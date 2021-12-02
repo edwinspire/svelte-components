@@ -1,7 +1,7 @@
 {
-  "name": "@edwinspire/svelte-component-table",
+  "name": "@edwinspire/svelte-components",
   "version": "1.0.0",
-  "description": "Tabla para Svelte con funciones interesantes",
+  "description": "Varios componentes para Svelte",
   "svelte": "index.js",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edwinspire/svelte-component-table.git"
+    "url": "git+https://github.com/edwinspire/svelte-components.git"
   },
   "keywords": [
     "svelte",
@@ -28,12 +28,11 @@
   "author": "edwinspire",
   "license": "LGPL-3.0",
   "bugs": {
-    "url": "https://github.com/edwinspire/svelte-component-table.git/issues"
+    "url": "https://github.com/edwinspire/svelte-components.git/issues"
   },
-  "homepage": "https://github.com/edwinspire/svelte-component-table.git#readme",
+  "homepage": "https://github.com/edwinspire/svelte-components.git#readme",
   "dependencies": {
-    "@edwinspire/universal-fetch": "git+https://github.com/edwinspire/universal-fetch.git",
-    "xlsx": "^0.17.3"
+    "@edwinspire/universal-fetch": "git+https://github.com/edwinspire/universal-fetch.git"
   },
   "files": [
     "src",
