@@ -1,4 +1,5 @@
-//import Table from "./Dialog/Modal.svelte";
-//const types = require("./Table/Column/DefaultTypes.js");
-//export { default as default } from "./Table/Table.svelte";
-export { default as DialogModal } from "./Dialog/Modal.svelte";
+import Table from "./Table/Table.svelte";
+const types = require("./Table/Column/DefaultTypes.js");
+import DialogModal  from "./Dialog/Modal.svelte";
+export { Table, types as ColumnTypes, DialogModal };
+//export { default as DialogModal } from "./Dialog/Modal.svelte";
