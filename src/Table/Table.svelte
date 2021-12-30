@@ -8,6 +8,7 @@
   const Json = require("./Column/DefaultTypes.js").Json;
   const DT = require("./Column/DefaultTypes.js").DateTime;
   const { DateTime } = require("luxon");
+  import { storeChangedTables } from "../socketio-client";
 
   //-      -//
   //TODO Habilitar mostrar u ocultar columnas
@@ -608,6 +609,7 @@
 </nav>
 
 {#if DataTable && DataTable.length > 0}
+{JSON.stringify($storeChangedTables)}
   <div class="table-container is-size-7">
     <table
       class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"

@@ -3,7 +3,7 @@ const sioc = require("socket.io-client");
 import { writable } from "svelte/store";
 const storeChangedTables = writable({});
 
-export class socketIoClient extends EventEmitter {
+class socketIoClient extends EventEmitter {
   constructor() {
     super();
     this.socketio = {};
@@ -30,3 +30,4 @@ export class socketIoClient extends EventEmitter {
     return this.socketio;
   }
 }
+export { storeChangedTables, socketIoClient };
