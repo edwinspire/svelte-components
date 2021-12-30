@@ -32,7 +32,8 @@
   },
   "homepage": "https://github.com/edwinspire/svelte-components.git#readme",
   "dependencies": {
-    "@edwinspire/universal-fetch": "git+https://github.com/edwinspire/universal-fetch.git"
+    "@edwinspire/universal-fetch": "git+https://github.com/edwinspire/universal-fetch.git",
+    "socket.io-client": "^4.4.0"
   },
   "files": [
     "src",
