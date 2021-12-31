@@ -11,6 +11,7 @@ class socketIoClient extends EventEmitter {
 
   connect() {
     let url_wwebsocket = window.location.protocol + "//" + window.location.host;
+
     console.log(url_wwebsocket);
     this.socketio = sioc.io(url_wwebsocket);
     this.socketio.on("connect", function (c) {
@@ -18,14 +19,12 @@ class socketIoClient extends EventEmitter {
     });
 
     this.socketio.on("pg-change-table", (c) => {
-      console.log("pg-change-table", c, storeChangedTables);
-      storeChangedTables.set(c);
-      /*
-        changedTables.subscribe((data) => {
-  
-          console.log("changedTables", data);
-        });
-        */
+      try {
+        storeChangedTables.set(JSON.parse(c));
+      } catch (error) {
+        console.error(error);
+        storeChangedTables.set({});
+      }
     });
     return this.socketio;
   }

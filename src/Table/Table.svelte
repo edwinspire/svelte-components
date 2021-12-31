@@ -36,13 +36,16 @@
   let ColumnSort;
   let ShowDialogColumn = false;
 
+  let timeRemainingToRefresh = 999;
+
   let LastFetchResponse = true;
   // -- Refresh -- //
   let IntervalRefresh = [10, 20, 30, 45, 60, 120, 240, 480, 960, 1920, 3840];
-  export let IntervalRefreshSelected = 2;
+  export let IntervalRefreshSelected = 4;
   //-- Pagination --//
   let PageSize = [25, 50, 100, 200, 300, 500, 1000];
   export let PageSizeSelected = 0;
+  export let relatedTablesForAutoRefresh = [];
 
   let PageSelected = 1;
   let totalFilteredRows = 0;
@@ -53,11 +56,6 @@
   let orderASC = true;
   let internal_columns = {};
 
-  //let BuildCelltypes = new BuildCellTypes(BaseCellTypes);
-  //BuildCelltypes.join(CellTypes);
-  //let CustomCellTypes = BuildCelltypes.types();
-  //console.log('CellTypes:', CustomCellTypes);
-
   $: SelectedRows, OnSelection();
   $: RawDataTable, ProcessRawData();
 
@@ -66,7 +64,20 @@
   }
 
   onMount(() => {
-    GetDataTable();
+    //timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected]||999;
+    timeRemainingToRefresh = 0;
+
+    //    GetDataTable();
+
+    storeChangedTables.subscribe((value) => {
+      try {
+        if (relatedTablesForAutoRefresh.includes(value.table)) {
+          auto_refresh_by_table_changed_request++;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });
   });
 
   function ArrayChunk(myArray, chunk_size) {
@@ -108,7 +119,6 @@
         }
       });
     }
-    //console.log(internal_columns);
   }
 
   function RowIsSelected(internal_hash_row) {
@@ -189,12 +199,22 @@
     }
   }
 
-  let auto_refresh = setInterval(() => {
-    GetDataTable();
-  }, IntervalRefresh[IntervalRefreshSelected] * 1000);
+  let auto_refresh_by_table_changed_request = 0;
+
+  let auto_refresh = setInterval(async () => {
+    if (
+      timeRemainingToRefresh == 0 ||
+      auto_refresh_by_table_changed_request > 0
+    ) {
+      await GetDataTable();
+      timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected];
+      auto_refresh_by_table_changed_request = 0;
+    } else {
+      timeRemainingToRefresh--;
+    }
+  }, 1000);
 
   onDestroy(() => {
-    //console.log("Mata refresh");
     clearInterval(auto_refresh);
   });
 
@@ -206,11 +226,7 @@
       IntervalRefreshSelected = 0;
     }
 
-    clearInterval(auto_refresh);
-
-    auto_refresh = setInterval(() => {
-      GetDataTable();
-    }, IntervalRefresh[IntervalRefreshSelected] * 1000 + 100);
+    timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected];
   }
 
   function SortColumn(key, order = "asc") {
@@ -341,14 +357,6 @@
     return false;
   }
 
-  /*
-  function HandleOnClickSelection() {
-    //console.log(showSelection);
-    showSelection = !showSelection;
-    return false;
-  }
-  */
-
   function HandleOnRowSelected(event) {
     if (SelectionType == 1) {
       SelectedRows = [];
@@ -457,7 +465,7 @@
               ><i class="fas fa-exclamation-triangle" /></span
             >
           {/if}
-          <span>{IntervalRefresh[IntervalRefreshSelected]}s</span>
+          <span>{timeRemainingToRefresh}s</span>
         </button>
       </div>
     {/if}
@@ -609,7 +617,6 @@
 </nav>
 
 {#if DataTable && DataTable.length > 0}
-{JSON.stringify($storeChangedTables)}
   <div class="table-container is-size-7">
     <table
       class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
