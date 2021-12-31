@@ -269,10 +269,14 @@
     if (text_search && text_search.length > 0) {
       FilterData();
     } else {
+      FilterData();
+      timeRemainingToRefresh = 0;
+      /*
       setTimeout(async () => {
         await GetDataTable();
         FilterData();
       }, 250);
+      */
     }
   }
 
