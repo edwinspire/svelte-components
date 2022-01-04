@@ -70,7 +70,7 @@
     //    GetDataTable();
 
     storeChangedTables.subscribe((value) => {
-      console.log('storeChangedTables.subscribe', value);
+      //console.log('storeChangedTables.subscribe', value);
       try {
         if (relatedTablesForAutoRefresh.includes(value.table)) {
           auto_refresh_by_table_changed_request++;
@@ -414,8 +414,8 @@
         try {
           loading = true;
           let res = await FetchData.get(url, params);
-
-          if (res && res.ok) {
+//console.log(res);
+          if (res && res.status == 200) {
             let data = await res.json();
 
             if (Array.isArray(data)) {
