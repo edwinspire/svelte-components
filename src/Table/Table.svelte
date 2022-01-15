@@ -414,7 +414,7 @@
         try {
           loading = true;
           let res = await FetchData.get(url, params);
-//console.log(res);
+          //console.log(res);
           if (res && res.status == 200) {
             let data = await res.json();
 
@@ -500,7 +500,31 @@
         <slot name="item5" />
       </div>
     {/if}
-
+    {#if $$slots.item6}
+      <div class="level-item">
+        <slot name="item6" />
+      </div>
+    {/if}
+    {#if $$slots.item7}
+      <div class="level-item">
+        <slot name="item7" />
+      </div>
+    {/if}
+    {#if $$slots.item8}
+      <div class="level-item">
+        <slot name="item8" />
+      </div>
+    {/if}
+    {#if $$slots.item9}
+      <div class="level-item">
+        <slot name="item9" />
+      </div>
+    {/if}
+    {#if $$slots.item10}
+      <div class="level-item">
+        <slot name="item10" />
+      </div>
+    {/if}
     {#if ShowNewButton}
       <div class="level-item" title="Agregar fila">
         <button class="button is-small" on:click={HClickNew}>
