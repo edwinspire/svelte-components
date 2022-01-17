@@ -46,7 +46,8 @@
   let PageSize = [25, 50, 100, 200, 300, 500, 1000];
   export let PageSizeSelected = 0;
   export let relatedTablesForAutoRefresh = [];
-
+  // -- Nombre del archivo a exportar -- //
+  export let fileNameExport = "";
   let PageSelected = 1;
   let totalFilteredRows = 0;
   let TotalPages = 0;
@@ -179,11 +180,16 @@
           ExtensionFile = "csv";
         }
 
-        let NameFile =
-          "Report_" +
-          DateTime.local().toFormat("yyyy-MM-dd_HH-mm-ss") +
-          "." +
-          ExtensionFile;
+        let fName = "Report";
+
+        if (fName && fName.length > 0) {
+          fName = fileNameExport;
+        }
+
+        let NameFile = `${fName}_${DateTime.local().toFormat(
+          "yyyy-MM-dd_HH-mm-ss"
+        )}.${ExtensionFile}`;
+
         var wopts = {
           bookType: ExtensionFile,
           bookSST: false,
