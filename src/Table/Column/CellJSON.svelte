@@ -15,5 +15,5 @@
     {/if}
   {/each}
 {:else}
- <div>{value}</div>  
+  <TCellJSON value={JSON.stringify(value)} />
 {/if}
