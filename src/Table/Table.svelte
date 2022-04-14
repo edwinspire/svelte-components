@@ -5,7 +5,8 @@
   import { createEventDispatcher } from "svelte";
   import { onDestroy, onMount } from "svelte";
   const uFetch = require("@edwinspire/universal-fetch");
-  const Json = require("./Column/DefaultTypes.js").Json;
+//  const Json = require("./Column/DefaultTypes.js").Json;
+  const Auto = require("./Column/DefaultTypes.js").Auto;
   const DT = require("./Column/DefaultTypes.js").DateTime;
   const { DateTime } = require("luxon");
   import { storeChangedTables } from "../socketio-client";
@@ -753,7 +754,7 @@
                     />
                   {:else}
                     <svelte:component
-                      this={Json}
+                      this={Auto}
                       props={false}
                       on:click={HClickCell(item, dataRow)}
                       row={dataRow}
