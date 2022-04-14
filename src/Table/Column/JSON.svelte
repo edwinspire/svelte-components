@@ -6,8 +6,5 @@
 </script>
 
 <td on:click>
-    <details>
-      <summary>[<b>{typeof value}</b>]</summary>
-      <TCellJSON {value} />
-    </details>
+    <TCellJSON {value} />
 </td>
