@@ -13,7 +13,7 @@
   }
 </script>
 
-<td class="" on:click>
+<td class={props.class} on:click>
   {#if value && typeof value === "string" && value.length > LimitMax}
     {#if show}
       <div>

@@ -5,6 +5,6 @@
   export const props = {};
 </script>
 
-<td on:click>
+<td on:click class={props.class}>
     <TCellJSON {value} />
 </td>

@@ -1,5 +1,5 @@
 <script>
-    "use strict";
+  "use strict";
   export let value;
   export const row = {};
   export let props = {};
@@ -33,10 +33,10 @@
 
   if (props && props.option) {
     option = config[props.option];
-  }else{
+  } else {
     option = null;
   }
-//  console.log(option, value);
+  //  console.log(option, value);
 </script>
 
 {#if option}
