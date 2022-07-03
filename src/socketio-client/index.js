@@ -26,23 +26,23 @@ class WebSocketClient extends EventEmitter {
       setTimeout(this.connect(), 2000);
     };
     this.websocket.onmessage = (event) => {
-      
-      let data;
+//      console.log(event);
+      let data = {};
       try {
         data = JSON.parse(event.data);
       } catch (error) {
         console.error(error);
       }
-      console.log("Websocket", data);
+  //    console.log("Websocket", data);
 
       if (
         data &&
         data.topic == "pgNotify" &&
         data.message.channel == "onchange-table"
       ) {
-        console.log("storeChangedTables Set");
+    //    console.log("storeChangedTables Set");
         try {
-          storeChangedTables.set(data);
+          storeChangedTables.set(JSON.parse(data.message.payload));
         } catch (error) {
           console.error(error);
           storeChangedTables.set({});
