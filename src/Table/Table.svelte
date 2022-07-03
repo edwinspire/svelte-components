@@ -73,6 +73,7 @@
 
     storeChangedTables.subscribe((value) => {
       //console.log('storeChangedTables.subscribe', value);
+
       try {
         if (relatedTablesForAutoRefresh.includes(value.table)) {
           auto_refresh_by_table_changed_request++;
