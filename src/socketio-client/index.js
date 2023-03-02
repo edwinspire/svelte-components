@@ -1,5 +1,5 @@
-const EventEmitter = require("events");
-const sioc = require("socket.io-client");
+import {EventEmitter} from "events";
+import sioc from "socket.io-client";
 import { writable } from "svelte/store";
 const storeChangedTables = writable({});
 
