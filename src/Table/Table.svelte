@@ -1,14 +1,14 @@
 <script>
   "use strict";
-  const crypto = require("crypto");
-  const XLSX = require("xlsx");
+  import { crypto } from "crypto";
+  import { XLSX } from "xlsx";
   import { createEventDispatcher } from "svelte";
   import { onDestroy, onMount } from "svelte";
-  const uFetch = require("@edwinspire/universal-fetch");
-//  const Json = require("./Column/DefaultTypes.js").Json;
-  const Auto = require("./Column/DefaultTypes.js").Auto;
-  const DT = require("./Column/DefaultTypes.js").DateTime;
-  const { DateTime } = require("luxon");
+  import { uFetch } from "@edwinspire/universal-fetch";
+  //  const Json = require("./Column/DefaultTypes.js").Json;
+  import { DateTime as DT, Auto } from "./Column/DefaultTypes.js";
+  //import DT = require("./Column/DefaultTypes.js").DateTime;
+  import { DateTime } from "luxon";
   import { storeChangedTables } from "../socketio-client";
 
   //-      -//
