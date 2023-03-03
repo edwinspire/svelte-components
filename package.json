@@ -33,7 +33,6 @@
   "homepage": "https://github.com/edwinspire/svelte-components.git#readme",
   "dependencies": {
     "@edwinspire/universal-fetch": "git+https://github.com/edwinspire/universal-fetch.git",
-    "socket.io-client": "^4.4.0",
     "xlsx": "^0.17.2",
     "luxon": "^2.0.2"
   },
