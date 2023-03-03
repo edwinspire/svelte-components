@@ -1,10 +1,10 @@
 <script>
   "use strict";
-  import { crypto } from "crypto";
+  //import { crypto } from "crypto";
   import { XLSX } from "xlsx";
   import { createEventDispatcher } from "svelte";
   import { onDestroy, onMount } from "svelte";
-  import  uFetch  from "@edwinspire/universal-fetch";
+  import uFetch from "@edwinspire/universal-fetch";
   //  const Json = require("./Column/DefaultTypes.js").Json;
   import { DateTime as DT, Auto } from "./Column/DefaultTypes.js";
   //import DT = require("./Column/DefaultTypes.js").DateTime;
@@ -60,6 +60,13 @@
 
   $: SelectedRows, OnSelection();
   $: RawDataTable, ProcessRawData();
+
+  async function sha(message) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const hash = await crypto.subtle.digest("SHA-1", data);
+    return hash;
+  }
 
   function OnSelection() {
     dispatch("selectrows", { rows: GetSelectedRows() });
@@ -389,11 +396,15 @@
   function ProcessRawData() {
     //console.log("ProcessRawData");
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
-    RawDataTable = RawDataTable.map((row) => {
+    RawDataTable = RawDataTable.map(async (row) => {
+      
+      let c = await sha(JSON.stringify(row));
+      /*
       let c = crypto
         .createHash("md5")
         .update(JSON.stringify(row))
         .digest("base64");
+        */
 
       if (Listinternal_hash_row[c]) {
         console.error("Hay un registro duplicado en la tabla", row);
