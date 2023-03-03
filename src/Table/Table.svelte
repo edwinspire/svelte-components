@@ -9,7 +9,7 @@
   import { DateTime as DT, Auto } from "./Column/DefaultTypes.js";
   //import DT = require("./Column/DefaultTypes.js").DateTime;
   import { DateTime } from "luxon";
-  import { storeChangedTables } from "../socketio-client";
+  import { storeChangedTables } from "../class/websocket.js";
 
   //-      -//
   //TODO Habilitar mostrar u ocultar columnas
