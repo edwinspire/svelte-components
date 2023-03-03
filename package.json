@@ -33,8 +33,9 @@
   "homepage": "https://github.com/edwinspire/svelte-components.git#readme",
   "dependencies": {
     "@edwinspire/universal-fetch": "git+https://github.com/edwinspire/universal-fetch.git",
-    "xlsx": "^0.17.2",
-    "luxon": "^2.0.2"
+    "events": "^3.3.0",
+    "luxon": "^2.0.2",
+    "xlsx": "^0.17.2"
   },
   "files": [
     "src",
