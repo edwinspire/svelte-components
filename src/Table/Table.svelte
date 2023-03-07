@@ -65,7 +65,9 @@
     const encoder = new TextEncoder();
     const data = encoder.encode(message);
     const hash = await crypto.subtle.digest("SHA-1", data);
-    return hash;
+    return [...new Uint8Array(hash)]
+      .map(x => x.toString(16).padStart(2, '0'))
+      .join('');
   }
 
   function OnSelection() {
