@@ -414,9 +414,9 @@
     //console.log("ProcessRawData");
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
 
-    RawDataTable = RawDataTable.map((row) => {
+    RawDataTable = RawDataTable.map(async(row) => {
       //let c = await sha(JSON.stringify(row));
-      let c = hash(JSON.stringify(row));
+      let c = await hash(JSON.stringify(row));
 
       /*
       let c = crypto
