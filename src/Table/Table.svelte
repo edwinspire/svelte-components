@@ -416,9 +416,9 @@
     for (const row of RawDataTable) {
       let c = await hash(JSON.stringify(row));
 
-      console.log("Registro HASH >> ", c);
+    //  console.log("Registro HASH >> ", c);
       if (Listinternal_hash_row[c]) {
-        console.error("Hay un registro duplicado en la tabla", row);
+      //  console.error("Hay un registro duplicado en la tabla", row);
         c =
           c +
           "-" +
@@ -433,29 +433,8 @@
       tmp_RawDataTable.push({ ...row, internal_hash_row: c });
     }
 
-    /*
-    RawDataTable = RawDataTable.map(async(row) => {
-      let c = await hash(JSON.stringify(row));
-
-      console.log("Registro HASH >> ", c);
-      if (Listinternal_hash_row[c]) {
-        console.error("Hay un registro duplicado en la tabla", row);
-        c =
-          c +
-          "-" +
-          new Date().getTime() +
-          "-" +
-          Math.floor(Math.random() * 10000);
-        Listinternal_hash_row[c] = true;
-      } else {
-        Listinternal_hash_row[c] = true;
-      } 
-
-      return { ...row, internal_hash_row: c };
-    });
-*/
-    console.log(tmp_RawDataTable, RawDataTable);
-
+    //    console.log(tmp_RawDataTable, RawDataTable);
+    RawDataTable = tmp_RawDataTable;
     SetColumns();
     FilterData();
   }
