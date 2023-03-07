@@ -61,6 +61,7 @@
   $: SelectedRows, OnSelection();
   $: RawDataTable, ProcessRawData();
 
+  /*
   async function sha(message) {
     const encoder = new TextEncoder();
     const data = encoder.encode(message);
@@ -69,6 +70,19 @@
       .map((x) => x.toString(16).padStart(2, "0"))
       .join("");
   }
+  */
+
+
+  function hash(string) {
+  const utf8 = new TextEncoder().encode(string);
+  return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((bytes) => bytes.toString(16).padStart(2, '0'))
+      .join('');
+    return hashHex;
+  });
+}
 
   function OnSelection() {
     dispatch("selectrows", { rows: GetSelectedRows() });
@@ -395,17 +409,14 @@
     OnSelection();
   }
 
-  function sha1(content) {
-    return crypto.createHash("sha1").update(content).digest("hex");
-  }
-
+  
   function ProcessRawData() {
     //console.log("ProcessRawData");
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
 
     RawDataTable = RawDataTable.map((row) => {
       //let c = await sha(JSON.stringify(row));
-      let c = sha1(JSON.stringify(row));
+      let c = hash(JSON.stringify(row));
 
       /*
       let c = crypto
