@@ -2,7 +2,7 @@
   import TCellJSON from "./CellJSON.svelte";
   export let value;
   //export let row = {};
-  export const props = {};
+  export let props = {};
 
   function stringIsValidJSON(input) {
 //    console.log(row);
