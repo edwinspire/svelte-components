@@ -1,10 +1,11 @@
 <script>
   import TCellJSON from "./CellJSON.svelte";
   export let value;
-  export const row = {};
+  //export let row = {};
   export const props = {};
 
   function stringIsValidJSON(input) {
+//    console.log(row);
     if (typeof input === "string") {
       try {
         let x = JSON.parse(input);
@@ -18,6 +19,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <td on:click class={props.class}>
   {#if value && (typeof value === "object" || Array.isArray(value))}
     <details>
@@ -31,6 +33,7 @@
         <TCellJSON value={JSON.parse(value)} />
       </details>
     {:else}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <span on:click>{value}</span>
     {/if}
   {:else}
