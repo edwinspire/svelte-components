@@ -66,8 +66,8 @@
     const data = encoder.encode(message);
     const hash = await crypto.subtle.digest("SHA-1", data);
     return [...new Uint8Array(hash)]
-      .map(x => x.toString(16).padStart(2, '0'))
-      .join('');
+      .map((x) => x.toString(16).padStart(2, "0"))
+      .join("");
   }
 
   function OnSelection() {
@@ -395,12 +395,18 @@
     OnSelection();
   }
 
+  function sha1(content) {
+    return crypto.createHash("sha1").update(content).digest("hex");
+  }
+
   function ProcessRawData() {
     //console.log("ProcessRawData");
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
-    RawDataTable = RawDataTable.map(async (row) => {
-      
-      let c = await sha(JSON.stringify(row));
+
+    RawDataTable = RawDataTable.map((row) => {
+      //let c = await sha(JSON.stringify(row));
+      let c = sha1(JSON.stringify(row));
+
       /*
       let c = crypto
         .createHash("md5")
@@ -408,7 +414,7 @@
         .digest("base64");
         */
 
-        console.log("Registro HASH >> ", c);
+      console.log("Registro HASH >> ", c);
       if (Listinternal_hash_row[c]) {
         console.error("Hay un registro duplicado en la tabla", row);
         c =
