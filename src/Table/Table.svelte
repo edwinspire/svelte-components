@@ -406,6 +406,7 @@
         .digest("base64");
         */
 
+        console.error("Registro HASH >> ", c);
       if (Listinternal_hash_row[c]) {
         console.error("Hay un registro duplicado en la tabla", row);
         c =
