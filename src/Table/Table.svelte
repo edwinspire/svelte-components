@@ -72,17 +72,16 @@
   }
   */
 
-
   function hash(string) {
-  const utf8 = new TextEncoder().encode(string);
-  return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((bytes) => bytes.toString(16).padStart(2, '0'))
-      .join('');
-    return hashHex;
-  });
-}
+    const utf8 = new TextEncoder().encode(string);
+    return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray
+        .map((bytes) => bytes.toString(16).padStart(2, "0"))
+        .join("");
+      return hashHex;
+    });
+  }
 
   function OnSelection() {
     dispatch("selectrows", { rows: GetSelectedRows() });
@@ -409,21 +408,13 @@
     OnSelection();
   }
 
-  
-  function ProcessRawData() {
+  async function ProcessRawData() {
     //console.log("ProcessRawData");
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
+    let tmp_RawDataTable = [];
 
-    RawDataTable = RawDataTable.map(async(row) => {
-      //let c = await sha(JSON.stringify(row));
+    for (const row of RawDataTable) {
       let c = await hash(JSON.stringify(row));
-
-      /*
-      let c = crypto
-        .createHash("md5")
-        .update(JSON.stringify(row))
-        .digest("base64");
-        */
 
       console.log("Registro HASH >> ", c);
       if (Listinternal_hash_row[c]) {
@@ -438,10 +429,32 @@
       } else {
         Listinternal_hash_row[c] = true;
       }
+
+      tmp_RawDataTable.push({ ...row, internal_hash_row: c });
+    }
+
+    /*
+    RawDataTable = RawDataTable.map(async(row) => {
+      let c = await hash(JSON.stringify(row));
+
+      console.log("Registro HASH >> ", c);
+      if (Listinternal_hash_row[c]) {
+        console.error("Hay un registro duplicado en la tabla", row);
+        c =
+          c +
+          "-" +
+          new Date().getTime() +
+          "-" +
+          Math.floor(Math.random() * 10000);
+        Listinternal_hash_row[c] = true;
+      } else {
+        Listinternal_hash_row[c] = true;
+      } 
+
       return { ...row, internal_hash_row: c };
     });
-
-    console.log(RawDataTable);
+*/
+    console.log(tmp_RawDataTable, RawDataTable);
 
     SetColumns();
     FilterData();
