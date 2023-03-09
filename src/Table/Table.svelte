@@ -413,24 +413,26 @@
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
     let tmp_RawDataTable = [];
 
-    for (const row of RawDataTable) {
-      let c = await hash(JSON.stringify(row));
+    if (Array.isArray(RawDataTable)) {
+      for (const row of RawDataTable) {
+        let c = await hash(JSON.stringify(row));
 
-      //  console.log("Registro HASH >> ", c);
-      if (Listinternal_hash_row[c]) {
-        console.error("Hay un registro duplicado en la tabla", row);
-        c =
-          c +
-          "-" +
-          new Date().getTime() +
-          "-" +
-          Math.floor(Math.random() * 10000);
-        Listinternal_hash_row[c] = true;
-      } else {
-        Listinternal_hash_row[c] = true;
+        //  console.log("Registro HASH >> ", c);
+        if (Listinternal_hash_row[c]) {
+          console.error("Hay un registro duplicado en la tabla", row);
+          c =
+            c +
+            "-" +
+            new Date().getTime() +
+            "-" +
+            Math.floor(Math.random() * 10000);
+          Listinternal_hash_row[c] = true;
+        } else {
+          Listinternal_hash_row[c] = true;
+        }
+
+        tmp_RawDataTable.push({ ...row, internal_hash_row: c });
       }
-
-      tmp_RawDataTable.push({ ...row, internal_hash_row: c });
     }
 
     //    console.log(tmp_RawDataTable, RawDataTable);
