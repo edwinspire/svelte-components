@@ -59,7 +59,7 @@
   let internal_columns = {};
 
   $: SelectedRows, OnSelection();
-  $: RawDataTable, ProcessRawData();
+  //  $: RawDataTable, ProcessRawData();
 
   /*
   async function sha(message) {
@@ -245,8 +245,20 @@
     }
   }, 1000);
 
+  let hash_last_data = "";
+  // Check changes of data
+  let check_changes_data = setInterval(async () => {
+    let hash_data = await hash(JSON.stringify(RawDataTable));
+
+    if (hash_last_data !== hash_data) {
+      hash_last_data = hash_data;
+      ProcessRawData();
+    }
+  }, 1500);
+
   onDestroy(() => {
     clearInterval(auto_refresh);
+    clearInterval(check_changes_data);
   });
 
   function ChangeIntervalRefresh() {
