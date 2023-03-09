@@ -415,6 +415,7 @@
 
     if (Array.isArray(RawDataTable)) {
       for (const row of RawDataTable) {
+        row.internal_hash_row = 0;
         let c = await hash(JSON.stringify(row));
 
         //  console.log("Registro HASH >> ", c);
@@ -433,14 +434,13 @@
 
         tmp_RawDataTable.push({ ...row, internal_hash_row: c });
       }
-    }else{
-      console.log('RawDataTable no es array', RawDataTable);
-      RawDataTable = [];  
-      
+    } else {
+      console.log("RawDataTable no es array", RawDataTable);
+      RawDataTable = [];
     }
 
     //    console.log(tmp_RawDataTable, RawDataTable);
-    RawDataTable =  tmp_RawDataTable ;
+    RawDataTable = tmp_RawDataTable;
     tmp_RawDataTable = [];
     SetColumns();
     FilterData();
