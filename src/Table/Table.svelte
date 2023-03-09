@@ -409,7 +409,7 @@
   }
 
   async function ProcessRawData() {
-    console.log("ProcessRawData >> ");
+    console.log("ProcessRawData >> ", RawDataTable);
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
     let tmp_RawDataTable = [];
 
