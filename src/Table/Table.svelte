@@ -414,7 +414,8 @@
     let tmp_RawDataTable = [];
 
     if (Array.isArray(RawDataTable)) {
-      for (const row of RawDataTable) {
+      for (const row_org of RawDataTable) {
+        let row = { ...row_org };
         row.internal_hash_row = 0;
         let c = await hash(JSON.stringify(row));
 
@@ -439,7 +440,7 @@
       RawDataTable = [];
     }
 
-    //    console.log(tmp_RawDataTable, RawDataTable);
+    console.log(tmp_RawDataTable, RawDataTable);
     RawDataTable = tmp_RawDataTable;
     tmp_RawDataTable = [];
     SetColumns();
