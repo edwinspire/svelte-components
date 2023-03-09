@@ -796,7 +796,10 @@
                     <svelte:component
                       this={internal_columns[item].decorator.component}
                       props={internal_columns[item].decorator.props}
-                      on:click={HClickCell(item, dataRow)}
+                      on:click={(e) => {
+                        e.preventDefault();
+                        HClickCell(item, dataRow);
+                      }}
                       row={dataRow}
                       value={dataRow[item]}
                     />
