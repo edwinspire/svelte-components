@@ -433,6 +433,10 @@
 
         tmp_RawDataTable.push({ ...row, internal_hash_row: c });
       }
+    }else{
+      console.log('RawDataTable no es array', RawDataTable);
+      RawDataTable = [];  
+      
     }
 
     //    console.log(tmp_RawDataTable, RawDataTable);
