@@ -440,7 +440,7 @@
     }
 
     //    console.log(tmp_RawDataTable, RawDataTable);
-    RawDataTable = { ...tmp_RawDataTable };
+    RawDataTable =  tmp_RawDataTable ;
     tmp_RawDataTable = [];
     SetColumns();
     FilterData();
