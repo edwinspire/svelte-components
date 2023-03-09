@@ -409,7 +409,7 @@
   }
 
   async function ProcessRawData() {
-    console.log("ProcessRawData >> ", RawDataTable);
+    //console.log("ProcessRawData >> ", RawDataTable);
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
     let tmp_RawDataTable = [];
 
@@ -432,15 +432,16 @@
         } else {
           Listinternal_hash_row[c] = true;
         }
-
-        tmp_RawDataTable.push({ ...row, internal_hash_row: c });
+        row.internal_hash_row = c;
+        //        tmp_RawDataTable.push({ ...row, internal_hash_row: c });
+        tmp_RawDataTable.push(row);
       }
     } else {
       console.log("RawDataTable no es array", RawDataTable);
       RawDataTable = [];
     }
 
-    console.log(tmp_RawDataTable, RawDataTable);
+    //console.log(tmp_RawDataTable, RawDataTable);
     RawDataTable = tmp_RawDataTable;
     tmp_RawDataTable = [];
     SetColumns();
