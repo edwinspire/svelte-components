@@ -416,9 +416,9 @@
     for (const row of RawDataTable) {
       let c = await hash(JSON.stringify(row));
 
-    //  console.log("Registro HASH >> ", c);
+      //  console.log("Registro HASH >> ", c);
       if (Listinternal_hash_row[c]) {
-      //  console.error("Hay un registro duplicado en la tabla", row);
+        console.error("Hay un registro duplicado en la tabla", row);
         c =
           c +
           "-" +
@@ -434,13 +434,14 @@
     }
 
     //    console.log(tmp_RawDataTable, RawDataTable);
-    RawDataTable = tmp_RawDataTable;
+    RawDataTable = { ...tmp_RawDataTable };
+    tmp_RawDataTable = [];
     SetColumns();
     FilterData();
   }
 
   async function GetDataTable() {
-    console.log('GetDataTable');
+    console.log("GetDataTable");
     if (loading) {
       console.log("Hay una petición en curso");
     } else {
