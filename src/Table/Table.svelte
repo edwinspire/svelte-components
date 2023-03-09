@@ -254,7 +254,7 @@
       hash_last_data = hash_data;
       ProcessRawData();
     }
-  }, 1500);
+  }, 750);
 
   onDestroy(() => {
     clearInterval(auto_refresh);
