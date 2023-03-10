@@ -20,7 +20,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<td class={props.class}>
+<td on:click class={props.class}>
   {#if value && (typeof value === "object" || Array.isArray(value))}
     <details>
       <summary>[<b>{typeof value}</b>]</summary>
