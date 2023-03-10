@@ -252,13 +252,17 @@
   let hash_last_data = "";
   // Check changes of data
   let check_changes_data = setInterval(async () => {
-    let hash_data = await hash(JSON.stringify(RawDataTable));
+    try {
+      let hash_data = await hash(JSON.stringify(RawDataTable));
 
-    if (hash_last_data !== hash_data) {
-      hash_last_data = hash_data;
-      ProcessRawData();
+      if (hash_last_data !== hash_data) {
+        hash_last_data = hash_data;
+        ProcessRawData();
+      }
+    } catch (error) {
+      console.error(error);
     }
-  }, 750);
+  }, 500);
 
   onDestroy(() => {
     clearInterval(auto_refresh);
