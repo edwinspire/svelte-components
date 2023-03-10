@@ -798,7 +798,7 @@
                       props={internal_columns[item].decorator.props}
                       on:click={(e) => {
                         console.log('HClickCell 1');
-                        e.preventDefault();
+                       // e.preventDefault();
                         HClickCell(item, dataRow);
                       }}
                       row={dataRow}
@@ -810,7 +810,7 @@
                       props={false}
                       on:click={(e) => {
                         console.log('HClickCell 2');
-                        e.preventDefault();
+                      //  e.preventDefault();
                         HClickCell(item, dataRow);
                       }}
                       row={dataRow}

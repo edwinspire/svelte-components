@@ -5,7 +5,7 @@
   export let props = {};
 
   function stringIsValidJSON(input) {
-//    console.log(row);
+    //    console.log(row);
     if (typeof input === "string") {
       try {
         let x = JSON.parse(input);
@@ -20,7 +20,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<td on:click class={props.class}>
+<td class={props.class}>
   {#if value && (typeof value === "object" || Array.isArray(value))}
     <details>
       <summary>[<b>{typeof value}</b>]</summary>
@@ -34,7 +34,7 @@
       </details>
     {:else}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <span on:click>{value}</span>
+      <span>{value}</span>
     {/if}
   {:else}
     <span>{JSON.stringify(value)}</span>
