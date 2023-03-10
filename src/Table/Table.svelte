@@ -82,6 +82,7 @@
         .join("");
       return hashHex;
     } catch (error) {
+      console.error(error);
       return "";
     }
   }
