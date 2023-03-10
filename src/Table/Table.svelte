@@ -72,15 +72,18 @@
   }
   */
 
-  function hash(string) {
-    const utf8 = new TextEncoder().encode(string);
-    return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {
+  async function hash(string) {
+    try {
+      const utf8 = new TextEncoder().encode(string);
+      let hashBuffer = await crypto.subtle.digest("SHA-256", utf8);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       const hashHex = hashArray
         .map((bytes) => bytes.toString(16).padStart(2, "0"))
         .join("");
       return hashHex;
-    });
+    } catch (error) {
+      return "";
+    }
   }
 
   function OnSelection() {
@@ -797,8 +800,8 @@
                       this={internal_columns[item].decorator.component}
                       props={internal_columns[item].decorator.props}
                       on:click={(e) => {
-                       // console.log('HClickCell 1');
-                       // e.preventDefault();
+                        // console.log('HClickCell 1');
+                        // e.preventDefault();
                         HClickCell(item, dataRow);
                       }}
                       row={dataRow}
@@ -809,8 +812,8 @@
                       this={Auto}
                       props={false}
                       on:click={(e) => {
-                       // console.log('HClickCell 2');
-                      //  e.preventDefault();
+                        // console.log('HClickCell 2');
+                        //  e.preventDefault();
                         HClickCell(item, dataRow);
                       }}
                       row={dataRow}
