@@ -94,7 +94,7 @@
   onMount(() => {
     //timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected]||999;
     timeRemainingToRefresh = 0;
-
+console.log('XLSX', XLSX);
     //    GetDataTable();
 
     storeChangedTables.subscribe((value) => {
