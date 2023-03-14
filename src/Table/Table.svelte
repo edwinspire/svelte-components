@@ -1,7 +1,7 @@
 <script>
   "use strict";
   //import { crypto } from "crypto";
-  import { XLSX } from "xlsx";
+  import { XLSX, utils  } from "xlsx";
   import { createEventDispatcher } from "svelte";
   import { onDestroy, onMount } from "svelte";
   import uFetch from "@edwinspire/universal-fetch";
@@ -94,7 +94,7 @@
   onMount(() => {
     //timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected]||999;
     timeRemainingToRefresh = 0;
-console.log('XLSX', XLSX);
+console.log('XLSX', XLSX, utils );
     //    GetDataTable();
 
     storeChangedTables.subscribe((value) => {
