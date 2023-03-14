@@ -1,7 +1,7 @@
 <script>
   "use strict";
   //import { crypto } from "crypto";
-  import { XLSX, utils  } from "xlsx";
+  import { XLSX, utils } from "xlsx";
   import { createEventDispatcher } from "svelte";
   import { onDestroy, onMount } from "svelte";
   import uFetch from "@edwinspire/universal-fetch";
@@ -94,7 +94,8 @@
   onMount(() => {
     //timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected]||999;
     timeRemainingToRefresh = 0;
-console.log('XLSX', XLSX, utils );
+    console.log("XLSX 1", utils);
+    console.log("XLSX 2", XLSX);
     //    GetDataTable();
 
     storeChangedTables.subscribe((value) => {
@@ -196,7 +197,7 @@ console.log('XLSX', XLSX, utils );
         delete r.internal_hash_row;
         return r;
       });
-console.log('FormatedData', FormatedData, XLSX);
+      console.log("FormatedData", FormatedData, XLSX);
       if (FormatedData && FormatedData.length > 0) {
         /* Create a worksheet */
         var ws = XLSX.utils.json_to_sheet(FormatedData);
