@@ -33,7 +33,7 @@
         <TCellJSON value={JSON.parse(value)} />
       </details>
     {:else if typeof value === "number"}
-    <span>{value}</span>
+    <div class="text_end">{value}</div>
     {:else}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div class="text_end">{value}</div>
