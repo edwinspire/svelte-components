@@ -94,7 +94,6 @@
   onMount(() => {
     //timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected]||999;
     timeRemainingToRefresh = 0;
-    console.log("XLSX 1", utils);
     console.log("XLSX 2", XLSX);
     //    GetDataTable();
 
