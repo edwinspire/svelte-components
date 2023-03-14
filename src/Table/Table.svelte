@@ -1,7 +1,7 @@
 <script>
   "use strict";
   //import { crypto } from "crypto";
-  import { XLSX, utils } from "xlsx";
+  import * as XLSX from "xlsx";
   import { createEventDispatcher } from "svelte";
   import { onDestroy, onMount } from "svelte";
   import uFetch from "@edwinspire/universal-fetch";
