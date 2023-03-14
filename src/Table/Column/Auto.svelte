@@ -32,11 +32,19 @@
         <summary>[<b>{typeof JSON.parse(value)}</b>]</summary>
         <TCellJSON value={JSON.parse(value)} />
       </details>
+    {:else if typeof value === "number"}
+    <span>{value}</span>
     {:else}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <span>{value}</span>
+      <div class="text_end">{value}</div>
     {/if}
   {:else}
     <span>{JSON.stringify(value)}</span>
   {/if}
 </td>
+
+<style>
+  .text_end{
+    text-align: end
+  }
+</style>
