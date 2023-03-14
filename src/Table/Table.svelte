@@ -196,7 +196,7 @@
         delete r.internal_hash_row;
         return r;
       });
-console.log('FormatedData', FormatedData);
+console.log('FormatedData', FormatedData, XLSX);
       if (FormatedData && FormatedData.length > 0) {
         /* Create a worksheet */
         var ws = XLSX.utils.json_to_sheet(FormatedData);
