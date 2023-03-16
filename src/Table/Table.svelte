@@ -5,9 +5,7 @@
   import { createEventDispatcher } from "svelte";
   import { onDestroy, onMount } from "svelte";
   import uFetch from "@edwinspire/universal-fetch";
-  //  const Json = require("./Column/DefaultTypes.js").Json;
   import { DateTime as DT, Auto } from "./Column/DefaultTypes.js";
-  //import DT = require("./Column/DefaultTypes.js").DateTime;
   import { DateTime } from "luxon";
   import { storeChangedTables } from "../class/websocket.js";
 
