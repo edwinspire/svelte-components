@@ -224,7 +224,7 @@
         };
         XLSX.writeFile(wb, NameFile, wopts);
       } else {
-        alert("Debe Seleccionar las filas para exportar");
+        alert("Por favor seleccione los registros a exportar");
         SelectionType = 2;
       }
     } catch (error) {
