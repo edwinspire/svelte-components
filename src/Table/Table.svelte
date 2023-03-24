@@ -8,6 +8,7 @@
   import { DateTime as DT, Auto } from "./Column/DefaultTypes.js";
   import { DateTime } from "luxon";
   import { storeChangedTables } from "../class/websocket.js";
+  import { sha256 } from "../class/sha.js";
 
   //-      -//
   //TODO Habilitar mostrar u ocultar columnas
@@ -249,9 +250,10 @@
 
   let hash_last_data = "";
   // Check changes of data
-  let check_changes_data = setInterval(async () => {
+  let check_changes_data = setInterval(() => {
     try {
-      let hash_data = await hash(JSON.stringify(RawDataTable));
+      //let hash_data = await hash(JSON.stringify(RawDataTable));
+      let hash_data = sha256(JSON.stringify(RawDataTable));
 
       if (hash_last_data !== hash_data) {
         hash_last_data = hash_data;
@@ -426,7 +428,7 @@
     OnSelection();
   }
 
-  async function ProcessRawData() {
+  function ProcessRawData() {
     //console.log("ProcessRawData >> ", RawDataTable);
     let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
     let tmp_RawDataTable = [];
@@ -435,7 +437,7 @@
       for (const row_org of RawDataTable) {
         let row = { ...row_org };
         row.internal_hash_row = 0;
-        let c = await hash(JSON.stringify(row));
+        let c = sha256(JSON.stringify(row));
 
         //  console.log("Registro HASH >> ", c);
         if (Listinternal_hash_row[c]) {
