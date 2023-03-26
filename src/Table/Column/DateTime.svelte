@@ -3,7 +3,7 @@
   export let props;
   export const row = {};
   let DC001 = false;
-  const { DateTime } = require("luxon");
+  import { DateTime } from "luxon";
   let format = "yyyy-MM-dd HH:mm:ss";
   let HighlightIsntToday = false;
 
