@@ -511,7 +511,7 @@
 </script>
 
 <!-- Main container -->
-<nav class="level">
+<nav class="level is-mobile">
   <!-- Left side -->
   <div class="level-left">
     <div class="level-item">
