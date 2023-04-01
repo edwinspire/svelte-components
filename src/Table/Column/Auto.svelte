@@ -26,7 +26,7 @@
       <summary>[<b>{typeof value}</b>]</summary>
       <TCellJSON {value} />
     </details>
-  {:else if value && (typeof value === "string" || typeof value === "number" || typeof value === "bigint" || typeof value === "boolean" || typeof value === "undefined")}
+  {:else if (typeof value === "string" || typeof value === "number" || typeof value === "bigint" || typeof value === "boolean" || typeof value === "undefined")}
     {#if typeof value === "string" && stringIsValidJSON(value) && (typeof JSON.parse(value) === "object" || Array.isArray(typeof JSON.parse(value)))}
       <details>
         <summary>[<b>{typeof JSON.parse(value)}</b>]</summary>
@@ -39,7 +39,7 @@
       <div>{value}</div>
     {/if}
   {:else}
-    <span>{JSON.stringify(value)}{typeof value}</span>
+    <span>{JSON.stringify(value)}</span>
   {/if}
 </td>
 
