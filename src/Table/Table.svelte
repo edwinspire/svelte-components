@@ -722,7 +722,7 @@
       class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
     >
       <!-- Aqui escribe el encabezado de la tabla -->
-      <thead>
+      <thead class="has-background-grey-lighter!important">
         <tr>
           <th class="has-text-centered">#</th>
           {#if SelectionType == 1}
