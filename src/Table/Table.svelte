@@ -34,7 +34,7 @@
   let text_search;
   let loading = false;
   let showEdit = false;
-  let showSelection = false;
+ // let showSelection = false;
   let ColumnSort;
   let ShowDialogColumn = false;
 
@@ -610,7 +610,7 @@
       </div>
     {/if}
 
-    {#if showSelection}
+    {#if ShowSelectionButton}
       <div class="level-item" title="Selección">
         <div class="dropdown is-hoverable is-right">
           <div class="dropdown-trigger">
