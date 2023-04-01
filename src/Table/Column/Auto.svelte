@@ -36,10 +36,10 @@
     <div class="text_end">{value}</div>
     {:else}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div>{value}{typeof value}</div>
+      <div>{value}</div>
     {/if}
   {:else}
-    <span>{JSON.stringify(value)}</span>
+    <span>{JSON.stringify(value)}{typeof value}</span>
   {/if}
 </td>
 
