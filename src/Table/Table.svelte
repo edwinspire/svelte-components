@@ -24,6 +24,8 @@
   export let params = {};
   export let ShowNewButton = false;
   export let ShowEditButton = false;
+  export let ShowSelectionButton = true;
+  export let ShowExportButton = true;
   const FetchData = new uFetch();
   const dispatch = createEventDispatcher();
   let DataTable = [];
@@ -93,7 +95,7 @@
   onMount(() => {
     //timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected]||999;
     timeRemainingToRefresh = 0;
-    console.log("XLSX 2", XLSX);
+    // console.log("XLSX 2", XLSX);
     //    GetDataTable();
 
     storeChangedTables.subscribe((value) => {
@@ -607,86 +609,92 @@
         </button>
       </div>
     {/if}
-    <div class="level-item" title="Selección">
-      <div class="dropdown is-hoverable is-right">
-        <div class="dropdown-trigger">
-          <button
-            class="button is-small"
-            aria-haspopup="true"
-            aria-controls="dropdown-menu"
-          >
-            <span class="icon">
-              <i class="far fa-list-alt" />
-            </span>
-          </button>
-        </div>
-        <div class="dropdown-menu" role="menu">
-          <div class="dropdown-content">
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="dropdown-item is-size-7">
-              <input
-                class="check_margin"
-                type="radio"
-                name="selection_type"
-                value="1"
-                checked
-                on:change={() => {
-                  SelectionType = 1;
-                }}
-              />
-              <span class="icon">
-                <i class="fas fa-check" />
-              </span>
-              <span>Simple</span>
-            </a>
 
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="dropdown-item is-size-7">
-              <input
-                class="check_margin"
-                type="radio"
-                name="selection_type"
-                value="2"
-                checked
-                on:change={() => {
-                  SelectionType = 2;
-                }}
-              />
+    {#if showSelection}
+      <div class="level-item" title="Selección">
+        <div class="dropdown is-hoverable is-right">
+          <div class="dropdown-trigger">
+            <button
+              class="button is-small"
+              aria-haspopup="true"
+              aria-controls="dropdown-menu"
+            >
               <span class="icon">
-                <i class="fas fa-check-double" />
+                <i class="far fa-list-alt" />
               </span>
-              <span>Multiple</span>
-            </a>
-            <hr class="dropdown-divider" />
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="dropdown-item is-size-7">
-              <input
-                class="check_margin"
-                type="radio"
-                name="selection_type"
-                value="0"
-                checked
-                on:change={() => {
-                  SelectionType = 0;
-                }}
-              />
+            </button>
+          </div>
+          <div class="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <!-- svelte-ignore a11y-missing-attribute -->
+              <a class="dropdown-item is-size-7">
+                <input
+                  class="check_margin"
+                  type="radio"
+                  name="selection_type"
+                  value="1"
+                  checked
+                  on:change={() => {
+                    SelectionType = 1;
+                  }}
+                />
+                <span class="icon">
+                  <i class="fas fa-check" />
+                </span>
+                <span>Simple</span>
+              </a>
 
-              <span class="icon">
-                <i class="fas fa-ban" />
-              </span>
-              <span>Ninguno</span>
-            </a>
+              <!-- svelte-ignore a11y-missing-attribute -->
+              <a class="dropdown-item is-size-7">
+                <input
+                  class="check_margin"
+                  type="radio"
+                  name="selection_type"
+                  value="2"
+                  checked
+                  on:change={() => {
+                    SelectionType = 2;
+                  }}
+                />
+                <span class="icon">
+                  <i class="fas fa-check-double" />
+                </span>
+                <span>Multiple</span>
+              </a>
+              <hr class="dropdown-divider" />
+              <!-- svelte-ignore a11y-missing-attribute -->
+              <a class="dropdown-item is-size-7">
+                <input
+                  class="check_margin"
+                  type="radio"
+                  name="selection_type"
+                  value="0"
+                  checked
+                  on:change={() => {
+                    SelectionType = 0;
+                  }}
+                />
+
+                <span class="icon">
+                  <i class="fas fa-ban" />
+                </span>
+                <span>Ninguno</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="level-item" title="Exportar Datos">
-      <button class="button is-small" on:click={handleExportSelection}>
-        <span class="icon">
-          <i class="far fa-file-excel" />
-        </span>
-      </button>
-    </div>
+    {/if}
+
+    {#if ShowExportButton}
+      <div class="level-item" title="Exportar Datos">
+        <button class="button is-small" on:click={handleExportSelection}>
+          <span class="icon">
+            <i class="far fa-file-excel" />
+          </span>
+        </button>
+      </div>
+    {/if}
 
     <div class="level-item">
       <div class="field has-addons">
