@@ -26,6 +26,11 @@
   export let ShowEditButton = false;
   export let ShowSelectionButton = true;
   export let ShowExportButton = true;
+
+  export let rowClassFunction = function (row) {
+    return "";
+  };
+
   const FetchData = new uFetch();
   const dispatch = createEventDispatcher();
   let DataTable = [];
@@ -34,7 +39,7 @@
   let text_search;
   let loading = false;
   let showEdit = false;
- // let showSelection = false;
+  // let showSelection = false;
   let ColumnSort;
   let ShowDialogColumn = false;
 
@@ -767,7 +772,7 @@
       </thead>
       <tbody>
         {#each DataTable as dataRow, i (dataRow.internal_hash_row)}
-          <tr>
+          <tr class={rowClassFunction(dataRow)}>
             <td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
             {#if SelectionType == 1}
               <td class="has-text-centered"

@@ -26,14 +26,14 @@
       <summary>[<b>{typeof value}</b>]</summary>
       <TCellJSON {value} />
     </details>
-  {:else if (typeof value === "string" || typeof value === "number" || typeof value === "bigint" || typeof value === "boolean" || typeof value === "undefined")}
+  {:else if typeof value === "string" || typeof value === "number" || typeof value === "bigint" || typeof value === "boolean" || typeof value === "undefined"}
     {#if typeof value === "string" && stringIsValidJSON(value) && (typeof JSON.parse(value) === "object" || Array.isArray(typeof JSON.parse(value)))}
       <details>
         <summary>[<b>{typeof JSON.parse(value)}</b>]</summary>
         <TCellJSON value={JSON.parse(value)} />
       </details>
     {:else if typeof value === "number"}
-    <div class="text_end">{value}</div>
+      <div class="text_end">{value}</div>
     {:else}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div>{value}</div>
@@ -44,7 +44,7 @@
 </td>
 
 <style>
-  .text_end{
-    text-align: end
+  .text_end {
+    text-align: end;
   }
 </style>
