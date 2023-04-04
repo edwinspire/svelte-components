@@ -695,7 +695,7 @@
       <div class="level-item" title="Exportar Datos">
         <button class="button is-small" on:click={handleExportSelection}>
           <span class="icon">
-            <i class="far fa-file-excel" />
+            <i class="fa-solid fa-file-arrow-down"></i>
           </span>
         </button>
       </div>
