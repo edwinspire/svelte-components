@@ -41,7 +41,7 @@
   let loading = false;
   let showEdit = false;
   // let showSelection = false;
-  let ColumnSort;
+  export let ColumnSort;
   let ShowDialogColumn = false;
 
   let timeRemainingToRefresh = 999;
