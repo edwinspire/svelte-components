@@ -26,6 +26,7 @@
   export let ShowEditButton = false;
   export let ShowSelectionButton = true;
   export let ShowExportButton = true;
+  export let iconExport = "fa-solid fa-file-excel";
 
   export let rowClassFunction = function (row) {
     return "";
@@ -50,7 +51,7 @@
   let IntervalRefresh = [10, 20, 30, 45, 60, 120, 240, 480, 960, 1920, 3840];
   export let IntervalRefreshSelected = 4;
   //-- Pagination --//
-  let PageSize = [25, 50, 100, 200, 300, 500, 1000];
+  export let PageSize = [25, 50, 100, 200, 300, 500, 1000];
   export let PageSizeSelected = 0;
   export let relatedTablesForAutoRefresh = [];
   // -- Nombre del archivo a exportar -- //
@@ -695,7 +696,7 @@
       <div class="level-item" title="Exportar Datos">
         <button class="button is-small" on:click={handleExportSelection}>
           <span class="icon">
-            <i class="fa-solid fa-file-arrow-down"></i>
+            <i class={iconExport} />
           </span>
         </button>
       </div>
