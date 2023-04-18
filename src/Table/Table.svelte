@@ -288,7 +288,7 @@
     timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected];
   }
 
-  function SortColumn(key, order = "asc") {
+  export function SortColumn(key, order = "asc") {
     return function innerSort(a, b) {
       if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
         return 0;
@@ -868,7 +868,7 @@
                   SelectPage();
                 }}
               >
-                <span class="icon ">
+                <span class="icon">
                   <i class="fas fa-angle-double-left" />
                 </span>
               </button>
@@ -881,7 +881,7 @@
                   SelectPage();
                 }}
               >
-                <span class="icon ">
+                <span class="icon">
                   <i class="fas fa-angle-left" />
                 </span>
               </button>
