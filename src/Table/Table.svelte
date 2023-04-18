@@ -62,7 +62,7 @@
   let paginatedData = [];
 
   let SelectAll = false;
-  let orderASC = true;
+  export let orderASC = true;
   let internal_columns = {};
 
   $: SelectedRows, OnSelection();
