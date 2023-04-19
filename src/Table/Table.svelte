@@ -41,7 +41,7 @@
   let loading = false;
   let showEdit = false;
   // let showSelection = false;
-  export let ColumnSort;
+  let ColumnSort;
   let ShowDialogColumn = false;
 
   let timeRemainingToRefresh = 999;
@@ -62,7 +62,7 @@
   let paginatedData = [];
 
   let SelectAll = false;
-  export let orderASC = true;
+  let orderASC = true;
   let internal_columns = {};
 
   $: SelectedRows, OnSelection();
@@ -288,7 +288,7 @@
     timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected];
   }
 
-  export function SortColumn(key, order = "asc") {
+  function SortColumn(key, order = "asc") {
     return function innerSort(a, b) {
       if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
         return 0;
