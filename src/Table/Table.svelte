@@ -181,11 +181,7 @@
 
         Object.keys(row).forEach((key) => {
 
-          console.log('___>>> ', columns);
-          console.log('___>>> ', key);
-          console.log('___>>> ', columns[key]);
-
-          if (columns[key].hidden === true) {
+          if (columns[key] && columns[key].hidden === true) {
             delete columns[key];
           } else if (
             columns[key] &&
