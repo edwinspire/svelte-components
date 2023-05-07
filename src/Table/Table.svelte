@@ -178,8 +178,11 @@
       let FormatedData = filteredData.map((row) => {
         let r = { ...row };
         // Convert to string objects
+
         Object.keys(row).forEach((key) => {
-          if (
+          if (columns[key].hidden === true) {
+            delete columns[key];
+          } else if (
             columns[key] &&
             columns[key].decorator &&
             columns[key].decorator.component &&
