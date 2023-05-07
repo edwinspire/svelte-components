@@ -181,7 +181,8 @@
 
         Object.keys(row).forEach((key) => {
 
-          if (columns[key] && columns[key].hidden === true) {
+          console.log('Export: ', key, columns[key]);
+          if (columns[key] && columns[key].hidden) {
             delete columns[key];
           } else if (
             columns[key] &&
