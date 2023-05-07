@@ -186,7 +186,7 @@
 
           console.log('Export: ', key, columns[key]);
           if (columns[key] && columns[key].hidden) {
-            delete columns[key];
+            delete row[key];
           } else if (
             columns[key] &&
             columns[key].decorator &&
