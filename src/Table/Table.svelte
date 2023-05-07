@@ -173,6 +173,9 @@
     //console.log(this);
     try {
       // Filter only selection
+
+      console.log('ExportTable > Columns ', columns);
+
       let filteredData = GetSelectedRows();
       let ExceedsCharacterLimitPerCell = false;
       let FormatedData = filteredData.map((row) => {
