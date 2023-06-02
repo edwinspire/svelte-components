@@ -1,3 +1,5 @@
+import "bulma/css/bulma.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import Table from "./Table/Table.svelte";
 import * as types from "./Table/Column/DefaultTypes.js";
 import DialogModal from "./Dialog/Modal.svelte";

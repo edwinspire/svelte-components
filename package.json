@@ -33,6 +33,8 @@
   "homepage": "https://github.com/edwinspire/svelte-components.git#readme",
   "dependencies": {
     "@edwinspire/universal-fetch": "git+https://github.com/edwinspire/universal-fetch.git",
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "bulma": "^0.9.4",
     "events": "^3.3.0",
     "luxon": "^2.0.2",
     "save": "^2.9.0",
