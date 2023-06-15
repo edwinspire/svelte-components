@@ -2,8 +2,8 @@
 /** @typedef {typeof __propDef.events}  DateTimeEvents */
 /** @typedef {typeof __propDef.slots}  DateTimeSlots */
 export default class DateTime extends SvelteComponentTyped<{
-    props: any;
     value: any;
+    props: any;
     row?: {};
 }, {
     click: MouseEvent;
@@ -18,8 +18,8 @@ export type DateTimeSlots = typeof __propDef.slots;
 import { SvelteComponentTyped } from "svelte";
 declare const __propDef: {
     props: {
-        props: any;
         value: any;
+        props: any;
         row?: {};
     };
     events: {

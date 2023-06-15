@@ -1,6 +1,6 @@
 <script>
   export let value;
-  import TCellJSON from "./tree.svelte";
+  import TCellJSON from "./JSON.svelte";
   /**
  * @type {{ [s: string]: any; } | ArrayLike<any>}
  */
