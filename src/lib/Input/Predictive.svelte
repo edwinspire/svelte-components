@@ -34,6 +34,15 @@
     selectedIndex = -1;
   }
 
+  function handleOptionClick(option) {
+    inputValue = option.name;
+    dispatch("select", option);
+
+    setTimeout(() => {
+      isOpen = false;
+    }, 0);
+  }
+
   function handleDropdownToggle() {
     isOpen = !isOpen;
     if (isOpen) {
@@ -108,7 +117,7 @@
                   class="dropdown-list-item menu-item {i === selectedIndex
                     ? 'is-active'
                     : ''}"
-                  on:click={() => handleOptionSelect(option)}
+                  on:click={() => handleOptionClick(option)}
                 >
                   {option.name}
                 </li>
