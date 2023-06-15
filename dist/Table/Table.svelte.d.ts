@@ -27,7 +27,20 @@ export default class Table extends SvelteComponentTyped<{
 } & {
     [evt: string]: CustomEvent<any>;
 }, {
-    title: {};
+    l01: {};
+    l02: {};
+    l03: {};
+    l04: {};
+    l05: {};
+    l06: {};
+    l07: {};
+    l08: {};
+    l09: {};
+    l10: {};
+    r07: {};
+    r08: {};
+    r09: {};
+    r10: {};
 }> {
     get GetSelectedRows(): () => any[];
 }
@@ -64,7 +77,20 @@ declare const __propDef: {
         [evt: string]: CustomEvent<any>;
     };
     slots: {
-        title: {};
+        l01: {};
+        l02: {};
+        l03: {};
+        l04: {};
+        l05: {};
+        l06: {};
+        l07: {};
+        l08: {};
+        l09: {};
+        l10: {};
+        r07: {};
+        r08: {};
+        r09: {};
+        r10: {};
     };
 };
 export {};

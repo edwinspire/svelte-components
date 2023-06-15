@@ -513,12 +513,56 @@
 
 <Level>
 	<span slot="l01">
-		{#if $$slots.title}
-			<span class="margin_title"><slot name="title" /></span>
+		{#if $$slots.l01}
+			<slot name="l01" />
+		{/if}
+	</span>
+	<span slot="l02">
+		{#if $$slots.l02}
+			<slot name="l02" />
+		{/if}
+	</span>
+	<span slot="l03">
+		{#if $$slots.l03}
+			<slot name="l03" />
+		{/if}
+	</span>
+	<span slot="l04">
+		{#if $$slots.l04}
+			<slot name="l04" />
+		{/if}
+	</span>
+	<span slot="l05">
+		{#if $$slots.l05}
+			<slot name="l05" />
+		{/if}
+	</span>
+	<span slot="l06">
+		{#if $$slots.l06}
+			<slot name="l06" />
+		{/if}
+	</span>
+	<span slot="l07">
+		{#if $$slots.l07}
+			<slot name="l07" />
+		{/if}
+	</span>
+	<span slot="l08">
+		{#if $$slots.l08}
+			<slot name="l08" />
+		{/if}
+	</span>
+	<span slot="l09">
+		{#if $$slots.l09}
+			<slot name="l09" />
+		{/if}
+	</span>
+	<span slot="l10">
+		{#if $$slots.l10}
+			<slot name="l10" />
 		{/if}
 	</span>
 
-	
 	<span slot="r01">
 		<div class="field has-addons">
 			<p class="control">
@@ -634,7 +678,7 @@
 			</button>
 		{/if}
 	</span>
-  <span slot="r06" title="Intervalo de refresco">
+	<span slot="r06" title="Intervalo de refresco">
 		{#if url}
 			<button class="button is-small" on:click={ChangeIntervalRefresh}>
 				{#if loading}
@@ -648,8 +692,30 @@
 			</button>
 		{/if}
 	</span>
-</Level>
+	<span slot="r07">
+		{#if $$slots.r07}
+			<slot name="r07" />
+		{/if}
+	</span>
 
+	<span slot="r08">
+		{#if $$slots.r08}
+			<slot name="r08" />
+		{/if}
+	</span>
+
+	<span slot="r09">
+		{#if $$slots.r09}
+			<slot name="r09" />
+		{/if}
+	</span>
+
+	<span slot="r10">
+		{#if $$slots.r10}
+			<slot name="r10" />
+		{/if}
+	</span>
+</Level>
 
 {#if DataTable && DataTable.length > 0}
 	<div class="table-container is-size-7">
