@@ -528,9 +528,14 @@
 <nav class="level is-mobile">
   <!-- Left side -->
   <div class="level-left">
-    <div class="level-item">
-      <span class="margin_title"><slot name="title">.</slot></span>
-    </div>
+
+  {#if $$slots.title}
+  <div class="level-item">
+    <span class="margin_title"><slot name="title">.</slot></span>
+  </div>    
+  {/if}
+
+
   </div>
 
   <!-- Right side -->
