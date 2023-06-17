@@ -86,7 +86,7 @@
 </script>
 
 <div class="field is-horizontal">
-  <div class="field-label is-normal">
+  <div class="field-label is-small">
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label class="label">{label}</label>
   </div>
