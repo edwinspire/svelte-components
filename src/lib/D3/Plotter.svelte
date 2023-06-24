@@ -21,8 +21,7 @@
 	let pathLine;
 	let dots;
 
-    let visibleData = [];
-
+	let visibleData = [];
 
 	$: x = d3
 		.scaleTime()
@@ -57,20 +56,26 @@
 		if (!extent) {
 			console.log('extent no existe ++++');
 			if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350)); // This allows to wait a little bit
-			x.domain(d3.extent(visibleData, (d) => new Date(d.date)));
+		//	x.domain(d3.extent(visibleData, (d) => new Date(d.date)));
 		} else {
-			const [x0, x1] = event.selection; // Obtiene los puntos de inicio y fin de la selección
-			const selectedData = visibleData.filter((d) => x(d.date) >= x0 && x(d.date) <= x1); // Filtra los datos dentro de la selección
-
-			// Aquí puedes hacer lo que desees con los datos seleccionados
-			console.log(selectedData);
-			data = selectedData;
-			d3.select('.brush').call(brush.move, null);
-		}
-		/*
+            console.log(extent);
+			x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+			d3.select(brushElement).call(brush.move, null); // This remove the grey brush area as soon as the selection has been done
+		
+        
+        
+        }
+		
 		// Update axis and circle position
 		d3.select(gx).transition().duration(1000).call(d3.axisBottom(x));
 
+    d3.select(dots)
+      .selectAll("circle")
+      .transition().duration(1000)
+      .attr("cx", function (d) { return x(new Date(d.date)); } )
+      .attr("cy", function (d) { return y(d.time); } )
+
+        /*
 		d3.select(dots)
 			.selectAll('circle')
 			.transition()
@@ -88,9 +93,8 @@
 	};
 
 	let resetChart = () => {
-        
-        console.log(resetChart);
-        /*
+		console.log(resetChart);
+		/*
 		x.domain(d3.extent(visibleData, (d) => new Date(d.date)));
 		d3.select('.brush').call(brush.move, null);
 		d3.select('.line').attr('d', line);
