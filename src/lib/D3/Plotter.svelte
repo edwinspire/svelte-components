@@ -21,6 +21,9 @@
 	let pathLine;
 	let dots;
 
+    let visibleData = [];
+
+
 	$: x = d3
 		.scaleTime()
 		.domain(d3.extent(data, (d) => new Date(d.date)))
@@ -40,10 +43,10 @@
 	$: d3.select(gy).call(d3.axisLeft(y));
 	$: d3.select(gx).call(d3.axisBottom(x));
 
-	$: data, updateInternalData;
+	$: data, updateInternalData();
 	function updateInternalData() {
 		if (actualizar) {
-			internalData = [...data];
+			visibleData = [...data];
 		}
 	}
 
@@ -54,29 +57,14 @@
 		if (!extent) {
 			console.log('extent no existe ++++');
 			if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350)); // This allows to wait a little bit
-			x.domain(d3.extent(data, (d) => new Date(d.date)));
+			x.domain(d3.extent(visibleData, (d) => new Date(d.date)));
 		} else {
-			/*
-			//x.domain([x.invert(extent[0]), x.invert(extent[1])]);
-			d3.select('.brush').call(brush.move, null);
-			//	console.log(extent, data);
-
 			const [x0, x1] = event.selection; // Obtiene los puntos de inicio y fin de la selección
-			const selectedData = data.filter((d) => x(d.date) >= x0 && x(d.date) <= x1); // Filtra los datos dentro de la selección
+			const selectedData = visibleData.filter((d) => x(d.date) >= x0 && x(d.date) <= x1); // Filtra los datos dentro de la selección
 
 			// Aquí puedes hacer lo que desees con los datos seleccionados
 			console.log(selectedData);
 			data = selectedData;
-            */
-
-			const [x0, x1] = event.selection; // Obtiene los puntos de inicio y fin de la selección
-			const selectedData = data.filter((d) => x(d.date) >= x0 && x(d.date) <= x1); // Filtra los datos dentro de la selección
-
-			// Aquí puedes hacer lo que desees con los datos seleccionados
-			console.log(selectedData);
-			data = selectedData;
-
-			// x.domain([x.invert(extent[0]), x.invert(extent[1])]);
 			d3.select('.brush').call(brush.move, null);
 		}
 		/*
@@ -100,10 +88,14 @@
 	};
 
 	let resetChart = () => {
-		x.domain(d3.extent(data, (d) => new Date(d.date)));
+        
+        console.log(resetChart);
+        /*
+		x.domain(d3.extent(visibleData, (d) => new Date(d.date)));
 		d3.select('.brush').call(brush.move, null);
 		d3.select('.line').attr('d', line);
 		d3.selectAll('.dot').attr('cx', (d) => x(new Date(d.date)));
+        */
 	};
 
 	onMount(() => {
@@ -182,10 +174,10 @@
 		fill="none"
 		stroke="currentColor"
 		stroke-width="1.5"
-		d={line(data)}
+		d={line(visibleData)}
 	/>
 	<g bind:this={dots} class="dots" fill="white" stroke="currentColor" stroke-width="1.5">
-		{#each data as d, i}
+		{#each visibleData as d, i}
 			<circle class="dot" key={i} cx={x(new Date(d.date))} cy={y(d.time)} r="1" />
 		{/each}
 	</g>
