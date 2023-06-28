@@ -10,11 +10,10 @@
 	let marginRight = 20;
 	let marginBottom = 30;
 	let marginLeft = 40;
-	//	export let limitData = 2000;
+	export let limitData = 2000;
 	let showResetButton = false;
-    let TimeSelected = 0;
 
-	let TimeSampleSelected = 'FULL';
+	let pausar = false;
 	let refresh = true;
 	let Svg;
 	let gx;
@@ -27,19 +26,6 @@
 
 	let visibleData = [{ date: Date.now(), time: 123 }];
 
-	let TimeSample = [
-		{ label: 'FULL', value: 0 },
-		{ label: 'YEARS', value: 1000 * 60 * 60 * 24 * 30 * 12 },
-		{ label: 'MONTHS', value: 1000 * 60 * 60 * 24 * 30 },
-		{ label: 'DAYS', value: 1000 * 60 * 60 * 24 },
-		{ label: 'HOURS', value: 1000 * 60 * 60 },
-		{ label: 'MINUTES', value: 1000 * 60 },
-		{ label: 'SECONDS', value: 1000 },
-		{ label: 'MILISECONDS', value: 1 }
-	];
-
-	let timeValue = 1;
-
 	let x = d3
 		.scaleTime()
 		.domain(d3.extent(visibleData, (d) => new Date(d.date)))
@@ -50,7 +36,7 @@
 		.domain([0, d3.max(visibleData, (d) => d.time)])
 		.range([height - marginBottom, marginTop]);
 
-	let line = d3
+	$: line = d3
 		.line()
 		.x((d, i) => x(new Date(d.date)))
 		.y((d) => y(d.time))
@@ -72,46 +58,20 @@
 			.domain([0, d3.max(visibleData, (d) => d.time)])
 			.range([height - marginBottom, marginTop]);
 
-		line = d3
-			.line()
-			.x((d, i) => x(new Date(d.date)))
-			.y((d) => y(d.time))
-			.curve(d3.curveCatmullRom.alpha(0.1));
-
-		let GridY = d3
-			.axisLeft(y)
-			.tickSize(-width + marginLeft + marginRight)
-			.tickSizeOuter(1);
-
-		let GridX = d3
-			.axisBottom(x)
-			.tickSize(-height + marginBottom + marginTop)
-			.tickSizeOuter(1)
-			.tickFormat(d3.timeFormat('%H:%M:%S.%L'));
-
-		d3.select(gy).call(GridY).selectAll('.tick line').attr('stroke', '#d1d1e0');
-		d3.select(gx).call(GridX).selectAll('.tick line').attr('stroke', '#d1d1e0');
-
-		// Agregar cuadrícula
-		//	addGrid();
+		d3.select(gy).call(d3.axisLeft(y));
+		d3.select(gx).call(d3.axisBottom(x));
 	}
 
 	function updateInternalData() {
-		if (refresh) {
-			if (TimeSampleSelected == 'FULL') {
-				visibleData = [...dataInput];
-			} else {
-				const now = Date.now();
-				const lastHour = now - TimeSampleSelected * timeValue;
-				//console.log(now, lastHour);
+		console.log('> updateInternalData >>>>>');
 
-				//const lastHour = now - 3600000; // 3600000 milisegundos = 1 hora
-				//const lastHour = now - 5000; // 1000 milisegundos = 1 second
-				visibleData = dataInput.filter((item) => item.date >= lastHour && item.date <= now);
-			}
-			visibleData = visibleData;
+		if (refresh) {
+			//visibleData = [...data];
+			//			console.log('>>>>>>', dataInput);
+			visibleData = [...dataInput]; //data.slice(limitData * -1);
+			//console.log(visibleData);
 		}
-		xy_Axis();
+        xy_Axis();
 	}
 
 	let updateChart = (event) => {
@@ -121,6 +81,7 @@
 		if (!extent) {
 			//console.log('extent no existe ++++');
 			if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350)); // This allows to wait a little bit
+			console.log('extent Nada');
 			resetZoom();
 			//  x.domain(d3.extent(visibleData, (d) => new Date(d.date)));
 		} else {
@@ -134,23 +95,8 @@
 			); // Filtra los datos dentro de la selección
 
 			// Aquí puedes hacer lo que desees con los datos seleccionados
-			//console.log(selectedData);
+			console.log(selectedData);
 			visibleData = [...selectedData];
-
-			// Obtener el primer valor
-			const firstValue = visibleData[0];
-
-			// Obtener el último valor
-			const lastValue = visibleData[visibleData.length - 1];
-TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
-
-			console.log(
-				'Calculo: ',
-				firstValue,
-				lastValue,
-				TimeSelected,
-				1 / TimeSelected
-			);
 		}
 	};
 
@@ -161,10 +107,14 @@ TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
 
 	function resetZoom() {
 		console.log('Reset', dataSnapshot, visibleData);
+
 		visibleData = [...dataSnapshot];
+		//data = [...dataSnapshot];
 	}
 
 	onMount(() => {
+		//		console.log(Svg);
+
 		brush = d3
 			.brushX()
 			.extent([
@@ -174,8 +124,6 @@ TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
 			.on('end', updateChart);
 
 		d3.select(brushElement).call(brush);
-
-		TimeSampleSelected = 'FULL';
 	});
 </script>
 
@@ -189,7 +137,6 @@ TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
 				on:click={() => {
 					refresh = false;
 					dataSnapshot = [...visibleData];
-					console.log(dataSnapshot);
 				}}
 			>
 				<span class="icon is-small">
@@ -219,30 +166,6 @@ TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
 			</button>
 		</div>
 	</span>
-
-	<span slot="r02">
-		<div class="field has-addons">
-			<p class="control">
-				<input
-					bind:value={timeValue}
-					class="input is-small"
-					type="number"
-					placeholder="Time sample"
-				/>
-			</p>
-			<p class="control">
-				<span class="select is-small">
-					<select bind:value={TimeSampleSelected}>
-						{#each TimeSample as ts}
-							<option value={ts.value}>
-								{ts.label}
-							</option>
-						{/each}
-					</select>
-				</span>
-			</p>
-		</div>
-	</span>
 </Level>
 <div bind:clientWidth={width}>
 	<svg {width} {height} bind:this={Svg}>
@@ -264,22 +187,23 @@ TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
 			stroke-width="1.5"
 			d={line(visibleData)}
 		/>
-		<g bind:this={dots} class="dots" fill="white" stroke="currentColor" stroke-width="2.5">
+		<g bind:this={dots} class="dots" fill="white" stroke="currentColor" stroke-width="1.5">
 			{#each visibleData as d, i}
 				<circle class="dot" key={i} cx={x(new Date(d.date))} cy={y(d.time)} r="1" />
 			{/each}
 		</g>
 	</svg>
-
-	<Level>
-		<span slot="l01"
-			>Time between selected endpoints: {TimeSelected}ms | Frecuency: {1 / TimeSelected} Hz</span
-		>
-	</Level>
 </div>
 
-<style>
-	.tick line {
-		stroke: #3cb371 !important;
-	}
-</style>
+<label class="checkbox">
+	<input
+		type="checkbox"
+		bind:checked={pausar}
+		on:change={() => {
+			if (pausar) {
+				visibleData = [...dataSnapshot];
+			}
+		}}
+	/>
+	Restaurar
+</label>
