@@ -14,7 +14,16 @@
 		{#each tabs as item}
 			<li class={item.isActive ? 'is-active' : ''}>
 				<!-- svelte-ignore a11y-missing-attribute -->
-				<a>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<a
+					on:click={() => {
+						tabs.forEach((t) => {
+							t.isActive = false;
+						});
+
+						item.isActive = true;
+					}}
+				>
 					{#if tabs.every(withIcons)}
 						<span class="icon"><i class={item.classIcon} aria-hidden="true" /></span>
 						<span>{item.label}</span>
