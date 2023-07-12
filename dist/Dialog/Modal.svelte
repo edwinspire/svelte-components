@@ -32,7 +32,7 @@
 					dispatch('ok', e);
 				}}
 			>
-				<slot name="label-ok">Guardar</slot>
+				<slot name="label-ok">Accept</slot>
 			</button>
 			<button
 				class="button is-small"
@@ -41,7 +41,7 @@
 					dispatch('cancel', e);
 				}}
 			>
-				<slot name="label-cancel">Cancelar</slot>
+				<slot name="label-cancel">Cancel</slot>
 			</button>
 		</footer>
 	</div>

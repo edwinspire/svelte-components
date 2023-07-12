@@ -6,4 +6,5 @@ import { WebSocketClient } from "./class/websocket.js";
 import Predictive from "./Input/Predictive.svelte";
 import Level from "./Level/Level.svelte";
 import Plotter from "./D3/Plotter.svelte";
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter };
+import Tab from "./Tab/Tab.svelte";
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab };
