@@ -8,6 +8,7 @@ import Predictive from './Input/Predictive.svelte';
 import Level from './Level/Level.svelte';
 import Plotter from './D3/Plotter.svelte';
 import Tab from './Tab/Tab.svelte';
+import Menu from './Menu/Menu.svelte';
 import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
 
@@ -20,6 +21,7 @@ export {
 	Predictive as PredictiveInput,
 	Level,
 	Plotter,
-	Tab
+	Tab,
+	Menu
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";

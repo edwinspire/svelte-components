@@ -1,5 +1,5 @@
 <script>
-	import { Table, DialogModal, Plotter, Tab} from '../lib/index.js';
+	import { Table, DialogModal, Plotter, Menu} from '../lib/index.js';
 	import { onMount } from 'svelte';
 
 	let dataTest = [];
@@ -12,4 +12,4 @@
 		
 	});
 </script>
-<Tab></Tab>
+<Menu></Menu>
