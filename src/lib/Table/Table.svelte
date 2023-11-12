@@ -813,8 +813,8 @@
 												// e.preventDefault();
 												HClickCell(item, dataRow);
 											}}
-											row={dataRow}
-											value={dataRow[item]}
+											bind:row={dataRow}
+											bind:value={dataRow[item]}
 										/>
 									{:else}
 										<svelte:component
@@ -825,8 +825,8 @@
 												//  e.preventDefault();
 												HClickCell(item, dataRow);
 											}}
-											row={dataRow}
-											value={dataRow[item]}
+											bind:row={dataRow}
+											bind:value={dataRow[item]}
 										/>
 									{/if}
 								{/if}
