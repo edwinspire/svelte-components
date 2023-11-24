@@ -3,13 +3,18 @@
 	export let value;
 	export const row = {};
 	export let props = {};
-  
-  /*
-  {
-		ontrue: { label: 'true', iconClass: 'fa-regular fa-square-check', showLabel: false },
-		onfalse: { label: 'false', iconClass: 'fa-regular fa-square', showLabel: true }
+	let defaultProps = {
+		ontrue: {
+			label: 'true',
+			iconClass: 'fa-regular fa-square-check',
+			iconColorClass: ' has-text-success '
+		},
+		onfalse: {
+			label: 'false',
+			iconClass: 'fa-regular fa-square',
+			iconColorClass: ' has-text-danger '
+		}
 	};
-*/
 
 	//  console.log(option, value);
 </script>
@@ -23,11 +28,42 @@
 			value = !value;
 		}}
 	>
-		<span class="icon">
-			<i class='fa-regular fa-square-check' />
+		<span
+			class={value
+				? props && props['ontrue'] && props['ontrue'].iconColorClass
+					? props['ontrue'].iconColorClass + ' icon'
+					: defaultProps['ontrue'].iconColorClass + ' icon'
+				: props && props['onfalse'] && props['onfalse'].iconColorClass
+				? props['onfalse'].iconColorClass + ' icon'
+				: defaultProps['onfalse'].iconColorClass + ' icon'}
+		>
+			{#if value}
+				<i
+					class={props && props['ontrue'] && props['ontrue'].iconClass
+						? props['ontrue'].iconClass
+						: defaultProps['ontrue'].iconClass}
+				/>
+			{:else}
+				<i
+					class={props && props['onfalse'] && props['onfalse'].iconClass
+						? props['onfalse'].iconClass
+						: defaultProps['onfalse'].iconClass}
+				/>
+			{/if}
 		</span>
-		
-    <span>{value}</span>
-		
+
+		{#if value}
+			<span
+				>{props && props['ontrue'] && props['ontrue'].label
+					? props['ontrue'].label
+					: defaultProps['ontrue'].label}</span
+			>
+		{:else}
+			<span
+				>{props && props['onfalse'] && props['onfalse'].label
+					? props['onfalse'].label
+					: defaultProps['onfalse'].label}</span
+			>
+		{/if}
 	</span>
 </td>

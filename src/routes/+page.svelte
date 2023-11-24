@@ -6,7 +6,7 @@
 
 
 	
-	let columns = { checsk: {label: 'CHECK', }, name: {label: 'Nombre'} };
+	let columns = { checsk: {label: 'CHECK', decorator: {component: ColumnTypes.BooleanIcon} }, name: {label: 'Nombre'} };
 
 	onMount(() => {});
 </script>
