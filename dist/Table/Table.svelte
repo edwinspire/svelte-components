@@ -117,17 +117,21 @@
 	});
 
 	function ArrayChunk(myArray, chunk_size) {
-		var index = 0;
-		var arrayLength = myArray.length;
-		var tempArray = [];
+		//var index = 0;
+		//var arrayLength = myArray.length;
+		let tempArray = [];
 		chunk_size = parseInt(chunk_size);
 
-		for (index = 0; index < arrayLength; index += chunk_size) {
-			let myChunk = myArray.slice(index, index + chunk_size);
-			// Do something if you want with the group
-			tempArray.push(myChunk);
+		if (myArray && Array.isArray(myArray)) {
+			for (let index = 0; index < myArray.length; index += chunk_size) {
+				let myChunk = myArray.slice(index, index + chunk_size);
+
+				// Do something if you want with the group
+				tempArray.push(myChunk);
+			}
 		}
 
+		//tempArray[0] = myArray;
 		return tempArray;
 	}
 
@@ -135,7 +139,9 @@
 		if (RawDataTable && RawDataTable.length > 0) {
 			let MaxSizeLabel = 15;
 			internal_columns = {};
+
 			Object.keys(RawDataTable[0]).forEach((item) => {
+				//let icolumn = {};
 				if (item === 'internal_hash_row') {
 					internal_columns[item] = {
 						label: item.substring(0, MaxSizeLabel),
@@ -153,6 +159,7 @@
 						hidden: false
 					};
 				}
+				//return icolumn;
 			});
 		}
 	}
@@ -390,10 +397,13 @@
 			TempData = RawDataTable;
 		}
 		totalFilteredRows = TempData.length;
+
 		Pagination(TempData);
 	}
 
 	function Pagination(rows) {
+		//console.log('Pagination 1 >>>>>>>> ', rows);
+
 		if (ColumnSort) {
 			if (orderASC) {
 				rows = rows.sort(SortColumn(ColumnSort));
@@ -402,7 +412,9 @@
 			}
 		}
 		//console.log(PageSize, PageSizeSelected);
+		//console.log('Pagination 2 >>>>>>>> ', rows);
 		paginatedData = ArrayChunk(rows, PageSize[PageSizeSelected]);
+
 		TotalPages = paginatedData.length;
 		if (PageSelected > TotalPages) {
 			PageSelected = 1;
@@ -447,7 +459,7 @@
 				row.internal_hash_row = 0;
 				let c = sha256(JSON.stringify(row));
 
-				//  console.log("Registro HASH >> ", c);
+				console.log('Registro HASH >> ', c);
 				if (Listinternal_hash_row[c]) {
 					console.error('Hay un registro duplicado en la tabla', row);
 					c = c + '-' + new Date().getTime() + '-' + Math.floor(Math.random() * 10000);
@@ -726,9 +738,7 @@
 					<th class="has-text-centered">#</th>
 					{#if SelectionType == 1}
 						<th class="has-text-centered"><span>-</span></th>
-					{/if}
-
-					{#if SelectionType == 2}
+					{:else if SelectionType == 2}
 						<th class="has-text-centered">
 							<input type="checkbox" on:click={handleChangeSelectAll} />
 						</th>
@@ -740,100 +750,108 @@
 						</th>
 					{/if}
 
-					{#each Object.keys(DataTable[0]) as item, ith}
-						<!-- Muestra las columnas que no se hayan especificado como ocultas -->
-						{#if internal_columns[item]}
-							{#if !internal_columns[item].hidden || !internal_columns[item].hidden == null}
-								<!-- Mostramos label si esque existe -->
-								<th
-									class="has-text-centered show_cursor_mouse"
-									data-column={item}
-									on:click={HClickHeader}
-								>
-									{internal_columns[item].label}
-									{#if ColumnSort == item}
-										{#if orderASC}
-											<i class="fas fa-caret-down" />
-										{:else}
-											<i class="fas fa-caret-up" />
-										{/if}
-									{/if}
-								</th>
-							{/if}
-						{/if}
-					{/each}
-				</tr>
-			</thead>
-			<tbody>
-				{#each DataTable as dataRow, i (dataRow.internal_hash_row)}
-					<tr class={rowClassFunction(dataRow)}>
-						<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
-						{#if SelectionType == 1}
-							<td class="has-text-centered"
-								><input
-									type="radio"
-									name="single_select"
-									class="show_cursor_mouse"
-									checked={RowIsSelected(dataRow.internal_hash_row)}
-									data-internal_hash_row={dataRow.internal_hash_row}
-									on:click={HandleOnRowSelected}
-								/></td
-							>
-						{/if}
-
-						{#if SelectionType == 2}
-							<td class="has-text-centered">
-								<input
-									class="show_cursor_mouse"
-									type="checkbox"
-									checked={RowIsSelected(dataRow.internal_hash_row)}
-									data-internal_hash_row={dataRow.internal_hash_row}
-									on:click={HandleOnRowSelected}
-								/>
-							</td>
-						{/if}
-
-						{#if showEdit}
-							<td class="has-text-centered show_cursor_mouse" on:click={HClickEditRow(dataRow)}>
-								<span class="icon is-small">
-									<i class="fas fa-pen" />
-								</span>
-							</td>
-						{/if}
-						{#each Object.keys(dataRow) as item, itd}
+					{#if internal_columns}
+						{#each Object.keys(internal_columns) as item, ith}
 							<!-- Muestra las columnas que no se hayan especificado como ocultas -->
 							{#if internal_columns[item]}
-								{#if !internal_columns[item].hidden || internal_columns[item].hidden == null}
-									{#if internal_columns[item].decorator && internal_columns[item].decorator.component}
-										<svelte:component
-											this={internal_columns[item].decorator.component}
-											props={internal_columns[item].decorator.props}
-											on:click={(e) => {
-												// console.log('HClickCell 1');
-												// e.preventDefault();
-												HClickCell(item, dataRow);
-											}}
-											bind:row={dataRow}
-											bind:value={dataRow[item]}
-										/>
-									{:else}
-										<svelte:component
-											this={Auto}
-											props={false}
-											on:click={(e) => {
-												// console.log('HClickCell 2');
-												//  e.preventDefault();
-												HClickCell(item, dataRow);
-											}}
-											bind:row={dataRow}
-											bind:value={dataRow[item]}
-										/>
-									{/if}
+								{#if !internal_columns[item].hidden || !internal_columns[item].hidden == null}
+									<!-- Mostramos label si es que existe -->
+									<th
+										class="has-text-centered show_cursor_mouse"
+										data-column={item}
+										on:click={HClickHeader}
+									>
+										{internal_columns[item].label}
+										{#if ColumnSort == item}
+											{#if orderASC}
+												<i class="fas fa-caret-down" />
+											{:else}
+												<i class="fas fa-caret-up" />
+											{/if}
+										{/if}
+									</th>
 								{/if}
 							{/if}
 						{/each}
-					</tr>
-				{/each}
+					{/if}
+				</tr>
+			</thead>
+			<tbody>
+				{#if DataTable && DataTable.length > 0}
+					{#each DataTable.filter((ev) => {
+						// Se puso este filtro para evitar errores cuando hay registros nulos o no tengan internal_hash_row
+						return ev && ev.internal_hash_row;
+					}) as dataRow, i (dataRow.internal_hash_row)}
+						<tr class={rowClassFunction(dataRow)}>
+							<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
+
+							{#if SelectionType == 1}
+								<td class="has-text-centered"
+									><input
+										type="radio"
+										name="single_select"
+										class="show_cursor_mouse"
+										checked={RowIsSelected(dataRow.internal_hash_row)}
+										data-internal_hash_row={dataRow.internal_hash_row}
+										on:click={HandleOnRowSelected}
+									/></td
+								>
+							{:else if SelectionType == 2}
+								<td class="has-text-centered">
+									<input
+										class="show_cursor_mouse"
+										type="checkbox"
+										checked={RowIsSelected(dataRow.internal_hash_row)}
+										data-internal_hash_row={dataRow.internal_hash_row}
+										on:click={HandleOnRowSelected}
+									/>
+								</td>
+							{/if}
+
+							{#if showEdit}
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
+								<td class="has-text-centered show_cursor_mouse" on:click={HClickEditRow(dataRow)}>
+									<span class="icon is-small">
+										<i class="fas fa-pen" />
+									</span>
+								</td>
+							{/if}
+
+							{#each Object.keys(dataRow) as item, itd}
+								<!-- Muestra las columnas que no se hayan especificado como ocultas -->
+								{#if internal_columns[item]}
+									{#if !internal_columns[item].hidden || internal_columns[item].hidden == null}
+										{#if internal_columns[item].decorator && internal_columns[item].decorator.component}
+											<svelte:component
+												this={internal_columns[item].decorator.component}
+												props={internal_columns[item].decorator.props}
+												on:click={(e) => {
+													// console.log('HClickCell 1');
+													// e.preventDefault();
+													HClickCell(item, dataRow);
+												}}
+												bind:row={dataRow}
+												bind:value={dataRow[item]}
+											/>
+										{:else}
+											<svelte:component
+												this={Auto}
+												props={false}
+												on:click={(e) => {
+													// console.log('HClickCell 2');
+													//  e.preventDefault();
+													HClickCell(item, dataRow);
+												}}
+												bind:row={dataRow}
+												bind:value={dataRow[item]}
+											/>
+										{/if}
+									{/if}
+								{/if}
+							{/each}
+						</tr>
+					{/each}
+				{/if}
 			</tbody>
 		</table>
 	</div>
@@ -1010,6 +1028,7 @@
 				{/each}
 			</div>
 		</section>
+
 		<footer class="modal-card-foot has-background-dark">
 			<button class="button is-success is-small">
 				<span>Aceptar</span>

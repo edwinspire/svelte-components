@@ -3,5 +3,6 @@ import TextLimit from "./TextLimit.svelte";
 import DateTime from "./DateTime.svelte";
 import Json from "./JSON.svelte";
 import Auto from "./Auto.svelte";
+import BooleanIcon from "./BooleanIcon.svelte";
 
-export { Boolean, TextLimit, DateTime, Json, Auto };
+export { Boolean, TextLimit, DateTime, Json, Auto, BooleanIcon };
