@@ -1,10 +1,15 @@
 <script>
+	import { createEventDispatcher } from 'svelte';
 	export let classSize = 'is-small';
 	export let tabs = [
 		{ label: 'Pictures', classIcon: 'fas fa-picture', slot: 'picture', isActive: false },
 		{ label: 'Calcs', classIcon: 'fas fa-picture', slot: 'music', isActive: true },
 		{ label: 'Film', classIcon: 'fas fa-film', slot: 'film', isActive: false }
 	];
+
+	export let active = '';
+
+	const dispatch = createEventDispatcher();
 
 	const withIcons = (currentValue) => currentValue.classIcon && currentValue.classIcon.length > 3;
 </script>
@@ -22,6 +27,8 @@
 						});
 
 						item.isActive = true;
+						active = item.slot;
+						dispatch(item.slot);
 					}}
 				>
 					{#if tabs.every(withIcons)}

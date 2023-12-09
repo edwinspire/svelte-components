@@ -9,6 +9,7 @@ export default class Tab extends SvelteComponentTyped<{
         slot: string;
         isActive: boolean;
     }[];
+    active?: string;
 }, {
     [evt: string]: CustomEvent<any>;
 }, {
@@ -28,6 +29,7 @@ declare const __propDef: {
             slot: string;
             isActive: boolean;
         }[];
+        active?: string;
     };
     events: {
         [evt: string]: CustomEvent<any>;
