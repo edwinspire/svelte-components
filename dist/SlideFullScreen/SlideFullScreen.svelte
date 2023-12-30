@@ -32,21 +32,4 @@
 		box-sizing: border-box; /* Incluye el padding en el cálculo del tamaño total */
 		margin: 1%;
 	}
-
-	.overlay a {
-		padding: 8px;
-		display: block;
-		transition: 0.3s;
-	}
-
-	.overlay a:hover,
-	.overlay a:focus {
-		color: #f1f1f1;
-	}
-
-	@media screen and (max-height: 450px) {
-		.overlay a {
-			font-size: 20px;
-		}
-	}
 </style>
