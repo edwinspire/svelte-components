@@ -4,6 +4,8 @@
 export default class SlideFullScreen extends SvelteComponentTyped<{
     show?: boolean;
 }, {
+    keydown: KeyboardEvent;
+} & {
     [evt: string]: CustomEvent<any>;
 }, {
     default: {};
@@ -18,6 +20,8 @@ declare const __propDef: {
         show?: boolean;
     };
     events: {
+        keydown: KeyboardEvent;
+    } & {
         [evt: string]: CustomEvent<any>;
     };
     slots: {

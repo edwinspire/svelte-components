@@ -2,7 +2,7 @@
 	export let show = false;
 </script>
 
-<div>
+<div on:keydown>
 	<div class="overlay" style="width: {show ? '100%' : '0%'};">
 		<div class="overlay-content box">
 			<slot />
