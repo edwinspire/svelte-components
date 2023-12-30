@@ -9,6 +9,8 @@ import Level from './Level/Level.svelte';
 import Plotter from './D3/Plotter.svelte';
 import Tab from './Tab/Tab.svelte';
 import Menu from './Menu/Menu.svelte';
+import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
+
 import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
 
@@ -22,6 +24,7 @@ export {
 	Level,
 	Plotter,
 	Tab,
-	Menu
+	Menu,
+	SlideFullScreen
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";
