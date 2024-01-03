@@ -9,4 +9,5 @@ import Plotter from './D3/Plotter.svelte';
 import Tab from './Tab/Tab.svelte';
 import Menu from './Menu/Menu.svelte';
 import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen };
+import BasicSelect from './Select/BasicSelect.svelte';
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect };
