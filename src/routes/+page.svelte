@@ -1,5 +1,5 @@
 <script>
-	import { Table, DialogModal, Plotter, Menu, ColumnTypes, SlideFullScreen } from '../lib/index.js';
+	import { Table, DialogModal, Plotter, Menu, ColumnTypes, SlideFullScreen , BasicSelect} from '../lib/index.js';
 	import { onMount } from 'svelte';
 
 	let dataTest = [
@@ -25,3 +25,5 @@
 <SlideFullScreen bind:show>
 	<div>jfskjfshfkdsh</div>
 </SlideFullScreen>
+
+<BasicSelect></BasicSelect>
