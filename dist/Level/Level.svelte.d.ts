@@ -1,7 +1,7 @@
 /** @typedef {typeof __propDef.props}  LevelProps */
 /** @typedef {typeof __propDef.events}  LevelEvents */
 /** @typedef {typeof __propDef.slots}  LevelSlots */
-export default class Level extends SvelteComponentTyped<{
+export default class Level extends SvelteComponent<{
     [x: string]: never;
 }, {
     [evt: string]: CustomEvent<any>;
@@ -32,7 +32,7 @@ export default class Level extends SvelteComponentTyped<{
 export type LevelProps = typeof __propDef.props;
 export type LevelEvents = typeof __propDef.events;
 export type LevelSlots = typeof __propDef.slots;
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         [x: string]: never;

@@ -1,7 +1,7 @@
 /** @typedef {typeof __propDef.props}  BasicSelectProps */
 /** @typedef {typeof __propDef.events}  BasicSelectEvents */
 /** @typedef {typeof __propDef.slots}  BasicSelectSlots */
-export default class BasicSelect extends SvelteComponentTyped<{
+export default class BasicSelect extends SvelteComponent<{
     option?: string;
     options?: {
         id: string;
@@ -18,7 +18,7 @@ export default class BasicSelect extends SvelteComponentTyped<{
 export type BasicSelectProps = typeof __propDef.props;
 export type BasicSelectEvents = typeof __propDef.events;
 export type BasicSelectSlots = typeof __propDef.slots;
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         option?: string;

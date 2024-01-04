@@ -1,7 +1,7 @@
 /** @typedef {typeof __propDef.props}  TableRemoteProps */
 /** @typedef {typeof __propDef.events}  TableRemoteEvents */
 /** @typedef {typeof __propDef.slots}  TableRemoteSlots */
-export default class TableRemote extends SvelteComponentTyped<{
+export default class TableRemote extends SvelteComponent<{
     url?: string;
     columns?: {};
     params?: {};
@@ -12,7 +12,7 @@ export default class TableRemote extends SvelteComponentTyped<{
 export type TableRemoteProps = typeof __propDef.props;
 export type TableRemoteEvents = typeof __propDef.events;
 export type TableRemoteSlots = typeof __propDef.slots;
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         url?: string;

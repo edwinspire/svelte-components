@@ -1,7 +1,7 @@
 /** @typedef {typeof __propDef.props}  BooleanIconProps */
 /** @typedef {typeof __propDef.events}  BooleanIconEvents */
 /** @typedef {typeof __propDef.slots}  BooleanIconSlots */
-export default class BooleanIcon extends SvelteComponentTyped<{
+export default class BooleanIcon extends SvelteComponent<{
     value: any;
     row?: {};
     props?: {};
@@ -15,7 +15,7 @@ export default class BooleanIcon extends SvelteComponentTyped<{
 export type BooleanIconProps = typeof __propDef.props;
 export type BooleanIconEvents = typeof __propDef.events;
 export type BooleanIconSlots = typeof __propDef.slots;
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         value: any;

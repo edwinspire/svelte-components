@@ -1,7 +1,7 @@
 /** @typedef {typeof __propDef.props}  PredictiveProps */
 /** @typedef {typeof __propDef.events}  PredictiveEvents */
 /** @typedef {typeof __propDef.slots}  PredictiveSlots */
-export default class Predictive extends SvelteComponentTyped<{
+export default class Predictive extends SvelteComponent<{
     label?: string;
     options?: {
         name: string;
@@ -16,7 +16,7 @@ export default class Predictive extends SvelteComponentTyped<{
 export type PredictiveProps = typeof __propDef.props;
 export type PredictiveEvents = typeof __propDef.events;
 export type PredictiveSlots = typeof __propDef.slots;
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         label?: string;

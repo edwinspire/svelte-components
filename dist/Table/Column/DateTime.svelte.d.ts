@@ -1,7 +1,7 @@
 /** @typedef {typeof __propDef.props}  DateTimeProps */
 /** @typedef {typeof __propDef.events}  DateTimeEvents */
 /** @typedef {typeof __propDef.slots}  DateTimeSlots */
-export default class DateTime extends SvelteComponentTyped<{
+export default class DateTime extends SvelteComponent<{
     value: any;
     props: any;
     row?: {};
@@ -15,7 +15,7 @@ export default class DateTime extends SvelteComponentTyped<{
 export type DateTimeProps = typeof __propDef.props;
 export type DateTimeEvents = typeof __propDef.events;
 export type DateTimeSlots = typeof __propDef.slots;
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         value: any;

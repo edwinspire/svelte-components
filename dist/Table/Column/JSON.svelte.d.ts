@@ -1,7 +1,7 @@
 /** @typedef {typeof __propDef.props}  JsonProps */
 /** @typedef {typeof __propDef.events}  JsonEvents */
 /** @typedef {typeof __propDef.slots}  JsonSlots */
-export default class Json extends SvelteComponentTyped<{
+export default class Json extends SvelteComponent<{
     value: any;
     row?: {};
     props?: {};
@@ -16,7 +16,7 @@ export default class Json extends SvelteComponentTyped<{
 export type JsonProps = typeof __propDef.props;
 export type JsonEvents = typeof __propDef.events;
 export type JsonSlots = typeof __propDef.slots;
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         value: any;
