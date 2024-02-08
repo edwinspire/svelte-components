@@ -491,7 +491,7 @@
 			if (url && url.length > 0) {
 				try {
 					loading = true;
-					let res = await FetchData.get(url, params);
+					let res = await FetchData.GET({ url, data: params });
 					//console.log(res);
 					if (res && res.status == 200) {
 						let data = await res.json();
