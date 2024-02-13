@@ -705,7 +705,7 @@
 		{/if}
 	</span>
 	<span slot="r06" title="Intervalo de refresco">
-		{#if url}
+		{#if requestData && requestData.url}
 			<button class="button is-small" on:click={ChangeIntervalRefresh}>
 				{#if loading}
 					<span class="icon has-text-info"><i class="fas fa-spinner fa-pulse" /></span>
