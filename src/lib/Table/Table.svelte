@@ -464,7 +464,7 @@
 				row.internal_hash_row = 0;
 				let c = sha256(JSON.stringify(row));
 
-				console.log('Registro HASH >> ', c);
+				//console.log('Registro HASH >> ', c);
 				if (Listinternal_hash_row[c]) {
 					console.error('Hay un registro duplicado en la tabla', row);
 					c = c + '-' + new Date().getTime() + '-' + Math.floor(Math.random() * 10000);
