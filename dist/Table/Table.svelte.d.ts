@@ -12,6 +12,7 @@ export default class Table extends SvelteComponent<{
     iconExport?: string;
     requestData?: {
         url: any;
+        refresh_time: number;
         params: any;
         method: string;
         headers: any;
@@ -21,7 +22,6 @@ export default class Table extends SvelteComponent<{
         };
     };
     rowClassFunction?: (row: any) => string;
-    IntervalRefreshSelected?: number;
     PageSize?: number[];
     PageSizeSelected?: number;
     relatedTablesForAutoRefresh?: any[];
@@ -68,6 +68,7 @@ declare const __propDef: {
         iconExport?: string;
         requestData?: {
             url: any;
+            refresh_time: number;
             params: any;
             method: string;
             headers: any;
@@ -77,7 +78,6 @@ declare const __propDef: {
             };
         };
         rowClassFunction?: (row: any) => string;
-        IntervalRefreshSelected?: number;
         PageSize?: number[];
         PageSizeSelected?: number;
         relatedTablesForAutoRefresh?: any[];

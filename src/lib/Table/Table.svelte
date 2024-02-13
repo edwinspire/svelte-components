@@ -32,7 +32,7 @@
 	//export let basicAuthorization; // {user: '', password: ''}
 	//export let method = 'GET';
 
-	export let requestData = {url: undefined, params: undefined,  method: 'GET', headers: undefined, authorization: {basic: undefined, bearer: undefined}};
+	export let requestData = {url: undefined, refresh_time: 4, params: undefined,  method: 'GET', headers: undefined, authorization: {basic: undefined, bearer: undefined}};
 
 	export let rowClassFunction = function (row) {
 		return '';
@@ -55,7 +55,7 @@
 	let LastFetchResponse = true;
 	// -- Refresh -- //
 	let IntervalRefresh = [10, 20, 30, 45, 60, 120, 240, 480, 960, 1920, 3840];
-	export let IntervalRefreshSelected = 4;
+	//export let requestData.refresh_time = 4;
 	//-- Pagination --//
 	export let PageSize = [25, 50, 100, 200, 300, 500, 1000];
 	export let PageSizeSelected = 0;
@@ -103,7 +103,7 @@
 	}
 
 	onMount(() => {
-		//timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected]||999;
+		//timeRemainingToRefresh = IntervalRefresh[requestData.refresh_time]||999;
 		timeRemainingToRefresh = 0;
 		// console.log("XLSX 2", XLSX);
 		//    GetDataTable();
@@ -264,7 +264,7 @@
 	let auto_refresh = setInterval(async () => {
 		if (timeRemainingToRefresh == 0 || auto_refresh_by_table_changed_request > 0) {
 			await GetDataTable();
-			timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected];
+			timeRemainingToRefresh = IntervalRefresh[requestData.refresh_time];
 			auto_refresh_by_table_changed_request = 0;
 		} else {
 			timeRemainingToRefresh--;
@@ -293,14 +293,14 @@
 	});
 
 	function ChangeIntervalRefresh() {
-		let i = IntervalRefreshSelected + 1;
+		let i = requestData.refresh_time + 1;
 		if (IntervalRefresh[i]) {
-			IntervalRefreshSelected = i;
+			requestData.refresh_time = i;
 		} else {
-			IntervalRefreshSelected = 0;
+			requestData.refresh_time = 0;
 		}
 
-		timeRemainingToRefresh = IntervalRefresh[IntervalRefreshSelected];
+		timeRemainingToRefresh = IntervalRefresh[requestData.refresh_time];
 	}
 
 	function SortColumn(key, order = 'asc') {
@@ -704,7 +704,7 @@
 			</button>
 		{/if}
 	</span>
-	<span slot="r06" title="Intervalo de refresco">
+	<span slot="r06" title="Data refresh interval.">
 		{#if requestData && requestData.url}
 			<button class="button is-small" on:click={ChangeIntervalRefresh}>
 				{#if loading}
