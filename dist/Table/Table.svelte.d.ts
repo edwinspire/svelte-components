@@ -2,16 +2,24 @@
 /** @typedef {typeof __propDef.events}  TableEvents */
 /** @typedef {typeof __propDef.slots}  TableSlots */
 export default class Table extends SvelteComponent<{
-    url?: string;
     RawDataTable?: any[];
     SelectionType?: number;
     columns?: {};
-    params?: {};
     ShowNewButton?: boolean;
     ShowEditButton?: boolean;
     ShowSelectionButton?: boolean;
     ShowExportButton?: boolean;
     iconExport?: string;
+    requestData?: {
+        url: any;
+        params: any;
+        method: string;
+        headers: any;
+        authorization: {
+            basic: any;
+            bearer: any;
+        };
+    };
     rowClassFunction?: (row: any) => string;
     IntervalRefreshSelected?: number;
     PageSize?: number[];
@@ -50,16 +58,24 @@ export type TableSlots = typeof __propDef.slots;
 import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
-        url?: string;
         RawDataTable?: any[];
         SelectionType?: number;
         columns?: {};
-        params?: {};
         ShowNewButton?: boolean;
         ShowEditButton?: boolean;
         ShowSelectionButton?: boolean;
         ShowExportButton?: boolean;
         iconExport?: string;
+        requestData?: {
+            url: any;
+            params: any;
+            method: string;
+            headers: any;
+            authorization: {
+                basic: any;
+                bearer: any;
+            };
+        };
         rowClassFunction?: (row: any) => string;
         IntervalRefreshSelected?: number;
         PageSize?: number[];

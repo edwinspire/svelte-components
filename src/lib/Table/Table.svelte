@@ -21,13 +21,18 @@
 	export let RawDataTable = [];
 	export let SelectionType = 0;
 	export let columns = {};
-	export let url = '';
-	export let params = {};
+	//export let url = '';
+	//export let params = {};
 	export let ShowNewButton = false;
 	export let ShowEditButton = false;
 	export let ShowSelectionButton = true;
 	export let ShowExportButton = true;
 	export let iconExport = 'fa-solid fa-file-excel';
+	//export let bearerAuthorization;
+	//export let basicAuthorization; // {user: '', password: ''}
+	//export let method = 'GET';
+
+	export let requestData = {url: undefined, params: undefined,  method: 'GET', headers: undefined, authorization: {basic: undefined, bearer: undefined}};
 
 	export let rowClassFunction = function (row) {
 		return '';
@@ -484,14 +489,23 @@
 	}
 
 	async function GetDataTable() {
-		console.log('GetDataTable');
+		//console.log('GetDataTable');
 		if (loading) {
 			console.log('Hay una petición en curso');
 		} else {
-			if (url && url.length > 0) {
+			if (requestData && requestData.url && requestData.url.length > 0) {
 				try {
 					loading = true;
-					let res = await FetchData.GET({ url, data: params });
+
+					if (requestData.authorization && requestData.authorization.bearer) {
+						FetchData.setBearerAuthorization(requestData.authorization.bearer);
+					} else if (requestData.authorization && requestData.authorization.basic) {
+						FetchData.SetBasicAuthentication(requestData.authorization.basic.username, requestData.authorization.basic.password);
+					}else{
+						FetchData.ClearAuthorizationHeader();
+					}
+
+					let res = await FetchData[requestData.method.toUpperCase()]({ url: requestData.url, data: requestData.params, headers: requestData.headers });
 					//console.log(res);
 					if (res && res.status == 200) {
 						let data = await res.json();
@@ -516,7 +530,7 @@
 					LastFetchResponse = false;
 				}
 			} else {
-				console.warn('Not url asigned');
+				//console.warn('Not url asigned');
 				LastFetchResponse = false;
 			}
 		}
