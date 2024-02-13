@@ -32,7 +32,14 @@
 	//export let basicAuthorization; // {user: '', password: ''}
 	//export let method = 'GET';
 
-	export let requestData = {url: undefined, refresh_time: 4, params: undefined,  method: 'GET', headers: undefined, authorization: {basic: undefined, bearer: undefined}};
+	export let requestData = {
+		url: undefined,
+		refresh_time: 4,
+		params: undefined,
+		method: 'GET',
+		headers: undefined,
+		authorization: { basic: undefined, bearer: undefined }
+	};
 
 	export let rowClassFunction = function (row) {
 		return '';
@@ -55,7 +62,7 @@
 	let LastFetchResponse = true;
 	// -- Refresh -- //
 	let IntervalRefresh = [10, 20, 30, 45, 60, 120, 240, 480, 960, 1920, 3840];
-	//export let requestData.refresh_time = 4;
+
 	//-- Pagination --//
 	export let PageSize = [25, 50, 100, 200, 300, 500, 1000];
 	export let PageSizeSelected = 0;
@@ -107,6 +114,10 @@
 		timeRemainingToRefresh = 0;
 		// console.log("XLSX 2", XLSX);
 		//    GetDataTable();
+		requestData.method = requestData.method || 'GET';
+		requestData.refresh_time = Number(requestData.refresh_time)
+			? Number(requestData.refresh_time)
+			: 4;
 
 		storeChangedTables.subscribe((value) => {
 			//console.log('storeChangedTables.subscribe', value);
@@ -251,7 +262,7 @@
 				};
 				XLSX.writeFile(wb, NameFile, wopts);
 			} else {
-				alert('Por favor seleccione los registros a exportar');
+				alert('Please select the records to export.');
 				SelectionType = 2;
 			}
 		} catch (error) {
@@ -491,7 +502,7 @@
 	async function GetDataTable() {
 		//console.log('GetDataTable');
 		if (loading) {
-			console.log('Hay una petición en curso');
+			console.log('There is a petition in progress.');
 		} else {
 			if (requestData && requestData.url && requestData.url.length > 0) {
 				try {
@@ -500,12 +511,24 @@
 					if (requestData.authorization && requestData.authorization.bearer) {
 						FetchData.setBearerAuthorization(requestData.authorization.bearer);
 					} else if (requestData.authorization && requestData.authorization.basic) {
-						FetchData.SetBasicAuthentication(requestData.authorization.basic.username, requestData.authorization.basic.password);
-					}else{
+						FetchData.SetBasicAuthentication(
+							requestData.authorization.basic.username,
+							requestData.authorization.basic.password
+						);
+					} else {
 						FetchData.ClearAuthorizationHeader();
 					}
 
-					let res = await FetchData[requestData.method.toUpperCase()]({ url: requestData.url, data: requestData.params, headers: requestData.headers });
+					let method_request =
+						requestData && requestData.method ? requestData.method.toUpperCase() : 'GET';
+
+					console.log(method_request);
+
+					let res = await FetchData[method_request]({
+						url: requestData.url,
+						data: requestData.params,
+						headers: requestData.headers
+					});
 					//console.log(res);
 					if (res && res.status == 200) {
 						let data = await res.json();
@@ -595,7 +618,7 @@
 				<input
 					class="input size_search is-small"
 					type="text"
-					placeholder="Buscar"
+					placeholder="Search"
 					bind:value={text_search}
 				/>
 			</p>
@@ -679,7 +702,7 @@
 							<span class="icon">
 								<i class="fas fa-ban" />
 							</span>
-							<span>Ninguno</span>
+							<span>None</span>
 						</a>
 					</div>
 				</div>
@@ -877,8 +900,8 @@
 				{#if paginatedData && paginatedData.length > 1}
 					<div class="level-item">
 						<span class="">
-							Página {PageSelected} de {TotalPages} (Total {totalFilteredRows}
-							filas)
+							Page {PageSelected} of {TotalPages} (Total {totalFilteredRows}
+							rows)
 						</span>
 					</div>
 					<div class="level-item">
@@ -986,7 +1009,7 @@
 			<!-- Right side -->
 			<div class="level-right">
 				<span class="level-item">
-					<span class="label_rows_per_page">Filas por página</span>
+					<span class="label_rows_per_page">Rows per page</span>
 					<div class="select is-small">
 						<!-- svelte-ignore a11y-no-onchange -->
 						<select
@@ -1009,7 +1032,7 @@
 {:else}
 	<div class="has-text-centered has-text-link-dark">
 		<i class="fa fa-table" aria-hidden="true" />
-		No hay datos que mostrar
+		There is no data to show
 	</div>
 {/if}
 
@@ -1019,7 +1042,7 @@
 		<header class="modal-card-head has-background-dark">
 			<p class="modal-card-title has-text-white">
 				<b>
-					<span>Columnas</span>
+					<span>Columns</span>
 				</b>
 			</p>
 			<button
@@ -1045,7 +1068,7 @@
 
 		<footer class="modal-card-foot has-background-dark">
 			<button class="button is-success is-small">
-				<span>Aceptar</span>
+				<span>Accept</span>
 			</button>
 			<button
 				class="button is-small"
@@ -1053,7 +1076,7 @@
 					ShowDialogColumn = false;
 				}}
 			>
-				<span>Cancelar</span>
+				<span>Cancel</span>
 			</button>
 		</footer>
 	</div>

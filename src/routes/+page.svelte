@@ -1,5 +1,13 @@
 <script>
-	import { Table, DialogModal, Plotter, Menu, ColumnTypes, SlideFullScreen , BasicSelect} from '../lib/index.js';
+	import {
+		Table,
+		DialogModal,
+		Plotter,
+		Menu,
+		ColumnTypes,
+		SlideFullScreen,
+		BasicSelect
+	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 
 	let dataTest = [
@@ -12,6 +20,10 @@
 		name: { label: 'Nombre' }
 	};
 	let show = false;
+	let requestData = {
+		url: 'https://cat-fact.herokuapp.com/facts/random',
+		params: { animal_type: 'cat', amount: 10 }
+	};
 
 	onMount(() => {});
 </script>
@@ -22,8 +34,4 @@
 	}}>Mostrar</button
 >
 
-<SlideFullScreen bind:show>
-	<div>jfskjfshfkdsh</div>
-</SlideFullScreen>
-
-<BasicSelect></BasicSelect>
+<Table bind:columns bind:requestData></Table>
