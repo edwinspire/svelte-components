@@ -16,7 +16,12 @@
 	];
 
 	let columns = {
-		checsk: { label: 'CHECK', decorator: { component: ColumnTypes.BooleanIcon } },
+		fecha: { label: 'CHECK', decorator: { component: ColumnTypes.DateTime } },
+		fecha2: {
+			label: 'CHECK2',
+			decorator: { component: ColumnTypes.DateTime, props: { fromFormat: 'yyyy-MM-dd' } }
+		},
+		fecha3: { label: 'CHECK3', decorator: { component: ColumnTypes.DateTime } },
 		name: { label: 'Nombre' }
 	};
 	let show = false;
@@ -24,6 +29,10 @@
 		url: 'https://cat-fact.herokuapp.com/facts/random',
 		params: { animal_type: 'cat', amount: 10 }
 	};
+
+	let RawDataTable = [
+		{ fecha: new Date().toISOString(), fecha2: '2024-02-14', fecha3: '2024-02-14T10:00:00.000z' }
+	];
 
 	onMount(() => {});
 </script>
@@ -34,4 +43,4 @@
 	}}>Mostrar</button
 >
 
-<Table bind:columns bind:requestData></Table>
+<Table bind:columns bind:RawDataTable></Table>
