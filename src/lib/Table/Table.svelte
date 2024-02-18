@@ -6,11 +6,11 @@
 	import { onDestroy, onMount } from 'svelte';
 	import uFetch from '@edwinspire/universal-fetch';
 	import { DateTime as DT, Auto } from './Column/DefaultTypes.js';
-	import { DateTime } from 'luxon';
+//	import { DateTime } from 'luxon';
 	import { storeChangedTables } from '../class/websocket.js';
 	import { sha256 } from '../class/sha.js';
 	import Level from '../Level/Level.svelte';
-	import { ExportTableToHTML } from './utils/export_data.js';
+	import { ExportTableToHTML, ExportTableToXlsx } from './utils/export_data.js';
 
 	//-      -//
 	//TODO Habilitar mostrar u ocultar columnas
@@ -192,7 +192,7 @@
 		});
 	}
 
-	function ExportTable() {
+	function ExportToHTML() {
 		//console.log(this);
 		try {
 			// Filter only selection
@@ -202,6 +202,25 @@
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
 				ExportTableToHTML(filteredData, columns, fileNameExport);
+			} else {
+				alert('Select the rows to export.');
+				SelectionType = 2;
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	function ExportToExcel() {
+		//console.log(this);
+		try {
+			// Filter only selection
+
+			console.log('ExportTable > Columns ', columns);
+
+			let filteredData = GetSelectedRows();
+			if (filteredData && filteredData.length > 0) {
+				ExportTableToXlsx(filteredData, columns, fileNameExport);
 			} else {
 				alert('Select the rows to export.');
 				SelectionType = 2;
@@ -572,9 +591,14 @@
 	</span>
 	<span slot="r02">
 		{#if ShowExportButton}
-			<button class="button is-small" on:click={handleExportSelection} title="Export to Excel">
+			<button class="button is-small" on:click={ExportToExcel} title="Export to Excel">
 				<span class="icon">
 					<i class={iconExport} />
+				</span>
+			</button>
+			<button class="button is-small" on:click={ExportToHTML} title="Export to Html">
+				<span class="icon">
+					<i class="fa-solid fa-download"></i>
 				</span>
 			</button>
 		{/if}
