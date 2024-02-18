@@ -10,6 +10,7 @@
 	import { storeChangedTables } from '../class/websocket.js';
 	import { sha256 } from '../class/sha.js';
 	import Level from '../Level/Level.svelte';
+	import { ExportTableToXlsx } from './utils/export_data.js';
 
 	//-      -//
 	//TODO Habilitar mostrar u ocultar columnas
@@ -199,70 +200,10 @@
 			console.log('ExportTable > Columns ', columns);
 
 			let filteredData = GetSelectedRows();
-			let ExceedsCharacterLimitPerCell = false;
-			let FormatedData = filteredData.map((row) => {
-				let r = { ...row };
-				// Convert to string objects
-
-				Object.keys(row).forEach((key) => {
-					//         console.log('Export: ', key, columns[key]);
-					if (columns[key] && columns[key].hidden) {
-						delete r[key];
-					} else if (
-						columns[key] &&
-						columns[key].decorator &&
-						columns[key].decorator.component &&
-						columns[key].decorator.component === DT
-					) {
-						//r[key] = new Date(row[key]).toISOString();
-						r[key] = DateTime.fromISO(row[key]).toFormat('yyyy-MM-dd HH:mm:ss');
-					} else if (row[key] !== null && typeof row[key] === 'object') {
-						//r[key] = JSON.stringify(row[key], null, 4);
-						r[key] = JSON.stringify(row[key]);
-						let caracteres = r[key].length;
-						//32767 es el limite de caracteres por celda en un xlsx
-						if (caracteres >= 32767) {
-							ExceedsCharacterLimitPerCell = true;
-							console.warn(
-								`El valor de la columna ${key} es muy largo para ser exportado, se ha limitado a 32767 caracteres`
-							);
-						}
-					}
-				});
-				delete r.internal_hash_row;
-				return r;
-			});
-			console.log('FormatedData', FormatedData, XLSX);
-			if (FormatedData && FormatedData.length > 0) {
-				/* Create a worksheet */
-				var ws = XLSX.utils.json_to_sheet(FormatedData);
-				/* Create a new empty workbook, then add the worksheet */
-				var wb = XLSX.utils.book_new();
-				XLSX.utils.book_append_sheet(wb, ws, 'Report');
-				let ExtensionFile = 'xlsx';
-				if (ExceedsCharacterLimitPerCell) {
-					ExtensionFile = 'csv';
-				}
-
-				let fName = 'Report';
-
-				if (fName && fName.length > 0) {
-					fName = fileNameExport;
-				}
-
-				let NameFile = `${fName}_${DateTime.local().toFormat(
-					'yyyy-MM-dd_HH-mm-ss'
-				)}.${ExtensionFile}`;
-
-				var wopts = {
-					bookType: ExtensionFile,
-					bookSST: false,
-					type: 'binary',
-					FS: ';'
-				};
-				XLSX.writeFile(wb, NameFile, wopts);
+			if (filteredData && filteredData.length > 0) {
+				ExportTableToXlsx(filteredData, columns, fileNameExport);
 			} else {
-				alert('Please select the records to export.');
+				alert('Select the rows to export.');
 				SelectionType = 2;
 			}
 		} catch (error) {
@@ -631,7 +572,7 @@
 	</span>
 	<span slot="r02">
 		{#if ShowExportButton}
-			<button class="button is-small" on:click={handleExportSelection}>
+			<button class="button is-small" on:click={handleExportSelection} title="Export to Excel">
 				<span class="icon">
 					<i class={iconExport} />
 				</span>
