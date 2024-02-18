@@ -10,7 +10,7 @@
 	import { storeChangedTables } from '../class/websocket.js';
 	import { sha256 } from '../class/sha.js';
 	import Level from '../Level/Level.svelte';
-	import { ExportTableToXlsx } from './utils/export_data.js';
+	import { ExportTableToHTML } from './utils/export_data.js';
 
 	//-      -//
 	//TODO Habilitar mostrar u ocultar columnas
@@ -201,7 +201,7 @@
 
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
-				ExportTableToXlsx(filteredData, columns, fileNameExport);
+				ExportTableToHTML(filteredData, columns, fileNameExport);
 			} else {
 				alert('Select the rows to export.');
 				SelectionType = 2;

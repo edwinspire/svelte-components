@@ -12,7 +12,9 @@
 
 	let dataTest = [
 		{ checsk: false, name: '33112321', datas: 'sdasdsad' },
-		{ checsk: true, name: '33ds112321', datas: 'sdasdsadddd' }
+		{ checsk: true, name: '232322', datas: 'this es field test' },
+		{ checsk: true, name: 'ddfff', datas: 'este es un texto un poco mas largo' },
+		{ checsk: true, name: 'kkhkññkjjhmamá', datas: 'Otro texto [verifiado]' }
 	];
 
 	let columns = {
@@ -43,4 +45,4 @@
 	}}>Mostrar</button
 >
 
-<Table bind:columns bind:RawDataTable></Table>
+<Table bind:columns bind:RawDataTable={dataTest}></Table>
