@@ -6,7 +6,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import uFetch from '@edwinspire/universal-fetch';
 	import { DateTime as DT, Auto } from './Column/DefaultTypes.js';
-//	import { DateTime } from 'luxon';
+	//	import { DateTime } from 'luxon';
 	import { storeChangedTables } from '../class/websocket.js';
 	import { sha256 } from '../class/sha.js';
 	import Level from '../Level/Level.svelte';
@@ -735,19 +735,19 @@
 	<div class="table-container is-size-7">
 		<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
 			<!-- Aqui escribe el encabezado de la tabla -->
-			<thead>
-				<tr>
-					<th class="has-text-centered">#</th>
+			<thead >
+				<tr class="has-background-link-dark">
+					<th class="has-text-centered has-text-white">#</th>
 					{#if SelectionType == 1}
-						<th class="has-text-centered"><span>-</span></th>
+						<th class="has-text-centered has-text-white"><span>-</span></th>
 					{:else if SelectionType == 2}
-						<th class="has-text-centered">
+						<th class="has-text-centered has-text-white">
 							<input type="checkbox" on:click={handleChangeSelectAll} />
 						</th>
 					{/if}
 
 					{#if showEdit}
-						<th class="has-text-centered">
+						<th class="has-text-centered has-text-white">
 							<i class="fas fa-pen" />
 						</th>
 					{/if}
@@ -759,7 +759,7 @@
 								{#if !internal_columns[item].hidden || !internal_columns[item].hidden == null}
 									<!-- Mostramos label si es que existe -->
 									<th
-										class="has-text-centered show_cursor_mouse"
+										class="has-text-centered show_cursor_mouse has-text-white"
 										data-column={item}
 										on:click={HClickHeader}
 									>
@@ -1048,6 +1048,7 @@
 </div>
 
 <style>
+
 	.size_search {
 		width: 7em;
 	}
