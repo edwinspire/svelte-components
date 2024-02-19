@@ -6,7 +6,6 @@ export default class Level extends SvelteComponent<{
 }, {
     [evt: string]: CustomEvent<any>;
 }, {
-    left: {};
     l01: {};
     l02: {};
     l03: {};
@@ -41,7 +40,6 @@ declare const __propDef: {
         [evt: string]: CustomEvent<any>;
     };
     slots: {
-        left: {};
         l01: {};
         l02: {};
         l03: {};

@@ -6,7 +6,8 @@
 		Menu,
 		ColumnTypes,
 		SlideFullScreen,
-		BasicSelect
+		BasicSelect,
+		Level
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 
@@ -44,5 +45,13 @@
 		show = true;
 	}}>Mostrar</button
 >
+
+<Level>
+	<div slot="r05">Menu principal</div>
+	<div slot="r04"><input class="input" type="button"></div>
+	<div slot="r03"><input class="input"></div>
+	<div slot="r02">este es un texto</div>
+	<div slot="r01"><input class="input" type="button"></div>
+</Level>
 
 <Table bind:columns bind:RawDataTable={dataTest}></Table>
