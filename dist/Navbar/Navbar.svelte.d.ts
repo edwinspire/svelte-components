@@ -43,5 +43,7 @@ declare const __propDef: {
         end4: {};
         end5: {};
     };
+    exports?: {};
+    bindings?: string;
 };
 export {};

@@ -108,5 +108,7 @@ declare const __propDef: {
         r09: {};
         r10: {};
     };
+    exports?: {};
+    bindings?: string;
 };
 export {};

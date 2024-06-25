@@ -23,5 +23,7 @@ declare const __propDef: {
     slots: {
         default: {};
     };
+    exports?: {};
+    bindings?: string;
 };
 export {};

@@ -35,5 +35,7 @@ declare const __propDef: {
         'label-ok': {};
         'label-cancel': {};
     };
+    exports?: {};
+    bindings?: string;
 };
 export {};

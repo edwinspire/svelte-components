@@ -61,5 +61,7 @@ declare const __propDef: {
         r02: {};
         r01: {};
     };
+    exports?: {};
+    bindings?: string;
 };
 export {};
