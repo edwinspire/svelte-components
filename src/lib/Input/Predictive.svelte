@@ -4,26 +4,26 @@
 	const dispatch = createEventDispatcher();
 
 	export let options = [
-		{ key: 'Manzana', value: '1' },
-		{ key: 'Durazno', value: '2' },
-		{ key: 'Limón', value: '3' },
-		{ key: 'Mandarina', value: '4' },
-		{ key: 'Naranja', value: '5' },
-		{ key: 'Toronja', value: '6' },
-		{ key: 'Fresa', value: '7' },
-		{ key: 'Plátano', value: '8' },
-		{ key: 'kiwi', value: '9' },
-		{ key: 'Maracuyá', value: '10' },
-		{ key: 'Chirimoya', value: '11' },
-		{ key: 'Babaco', value: '12' },
-		{ key: 'Aguacate', value: '13' },
-		{ key: 'Pera', value: '14' },
-		{ key: 'Mispero', value: '15' },
-		{ key: 'Guaba', value: '16' },
-		{ key: 'Guanabana', value: '17' },
-		{ key: 'Mora', value: '18' },
-		{ key: 'Taxo', value: '19' },
-		{ key: 'Tamarindo', value: '20' }
+		{ name: 'Manzana', value: '1' },
+		{ name: 'Durazno', value: '2' },
+		{ name: 'Limón', value: '3' },
+		{ name: 'Mandarina', value: '4' },
+		{ name: 'Naranja', value: '5' },
+		{ name: 'Toronja', value: '6' },
+		{ name: 'Fresa', value: '7' },
+		{ name: 'Plátano', value: '8' },
+		{ name: 'kiwi', value: '9' },
+		{ name: 'Maracuyá', value: '10' },
+		{ name: 'Chirimoya', value: '11' },
+		{ name: 'Babaco', value: '12' },
+		{ name: 'Aguacate', value: '13' },
+		{ name: 'Pera', value: '14' },
+		{ name: 'Mispero', value: '15' },
+		{ name: 'Guaba', value: '16' },
+		{ name: 'Guanabana', value: '17' },
+		{ name: 'Mora', value: '18' },
+		{ name: 'Taxo', value: '19' },
+		{ name: 'Tamarindo', value: '20' }
 	];
 
 	let filteredOptions = options;
@@ -39,13 +39,13 @@
 	function handleInput(event) {
 		inputValue = event.target.value;
 		filteredOptions = options.filter((option) =>
-			option.key.toLowerCase().includes(inputValue.toLowerCase())
+			option.name.toLowerCase().includes(inputValue.toLowerCase())
 		);
 		showDropdown = true;
 	}
 
 	function handleClick(option) {
-		inputValue = option.key;
+		inputValue = option.name;
 		selectedValue = option.value;
 		showDropdown = false;
 		console.log('option', option);
@@ -54,7 +54,7 @@
 
 	function handleFocus() {
 		filteredOptions = options.filter((option) =>
-			option.key.toLowerCase().includes(inputValue.toLowerCase())
+			option.name.toLowerCase().includes(inputValue.toLowerCase())
 		);
 		// showDropdown = true;
 	}
@@ -86,7 +86,7 @@
 								{#each filteredOptions as option}
 									<!-- svelte-ignore a11y-invalid-attribute -->
 									<a href="#" class="dropdown-item" on:click={() => handleClick(option)}>
-										{option.key}
+										{option.name}
 									</a>
 								{/each}
 							</div>

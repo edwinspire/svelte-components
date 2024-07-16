@@ -4,7 +4,7 @@
 export default class Predictive extends SvelteComponent<{
     label?: string;
     options?: {
-        key: string;
+        name: string;
         value: string;
     }[];
     selectedValue?: string;
@@ -25,7 +25,7 @@ declare const __propDef: {
     props: {
         label?: string;
         options?: {
-            key: string;
+            name: string;
             value: string;
         }[];
         selectedValue?: string;
