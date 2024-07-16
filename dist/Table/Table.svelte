@@ -584,7 +584,9 @@
 			</p>
 			<p class="control">
 				<button class="button is-small" on:click={handleClickSearch}>
-					<i class="fas fa-search" />
+					<span class="icon is-small">
+						<i class="fas fa-search" />
+					</span>
 				</button>
 			</p>
 		</div>
@@ -735,7 +737,7 @@
 	<div class="table-container is-size-7">
 		<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
 			<!-- Aqui escribe el encabezado de la tabla -->
-			<thead >
+			<thead>
 				<tr class="has-background-link-dark">
 					<th class="has-text-centered has-text-white">#</th>
 					{#if SelectionType == 1}
@@ -1048,7 +1050,6 @@
 </div>
 
 <style>
-
 	.size_search {
 		width: 7em;
 	}

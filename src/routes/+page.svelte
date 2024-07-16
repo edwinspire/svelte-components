@@ -48,7 +48,7 @@
 
 <Level>
 	<div slot="r05">Menu principal</div>
-	<div slot="r04"><input class="input" type="button"></div>
+	<div slot="r04"><input class="input is-danger" type="button" label="sss"></div>
 	<div slot="r03"><input class="input"></div>
 	<div slot="r02">este es un texto</div>
 	<div slot="r01"><input class="input" type="button"></div>
