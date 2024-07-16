@@ -4,9 +4,13 @@
 export default class Predictive extends SvelteComponent<{
     label?: string;
     options?: {
-        name: string;
-        value: number;
+        key: string;
+        value: string;
     }[];
+    selectedValue?: string;
+    classLabel?: string;
+    classInput?: string;
+    placeholder?: string;
 }, {
     select: CustomEvent<any>;
 } & {
@@ -21,9 +25,13 @@ declare const __propDef: {
     props: {
         label?: string;
         options?: {
-            name: string;
-            value: number;
+            key: string;
+            value: string;
         }[];
+        selectedValue?: string;
+        classLabel?: string;
+        classInput?: string;
+        placeholder?: string;
     };
     events: {
         select: CustomEvent<any>;

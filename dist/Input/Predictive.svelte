@@ -1,161 +1,106 @@
+<!-- App.svelte -->
 <script>
-  import { createEventDispatcher, onMount, onDestroy } from "svelte";
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
 
-  export let label = "";
-  let inputValue = "";
-  export let options = [
-    { name: "Apple", value: 0 },
-    { name: "Banana", value: 1 },
-    { name: "Cherry", value: 2 },
-    { name: "Grape", value: 3 },
-    { name: "Orange", value: 4 },
-    { name: "Orange1", value: 5 },
-    { name: "Orange2", value: 6 },
-    { name: "Orange3", value: 7 },
-    { name: "Orange4", value: 8 },
-    { name: "Orange5", value: 9 },
-    { name: "Orange6", value: 10 },
-  ];
-  let filteredOptions = [];
-  let isOpen = false;
-  let selectedIndex = -1;
+	export let options = [
+		{ key: 'Manzana', value: '1' },
+		{ key: 'Durazno', value: '2' },
+		{ key: 'Limón', value: '3' },
+		{ key: 'Mandarina', value: '4' },
+		{ key: 'Naranja', value: '5' },
+		{ key: 'Toronja', value: '6' },
+		{ key: 'Fresa', value: '7' },
+		{ key: 'Plátano', value: '8' },
+		{ key: 'kiwi', value: '9' },
+		{ key: 'Maracuyá', value: '10' },
+		{ key: 'Chirimoya', value: '11' },
+		{ key: 'Babaco', value: '12' },
+		{ key: 'Aguacate', value: '13' },
+		{ key: 'Pera', value: '14' },
+		{ key: 'Mispero', value: '15' },
+		{ key: 'Guaba', value: '16' },
+		{ key: 'Guanabana', value: '17' },
+		{ key: 'Mora', value: '18' },
+		{ key: 'Taxo', value: '19' },
+		{ key: 'Tamarindo', value: '20' }
+	];
 
-  const dispatch = createEventDispatcher();
+	let filteredOptions = options;
+	let showDropdown = false;
+	let inputValue = '';
+	export let label = '';
 
-  function handleInput(event) {
-    inputValue = event.target.value;
-    filterOptions();
-  }
+	export let selectedValue = '';
+	export let classLabel = 'is-normal';
+	export let classInput = '';
+	export let placeholder = 'Type to see options';
 
-  function filterOptions() {
-    filteredOptions = options.filter((option) =>
-      option.name.toLowerCase().includes(inputValue.toLowerCase())
-    );
-    selectedIndex = -1;
-  }
+	function handleInput(event) {
+		inputValue = event.target.value;
+		filteredOptions = options.filter((option) =>
+			option.key.toLowerCase().includes(inputValue.toLowerCase())
+		);
+		showDropdown = true;
+	}
 
-  function handleOptionClick(option) {
-    inputValue = option.name;
-    dispatch("select", option);
+	function handleClick(option) {
+		inputValue = option.key;
+		selectedValue = option.value;
+		showDropdown = false;
+		console.log('option', option);
+		dispatch('select', option);
+	}
 
-    setTimeout(() => {
-      isOpen = false;
-    }, 0);
-  }
-
-  function handleDropdownToggle() {
-    isOpen = !isOpen;
-    if (isOpen) {
-      filterOptions();
-    }
-  }
-
-  function handleOptionSelect(option) {
-    inputValue = option.name;
-    isOpen = false;
-    dispatch("select", option);
-  }
-
-  function handleKeyDown(event) {
-    if (isOpen) {
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        selectedIndex = Math.max(selectedIndex - 1, 0);
-      } else if (event.key === "ArrowDown") {
-        event.preventDefault();
-        selectedIndex = Math.min(selectedIndex + 1, filteredOptions.length - 1);
-      } else if (event.key === "Enter" && selectedIndex !== -1) {
-        event.preventDefault();
-        handleOptionSelect(filteredOptions[selectedIndex]);
-      }
-    }
-  }
-
-  function handleClickOutside(event) {
-    if (isOpen && !event.target.closest(".dropdown")) {
-      isOpen = false;
-    }
-  }
-
-  onMount(() => {
-    window.addEventListener("click", handleClickOutside);
-  });
-  onDestroy(() => {
-//    window.removeEventListener("click", handleClickOutside);
-  });
+	function handleFocus() {
+		filteredOptions = options.filter((option) =>
+			option.key.toLowerCase().includes(inputValue.toLowerCase())
+		);
+		// showDropdown = true;
+	}
 </script>
 
 <div class="field is-horizontal">
-  <div class="field-label is-small">
-    <!-- svelte-ignore a11y-label-has-associated-control -->
-    <label class="label">{label}</label>
-  </div>
-  <div class="field-body">
-    <div class="field is-narrow">
-      <div class="control">
-        <!-- svelte-ignore a11y-label-has-associated-control -->
-        <label class="dropdown">
-          <span class="control has-icons-right">
-            <input
-              class="input is-small"
-              type="text"
-              value={inputValue}
-              on:input={handleInput}              
-              on:click={() => { if (!isOpen) handleDropdownToggle(); }}
-              on:focus={handleDropdownToggle}
-              on:keydown={handleKeyDown}
-            />
-            <span class="icon is-small is-right">
-              <i class="fa-solid fa-chevron-down" />
-            </span>
-          </span>
-
-          {#if isOpen && filteredOptions.length > 0}
-            <ul class="dropdown-list menu label is-small">
-              {#each filteredOptions as option, i}
-                <li
-                  class="dropdown-list-item menu-item {i === selectedIndex
-                    ? 'is-active'
-                    : ''}"
-                  on:click={() => handleOptionClick(option)}
-                >
-                  {option.name}
-                </li>
-              {/each}
-            </ul>
-          {/if}
-        </label>
-      </div>
-    </div>
-  </div>
+	<div class="field-label {classLabel}">
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label class="label">{label}</label>
+	</div>
+	<div class="field-body">
+		<div class="field is-narrow">
+			<div class="control">
+				<div class="control">
+					<input
+						class="input {classInput}"
+						type="text"
+						bind:value={inputValue}
+						on:input={handleInput}
+						on:focus={handleFocus}
+						{placeholder}
+					/>
+					<input type="hidden" bind:value={selectedValue} />
+				</div>
+				{#if showDropdown && filteredOptions.length > 0}
+					<div class="dropdown is-active">
+						<div class="dropdown-menu" role="menu">
+							<div class="dropdown-content">
+								{#each filteredOptions as option}
+									<!-- svelte-ignore a11y-invalid-attribute -->
+									<a href="#" class="dropdown-item" on:click={() => handleClick(option)}>
+										{option.key}
+									</a>
+								{/each}
+							</div>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
+	</div>
 </div>
 
-
 <style>
-  .dropdown {
-    position: relative;
-  }
-
-  .dropdown-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 4px;
-    z-index: 999;
-  }
-
-  .dropdown-list-item {
-    padding: 8px;
-    cursor: pointer;
-  }
-
-  .dropdown-list-item.is-active {
-    background-color: #f5f5f5;
-  }
+	.dropdown-content {
+		max-height: 200px;
+		overflow-y: auto;
+	}
 </style>

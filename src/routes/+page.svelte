@@ -7,9 +7,12 @@
 		ColumnTypes,
 		SlideFullScreen,
 		BasicSelect,
-		Level
+		Level,
+		PredictiveInput
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
+
+let selectedValue = '';
 
 	let dataTest = [
 		{ checsk: false, name: '33112321', datas: 'sdasdsad' },
@@ -53,5 +56,11 @@
 	<div slot="r02">este es un texto</div>
 	<div slot="r01"><input class="input" type="button"></div>
 </Level>
+
+<BasicSelect></BasicSelect>
+
+<PredictiveInput bind:selectedValue={selectedValue} classInput='is-small' label='Opciones' classLabel='is-small' on:select={(p)=>{
+	console.log('selectedValue', selectedValue, p);
+}}></PredictiveInput>
 
 <Table bind:columns bind:RawDataTable={dataTest}></Table>
