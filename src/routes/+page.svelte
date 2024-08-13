@@ -21,7 +21,7 @@
 		{
 			checsk: true,
 			name: 'ddfff',
-			datas: 'este es un texto un poco mas largo',
+			datas: '12.988',
 			fecha: '2024-08-13T16:22:02.449'
 		},
 		{
@@ -39,14 +39,18 @@
 		},
 		fecha: {
 			label: 'CHECK',
-			decorator: { component: ColumnTypes.DateTime, props: { editInline: true, fromFormat: 'yyyy-MM-ddTHH:mm:ss' } }
+			decorator: {
+				component: ColumnTypes.DateTime,
+				props: { editInline: true, fromFormat: 'yyyy-MM-ddTHH:mm:ss' }
+			}
 		},
-		fecha2: {
+		datas: {
 			label: 'CHECK2',
-			decorator: { component: ColumnTypes.DateTime, props: { fromFormat: 'yyyy-MM-dd' } }
-		},
+			decorator: {component: ColumnTypes.Auto, props: { editInline: true }
+		}
+	},
 		fecha3: { label: 'CHECK3', decorator: { component: ColumnTypes.DateTime } },
-		name: { label: 'Nombre' }
+		name: { label: 'Nombre', decorator: {component: ColumnTypes.Auto, props: { editInline: true } } }
 	};
 	let show = false;
 	let requestData = {
