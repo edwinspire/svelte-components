@@ -1,5 +1,4 @@
 <script>
-	import { now } from 'd3';
 	export let value;
 	export let props;
 	export const row = {};
@@ -8,8 +7,9 @@
 	let format = 'yyyy-MM-dd HH:mm:ss';
 	let HighlightIsntToday = false;
 	let fromFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+let value_formated = '';
 
-	if (props) {
+if (props) {
 		if (props.format) {
 			format = props.format;
 		}
@@ -27,6 +27,8 @@
 		DC001 =
 			HighlightIsntToday &&
 			DateTime.fromISO(value).toFormat('yyyy-MM-dd') !== DateTime.local().toFormat('yyyy-MM-dd');
+
+			value_formated = DateTime.fromFormat(value, fromFormat);
 		/*
       HighlightIsntToday &&
       !(
@@ -34,11 +36,12 @@
         new Date(value).getDate() === new Date().getDate()
       );
       */
-		console.log(fromFormat);
+		//		console.log(fromFormat);
 	}
 	$: value, fn_DC01();
 </script>
 
 <td on:click class:has-text-danger={DC001}>
-	{DateTime.fromFormat(value, fromFormat).toLocal().toFormat(format)}
+		{DateTime.fromFormat(value, fromFormat).toLocal().toFormat(format)}
+	
 </td>
