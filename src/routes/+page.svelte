@@ -1,4 +1,5 @@
 <script>
+	import { format } from 'd3';
 	import {
 		Table,
 		DialogModal,
@@ -15,10 +16,20 @@
 	let selectedValue = '';
 
 	let dataTest = [
-		{ checsk: false, name: '33112321', datas: 'sdasdsad' },
-		{ checsk: true, name: '232322', datas: 'this es field test' },
-		{ checsk: true, name: 'ddfff', datas: 'este es un texto un poco mas largo' },
-		{ checsk: true, name: 'kkhkññkjjhmamá', datas: 'Otro texto [verifiado]' }
+		{ checsk: false, name: '33112321', datas: 'sdasdsad', fecha: '2024-08-13T16:55:13' },
+		{ checsk: true, name: '232322', datas: 'this es field test', fecha: new Date().toISOString() },
+		{
+			checsk: true,
+			name: 'ddfff',
+			datas: 'este es un texto un poco mas largo',
+			fecha: '2024-08-13T16:22:02.449'
+		},
+		{
+			checsk: true,
+			name: 'kkhkññkjjhmamá',
+			datas: 'Otro texto [verifiado]',
+			fecha: new Date().toISOString()
+		}
 	];
 
 	let columns = {
@@ -26,7 +37,10 @@
 			label: 'ENABLED',
 			decorator: { component: ColumnTypes.Boolean, props: { editInline: true } }
 		},
-		fecha: { label: 'CHECK', decorator: { component: ColumnTypes.DateTime } },
+		fecha: {
+			label: 'CHECK',
+			decorator: { component: ColumnTypes.DateTime, props: { editInline: true, fromFormat: 'yyyy-MM-ddTHH:mm:ss' } }
+		},
 		fecha2: {
 			label: 'CHECK2',
 			decorator: { component: ColumnTypes.DateTime, props: { fromFormat: 'yyyy-MM-dd' } }

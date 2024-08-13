@@ -1,5 +1,4 @@
 <script>
-	import { now } from 'd3';
 	export let value;
 	export let props;
 	export const row = {};
@@ -8,7 +7,8 @@
 	let format = 'yyyy-MM-dd HH:mm:ss';
 	let HighlightIsntToday = false;
 	let fromFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
+let value_formated = '';
+let picker;
 	if (props) {
 		if (props.format) {
 			format = props.format;
@@ -27,6 +27,8 @@
 		DC001 =
 			HighlightIsntToday &&
 			DateTime.fromISO(value).toFormat('yyyy-MM-dd') !== DateTime.local().toFormat('yyyy-MM-dd');
+
+			value_formated = DateTime.fromFormat(value, fromFormat);
 		/*
       HighlightIsntToday &&
       !(
@@ -34,11 +36,36 @@
         new Date(value).getDate() === new Date().getDate()
       );
       */
-//		console.log(fromFormat);
+		//		console.log(fromFormat);
 	}
 	$: value, fn_DC01();
 </script>
 
 <td on:click class:has-text-danger={DC001}>
-	{DateTime.fromFormat(value, fromFormat).toLocal().toFormat(format)}
+	{#if props && props.editInline}
+
+	<div class="field has-addons">
+		<p class="control is-small">
+		  <input class="input is-small" type="text" placeholder="input" bind:value={value_formated}>
+		</p>
+			<button class="button is-small" on:click={()=>{
+				
+				try {
+				 picker.showPicker();
+				} catch (error) {
+					alert('No soportado');
+				}
+			}}>
+				<span class="icon">
+					<i class="fa-regular fa-calendar"></i>
+				</span>
+			  </button>
+	
+	  </div>
+  
+	  <input bind:this={picker} type="datetime-local" >
+
+	{:else}
+		{DateTime.fromFormat(value, fromFormat).toLocal().toFormat(format)}
+	{/if}
 </td>
