@@ -22,10 +22,13 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <td class="has-text-centered" on:click>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<span
 		class="icon-text"
 		on:click={() => {
-			value = !value;
+			if (props && props.editInline) {
+				value = !value;
+			}
 		}}
 	>
 		<span
@@ -34,8 +37,8 @@
 					? props['ontrue'].iconColorClass + ' icon'
 					: defaultProps['ontrue'].iconColorClass + ' icon'
 				: props && props['onfalse'] && props['onfalse'].iconColorClass
-				? props['onfalse'].iconColorClass + ' icon'
-				: defaultProps['onfalse'].iconColorClass + ' icon'}
+					? props['onfalse'].iconColorClass + ' icon'
+					: defaultProps['onfalse'].iconColorClass + ' icon'}
 		>
 			{#if value}
 				<i
