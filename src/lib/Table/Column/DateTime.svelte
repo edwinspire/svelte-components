@@ -34,7 +34,7 @@
         new Date(value).getDate() === new Date().getDate()
       );
       */
-		console.log(fromFormat);
+//		console.log(fromFormat);
 	}
 	$: value, fn_DC01();
 </script>

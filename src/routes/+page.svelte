@@ -12,7 +12,7 @@
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 
-let selectedValue = '';
+	let selectedValue = '';
 
 	let dataTest = [
 		{ checsk: false, name: '33112321', datas: 'sdasdsad' },
@@ -22,6 +22,10 @@ let selectedValue = '';
 	];
 
 	let columns = {
+		checsk: {
+			label: 'ENABLED',
+			decorator: { component: ColumnTypes.Boolean, props: { editInline: true } }
+		},
 		fecha: { label: 'CHECK', decorator: { component: ColumnTypes.DateTime } },
 		fecha2: {
 			label: 'CHECK2',
@@ -51,16 +55,22 @@ let selectedValue = '';
 
 <Level>
 	<div slot="r05">Menu principal</div>
-	<div slot="r04"><input class="input is-danger" type="button" label="sss"></div>
-	<div slot="r03"><input class="input"></div>
+	<div slot="r04"><input class="input is-danger" type="button" label="sss" /></div>
+	<div slot="r03"><input class="input" /></div>
 	<div slot="r02">este es un texto</div>
-	<div slot="r01"><input class="input" type="button"></div>
+	<div slot="r01"><input class="input" type="button" /></div>
 </Level>
 
 <BasicSelect></BasicSelect>
 
-<PredictiveInput bind:selectedValue={selectedValue} classInput='is-small' label='Opciones' classLabel='is-small' on:select={(p)=>{
-	console.log('selectedValue', selectedValue, p);
-}}></PredictiveInput>
+<PredictiveInput
+	bind:selectedValue
+	classInput="is-small"
+	label="Opciones"
+	classLabel="is-small"
+	on:select={(p) => {
+		console.log('selectedValue', selectedValue, p);
+	}}
+></PredictiveInput>
 
 <Table bind:columns bind:RawDataTable={dataTest}></Table>
