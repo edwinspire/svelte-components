@@ -83,18 +83,6 @@
 	let internal_columns = {};
 
 	$: SelectedRows, OnSelection();
-	//  $: RawDataTable, ProcessRawData();
-
-	/*
-  async function sha(message) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(message);
-    const hash = await crypto.subtle.digest("SHA-1", data);
-    return [...new Uint8Array(hash)]
-      .map((x) => x.toString(16).padStart(2, "0"))
-      .join("");
-  }
-  */
 
 	async function hash(string) {
 		try {
@@ -326,7 +314,7 @@
 	}
 
 	function HClickDelete(e) {
-		dispatch('deleterow', e);
+		dispatch('deleterow', { rows: GetSelectedRows() });
 	}
 
 	function HClickHeader(e) {
