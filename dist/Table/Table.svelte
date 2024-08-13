@@ -29,9 +29,12 @@
 	export let ShowSelectionButton = true;
 	export let ShowExportButton = true;
 	export let iconExport = 'fa-solid fa-file-excel';
+	export let iconDeleteRow = 'fa-solid fa-trash';
+
 	//export let bearerAuthorization;
 	//export let basicAuthorization; // {user: '', password: ''}
 	//export let method = 'GET';
+	export let ShowDeleteButton = false;
 
 	export let requestData = {
 		url: undefined,
@@ -230,6 +233,24 @@
 		}
 	}
 
+	function fnDeleteRows() {
+		//console.log(this);
+		try {
+			// Filter only selection
+
+			console.log('ExportTable > Columns ', columns);
+
+			let filteredData = GetSelectedRows();
+			if (filteredData && filteredData.length > 0) {
+			} else {
+				alert('Select the rows to export.');
+				SelectionType = 2;
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	let auto_refresh_by_table_changed_request = 0;
 
 	let auto_refresh = setInterval(async () => {
@@ -303,6 +324,11 @@
 	function HClickNew(e) {
 		dispatch('newrow', e);
 	}
+
+	function HClickDelete(e) {
+		dispatch('deleterow', e);
+	}
+
 	function HClickHeader(e) {
 		ColumnSort = e.target.dataset.column;
 		orderASC = !orderASC;
@@ -676,7 +702,20 @@
 			</div>
 		{/if}
 	</span>
-	<span slot="r04" title="Editar">
+
+
+	<span slot="r04">
+		{#if ShowDeleteButton}
+			<button class="button is-small" on:click={fnDeleteRows} title="Delete row"  on:click={HClickDelete}>
+				<span class="icon">
+					<i class={iconDeleteRow} />
+				</span>
+			</button>
+		{/if}
+	</span>
+
+
+	<span slot="r05" title="Editar">
 		{#if ShowEditButton}
 			<button class="button is-small" on:click={HandleOnClickEdit}>
 				<span class="icon">
@@ -685,7 +724,9 @@
 			</button>
 		{/if}
 	</span>
-	<span slot="r05" title="Agregar fila">
+
+
+	<span slot="r06" title="Agregar fila">
 		{#if ShowNewButton}
 			<button class="button is-small" on:click={HClickNew}>
 				<span class="icon">
@@ -694,7 +735,7 @@
 			</button>
 		{/if}
 	</span>
-	<span slot="r06" title="Data refresh interval.">
+	<span slot="r07" title="Data refresh interval.">
 		{#if requestData && requestData.url}
 			<button class="button is-small" on:click={ChangeIntervalRefresh}>
 				{#if loading}
@@ -706,11 +747,6 @@
 				{/if}
 				<span>{timeRemainingToRefresh}s</span>
 			</button>
-		{/if}
-	</span>
-	<span slot="r07">
-		{#if $$slots.r07}
-			<slot name="r07" />
 		{/if}
 	</span>
 

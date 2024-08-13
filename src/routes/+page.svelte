@@ -91,4 +91,4 @@
 	}}
 ></PredictiveInput>
 
-<Table bind:columns bind:RawDataTable={dataTest}></Table>
+<Table bind:columns bind:RawDataTable={dataTest} ShowDeleteButton={true} ShowNewButton={true} ShowEditButton={true} ></Table>

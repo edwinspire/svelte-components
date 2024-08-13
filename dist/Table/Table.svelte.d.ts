@@ -10,6 +10,8 @@ export default class Table extends SvelteComponent<{
     ShowSelectionButton?: boolean;
     ShowExportButton?: boolean;
     iconExport?: string;
+    iconDeleteRow?: string;
+    ShowDeleteButton?: boolean;
     requestData?: {
         url: any;
         refresh_time: number;
@@ -32,6 +34,7 @@ export default class Table extends SvelteComponent<{
     clickrow: CustomEvent<any>;
     editrow: CustomEvent<any>;
     newrow: CustomEvent<any>;
+    deleterow: CustomEvent<any>;
 } & {
     [evt: string]: CustomEvent<any>;
 }, {
@@ -45,7 +48,6 @@ export default class Table extends SvelteComponent<{
     l08: {};
     l09: {};
     l10: {};
-    r07: {};
     r08: {};
     r09: {};
     r10: {};
@@ -66,6 +68,8 @@ declare const __propDef: {
         ShowSelectionButton?: boolean;
         ShowExportButton?: boolean;
         iconExport?: string;
+        iconDeleteRow?: string;
+        ShowDeleteButton?: boolean;
         requestData?: {
             url: any;
             refresh_time: number;
@@ -89,6 +93,7 @@ declare const __propDef: {
         clickrow: CustomEvent<any>;
         editrow: CustomEvent<any>;
         newrow: CustomEvent<any>;
+        deleterow: CustomEvent<any>;
     } & {
         [evt: string]: CustomEvent<any>;
     };
@@ -103,7 +108,6 @@ declare const __propDef: {
         l08: {};
         l09: {};
         l10: {};
-        r07: {};
         r08: {};
         r09: {};
         r10: {};
