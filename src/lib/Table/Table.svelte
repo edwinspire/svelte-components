@@ -265,7 +265,7 @@
 		} catch (error) {
 			console.error(error);
 		}
-	}, 500);
+	}, 2000);
 
 	onDestroy(() => {
 		clearInterval(auto_refresh);
