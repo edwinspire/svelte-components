@@ -62,7 +62,37 @@
 		{ fecha: new Date().toISOString(), fecha2: '2024-02-14', fecha3: '2024-02-14T10:00:00.000z' }
 	];
 
-	onMount(() => {});
+	function generateRandomJson() {
+  // Generar un valor booleano aleatorio
+  const randomCheck = Math.random() >= 0.5;
+  
+  // Generar un número aleatorio y convertirlo en string
+  const randomName = Math.floor(Math.random() * 100000000).toString();
+  
+  // Generar una cadena aleatoria
+  const randomDatas = Math.random().toString(36).substring(2, 10);
+  
+  // Generar una fecha aleatoria dentro de un rango razonable
+  const randomDate = new Date(Date.now() + Math.floor(Math.random() * 10000000000)).toISOString();
+
+  // Estructura JSON con valores aleatorios
+  return {
+    checsk: randomCheck,
+    name: randomName,
+    datas: randomDatas,
+    fecha: randomDate
+  };
+}
+
+
+
+	onMount(() => {
+
+		setInterval(() => {
+			 dataTest.push(generateRandomJson());
+		}, 500);
+
+	});
 </script>
 
 <button

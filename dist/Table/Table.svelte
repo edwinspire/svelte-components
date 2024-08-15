@@ -83,7 +83,37 @@
 	let internal_columns = {};
 
 	$: SelectedRows, OnSelection();
+	$: DataTable, onrawDataChanged();
 
+	let idTimeoutDataChanged;
+
+	function onrawDataChanged() {
+		console.log('Ha cambiado INCIA......', idTimeoutDataChanged);
+
+		// Cancela el ultimo timeout
+		clearTimeout(idTimeoutDataChanged);
+		console.log('Ha cambiado LIMPIO......', idTimeoutDataChanged);
+
+		// Setea uno nuevo
+		idTimeoutDataChanged = setTimeout(() => {
+			try {
+				//let hash_data = await hash(JSON.stringify(RawDataTable));
+				let hash_data = sha256(JSON.stringify(RawDataTable));
+
+				if (hash_last_data !== hash_data) {
+					hash_last_data = hash_data;
+					console.log('Hacer algo luego del cambio luego de x tiempo', idTimeoutDataChanged);
+					ProcessRawData();
+				} else {
+					console.log('No hay cambios');
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		}, 5000);
+	}
+
+	/*
 	async function hash(string) {
 		try {
 			const utf8 = new TextEncoder().encode(string);
@@ -96,6 +126,7 @@
 			return '';
 		}
 	}
+	*/
 
 	function OnSelection() {
 		dispatch('selectrows', { rows: GetSelectedRows() });
@@ -252,6 +283,8 @@
 	}, 1000);
 
 	let hash_last_data = '';
+	
+	/*
 	// Check changes of data
 	let check_changes_data = setInterval(() => {
 		try {
@@ -259,17 +292,18 @@
 			let hash_data = sha256(JSON.stringify(RawDataTable));
 
 			if (hash_last_data !== hash_data) {
-				hash_last_data = hash_data;
-				ProcessRawData();
+				//hash_last_data = hash_data;
+				//ProcessRawData();
 			}
 		} catch (error) {
 			console.error(error);
 		}
 	}, 2000);
+	*/
 
 	onDestroy(() => {
 		clearInterval(auto_refresh);
-		clearInterval(check_changes_data);
+		//clearInterval(check_changes_data);
 	});
 
 	function ChangeIntervalRefresh() {
@@ -691,17 +725,20 @@
 		{/if}
 	</span>
 
-
 	<span slot="r04">
 		{#if ShowDeleteButton}
-			<button class="button is-small" on:click={fnDeleteRows} title="Delete row"  on:click={HClickDelete}>
+			<button
+				class="button is-small"
+				on:click={fnDeleteRows}
+				title="Delete row"
+				on:click={HClickDelete}
+			>
 				<span class="icon">
 					<i class={iconDeleteRow} />
 				</span>
 			</button>
 		{/if}
 	</span>
-
 
 	<span slot="r05" title="Editar">
 		{#if ShowEditButton}
@@ -712,7 +749,6 @@
 			</button>
 		{/if}
 	</span>
-
 
 	<span slot="r06" title="Agregar fila">
 		{#if ShowNewButton}
