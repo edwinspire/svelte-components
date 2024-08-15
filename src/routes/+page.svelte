@@ -9,7 +9,8 @@
 		SlideFullScreen,
 		BasicSelect,
 		Level,
-		PredictiveInput
+		PredictiveInput,
+		EditorCode
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 
@@ -87,11 +88,11 @@
 
 
 	onMount(() => {
-
+/*
 		setInterval(() => {
 			 dataTest.push(generateRandomJson());
 		}, 500);
-
+*/
 	});
 </script>
 
@@ -120,5 +121,7 @@
 		console.log('selectedValue', selectedValue, p);
 	}}
 ></PredictiveInput>
+
+<EditorCode></EditorCode>
 
 <Table bind:columns bind:RawDataTable={dataTest} ShowDeleteButton={true} ShowNewButton={true} ShowEditButton={true} ></Table>
