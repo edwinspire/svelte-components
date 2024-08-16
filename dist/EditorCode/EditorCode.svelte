@@ -6,7 +6,7 @@
 	import { json } from '@codemirror/lang-json';
 	import { html } from '@codemirror/lang-html';
 	import { xml } from '@codemirror/lang-xml';
-    import { sql } from '@codemirror/lang-sql';
+	import { sql } from '@codemirror/lang-sql';
 
 	import prettier from 'prettier';
 	import parserBabel from 'prettier/parser-babel';
@@ -17,18 +17,18 @@
 	let editorView;
 	let elementParent;
 
-	export let code = `console.log('Hola, CodeMirror con Svelte');`;
+	export let code = `{"var1": 1, "var2": 2, "var3": 3, "var4": 1234567890}`;
 	export let title = 'Editor Code';
-	export let lang = 'js';
-	export let showFormat = false;
-	export let showSelectLang = false;
+	export let lang = 'json';
+	export let showFormat = true;
+	export let showSelectLang = true;
 
 	const languages = {
 		none: undefined,
 		js: javascript(),
 		json: json(),
 		html: html(),
-        sql: sql(),
+		sql: sql(),
 		xml: xml()
 	};
 
@@ -44,11 +44,14 @@
 
 	// Sincronización de cambios de code con el editor
 	$: if (editorView && editorView.state.doc.toString() !== code) {
+
 		const transaction = editorView.state.update({
 			changes: { from: 0, to: editorView.state.doc.length, insert: code }
 		});
 		editorView.dispatch(transaction);
 	}
+
+	
 
 	function selectTheme() {
 		/*
@@ -69,6 +72,8 @@
 		if (elementParent) {
 			if (editorView) editorView.destroy();
 
+			formatCode();
+
 			editorView = new EditorView({
 				doc: code,
 				extensions: [
@@ -87,7 +92,17 @@
 	}
 
 	// Formatear el código utilizando Prettier
-	async function formatCode() {
+	 function formatCode() {
+	
+		if (lang == 'json') {
+			try {
+				code = JSON.stringify(JSON.parse(code), null, 2);
+			} catch (error) {
+				console.error(error, code);
+				alert('Sintaxis error');
+			}
+		} 
+	
 		// console.log(code, prettierParsers[lang], parserBabel, parserHtml, parserPostcss);
 		/*
         try {
@@ -114,7 +129,16 @@
 
 		// Actualizar la variable code con el código formateado
 		//code = formattedCode.trim();
-		alert('Not implemented');
+		/*
+		switch (lang) {
+			case 'json':
+				code = JSON.stringify(code, null, 2);
+				break;
+			default:
+				alert('No implemented');
+				break;
+		}
+		*/
 	}
 
 	onMount(() => {
@@ -141,8 +165,8 @@
 									<option value="none">None</option>
 									<option value="js">JavaScript</option>
 									<option value="json">JSON</option>
-                                    <option value="html">HTML</option>
-                                    <option value="sql">SQL</option>
+									<option value="xml">HTML</option>
+									<option value="sql">SQL</option>
 									<option value="xml">XML</option>
 								</select>
 							</div>
@@ -154,7 +178,7 @@
 	</div>
 
 	<div slot="r01">
-		{#if showFormat}
+		{#if showFormat && lang == 'json'}
 			<button
 				class="button is-small"
 				on:click={async () => {
