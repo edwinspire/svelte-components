@@ -192,12 +192,8 @@
 </Level>
 
 <!-- Editor de CodeMirror -->
-<div class="editor" bind:this={elementParent}></div>
+<div  bind:this={elementParent}></div>
 
 <style>
-	.editor {
-		border: 1px solid #ddd;
-		height: 300px;
-		margin-top: 10px;
-	}
+	
 </style>
