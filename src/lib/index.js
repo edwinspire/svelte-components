@@ -9,7 +9,7 @@ import Level from './Level/Level.svelte';
 import Plotter from './D3/Plotter.svelte';
 import Tab from './Tab/Tab.svelte';
 import Menu from './Menu/Menu.svelte';
-import EditorCode from './EditorCode/index.svelte';
+import EditorCode from './EditorCode/EditorCode.svelte';
 import BasicSelect from './Select/BasicSelect.svelte';
 import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
 

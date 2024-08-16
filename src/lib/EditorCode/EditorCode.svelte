@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { Level } from '../../lib/index.js';
+	import { Level } from '../index.js';
 	import { EditorView, basicSetup } from 'codemirror';
 	import { javascript } from '@codemirror/lang-javascript';
 	import { json } from '@codemirror/lang-json';
