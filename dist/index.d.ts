@@ -10,4 +10,5 @@ import Tab from './Tab/Tab.svelte';
 import Menu from './Menu/Menu.svelte';
 import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
 import BasicSelect from './Select/BasicSelect.svelte';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect };
+import EditorCode from './EditorCode/index.svelte';
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode };

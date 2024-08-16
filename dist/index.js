@@ -9,6 +9,7 @@ import Level from './Level/Level.svelte';
 import Plotter from './D3/Plotter.svelte';
 import Tab from './Tab/Tab.svelte';
 import Menu from './Menu/Menu.svelte';
+import EditorCode from './EditorCode/index.svelte';
 import BasicSelect from './Select/BasicSelect.svelte';
 import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
 
@@ -27,6 +28,7 @@ export {
 	Tab,
 	Menu,
 	SlideFullScreen,
-	BasicSelect
+	BasicSelect,
+	EditorCode
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";

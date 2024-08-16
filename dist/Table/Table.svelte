@@ -88,12 +88,10 @@
 	let idTimeoutDataChanged;
 
 	function onrawDataChanged() {
-		console.log('Ha cambiado INCIA......', idTimeoutDataChanged);
-
+		
 		// Cancela el ultimo timeout
 		clearTimeout(idTimeoutDataChanged);
-		console.log('Ha cambiado LIMPIO......', idTimeoutDataChanged);
-
+		
 		// Setea uno nuevo
 		idTimeoutDataChanged = setTimeout(() => {
 			try {
@@ -102,15 +100,14 @@
 
 				if (hash_last_data !== hash_data) {
 					hash_last_data = hash_data;
-					console.log('Hacer algo luego del cambio luego de x tiempo', idTimeoutDataChanged);
 					ProcessRawData();
 				} else {
-					console.log('No hay cambios');
+					console.log('No changes on Data on Table widget');
 				}
 			} catch (error) {
 				console.error(error);
 			}
-		}, 5000);
+		}, 3000);
 	}
 
 	/*
