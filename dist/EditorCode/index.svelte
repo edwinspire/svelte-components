@@ -6,6 +6,7 @@
 	import { json } from '@codemirror/lang-json';
 	import { html } from '@codemirror/lang-html';
 	import { xml } from '@codemirror/lang-xml';
+    import { sql } from '@codemirror/lang-sql';
 
 	import prettier from 'prettier';
 	import parserBabel from 'prettier/parser-babel';
@@ -27,6 +28,7 @@
 		js: javascript(),
 		json: json(),
 		html: html(),
+        sql: sql(),
 		xml: xml()
 	};
 
@@ -139,7 +141,8 @@
 									<option value="none">None</option>
 									<option value="js">JavaScript</option>
 									<option value="json">JSON</option>
-									<option value="html">HTML</option>
+                                    <option value="html">HTML</option>
+                                    <option value="sql">SQL</option>
 									<option value="xml">XML</option>
 								</select>
 							</div>

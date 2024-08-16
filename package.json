@@ -70,6 +70,7 @@
 		"@codemirror/lang-html": "^6.4.9",
 		"@codemirror/lang-javascript": "^6.2.2",
 		"@codemirror/lang-json": "^6.0.1",
+		"@codemirror/lang-sql": "^6.7.0",
 		"@codemirror/lang-xml": "^6.1.0",
 		"@codemirror/state": "^6.4.1",
 		"@codemirror/view": "^6.32.0",
