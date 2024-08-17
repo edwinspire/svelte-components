@@ -44,26 +44,10 @@
 
 	// Sincronización de cambios de code con el editor
 	$: if (editorView && editorView.state.doc.toString() !== code) {
-
 		const transaction = editorView.state.update({
 			changes: { from: 0, to: editorView.state.doc.length, insert: code }
 		});
 		editorView.dispatch(transaction);
-	}
-
-	
-
-	function selectTheme() {
-		/*
-        var editor = CodeMirror.fromTextArea(elementParent, {
-    lineNumbers: true,
-    styleActiveLine: true,
-    matchBrackets: true
-  });
-   
-  editor.setOption("theme", 'default');
-*/
-		//	console.log(editorView.mountStyles());
 	}
 
 	function initializeEditor() {
@@ -92,53 +76,20 @@
 	}
 
 	// Formatear el código utilizando Prettier
-	 function formatCode() {
-	
+	function formatCode() {
 		if (lang == 'json') {
 			try {
-				code = JSON.stringify(JSON.parse(code), null, 2);
+				console.log(code, typeof code);
+				if (typeof code === 'object') {
+					code = JSON.stringify(code, null, 2);
+				} else {
+					code = JSON.stringify(JSON.parse(code), null, 2);
+				}
 			} catch (error) {
 				console.error(error, code);
 				alert('Sintaxis error');
 			}
-		} 
-	
-		// console.log(code, prettierParsers[lang], parserBabel, parserHtml, parserPostcss);
-		/*
-        try {
-			const formattedCode = await prettier.format(code, {
-				parser: 'babel',
-				plugins: [parserBabel],
-				singleQuote: true,
-				semi: false
-			});
-
-			console.log(formattedCode);
-		} catch (error) {
-			console.log(error);
 		}
-        */
-
-		/*
-		// Actualizar el editor con el código formateado
-		const transaction = editorView.state.update({
-			changes: { from: 0, to: editorView.state.doc.length, insert: formattedCode.trim() }
-		});
-		editorView.dispatch(transaction);
-        */
-
-		// Actualizar la variable code con el código formateado
-		//code = formattedCode.trim();
-		/*
-		switch (lang) {
-			case 'json':
-				code = JSON.stringify(code, null, 2);
-				break;
-			default:
-				alert('No implemented');
-				break;
-		}
-		*/
 	}
 
 	onMount(() => {
@@ -192,8 +143,7 @@
 </Level>
 
 <!-- Editor de CodeMirror -->
-<div  bind:this={elementParent}></div>
+<div bind:this={elementParent}></div>
 
 <style>
-	
 </style>
