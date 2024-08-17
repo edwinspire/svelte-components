@@ -19,12 +19,11 @@
 
 	export let code = `Text demo`;
 	export let title = 'Editor Code';
-	export let lang = 'none';
+	export let lang = 'json';
 	export let showFormat = true;
 	export let showSelectLang = true;
 
 	const languages = {
-		none: undefined,
 		js: javascript(),
 		json: json(),
 		html: html(),
@@ -144,6 +143,3 @@
 
 <!-- Editor de CodeMirror -->
 <div bind:this={elementParent}></div>
-
-<style>
-</style>
