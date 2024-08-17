@@ -17,9 +17,9 @@
 	let editorView;
 	let elementParent;
 
-	export let code = `{"var1": 1, "var2": 2, "var3": 3, "var4": 1234567890}`;
+	export let code = `Text demo`;
 	export let title = 'Editor Code';
-	export let lang = 'json';
+	export let lang = 'none';
 	export let showFormat = true;
 	export let showSelectLang = true;
 
@@ -87,7 +87,7 @@
 				}
 			} catch (error) {
 				console.error(error, code);
-				alert('Sintaxis error');
+			//	alert('Sintaxis error');
 			}
 		}
 	}
@@ -114,9 +114,9 @@
 							<div class="select is-small">
 								<select bind:value={lang}>
 									<option value="none">None</option>
+									<option value="xml">HTML</option>
 									<option value="js">JavaScript</option>
 									<option value="json">JSON</option>
-									<option value="xml">HTML</option>
 									<option value="sql">SQL</option>
 									<option value="xml">XML</option>
 								</select>
