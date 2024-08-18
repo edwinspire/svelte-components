@@ -20,8 +20,11 @@
 	export let code = `Text demo`;
 	export let title = 'Editor Code';
 	export let lang = 'json';
-	export let showFormat = true;
-	export let showSelectLang = true;
+	export let showFormat = false;
+	export let showSelectLang = false;
+
+	let formatError = false;
+	let internal_code = '';
 
 	const languages = {
 		js: javascript(),
@@ -32,6 +35,7 @@
 	};
 
 	$: lang, initializeEditor();
+	$: code, parseCode();
 
 	// Prettier parsers por lenguaje
 	const prettierParsers = {
@@ -41,12 +45,57 @@
 		xml: 'html'
 	};
 
+	/*
 	// Sincronización de cambios de code con el editor
 	$: if (editorView && editorView.state.doc.toString() !== code) {
+		console.log('>>>> state.update >>>', internal_code, editorView.state.doc.toString());
+
 		const transaction = editorView.state.update({
-			changes: { from: 0, to: editorView.state.doc.length, insert: code }
+			changes: { from: 0, to: editorView.state.doc.length, insert: internal_code }
 		});
+
 		editorView.dispatch(transaction);
+	}
+*/
+	export function reset() {
+		internal_code = code;
+		parseCode();
+	}
+
+	function parseCode() {
+		let f = format(code);
+		formatError = f.error;
+		internal_code = f.code;
+
+		/*
+		if (lang == 'json') {
+			formatError = false;
+			try {
+				//	console.log(code, typeof code);
+				if (typeof code === 'object') {
+					internal_code = JSON.stringify(code, null, 2);
+				} else {
+					internal_code = JSON.stringify(JSON.parse(code), null, 2);
+				}
+			} catch (error) {
+				console.error(error, code, internal_code);
+				formatError = true;
+				//	alert('Sintaxis error');
+			}
+		} else {
+			internal_code = code;
+		}
+		*/
+
+		console.log('>>>> parseCode >>>', code, internal_code);
+
+		if (editorView && editorView.state) {
+			const transaction = editorView.state.update({
+				changes: { from: 0, to: editorView.state.doc.length, insert: internal_code }
+			});
+
+			editorView.dispatch(transaction);
+		}
 	}
 
 	function initializeEditor() {
@@ -58,13 +107,15 @@
 			formatCode();
 
 			editorView = new EditorView({
-				doc: code,
+				doc: internal_code,
 				extensions: [
 					basicSetup,
 					languages[lang] ? languages[lang] : [],
 					EditorView.updateListener.of((update) => {
 						if (update.changes) {
-							code = update.state.doc.toString();
+							internal_code = update.state.doc.toString();
+							//console.log('>>>> updateListener >>>', internal_code);
+							//formatCode();
 						}
 					})
 				],
@@ -74,21 +125,47 @@
 		}
 	}
 
-	// Formatear el código utilizando Prettier
+	// Formatear el código
 	function formatCode() {
+		if (editorView && editorView.state) {
+			let f = format(editorView.state.doc.toString());
+			formatError = f.error;
+			internal_code = f.code;
+		}
+
+		/*
 		if (lang == 'json') {
 			try {
-				console.log(code, typeof code);
+				console.log(code, internal_code, editorView.state.doc.toString());
 				if (typeof code === 'object') {
-					code = JSON.stringify(code, null, 2);
+					internal_code = JSON.stringify(editorView.state.doc.toString(), null, 2);
 				} else {
-					code = JSON.stringify(JSON.parse(code), null, 2);
+					internal_code = JSON.stringify(JSON.parse(editorView.state.doc.toString()), null, 2);
 				}
 			} catch (error) {
-				console.error(error, code);
-			//	alert('Sintaxis error');
+				console.error(error, internal_code);
+				//	alert('Sintaxis error');
+				formatError = true;
 			}
 		}
+		*/
+	}
+
+	function format(code_without_format) {
+		let result = { code: code_without_format, error: false };
+		if (lang == 'json') {
+			try {
+				if (typeof code_without_format === 'object') {
+					result.code = JSON.stringify(code_without_format, null, 2);
+				} else {
+					result.code = JSON.stringify(JSON.parse(code_without_format), null, 2);
+				}
+			} catch (error) {
+				result.error = false;
+			}
+		}
+		console.log('format result > ', result);
+		return result;
 	}
 
 	onMount(() => {
@@ -109,8 +186,8 @@
 				</div>
 				<div class="field-body">
 					<div class="field is-narrow">
-						<div class="control">
-							<div class="select is-small">
+						<div class="control has-icons-left">
+							<div class="select is-small {formatError ? 'is-danger' : ''}">
 								<select bind:value={lang}>
 									<option value="none">None</option>
 									<option value="xml">HTML</option>
@@ -119,6 +196,12 @@
 									<option value="sql">SQL</option>
 									<option value="xml">XML</option>
 								</select>
+
+								<span class="icon is-small is-left">
+									{#if formatError}
+										<i class="fa-solid fa-triangle-exclamation"></i>
+									{/if}
+								</span>
 							</div>
 						</div>
 					</div>
@@ -136,6 +219,24 @@
 				}}
 			>
 				Format
+			</button>
+
+			<button
+				class="button is-small"
+				on:click={() => {
+					code = { hola: 'mundo' };
+				}}
+			>
+				PRUEBA
+			</button>
+
+			<button
+				class="button is-small"
+				on:click={() => {
+					reset();
+				}}
+			>
+				RESET
 			</button>
 		{/if}
 	</div>

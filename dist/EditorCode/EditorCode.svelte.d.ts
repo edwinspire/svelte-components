@@ -3,6 +3,7 @@
 /** @typedef {typeof __propDef.slots}  EditorCodeSlots */
 export default class EditorCode extends SvelteComponent<{
     code?: string;
+    reset?: () => void;
     title?: string;
     lang?: string;
     showFormat?: boolean;
@@ -10,6 +11,7 @@ export default class EditorCode extends SvelteComponent<{
 }, {
     [evt: string]: CustomEvent<any>;
 }, {}> {
+    get reset(): () => void;
 }
 export type EditorCodeProps = typeof __propDef.props;
 export type EditorCodeEvents = typeof __propDef.events;
@@ -18,6 +20,7 @@ import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         code?: string;
+        reset?: () => void;
         title?: string;
         lang?: string;
         showFormat?: boolean;
