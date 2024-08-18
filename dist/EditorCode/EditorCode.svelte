@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, SvelteComponentTyped } from 'svelte';
 	import { Level } from '../index.js';
 	import { EditorView, basicSetup } from 'codemirror';
 	import { javascript } from '@codemirror/lang-javascript';
@@ -17,12 +17,13 @@
 	let editorView;
 	let elementParent;
 
-	export let code = `Text demo`;
+	//	export let code = `Text demo`;
 	export let title = 'Editor Code';
 	export let lang = 'json';
 	export let showFormat = false;
 	export let showSelectLang = false;
 
+	let org_code = '';
 	let formatError = false;
 	let internal_code = '';
 
@@ -35,7 +36,7 @@
 	};
 
 	$: lang, initializeEditor();
-	$: code, parseCode();
+	// $: code, parseCode();
 
 	// Prettier parsers por lenguaje
 	const prettierParsers = {
@@ -44,6 +45,26 @@
 		html: 'html',
 		xml: 'html'
 	};
+
+	export function setCode(code) {
+		internal_code = code;
+		org_code = code;
+		parseCode();
+	}
+
+	export function getCode() {
+		try {
+			formatError = false;
+			if (lang === 'json') {
+				return JSON.parse(editorView.state.doc.toString());
+			} else {
+				return editorView.state.doc.toString();
+			}
+		} catch (error) {
+			formatError = true;
+			return editorView.state.doc.toString();
+		}
+	}
 
 	/*
 	// Sincronización de cambios de code con el editor
@@ -58,36 +79,16 @@
 	}
 */
 	export function reset() {
-		internal_code = code;
+		internal_code = org_code;
 		parseCode();
 	}
 
 	function parseCode() {
-		let f = format(code);
+		let f = format(internal_code);
 		formatError = f.error;
 		internal_code = f.code;
 
-		/*
-		if (lang == 'json') {
-			formatError = false;
-			try {
-				//	console.log(code, typeof code);
-				if (typeof code === 'object') {
-					internal_code = JSON.stringify(code, null, 2);
-				} else {
-					internal_code = JSON.stringify(JSON.parse(code), null, 2);
-				}
-			} catch (error) {
-				console.error(error, code, internal_code);
-				formatError = true;
-				//	alert('Sintaxis error');
-			}
-		} else {
-			internal_code = code;
-		}
-		*/
-
-		console.log('>>>> parseCode >>>', code, internal_code);
+		console.log('>>>> parseCode >>>', internal_code);
 
 		if (editorView && editorView.state) {
 			const transaction = editorView.state.update({
@@ -114,7 +115,7 @@
 					EditorView.updateListener.of((update) => {
 						if (update.changes) {
 							internal_code = update.state.doc.toString();
-							//console.log('>>>> updateListener >>>', internal_code);
+							console.log('>>>> updateListener >>>', internal_code);
 							//formatCode();
 						}
 					})
@@ -132,23 +133,6 @@
 			formatError = f.error;
 			internal_code = f.code;
 		}
-
-		/*
-		if (lang == 'json') {
-			try {
-				console.log(code, internal_code, editorView.state.doc.toString());
-				if (typeof code === 'object') {
-					internal_code = JSON.stringify(editorView.state.doc.toString(), null, 2);
-				} else {
-					internal_code = JSON.stringify(JSON.parse(editorView.state.doc.toString()), null, 2);
-				}
-			} catch (error) {
-				console.error(error, internal_code);
-				//	alert('Sintaxis error');
-				formatError = true;
-			}
-		}
-		*/
 	}
 
 	function format(code_without_format) {
@@ -224,7 +208,7 @@
 			<button
 				class="button is-small"
 				on:click={() => {
-					code = { hola: 'mundo' };
+					setCode({ hola: 'mundo' });
 				}}
 			>
 				PRUEBA
@@ -233,7 +217,8 @@
 			<button
 				class="button is-small"
 				on:click={() => {
-					reset();
+					//reset();
+					console.log(getCode());
 				}}
 			>
 				RESET
