@@ -17,7 +17,7 @@
 	let editorView;
 	let elementParent;
 
-	//	export let code = `Text demo`;
+	export let code = `Text demo`;
 	export let title = 'Editor Code';
 	export let lang = 'json';
 	export let showFormat = false;
@@ -36,7 +36,7 @@
 	};
 
 	$: lang, initializeEditor();
-	// $: code, parseCode();
+	$: code, parseCode();
 
 	// Prettier parsers por lenguaje
 	const prettierParsers = {
@@ -46,14 +46,12 @@
 		xml: 'html'
 	};
 
-	export function setCode(code) {
-		console.log('setCode >>>>> ', code);
-		internal_code = code;
-		org_code = code;
-		parseCode();
+	export function setCode(new_code) {
+		code = new_code;
 	}
 
 	export function getCode() {
+		/*
 		try {
 			formatError = false;
 			if (lang === 'json') {
@@ -65,6 +63,8 @@
 			formatError = true;
 			return editorView.state.doc.toString();
 		}
+		*/
+		return JSON.parse(editorView.state.doc.toString());
 	}
 
 	/*
@@ -85,7 +85,8 @@
 	}
 
 	function parseCode() {
-		let f = format(internal_code);
+		org_code = code;
+		let f = format(code);
 		formatError = f.error;
 		internal_code = f.code;
 
