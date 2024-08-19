@@ -1,5 +1,5 @@
 <script>
-	import { onMount, SvelteComponentTyped } from 'svelte';
+	import { onMount } from 'svelte';
 	import { Level } from '../index.js';
 	import { EditorView, basicSetup } from 'codemirror';
 	import { javascript } from '@codemirror/lang-javascript';
@@ -20,8 +20,8 @@
 	export let code = `Text demo`;
 	export let title = 'Editor Code';
 	export let lang = 'json';
-	export let showFormat = true;
-	export let showSelectLang = true;
+	export let showFormat = false;
+	export let showSelectLang = false;
 
 	let org_code = '';
 	let formatError = false;
@@ -88,10 +88,6 @@
 		org_code = code;
 		let f = format(code);
 
-		if (editorView) {
-			console.log('>>>> parseCode >>>', code, f, editorView.state.doc.toString());
-		}
-
 		formatError = f.error;
 		internal_code = f.code;
 
@@ -120,7 +116,7 @@
 					EditorView.updateListener.of((update) => {
 						if (update.changes) {
 							internal_code = update.state.doc.toString();
-							console.log('>>>> updateListener >>>', internal_code);
+							//	console.log('>>>> updateListener >>>', internal_code);
 
 							clearTimeout(timeoutParseOnChange);
 
@@ -135,7 +131,7 @@
 								} catch (error) {
 									formatError = true;
 								}
-							}, 5000);
+							}, 3000);
 						}
 					})
 				],
@@ -167,7 +163,7 @@
 				result.error = false;
 			}
 		}
-		console.log('format result > ', result);
+		//		console.log('format result > ', result);
 		return result;
 	}
 
@@ -213,6 +209,12 @@
 		{/if}
 	</div>
 
+	<div slot="r02">
+		{#if $$slots.slot}
+			<span class="slot_padding"><slot name="slot" /></span>
+		{/if}
+	</div>
+
 	<div slot="r01">
 		{#if showFormat && lang == 'json'}
 			<button
@@ -227,17 +229,8 @@
 			<button
 				class="button is-small"
 				on:click={() => {
-					setCode({ hola: 'mundo' });
-				}}
-			>
-				PRUEBA
-			</button>
-
-			<button
-				class="button is-small"
-				on:click={() => {
-					//reset();
-					console.log(code);
+					reset();
+					//console.log(code);
 				}}
 			>
 				RESET

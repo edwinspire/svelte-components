@@ -12,7 +12,9 @@ export default class EditorCode extends SvelteComponent<{
     getCode?: () => any;
 }, {
     [evt: string]: CustomEvent<any>;
-}, {}> {
+}, {
+    slot: {};
+}> {
     get setCode(): (new_code: any) => void;
     get getCode(): () => any;
     get reset(): () => void;
@@ -35,7 +37,9 @@ declare const __propDef: {
     events: {
         [evt: string]: CustomEvent<any>;
     };
-    slots: {};
+    slots: {
+        slot: {};
+    };
     exports?: {};
     bindings?: string;
 };
