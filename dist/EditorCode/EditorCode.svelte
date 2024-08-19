@@ -20,12 +20,13 @@
 	export let code = `Text demo`;
 	export let title = 'Editor Code';
 	export let lang = 'json';
-	export let showFormat = false;
-	export let showSelectLang = false;
+	export let showFormat = true;
+	export let showSelectLang = true;
 
 	let org_code = '';
 	let formatError = false;
 	let internal_code = '';
+	let timeoutParseOnChange;
 
 	const languages = {
 		js: javascript(),
@@ -51,7 +52,6 @@
 	}
 
 	export function getCode() {
-		/*
 		try {
 			formatError = false;
 			if (lang === 'json') {
@@ -63,8 +63,8 @@
 			formatError = true;
 			return editorView.state.doc.toString();
 		}
-		*/
-		return JSON.parse(editorView.state.doc.toString());
+
+		// return JSON.parse(editorView.state.doc.toString());
 	}
 
 	/*
@@ -87,12 +87,15 @@
 	function parseCode() {
 		org_code = code;
 		let f = format(code);
+
+		if (editorView) {
+			console.log('>>>> parseCode >>>', code, f, editorView.state.doc.toString());
+		}
+
 		formatError = f.error;
 		internal_code = f.code;
 
-		console.log('>>>> parseCode >>>', internal_code);
-
-		if (editorView && editorView.state) {
+		if (editorView && editorView.state && f.code != editorView.state.doc.toString()) {
 			const transaction = editorView.state.update({
 				changes: { from: 0, to: editorView.state.doc.length, insert: internal_code }
 			});
@@ -118,7 +121,21 @@
 						if (update.changes) {
 							internal_code = update.state.doc.toString();
 							console.log('>>>> updateListener >>>', internal_code);
-							//formatCode();
+
+							clearTimeout(timeoutParseOnChange);
+
+							timeoutParseOnChange = setTimeout(() => {
+								try {
+									formatError = false;
+									if (lang === 'json') {
+										code = JSON.parse(editorView.state.doc.toString());
+									} else {
+										code = editorView.state.doc.toString();
+									}
+								} catch (error) {
+									formatError = true;
+								}
+							}, 5000);
 						}
 					})
 				],
@@ -220,7 +237,7 @@
 				class="button is-small"
 				on:click={() => {
 					//reset();
-					console.log(getCode());
+					console.log(code);
 				}}
 			>
 				RESET
