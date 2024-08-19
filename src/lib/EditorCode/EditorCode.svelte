@@ -26,8 +26,8 @@
 	export let isReadOnly = true;
 	export let showHiddenButton = true;
 	export let showResetButton = false;
+	export let showCode = true;
 
-	let showCode = true;
 	let org_code = '';
 	let formatError = false;
 	let internal_code = '';
@@ -183,7 +183,6 @@
 	});
 </script>
 
-<div class="box">
 	<Level>
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<div slot="l01"><label class="label is-small">{title}</label></div>
@@ -256,8 +255,6 @@
 					class="button is-small"
 					on:click={() => {
 						showCode = !showCode;
-
-						
 					}}
 				>
 					{#if showCode}
@@ -270,7 +267,5 @@
 		</div>
 	</Level>
 
-		<!-- Editor de CodeMirror -->
-		<div bind:this={elementParent} class="{showCode?'':'is-hidden'}"></div>
-	
-</div>
+	<!-- Editor de CodeMirror -->
+	<div bind:this={elementParent} class={showCode ? '' : 'is-hidden'}></div>
