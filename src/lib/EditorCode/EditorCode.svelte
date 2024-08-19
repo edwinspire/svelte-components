@@ -183,89 +183,94 @@
 	});
 </script>
 
-	<Level>
-		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<div slot="l01"><label class="label is-small">{title}</label></div>
+<Level>
+	<!-- svelte-ignore a11y-label-has-associated-control -->
+	<div slot="l01"><label class="label is-small">{title}</label></div>
 
-		<div slot="r05">
-			{#if showSelectLang}
-				<div class="field is-horizontal">
-					<div class="field-label is-small">
-						<!-- svelte-ignore a11y-label-has-associated-control -->
-						<label class="label">Language</label>
-					</div>
-					<div class="field-body">
-						<div class="field is-narrow">
-							<div class="control has-icons-left">
-								<div class="select is-small {formatError ? 'is-danger' : ''}">
-									<select bind:value={lang}>
-										<option value="none">None</option>
-										<option value="xml">HTML</option>
-										<option value="js">JavaScript</option>
-										<option value="json">JSON</option>
-										<option value="sql">SQL</option>
-										<option value="xml">XML</option>
-									</select>
+	<div slot="r05">
+		{#if showSelectLang}
+			<div class="field is-horizontal">
+				<div class="field-label is-small">
+					<!-- svelte-ignore a11y-label-has-associated-control -->
+					<label class="label">Language</label>
+				</div>
+				<div class="field-body">
+					<div class="field is-narrow">
+						<div class="control has-icons-left">
+							<div class="select is-small {formatError ? 'is-danger' : ''}">
+								<select bind:value={lang}>
+									<option value="none">None</option>
+									<option value="xml">HTML</option>
+									<option value="js">JavaScript</option>
+									<option value="json">JSON</option>
+									<option value="sql">SQL</option>
+									<option value="xml">XML</option>
+								</select>
 
-									<span class="icon is-small is-left">
-										{#if formatError}
-											<i class="fa-solid fa-triangle-exclamation"></i>
-										{/if}
-									</span>
-								</div>
+								<span class="icon is-small is-left">
+									{#if formatError}
+										<i class="fa-solid fa-triangle-exclamation"></i>
+									{/if}
+								</span>
 							</div>
 						</div>
 					</div>
 				</div>
-			{/if}
-		</div>
+			</div>
+		{/if}
+	</div>
 
-		<div slot="r02">
-			{#if $$slots.slot}
-				<span class="slot_padding"><slot name="slot" /></span>
-			{/if}
-		</div>
+	<div slot="r02">
+		{#if $$slots.slot}
+			<span class="slot_padding"><slot name="slot" /></span>
+		{/if}
+	</div>
 
-		<div slot="r01">
-			{#if showFormat && lang == 'json'}
-				<button
-					class="button is-small"
-					on:click={async () => {
-						await formatCode();
-					}}
-				>
-					Format
-				</button>
-			{/if}
+	<div slot="r01">
+		{#if showFormat && lang == 'json'}
+			<button
+				class="button is-small"
+				on:click={async () => {
+					await formatCode();
+				}}
+			>
+				Format
+			</button>
+		{/if}
 
-			{#if showResetButton}
-				<button
-					class="button is-small"
-					on:click={() => {
-						reset();
-						//console.log(code);
-					}}
-				>
-					Reset
-				</button>
-			{/if}
+		{#if showResetButton}
+			<button
+				class="button is-small"
+				on:click={() => {
+					reset();
+					//console.log(code);
+				}}
+			>
+				<span class="icon is-small">
+					<i class="fa-solid fa-rotate-left"></i>
+				</span>
+				<span>Reset</span>
+			</button>
+		{/if}
 
-			{#if showHiddenButton}
-				<button
-					class="button is-small"
-					on:click={() => {
-						showCode = !showCode;
-					}}
-				>
+		{#if showHiddenButton}
+			<button title="Hide or show Code"
+				class="button is-small"
+				on:click={() => {
+					showCode = !showCode;
+				}}
+			>
+				<span class="icon is-small">
 					{#if showCode}
-						Hidden Code
+						<i class="fa-solid fa-eye-slash"></i>
 					{:else}
-						Show Code
+						<i class="fa-solid fa-eye"></i>
 					{/if}
-				</button>
-			{/if}
-		</div>
-	</Level>
+				</span>
+			</button>
+		{/if}
+	</div>
+</Level>
 
-	<!-- Editor de CodeMirror -->
-	<div bind:this={elementParent} class={showCode ? '' : 'is-hidden'}></div>
+<!-- Editor de CodeMirror -->
+<div bind:this={elementParent} class={showCode ? '' : 'is-hidden'}></div>
