@@ -23,8 +23,11 @@
 	export let lang = 'json';
 	export let showFormat = false;
 	export let showSelectLang = false;
-export let isReadOnly = true;
+	export let isReadOnly = true;
+	export let showHiddenButton = true;
+	export let showResetButton = false;
 
+	let showCode = true;
 	let org_code = '';
 	let formatError = false;
 	let internal_code = '';
@@ -101,11 +104,11 @@ export let isReadOnly = true;
 			editorView.dispatch(transaction);
 		}
 	}
-	 // Función para alternar entre solo lectura y editable
-	 function toggleReadOnly() {
-    isReadOnly = !isReadOnly;
-    initializeEditor(); // Reinicializar el editor con la nueva configuración
-  }
+	// Función para alternar entre solo lectura y editable
+	function toggleReadOnly() {
+		isReadOnly = !isReadOnly;
+		initializeEditor(); // Reinicializar el editor con la nueva configuración
+	}
 
 	function initializeEditor() {
 		//		console.log('>>>> elementParent', elementParent);
@@ -180,72 +183,94 @@ export let isReadOnly = true;
 	});
 </script>
 
-<Level>
-	<!-- svelte-ignore a11y-label-has-associated-control -->
-	<div slot="l01"><label class="label is-small">{title}</label></div>
+<div class="box">
+	<Level>
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<div slot="l01"><label class="label is-small">{title}</label></div>
 
-	<div slot="r05">
-		{#if showSelectLang}
-			<div class="field is-horizontal">
-				<div class="field-label is-small">
-					<!-- svelte-ignore a11y-label-has-associated-control -->
-					<label class="label">Language</label>
-				</div>
-				<div class="field-body">
-					<div class="field is-narrow">
-						<div class="control has-icons-left">
-							<div class="select is-small {formatError ? 'is-danger' : ''}">
-								<select bind:value={lang}>
-									<option value="none">None</option>
-									<option value="xml">HTML</option>
-									<option value="js">JavaScript</option>
-									<option value="json">JSON</option>
-									<option value="sql">SQL</option>
-									<option value="xml">XML</option>
-								</select>
+		<div slot="r05">
+			{#if showSelectLang}
+				<div class="field is-horizontal">
+					<div class="field-label is-small">
+						<!-- svelte-ignore a11y-label-has-associated-control -->
+						<label class="label">Language</label>
+					</div>
+					<div class="field-body">
+						<div class="field is-narrow">
+							<div class="control has-icons-left">
+								<div class="select is-small {formatError ? 'is-danger' : ''}">
+									<select bind:value={lang}>
+										<option value="none">None</option>
+										<option value="xml">HTML</option>
+										<option value="js">JavaScript</option>
+										<option value="json">JSON</option>
+										<option value="sql">SQL</option>
+										<option value="xml">XML</option>
+									</select>
 
-								<span class="icon is-small is-left">
-									{#if formatError}
-										<i class="fa-solid fa-triangle-exclamation"></i>
-									{/if}
-								</span>
+									<span class="icon is-small is-left">
+										{#if formatError}
+											<i class="fa-solid fa-triangle-exclamation"></i>
+										{/if}
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		{/if}
-	</div>
+			{/if}
+		</div>
 
-	<div slot="r02">
-		{#if $$slots.slot}
-			<span class="slot_padding"><slot name="slot" /></span>
-		{/if}
-	</div>
+		<div slot="r02">
+			{#if $$slots.slot}
+				<span class="slot_padding"><slot name="slot" /></span>
+			{/if}
+		</div>
 
-	<div slot="r01">
-		{#if showFormat && lang == 'json'}
-			<button
-				class="button is-small"
-				on:click={async () => {
-					await formatCode();
-				}}
-			>
-				Format
-			</button>
+		<div slot="r01">
+			{#if showFormat && lang == 'json'}
+				<button
+					class="button is-small"
+					on:click={async () => {
+						await formatCode();
+					}}
+				>
+					Format
+				</button>
+			{/if}
 
-			<button
-				class="button is-small"
-				on:click={() => {
-					reset();
-					//console.log(code);
-				}}
-			>
-				RESET
-			</button>
-		{/if}
-	</div>
-</Level>
+			{#if showResetButton}
+				<button
+					class="button is-small"
+					on:click={() => {
+						reset();
+						//console.log(code);
+					}}
+				>
+					Reset
+				</button>
+			{/if}
 
-<!-- Editor de CodeMirror -->
-<div bind:this={elementParent}></div>
+			{#if showHiddenButton}
+				<button
+					class="button is-small"
+					on:click={() => {
+						showCode = !showCode;
+
+						
+					}}
+				>
+					{#if showCode}
+						Hidden Code
+					{:else}
+						Show Code
+					{/if}
+				</button>
+			{/if}
+		</div>
+	</Level>
+
+		<!-- Editor de CodeMirror -->
+		<div bind:this={elementParent} class="{showCode?'':'is-hidden'}"></div>
+	
+</div>
