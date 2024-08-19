@@ -47,6 +47,7 @@
 	};
 
 	export function setCode(code) {
+		console.log('setCode >>>>> ', code);
 		internal_code = code;
 		org_code = code;
 		parseCode();
