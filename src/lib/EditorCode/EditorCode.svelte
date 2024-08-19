@@ -7,6 +7,7 @@
 	import { html } from '@codemirror/lang-html';
 	import { xml } from '@codemirror/lang-xml';
 	import { sql } from '@codemirror/lang-sql';
+	import { EditorState } from '@codemirror/state';
 
 	import prettier from 'prettier';
 	import parserBabel from 'prettier/parser-babel';
@@ -22,6 +23,7 @@
 	export let lang = 'json';
 	export let showFormat = false;
 	export let showSelectLang = false;
+export let isReadOnly = true;
 
 	let org_code = '';
 	let formatError = false;
@@ -99,6 +101,11 @@
 			editorView.dispatch(transaction);
 		}
 	}
+	 // Función para alternar entre solo lectura y editable
+	 function toggleReadOnly() {
+    isReadOnly = !isReadOnly;
+    initializeEditor(); // Reinicializar el editor con la nueva configuración
+  }
 
 	function initializeEditor() {
 		//		console.log('>>>> elementParent', elementParent);
@@ -112,6 +119,7 @@
 				doc: internal_code,
 				extensions: [
 					basicSetup,
+					isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
 					languages[lang] ? languages[lang] : [],
 					EditorView.updateListener.of((update) => {
 						if (update.changes) {

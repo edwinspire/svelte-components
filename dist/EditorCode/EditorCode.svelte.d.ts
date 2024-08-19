@@ -8,6 +8,7 @@ export default class EditorCode extends SvelteComponent<{
     lang?: string;
     showFormat?: boolean;
     showSelectLang?: boolean;
+    isReadOnly?: boolean;
     setCode?: (new_code: any) => void;
     getCode?: () => any;
 }, {
@@ -31,6 +32,7 @@ declare const __propDef: {
         lang?: string;
         showFormat?: boolean;
         showSelectLang?: boolean;
+        isReadOnly?: boolean;
         setCode?: (new_code: any) => void;
         getCode?: () => any;
     };
