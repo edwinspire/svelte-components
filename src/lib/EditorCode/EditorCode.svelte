@@ -23,7 +23,7 @@
 	export let lang = 'json';
 	export let showFormat = false;
 	export let showSelectLang = false;
-	export let isReadOnly = true;
+	export let isReadOnly = false;
 	export let showHiddenButton = true;
 	export let showResetButton = false;
 	export let showCode = true;
