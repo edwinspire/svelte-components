@@ -185,7 +185,15 @@
 
 <Level>
 	<!-- svelte-ignore a11y-label-has-associated-control -->
-	<div slot="l01"><label class="label is-small">{title}</label></div>
+	<div slot="l01">
+		{#if title && title.length > 0}
+			<label class="label is-small">{title}</label>
+		{/if}
+
+		{#if $$slots.left}
+			<span class=""><slot name="left" /></span>
+		{/if}
+	</div>
 
 	<div slot="r05">
 		{#if showSelectLang}
@@ -221,8 +229,8 @@
 	</div>
 
 	<div slot="r02">
-		{#if $$slots.slot}
-			<span class="slot_padding"><slot name="slot" /></span>
+		{#if $$slots.right}
+			<span class=""><slot name="right" /></span>
 		{/if}
 	</div>
 
@@ -254,7 +262,8 @@
 		{/if}
 
 		{#if showHiddenButton}
-			<button title="Hide or show Code"
+			<button
+				title="Hide or show Code"
 				class="button is-small"
 				on:click={() => {
 					showCode = !showCode;
