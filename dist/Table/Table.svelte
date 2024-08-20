@@ -83,9 +83,10 @@
 	let internal_columns = {};
 
 	$: SelectedRows, OnSelection();
-	$: DataTable, onrawDataChanged();
+	$: DataTable, RawDataTable, onrawDataChanged();
 
 	let idTimeoutDataChanged;
+
 
 	function onrawDataChanged() {
 		
