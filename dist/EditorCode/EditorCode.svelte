@@ -18,8 +18,8 @@
 	let editorView;
 	let elementParent;
 
-	export let code = `Text demo`;
-	export let title = 'Editor Code';
+	export let code = ``;
+	export let title = '';
 	export let lang = 'json';
 	export let showFormat = false;
 	export let showSelectLang = false;
