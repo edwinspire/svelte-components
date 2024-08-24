@@ -3,14 +3,29 @@
 /** @typedef {typeof __propDef.slots}  TabSlots */
 export default class Tab extends SvelteComponent<{
     classSize?: string;
-    tabs?: {
+    tabs?: ({
         label: string;
         classIcon: string;
         slot: string;
         isActive: boolean;
-    }[];
-    active?: string;
+        disabled: boolean;
+    } | {
+        label: string;
+        classIcon: string;
+        isActive: boolean;
+        slot?: undefined;
+        disabled?: undefined;
+    } | {
+        label: string;
+        classIcon: string;
+        isActive: boolean;
+        disabled: boolean;
+        slot?: undefined;
+    })[];
+    active?: number;
 }, {
+    select: CustomEvent<any>;
+} & {
     [evt: string]: CustomEvent<any>;
 }, {
     default: {};
@@ -23,15 +38,30 @@ import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         classSize?: string;
-        tabs?: {
+        tabs?: ({
             label: string;
             classIcon: string;
             slot: string;
             isActive: boolean;
-        }[];
-        active?: string;
+            disabled: boolean;
+        } | {
+            label: string;
+            classIcon: string;
+            isActive: boolean;
+            slot?: undefined;
+            disabled?: undefined;
+        } | {
+            label: string;
+            classIcon: string;
+            isActive: boolean;
+            disabled: boolean;
+            slot?: undefined;
+        })[];
+        active?: number;
     };
     events: {
+        select: CustomEvent<any>;
+    } & {
         [evt: string]: CustomEvent<any>;
     };
     slots: {
