@@ -10,7 +10,8 @@
 		BasicSelect,
 		Level,
 		PredictiveInput,
-		EditorCode
+		EditorCode,
+		Tab
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 
@@ -86,6 +87,8 @@
 }
 
 
+let tab_list = [{label: 'UNO',  disabled: true}, {label: 'DOS', isActive: true}, {label: 'TRES'}, {label: 'CUATRO'}]
+let active_tab = 0;
 
 	onMount(() => {
 /*
@@ -96,9 +99,20 @@
 	});
 </script>
 
+
+
+<Tab bind:tabs={tab_list} bind:active={active_tab}>
+
+
+
+
+</Tab>
+
+
 <button
 	on:click={() => {
 		show = true;
+		active_tab = 1;
 	}}>Mostrar</button
 >
 
@@ -123,5 +137,5 @@
 ></PredictiveInput>
 
 <EditorCode></EditorCode>
-
-<Table bind:columns bind:RawDataTable={dataTest} ShowDeleteButton={true} ShowNewButton={true} ShowEditButton={true} ></Table>
+<!-- 
+<Table bind:columns bind:RawDataTable={dataTest} ShowDeleteButton={true} ShowNewButton={true} ShowEditButton={true} ></Table> -->
