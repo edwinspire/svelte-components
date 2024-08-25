@@ -87,26 +87,26 @@
 
 	let idTimeoutDataChanged;
 
-
 	function onrawDataChanged() {
-		
 		// Cancela el ultimo timeout
 		clearTimeout(idTimeoutDataChanged);
-		
+
 		// Setea uno nuevo
 		idTimeoutDataChanged = setTimeout(() => {
-			try {
-				//let hash_data = await hash(JSON.stringify(RawDataTable));
-				let hash_data = sha256(JSON.stringify(RawDataTable));
+			if (RawDataTable) {
+				try {
+					//let hash_data = await hash(JSON.stringify(RawDataTable));
+					let hash_data = sha256(JSON.stringify(RawDataTable));
 
-				if (hash_last_data !== hash_data) {
-					hash_last_data = hash_data;
-					ProcessRawData();
-				} else {
-					console.log('No changes on Data on Table widget');
+					if (hash_last_data !== hash_data) {
+						hash_last_data = hash_data;
+						ProcessRawData();
+					} else {
+						console.log('No changes on Data on Table widget');
+					}
+				} catch (error) {
+					console.error(error);
 				}
-			} catch (error) {
-				console.error(error);
 			}
 		}, 3000);
 	}
@@ -266,7 +266,7 @@
 	}, 1000);
 
 	let hash_last_data = '';
-	
+
 	/*
 	// Check changes of data
 	let check_changes_data = setInterval(() => {
