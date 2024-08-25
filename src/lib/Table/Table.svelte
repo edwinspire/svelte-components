@@ -97,8 +97,10 @@
 			// Setea uno nuevo
 			idTimeoutDataChanged = setTimeout(() => {
 				try {
+					let sf = JSON.stringify(RawDataTable);
+
 					//let hash_data = await hash(JSON.stringify(RawDataTable));
-					let hash_data = sha256(JSON.stringify(RawDataTable));
+					let hash_data = sha256(sf && sf.length > 0 ? sf : '0');
 
 					if (hash_last_data !== hash_data) {
 						hash_last_data = hash_data;
@@ -109,7 +111,7 @@
 				} catch (error) {
 					console.error(error, RawDataTable);
 				}
-			}, 1500);
+			}, 1000);
 		}
 	}
 
