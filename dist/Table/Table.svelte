@@ -107,7 +107,7 @@
 						console.log('No changes on Data on Table widget');
 					}
 				} catch (error) {
-					console.error(error);
+					console.error(error, RawDataTable);
 				}
 			}, 1000);
 		}
@@ -460,21 +460,26 @@
 	function ProcessRawData() {
 		//console.log("ProcessRawData >> ", RawDataTable);
 
-		if (Array.isArray(RawDataTable)) {
+		if (RawDataTable && Array.isArray(RawDataTable)) {
 			let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
 
 			RawDataTable = RawDataTable.map((row, i) => {
-				row.internal_hash_row = 0;
-				let c = sha256(JSON.stringify(row));
+				try {
+					row.internal_hash_row = 0;
+					let c = sha256(JSON.stringify(row));
 
-				//console.log('Registro HASH >> ', c);
-				if (Listinternal_hash_row[c]) {
-					console.error('Hay un registro duplicado en la tabla', row);
-					c = c +  '-' + i;
+					//console.log('Registro HASH >> ', c);
+					if (Listinternal_hash_row[c]) {
+						console.error('Hay un registro duplicado en la tabla', row);
+						c = c + '-' + i;
+						Listinternal_hash_row[c] = true;
+					}
 					Listinternal_hash_row[c] = true;
+					row.internal_hash_row = c;
+				} catch (error) {
+					console.error(error, row);
 				}
-				Listinternal_hash_row[c] = true;
-				row.internal_hash_row = c;
+
 				return row;
 			});
 
