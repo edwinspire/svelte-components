@@ -14,6 +14,7 @@ import BasicSelect from './Select/BasicSelect.svelte';
 import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
 
 import { storeChangedTables, WebSocketClient } from './class/websocket.js';
+import { sha256 } from './class/sha.js';
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
 
 export {
@@ -29,6 +30,7 @@ export {
 	Menu,
 	SlideFullScreen,
 	BasicSelect,
-	EditorCode
+	EditorCode,
+	sha256
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";

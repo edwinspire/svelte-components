@@ -109,7 +109,7 @@
 				} catch (error) {
 					console.error(error, RawDataTable);
 				}
-			}, 1000);
+			}, 1500);
 		}
 	}
 
