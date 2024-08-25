@@ -88,12 +88,14 @@
 	let idTimeoutDataChanged;
 
 	function onrawDataChanged() {
-		// Cancela el ultimo timeout
-		clearTimeout(idTimeoutDataChanged);
+		// console.log('>> onrawDataChanged >>', hash_last_data);
 
-		// Setea uno nuevo
-		idTimeoutDataChanged = setTimeout(() => {
-			if (RawDataTable) {
+		if (RawDataTable) {
+			// Cancela el ultimo timeout
+			clearTimeout(idTimeoutDataChanged);
+
+			// Setea uno nuevo
+			idTimeoutDataChanged = setTimeout(() => {
 				try {
 					//let hash_data = await hash(JSON.stringify(RawDataTable));
 					let hash_data = sha256(JSON.stringify(RawDataTable));
@@ -107,8 +109,8 @@
 				} catch (error) {
 					console.error(error);
 				}
-			}
-		}, 3000);
+			}, 1000);
+		}
 	}
 
 	function OnSelection() {
@@ -457,10 +459,26 @@
 
 	function ProcessRawData() {
 		//console.log("ProcessRawData >> ", RawDataTable);
-		let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
-		let tmp_RawDataTable = [];
 
 		if (Array.isArray(RawDataTable)) {
+			let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
+
+			RawDataTable = RawDataTable.map((row, i) => {
+				row.internal_hash_row = 0;
+				let c = sha256(JSON.stringify(row));
+
+				//console.log('Registro HASH >> ', c);
+				if (Listinternal_hash_row[c]) {
+					console.error('Hay un registro duplicado en la tabla', row);
+					c = c +  '-' + i;
+					Listinternal_hash_row[c] = true;
+				}
+				Listinternal_hash_row[c] = true;
+				row.internal_hash_row = c;
+				return row;
+			});
+
+			/*
 			for (const row_org of RawDataTable) {
 				let row = { ...row_org };
 				row.internal_hash_row = 0;
@@ -478,14 +496,15 @@
 				//        tmp_RawDataTable.push({ ...row, internal_hash_row: c });
 				tmp_RawDataTable.push(row);
 			}
+			*/
 		} else {
 			console.log('RawDataTable no es array', RawDataTable);
 			RawDataTable = [];
 		}
 
 		//console.log(tmp_RawDataTable, RawDataTable);
-		RawDataTable = tmp_RawDataTable;
-		tmp_RawDataTable = [];
+		//RawDataTable = tmp_RawDataTable;
+		//tmp_RawDataTable = [];
 		SetColumns();
 		FilterData();
 	}

@@ -1,5 +1,4 @@
 <script>
-	import { format } from 'd3';
 	import {
 		Table,
 		DialogModal,
@@ -14,10 +13,24 @@
 		Tab
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
+	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
 
 	let selectedValue = '';
 
+	let json01 = {
+		a: 90,
+		b: { c: { j: { h: 12, y: 'sdfa' } } }
+	};
+
+
+	let json02 = {
+		a: 90,
+		b: { c: { j: { h: 12, y: 'sdf' } } }
+	};
+
+
 	let dataTest = [
+		{ checsk: false, name: '33112321', datas: 'sdasdsad', fecha: '2024-08-13T16:55:13' },
 		{ checsk: false, name: '33112321', datas: 'sdasdsad', fecha: '2024-08-13T16:55:13' },
 		{ checsk: true, name: '232322', datas: 'this es field test', fecha: new Date().toISOString() },
 		{
@@ -48,11 +61,13 @@
 		},
 		datas: {
 			label: 'CHECK2',
-			decorator: {component: ColumnTypes.Auto, props: { editInline: true }
-		}
-	},
+			decorator: { component: ColumnTypes.Auto, props: { editInline: true } }
+		},
 		fecha3: { label: 'CHECK3', decorator: { component: ColumnTypes.DateTime } },
-		name: { label: 'Nombre', decorator: {component: ColumnTypes.Auto, props: { editInline: true } } }
+		name: {
+			label: 'Nombre',
+			decorator: { component: ColumnTypes.Auto, props: { editInline: true } }
+		}
 	};
 	let show = false;
 	let requestData = {
@@ -65,33 +80,39 @@
 	];
 
 	function generateRandomJson() {
-  // Generar un valor booleano aleatorio
-  const randomCheck = Math.random() >= 0.5;
-  
-  // Generar un número aleatorio y convertirlo en string
-  const randomName = Math.floor(Math.random() * 100000000).toString();
-  
-  // Generar una cadena aleatoria
-  const randomDatas = Math.random().toString(36).substring(2, 10);
-  
-  // Generar una fecha aleatoria dentro de un rango razonable
-  const randomDate = new Date(Date.now() + Math.floor(Math.random() * 10000000000)).toISOString();
+		// Generar un valor booleano aleatorio
+		const randomCheck = Math.random() >= 0.5;
 
-  // Estructura JSON con valores aleatorios
-  return {
-    checsk: randomCheck,
-    name: randomName,
-    datas: randomDatas,
-    fecha: randomDate
-  };
-}
+		// Generar un número aleatorio y convertirlo en string
+		const randomName = Math.floor(Math.random() * 100000000).toString();
 
+		// Generar una cadena aleatoria
+		const randomDatas = Math.random().toString(36).substring(2, 10);
 
-let tab_list = [{label: 'UNO',  disabled: true}, {label: 'DOS', isActive: true}, {label: 'TRES'}, {label: 'CUATRO'}]
-let active_tab = 0;
+		// Generar una fecha aleatoria dentro de un rango razonable
+		const randomDate = new Date(Date.now() + Math.floor(Math.random() * 10000000000)).toISOString();
+
+		// Estructura JSON con valores aleatorios
+		return {
+			checsk: randomCheck,
+			name: randomName,
+			datas: randomDatas,
+			fecha: randomDate
+		};
+	}
+
+	let tab_list = [
+		{ label: 'UNO', disabled: true },
+		{ label: 'DOS', isActive: true },
+		{ label: 'TRES' },
+		{ label: 'CUATRO' }
+	];
+	let active_tab = 0;
 
 	onMount(() => {
-/*
+		
+
+		/*
 		setInterval(() => {
 			 dataTest.push(generateRandomJson());
 		}, 500);
@@ -99,15 +120,7 @@ let active_tab = 0;
 	});
 </script>
 
-
-
-<Tab bind:tabs={tab_list} bind:active={active_tab}>
-
-
-
-
-</Tab>
-
+<Tab bind:tabs={tab_list} bind:active={active_tab}></Tab>
 
 <button
 	on:click={() => {
@@ -137,5 +150,14 @@ let active_tab = 0;
 ></PredictiveInput>
 
 <EditorCode></EditorCode>
-<!-- 
-<Table bind:columns bind:RawDataTable={dataTest} ShowDeleteButton={true} ShowNewButton={true} ShowEditButton={true} ></Table> -->
+
+<Table
+	bind:columns
+	on:newrow={()=>{
+		console.log(dataTest);
+	}}
+	bind:RawDataTable={dataTest}
+	ShowDeleteButton={true}
+	ShowNewButton={true}
+	ShowEditButton={true}
+></Table>
