@@ -3,6 +3,7 @@
 /** @typedef {typeof __propDef.slots}  TextLimitSlots */
 export default class TextLimit extends SvelteComponent<{
     value: any;
+    row: any;
     props?: {};
 }, {
     click: MouseEvent;
@@ -18,6 +19,7 @@ import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         value: any;
+        row: any;
         props?: {};
     };
     events: {

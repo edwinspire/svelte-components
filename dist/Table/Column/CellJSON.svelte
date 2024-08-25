@@ -1,5 +1,6 @@
 <script>
   export let value;
+  export let row; // Required by no user directly
   import TCellJSON from "./JSON.svelte";
   /**
  * @type {{ [s: string]: any; } | ArrayLike<any>}

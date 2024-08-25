@@ -3,6 +3,7 @@
 /** @typedef {typeof __propDef.slots}  AutoSlots */
 export default class Auto extends SvelteComponent<{
     value: any;
+    row?: {};
     props?: {};
 }, {
     click: MouseEvent;
@@ -17,6 +18,7 @@ import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         value: any;
+        row?: {};
         props?: {};
     };
     events: {

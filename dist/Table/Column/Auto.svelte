@@ -1,7 +1,7 @@
 <script>
 	import TCellJSON from './CellJSON.svelte';
 	export let value;
-	//export let row = {};
+	export let row = {}; // Required by no user directly
 	export let props = {};
 
 	function stringIsValidJSON(input) {

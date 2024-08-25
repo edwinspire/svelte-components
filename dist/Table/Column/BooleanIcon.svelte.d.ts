@@ -10,7 +10,6 @@ export default class BooleanIcon extends SvelteComponent<{
 } & {
     [evt: string]: CustomEvent<any>;
 }, {}> {
-    get row(): {};
 }
 export type BooleanIconProps = typeof __propDef.props;
 export type BooleanIconEvents = typeof __propDef.events;

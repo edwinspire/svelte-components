@@ -1,5 +1,6 @@
 <script>
   export let value;
+  export let row; // Required by no user directly
   let show = false;
   let LimitMax = 30;
   export const props = {};

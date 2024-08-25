@@ -1,7 +1,7 @@
 <script>
 	export let value;
 	export let props;
-	export const row = {};
+	export let row = {}; // Required by no user directly
 	let DC001 = false;
 	import { DateTime } from 'luxon';
 	let format = 'yyyy-MM-dd HH:mm:ss';

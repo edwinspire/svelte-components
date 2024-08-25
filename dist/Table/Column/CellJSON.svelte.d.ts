@@ -3,6 +3,7 @@
 /** @typedef {typeof __propDef.slots}  CellJsonSlots */
 export default class CellJson extends SvelteComponent<{
     value: any;
+    row: any;
 }, {
     [evt: string]: CustomEvent<any>;
 }, {}> {
@@ -14,6 +15,7 @@ import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         value: any;
+        row: any;
     };
     events: {
         [evt: string]: CustomEvent<any>;

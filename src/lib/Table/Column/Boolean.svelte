@@ -1,7 +1,7 @@
 <script>
 	'use strict';
 	export let value;
-	export const row = {};
+	export let row = {}; // Required by no user directly
 	export let props = {};
 	let option = 'default';
 

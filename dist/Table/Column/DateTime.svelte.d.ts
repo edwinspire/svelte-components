@@ -10,7 +10,6 @@ export default class DateTime extends SvelteComponent<{
 } & {
     [evt: string]: CustomEvent<any>;
 }, {}> {
-    get row(): {};
 }
 export type DateTimeProps = typeof __propDef.props;
 export type DateTimeEvents = typeof __propDef.events;

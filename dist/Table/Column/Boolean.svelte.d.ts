@@ -10,7 +10,6 @@ export default class Boolean extends SvelteComponent<{
 } & {
     [evt: string]: CustomEvent<any>;
 }, {}> {
-    get row(): {};
 }
 export type BooleanProps = typeof __propDef.props;
 export type BooleanEvents = typeof __propDef.events;

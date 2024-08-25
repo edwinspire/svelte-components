@@ -10,7 +10,6 @@ export default class Json extends SvelteComponent<{
 } & {
     [evt: string]: CustomEvent<any>;
 }, {}> {
-    get row(): {};
     get props(): {};
 }
 export type JsonProps = typeof __propDef.props;
