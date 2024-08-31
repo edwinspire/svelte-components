@@ -10,7 +10,7 @@
 		Level,
 		PredictiveInput,
 		EditorCode,
-		Tab
+		Tab, RESTTester
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -119,6 +119,8 @@
 */
 	});
 </script>
+
+<RESTTester></RESTTester>
 
 <Tab bind:tabs={tab_list} bind:active={active_tab}></Tab>
 

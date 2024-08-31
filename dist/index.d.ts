@@ -12,4 +12,6 @@ import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
 import BasicSelect from './Select/BasicSelect.svelte';
 import EditorCode from './EditorCode/EditorCode.svelte';
 import { sha256 } from './class/sha.js';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256 };
+import RESTTester from './RESTTester/index.svelte';
+import JSONView from './JSONView/index.svelte';
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView };
