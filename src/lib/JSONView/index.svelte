@@ -2,7 +2,11 @@
 	export let jsonObject = {};
 
 	function formatJsonForHtmlCode(/** @type {any} */ json) {
-		return JSON.stringify(json, null, 2).replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
+		return json
+			? JSON.stringify(json && typeof json == 'object', null, 2)
+					.replace(/\n/g, '<br/>')
+					.replace(/ /g, '&nbsp;')
+			: '';
 	}
 </script>
 
