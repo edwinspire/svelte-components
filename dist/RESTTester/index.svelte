@@ -81,6 +81,12 @@
 		URL.revokeObjectURL(url);
 	}
 
+	function resetResponse() {
+		last_response = {};
+		data_result = undefined;
+		time_responde = undefined;
+	}
+
 	function getDataSend(data_table) {
 		let result = {};
 		//		console.log(data_table);
@@ -198,7 +204,7 @@
 										}
 
 										//console.log(data_send, url, method);
-										last_response = {};
+										resetResponse();
 										// Capturamos el tiempo inicial
 										let startTime = Date.now();
 										last_response = await uF[method]({ url: url, data: data_send });
