@@ -35,7 +35,7 @@
 
 	let responses_as = [
 		{ as: 'json', label: 'JSON' },
-		{ as: 'datatable', label: 'table' },
+		{ as: 'datatable', label: 'Table' },
 		{ as: 'text', label: 'Text' }
 	];
 
@@ -197,7 +197,8 @@
 											}
 										}
 
-										console.log(data_send, url, method);
+										//console.log(data_send, url, method);
+										last_response = {};
 										// Capturamos el tiempo inicial
 										let startTime = Date.now();
 										last_response = await uF[method]({ url: url, data: data_send });
