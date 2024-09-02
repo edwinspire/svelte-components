@@ -235,10 +235,13 @@
 											}
 
 											console.log(last_response, data_result);
+										} else {
+											data_result = await last_response.json();
 										}
 									} catch (error) {
 										running = false;
 										console.error(error);
+										data_result = error;
 										alert(error);
 									}
 
@@ -282,7 +285,7 @@
 		<div class="field is-grouped is-grouped-multiline">
 			<div class="control">
 				<div class="tags has-addons">
-					<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}"
+					<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-danger'}"
 						>Status</span
 					>
 					{#if last_response && last_response.status}
@@ -343,7 +346,9 @@
 		</div>
 		<div>
 			{#if Number(sizeKBResponse) < Number(limitSizeResponseView)}
-				{#if response_as == 'json'}
+				{#if last_response && !last_response.ok && data_result}
+					<JSONView bind:jsonObject={data_result}></JSONView>
+				{:else if response_as == 'json'}
 					<JSONView bind:jsonObject={data_result}></JSONView>
 				{:else if response_as == 'text'}
 					<code>

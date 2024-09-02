@@ -16,7 +16,7 @@
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
 
 	let selectedValue = '';
-
+	let mostrar_dialogo = true;
 	let json01 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdfa' } } }
@@ -163,3 +163,6 @@
 	ShowNewButton={true}
 	ShowEditButton={true}
 ></Table>
+
+
+<DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>
