@@ -15,6 +15,9 @@
 		{ label: 'Binary', disabled: true }
 	];
 
+
+	$: data, defaultValues();
+
 	export function getCode() {
 		//    console.log(">> getCode en JS.SVELTE ", );
 		return fnEditorCodeOld.getCode();
