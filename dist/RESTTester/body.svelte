@@ -24,7 +24,7 @@
 		fnEditorCodeOld.reset();
 	}
 
-	onMount(() => {
+	function defaultValues() {
 		if (!data) {
 			data = { js: {}, xml: {}, text: {} };
 		}
@@ -44,6 +44,10 @@
 		if (data && !data.selection) {
 			data.selection = 0;
 		}
+	}
+
+	onMount(() => {
+		defaultValues();
 	});
 </script>
 

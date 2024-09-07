@@ -6,7 +6,9 @@
 
 	let tabList = [{ label: 'None', isActive: true }, { label: 'Basic' }, { label: 'Bearer' }];
 
-	onMount(() => {
+	$: data, defaultValues();
+
+	function defaultValues() {
 		if (!data) {
 			data = { basic: {}, bearer: {} };
 		}
@@ -22,7 +24,9 @@
 		if (data && !data.selection) {
 			data.selection = 0;
 		}
-	});
+	}
+
+	onMount(() => {});
 </script>
 
 {#if data}
