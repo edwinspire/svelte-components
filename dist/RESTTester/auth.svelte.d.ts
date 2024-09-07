@@ -2,7 +2,10 @@
 /** @typedef {typeof __propDef.events}  AuthEvents */
 /** @typedef {typeof __propDef.slots}  AuthSlots */
 export default class Auth extends SvelteComponent<{
-    data: any;
+    data?: {
+        basic: {};
+        bearer: {};
+    };
 }, {
     [evt: string]: CustomEvent<any>;
 }, {}> {
@@ -13,7 +16,10 @@ export type AuthSlots = typeof __propDef.slots;
 import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
-        data: any;
+        data?: {
+            basic: {};
+            bearer: {};
+        };
     };
     events: {
         [evt: string]: CustomEvent<any>;

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Tab } from '../index.js';
 
-	export let data;
+	export let data = { basic: {}, bearer: {} };
 
 	let tabList = [{ label: 'None', isActive: true }, { label: 'Basic' }, { label: 'Bearer' }];
 
@@ -25,7 +25,7 @@
 	});
 </script>
 
-{#if data }
+{#if data}
 	<Tab bind:tabs={tabList} bind:active={data.selection}>
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<div class={tabList[0].isActive ? '' : 'is-hidden'}>

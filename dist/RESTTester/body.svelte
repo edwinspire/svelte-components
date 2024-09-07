@@ -4,7 +4,7 @@
 
 	import KeyValue from './key_value/kv.svelte';
 
-	export let data;
+	export let data = { js: {}, xml: {}, text: {} };
 	let fileName = '';
 
 	let tabList = [
