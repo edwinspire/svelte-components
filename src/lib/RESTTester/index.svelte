@@ -11,6 +11,7 @@
 	export let method = 'GET';
 	export let data = { query: [], headers: [], auth: {}, body: {} };
 	export let limitSizeResponseView = 20000;
+	export let methodDisabled = false;
 
 	let uF = new uFetch();
 	let last_response;
@@ -147,7 +148,7 @@
 
 							<p class="control">
 								<span class="select is-small">
-									<select bind:value={method}>
+									<select bind:value={method} disabled={methodDisabled}>
 										{#each methods as m}
 											<option value={m.method}>{m.label}</option>
 										{/each}

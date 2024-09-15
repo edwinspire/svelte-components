@@ -11,6 +11,7 @@ export default class Index extends SvelteComponent<{
         body: {};
     };
     limitSizeResponseView?: number;
+    methodDisabled?: boolean;
 }, {
     [evt: string]: CustomEvent<any>;
 }, {}> {
@@ -30,6 +31,7 @@ declare const __propDef: {
             body: {};
         };
         limitSizeResponseView?: number;
+        methodDisabled?: boolean;
     };
     events: {
         [evt: string]: CustomEvent<any>;

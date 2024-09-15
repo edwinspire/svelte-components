@@ -15,7 +15,6 @@
 		{ label: 'Binary', disabled: true }
 	];
 
-
 	$: data, defaultValues();
 
 	export function getCode() {
