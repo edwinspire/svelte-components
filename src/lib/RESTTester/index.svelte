@@ -88,7 +88,28 @@
 		time_responde = undefined;
 	}
 
-	function getDataSend(data_table) {
+	function getDataBody() {
+		let dataBody;
+		//console.log(data.body);
+		switch (data.body.selection) {
+			case 0:
+				try {
+					dataBody = JSON.parse(data.body.js.code);
+				} catch (error) {
+					console.warn(error);
+					dataBody = {};
+				}
+				break;
+
+			default:
+				dataBody = undefined;
+				break;
+		}
+
+		return dataBody;
+	}
+
+	function getDataQuery(data_table) {
 		let result = {};
 		//		console.log(data_table);
 		if (data_table && Array.isArray(data_table)) {
@@ -102,7 +123,7 @@
 		return result;
 	}
 
-	function existsData(data_table) {
+	function existsDataTable(data_table) {
 		if (data_table && Array.isArray(data_table)) {
 			return data_table.find((element) => element.enabled && element.key && element.key.length > 0);
 		} else {
@@ -192,15 +213,17 @@
 											method == 'CONNECT' ||
 											method == 'TRACE'
 										) {
-											data_send = getDataSend(data.query);
+											data_send = getDataQuery(data.query);
 										} else if (method == 'POST' || method == 'PUT' || method == 'PATCH') {
 											// Pueden tener tanto query como body
 											// Preferir body en lugar de query
+											//console.log('>>>>>>>', data.body);
+											let bodyData = getDataBody();
 
-											if (existsData(data.body)) {
-												data_send = getDataSend(data.body);
+											if (bodyData) {
+												data_send = bodyData;
 											} else {
-												data_send = getDataSend(data.query);
+												data_send = getDataQuery(data.query);
 											}
 										}
 

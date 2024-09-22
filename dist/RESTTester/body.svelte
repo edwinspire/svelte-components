@@ -5,6 +5,8 @@
 	import KeyValue from './key_value/kv.svelte';
 
 	export let data = { js: {}, xml: {}, text: {} };
+
+//let fnJSEditor;
 	let fileName = '';
 
 	let tabList = [
@@ -19,11 +21,11 @@
 
 	export function getCode() {
 		//    console.log(">> getCode en JS.SVELTE ", );
-		return fnEditorCodeOld.getCode();
+//		return fnJSEditor.getCode();
 	}
 
 	export function reset() {
-		fnEditorCodeOld.reset();
+//		fnJSEditor.reset();
 	}
 
 	function defaultValues() {

@@ -1,21 +1,37 @@
 {
-    // Use IntelliSense para saber los atributos posibles.
-    // Mantenga el puntero para ver las descripciones de los existentes atributos.
-    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
+	"version": "0.2.0",
+	"configurations": [
+	{
+		"name": "Launch Chrome",
+		"request": "launch",
+		"type": "chrome",
+		"url": "http://localhost:3000",
+		"webRoot": "${workspaceFolder}"
+	},
+
         {
-            "command": "npm run dev",
-            "name": "Run npm start",
+            "name": "Launch Chrome",
             "request": "launch",
-            "type": "node-terminal"
-        },
-        {
             "type": "chrome",
-            "request": "launch",
-            "name": "Iniciar Chrome para localhost",
-            "url": "http://localhost:8080",
+        
+            "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}"
-        }
-    ]
+        },
+		{
+			"type": "msedge",
+			"request": "launch",
+			"name": "Launch Edge",
+			"url": "http://127.0.0.1:3000",
+			"webRoot": "${workspaceFolder}"
+		},
+		{
+			"name": "Launch vite",
+			"request": "launch",
+			"runtimeArgs": ["dev"],
+			"runtimeExecutable": "vite",
+			"skipFiles": ["<node_internals>/**"],
+			"type": "node",
+			"console": "integratedTerminal"
+		},
+	]
 }

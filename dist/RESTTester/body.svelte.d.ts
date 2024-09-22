@@ -8,11 +8,11 @@ export default class Body extends SvelteComponent<{
         text: {};
     };
     reset?: () => void;
-    getCode?: () => any;
+    getCode?: () => void;
 }, {
     [evt: string]: CustomEvent<any>;
 }, {}> {
-    get getCode(): () => any;
+    get getCode(): () => void;
     get reset(): () => void;
 }
 export type BodyProps = typeof __propDef.props;
@@ -27,7 +27,7 @@ declare const __propDef: {
             text: {};
         };
         reset?: () => void;
-        getCode?: () => any;
+        getCode?: () => void;
     };
     events: {
         [evt: string]: CustomEvent<any>;
