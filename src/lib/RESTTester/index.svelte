@@ -198,9 +198,9 @@
 											// Preferir body en lugar de query
 
 											if (existsData(data.body)) {
-												data_send = getDataSend(data.query);
-											} else {
 												data_send = getDataSend(data.body);
+											} else {
+												data_send = getDataSend(data.query);
 											}
 										}
 
