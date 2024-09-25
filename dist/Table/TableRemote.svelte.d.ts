@@ -3,6 +3,7 @@
 /** @typedef {typeof __propDef.slots}  TableRemoteSlots */
 export default class TableRemote extends SvelteComponent<{
     url?: string;
+    RawDataTable?: any[];
     columns?: {};
     params?: {};
 }, {
@@ -16,6 +17,7 @@ import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         url?: string;
+        RawDataTable?: any[];
         columns?: {};
         params?: {};
     };

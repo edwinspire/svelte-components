@@ -7,9 +7,9 @@
 	let format = 'yyyy-MM-dd HH:mm:ss';
 	let HighlightIsntToday = false;
 	let fromFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-let value_formated = '';
+	let value_formated = '';
 
-if (props) {
+	if (props) {
 		if (props.format) {
 			format = props.format;
 		}
@@ -24,11 +24,17 @@ if (props) {
 	}
 
 	function fn_DC01() {
-		DC001 =
-			HighlightIsntToday &&
-			DateTime.fromISO(value).toFormat('yyyy-MM-dd') !== DateTime.local().toFormat('yyyy-MM-dd');
+		try {
+			DC001 =
+				HighlightIsntToday &&
+				DateTime.fromISO(value).toFormat('yyyy-MM-dd') !== DateTime.local().toFormat('yyyy-MM-dd');
 
-			value_formated = DateTime.fromFormat(value, fromFormat);
+			//value_formated = DateTime.fromFormat(value, fromFormat);
+			value_formated = DateTime.fromFormat(value, fromFormat).toLocal().toFormat(format);
+		} catch (error) {
+			value_formated = value;
+		}
+
 		/*
       HighlightIsntToday &&
       !(
@@ -42,6 +48,5 @@ if (props) {
 </script>
 
 <td on:click class:has-text-danger={DC001}>
-		{DateTime.fromFormat(value, fromFormat).toLocal().toFormat(format)}
-	
+	{value_formated}
 </td>
