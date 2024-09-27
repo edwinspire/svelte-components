@@ -1,17 +1,12 @@
-export function copyTextToClipboard(text) {
+export async function copyTextToClipboard(text) {
 	let result = { result: false, error: undefined };
 	// Primero, intentamos usar la API moderna si está disponible
 	if (navigator.clipboard && navigator.clipboard.writeText) {
-		navigator.clipboard
-			.writeText(text)
-			.then(() => {
-				//console.log("Texto copiado al portapapeles usando clipboard API.");
-				result.result = true;
-			})
-			.catch((err) => {
-				//console.error("Error al copiar usando clipboard API: ", err);
-				result.error = err;
-			});
+		try {
+			result.result = await navigator.clipboard.writeText(text);
+		} catch (error) {
+			result.error = err;
+		}
 	} else {
 		// Fallback para navegadores que no soportan la API clipboard (HTTP o viejos navegadores)
 		let tempInput = document.createElement('input');
