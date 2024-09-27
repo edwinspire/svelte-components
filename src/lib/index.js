@@ -17,7 +17,7 @@ import JSONView from './JSONView/index.svelte';
 
 import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 import { sha256 } from './class/sha.js';
-import { browserClipboard } from './class/browserClipboard.js';
+import { copyTextToClipboard } from './class/browserClipboard.js';
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
 
 export {
@@ -37,6 +37,6 @@ export {
 	sha256,
 	RESTTester,
 	JSONView,
-	browserClipboard
+	copyTextToClipboard
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";
