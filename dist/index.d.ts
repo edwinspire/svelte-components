@@ -14,4 +14,4 @@ import EditorCode from './EditorCode/EditorCode.svelte';
 import { sha256 } from './class/sha.js';
 import RESTTester from './RESTTester/index.svelte';
 import JSONView from './JSONView/index.svelte';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView };
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, browserClipboard };
