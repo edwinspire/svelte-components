@@ -3,7 +3,8 @@ export async function copyTextToClipboard(text) {
 	// Primero, intentamos usar la API moderna si está disponible
 	if (navigator.clipboard && navigator.clipboard.writeText) {
 		try {
-			result.result = await navigator.clipboard.writeText(text);
+            await navigator.clipboard.writeText(text);
+			result.result = true;
 		} catch (error) {
 			result.error = err;
 		}
