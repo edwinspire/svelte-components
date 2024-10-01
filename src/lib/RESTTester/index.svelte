@@ -109,6 +109,20 @@
 		return dataBody;
 	}
 
+	function getDataHeaders(data_table) {
+		let result = {};
+		//		console.log(data_table);
+		if (data_table && Array.isArray(data_table)) {
+			for (let i = 0; i < data_table.length; i++) {
+				if (data_table[i].enabled && data_table[i].key && data_table[i].key.length > 0) {
+					result[data_table[i].key] = data_table[i].value;
+				}
+			}
+		}
+
+		return result;
+	}
+
 	function getDataQuery(data_table) {
 		let result = {};
 		//		console.log(data_table);
@@ -150,7 +164,7 @@
 					<input
 						class="input is-small is-expanded"
 						type="text"
-						placeholder="Application name"
+						placeholder="URL"
 						bind:value={url}
 					/>
 				</p>
@@ -231,14 +245,28 @@
 										resetResponse();
 										// Capturamos el tiempo inicial
 										let startTime = Date.now();
-										last_response = await uF[method]({ url: url, data: data_send });
+
+										//let headers = {"access-control-expose-headers": "Content-Disposition", "access-control-allow-headers": "Authorization"}
+
+										//console.log(data);
+
+										last_response = await uF[method]({
+											url: url,
+											data: data_send,
+											headers: getDataHeaders(data.headers)
+										});
+
+										//last_response.headers.add("Access-Control-Expose-Headers","Authorization")
+
 										// Capturamos el tiempo final
 										let endTime = Date.now();
 
 										// Calculamos la diferencia en milisegundos
 										time_responde = endTime - startTime;
 
-										//console.warn(last_response.headers);
+										console.warn(last_response);
+
+										// TODO: probar cuando el dato es text pero en el editor se usa JSON, hay una excepción que no está controlada y el editor deja de funcionat
 
 										if (last_response.ok) {
 											switch (response_as) {
@@ -255,10 +283,11 @@
 													break;
 												default:
 													data_result = '';
+													sizeKBResponse = -1;
 													break;
 											}
 
-											console.log(last_response, data_result);
+											//console.log(last_response, data_result);
 										} else {
 											data_result = await last_response.json();
 										}
