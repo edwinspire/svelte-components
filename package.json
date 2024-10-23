@@ -82,5 +82,10 @@
 		"events": "^3.3.0",
 		"luxon": "^2.0.2",
 		"xlsx": "^0.18.5"
+	},
+	"importSort": {
+		"*.js": {
+			"style": "module"
+		}
 	}
 }

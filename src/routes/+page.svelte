@@ -22,7 +22,7 @@
 		b: { c: { j: { h: 12, y: 'sdfa' } } }
 	};
 
-
+let code = {};
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
@@ -151,7 +151,7 @@
 	}}
 ></PredictiveInput>
 
-<EditorCode></EditorCode>
+<EditorCode bind:code={code} ></EditorCode>
 
 <Table
 	bind:columns

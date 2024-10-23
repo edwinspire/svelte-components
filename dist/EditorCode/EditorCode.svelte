@@ -9,9 +9,10 @@
 	import { sql } from '@codemirror/lang-sql';
 	import { EditorState } from '@codemirror/state';
 
-	import prettier from 'prettier';
-	import parserBabel from 'prettier/parser-babel';
-	import * as prettierPluginBabel from 'prettier/plugins/babel';
+	import * as prettier from 'prettier';
+	import * as parserBabel from 'prettier/parser-babel';
+	import prettierPluginBabel from 'prettier/plugins/babel';
+	import * as estree from 'prettier/plugins/estree.js';
 	import parserHtml from 'prettier/parser-html';
 	import parserPostcss from 'prettier/parser-postcss';
 
@@ -124,10 +125,28 @@
 					basicSetup,
 					isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
 					languages[lang] ? languages[lang] : [],
-					EditorView.updateListener.of((update) => {
+					EditorView.updateListener.of(async (update) => {
 						if (update.changes) {
 							internal_code = update.state.doc.toString();
-							//	console.log('>>>> updateListener >>>', internal_code);
+							/*
+							console.log('>>>> updateListener >>>', internal_code, lang);
+
+							// Usar prettier para formatear JSON
+							const formattedJson = await prettier.format(update.state.doc.toString(), {
+								parser: 'json', // Parser de
+								plugins: [parserBabel, estree],
+
+								trailingComma: 'es5',
+								tabWidth: 4,
+								semi: false,
+								singleQuote: true
+							});
+
+							console.log('JSON Formateado:');
+							console.log(formattedJson);
+
+							console.log(internal_code);
+							*/
 
 							clearTimeout(timeoutParseOnChange);
 
@@ -141,8 +160,9 @@
 									}
 								} catch (error) {
 									formatError = true;
+									console.log(error);
 								}
-							}, 3000);
+							}, 1500);
 						}
 					})
 				],
