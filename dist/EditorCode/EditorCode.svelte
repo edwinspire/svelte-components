@@ -128,25 +128,8 @@
 					EditorView.updateListener.of(async (update) => {
 						if (update.changes) {
 							internal_code = update.state.doc.toString();
-							/*
-							console.log('>>>> updateListener >>>', internal_code, lang);
-
-							// Usar prettier para formatear JSON
-							const formattedJson = await prettier.format(update.state.doc.toString(), {
-								parser: 'json', // Parser de
-								plugins: [parserBabel, estree],
-
-								trailingComma: 'es5',
-								tabWidth: 4,
-								semi: false,
-								singleQuote: true
-							});
-
-							console.log('JSON Formateado:');
-							console.log(formattedJson);
-
-							console.log(internal_code);
-							*/
+							
+												
 
 							clearTimeout(timeoutParseOnChange);
 
@@ -181,7 +164,7 @@
 		}
 	}
 
-	function format(code_without_format) {
+async	function format(code_without_format) {
 		let result = { code: code_without_format, error: false };
 		if (lang == 'json') {
 			try {
@@ -190,6 +173,27 @@
 				} else {
 					result.code = JSON.stringify(JSON.parse(code_without_format), null, 2);
 				}
+/*
+				// Usar prettier para formatear JSON
+				result.code = await prettier.format(result.code, {
+								parser: 'json', // Parser de
+								plugins: [parserBabel, estree],
+
+								trailingComma: 'es5',
+								tabWidth: 4,
+								semi: false,
+								singleQuote: true,
+								printWidth: 1, // Forzar el valor de cada clave a estar en su propia línea
+    bracketSpacing: true // Agregar espacio entre llaves y contenido interno
+
+							});
+
+							console.log('JSON Formateado:');
+							//console.log(formattedJson);
+
+							console.log(result.code);
+							*/
+
 			} catch (error) {
 				result.error = false;
 			}

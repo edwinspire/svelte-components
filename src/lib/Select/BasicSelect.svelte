@@ -15,10 +15,12 @@
 
 <div class="select {css_class}">
 	<select bind:value={option} on:change={handleClick}>
-		{#each options as h}
-			<option value={h.id}>
-				{h.value}
-			</option>
-		{/each}
+		{#if options && Array.isArray(options)}
+			{#each options as h}
+				<option value={h.id}>
+					{h.value}
+				</option>
+			{/each}
+		{/if}
 	</select>
 </div>
