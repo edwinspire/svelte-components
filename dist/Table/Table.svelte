@@ -167,6 +167,8 @@
 			internal_columns = {};
 
 			Object.keys(RawDataTable[0]).forEach((item) => {
+				console.log('Tabla: ', item);
+
 				//let icolumn = {};
 				if (item === 'internal_hash_row') {
 					internal_columns[item] = {
@@ -186,6 +188,22 @@
 					};
 				}
 				//return icolumn;
+			});
+		}
+	}
+
+	function SetColumns_xxx() {
+		if (RawDataTable && RawDataTable.length > 0) {
+			let MaxSizeLabel = 15;
+			internal_columns = { ...columns };
+
+			Object.keys(RawDataTable[0]).forEach((data_col) => {
+				if (!internal_columns[data_col]) {
+					internal_columns[data_col] = {
+						label: data_col.substring(0, MaxSizeLabel),
+						hidden: true
+					};
+				}
 			});
 		}
 	}
@@ -482,7 +500,22 @@
 					console.error(error, row);
 				}
 
-				return row;
+				// Reordenar la posicion de las columnas de acuerdo al orden de la parametrizaicion de las columnas
+				let new_row = {};
+				for (let col in columns) {
+					//console.log(`Clave: ${clave}, Valor: ${miObjeto[clave]}`);
+					new_row[col] = row[col];
+				}
+
+				// Se agrega el resto de columnas que no están en la parametrizacion de columnas
+				for (let col in row) {
+				
+					if (!new_row[col]) {
+						new_row[col] = row[col];
+					}
+				}
+
+				return new_row;
 			});
 
 			/*
