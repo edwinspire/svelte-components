@@ -30,44 +30,49 @@ let code = {};
 
 
 	let dataTest = [
-		{ checsk: false, name: '33112321', datas: 'sdasdsad', fecha: '2024-08-13T16:55:13' },
+		{ checsk: false, name: 'name', datas: 'datas', fecha: 'fecha', fecha3: 233 },
 		{ checsk: false, name: '33112321', datas: 'sdasdsad', fecha: '2024-08-13T16:55:13' },
 		{ checsk: true, name: '232322', datas: 'this es field test', fecha: new Date().toISOString() },
 		{
 			checsk: true,
-			name: 'ddfff',
-			datas: '12.988',
-			fecha: '2024-08-13T16:22:02.449'
+			name: 'kkhkññkjjhmamá',
+			datas: 'Otro texto [verifiado]',
+			fecha3: 'fecha 3'
 		},
 		{
 			checsk: true,
-			name: 'kkhkññkjjhmamá',
-			datas: 'Otro texto [verifiado]',
-			fecha: new Date().toISOString()
+			name: 'ddfff',
+			datas: '12.988',
+			fecha: '2024-08-13T16:22:02.449',
+			fecha3: 'Ultima fila.'
 		}
+		
 	];
 
 	let columns = {
-		checsk: {
-			label: 'ENABLED',
-			decorator: { component: ColumnTypes.Boolean, props: { editInline: true } }
-		},
+
 		fecha: {
-			label: 'CHECK',
+			label: 'fechaz',
 			decorator: {
 				component: ColumnTypes.DateTime,
 				props: { editInline: true, fromFormat: 'yyyy-MM-ddTHH:mm:ss' }
 			}
 		},
-		datas: {
-			label: 'CHECK2',
-			decorator: { component: ColumnTypes.Auto, props: { editInline: true } }
-		},
-		fecha3: { label: 'CHECK3', decorator: { component: ColumnTypes.DateTime } },
 		name: {
 			label: 'Nombre',
 			decorator: { component: ColumnTypes.Auto, props: { editInline: true } }
 		}
+		,
+		
+		checsk: {
+			label: 'checskz',
+			decorator: { component: ColumnTypes.Boolean, props: { editInline: true } }
+		},
+		datas: {
+			label: 'datasz',
+			decorator: { component: ColumnTypes.Auto, props: { editInline: true } }
+		}
+		
 	};
 	let show = false;
 	let requestData = {
@@ -120,9 +125,10 @@ let code = {};
 	});
 </script>
 
-<RESTTester></RESTTester>
+<!-- <RESTTester></RESTTester> -->
 
-<Tab bind:tabs={tab_list} bind:active={active_tab}></Tab>
+<!-- 
+<Tab bind:tabs={tab_list} bind:active={active_tab}></Tab> -->
 
 <button
 	on:click={() => {
@@ -139,8 +145,6 @@ let code = {};
 	<div slot="r01"><input class="input" type="button" /></div>
 </Level>
 
-<BasicSelect></BasicSelect>
-
 <PredictiveInput
 	bind:selectedValue
 	classInput="is-small"
@@ -154,7 +158,7 @@ let code = {};
 <EditorCode bind:code={code} ></EditorCode>
 
 <Table
-	bind:columns
+bind:columns
 	on:newrow={()=>{
 		console.log(dataTest);
 	}}
@@ -164,5 +168,5 @@ let code = {};
 	ShowEditButton={true}
 ></Table>
 
-
-<DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>
+<!-- 
+<DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
