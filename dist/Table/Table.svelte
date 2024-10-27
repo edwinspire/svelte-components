@@ -84,6 +84,7 @@
 
 	$: SelectedRows, OnSelection();
 	$: DataTable, RawDataTable, onrawDataChanged();
+	$: columns, SetColumns();
 
 	let idTimeoutDataChanged;
 
