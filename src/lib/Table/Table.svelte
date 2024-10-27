@@ -168,7 +168,7 @@
 			internal_columns = {};
 
 			Object.keys(RawDataTable[0]).forEach((item) => {
-				console.log('Tabla: ', item);
+			//	console.log('Tabla: ', item);
 
 				//let icolumn = {};
 				if (item === 'internal_hash_row') {
@@ -225,7 +225,7 @@
 		try {
 			// Filter only selection
 
-			console.log('ExportTable > Columns ', columns);
+		//	console.log('ExportTable > Columns ', columns);
 
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
@@ -244,7 +244,7 @@
 		try {
 			// Filter only selection
 
-			console.log('ExportTable > Columns ', columns);
+		//	console.log('ExportTable > Columns ', columns);
 
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
@@ -263,7 +263,7 @@
 		try {
 			// Filter only selection
 
-			console.log('ExportTable > Columns ', columns);
+		//	console.log('ExportTable > Columns ', columns);
 
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
