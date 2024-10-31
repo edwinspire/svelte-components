@@ -9,13 +9,6 @@
 	import { sql } from '@codemirror/lang-sql';
 	import { EditorState } from '@codemirror/state';
 
-	import * as prettier from 'prettier';
-	import * as parserBabel from 'prettier/parser-babel';
-	import prettierPluginBabel from 'prettier/plugins/babel';
-	import * as estree from 'prettier/plugins/estree.js';
-	import parserHtml from 'prettier/parser-html';
-	import parserPostcss from 'prettier/parser-postcss';
-
 	let editorView;
 	let elementParent;
 
@@ -92,19 +85,24 @@
 
 	function parseCode() {
 		org_code = code;
-		let f = format(code);
+		let f = format(org_code);
 
 		formatError = f.error;
 		internal_code = f.code;
 
-		if (editorView && editorView.state && f.code != editorView.state.doc.toString()) {
+		setCodeEditor(internal_code);
+	}
+
+	function setCodeEditor(text) {
+		if (editorView && editorView.state && text != editorView.state.doc.toString()) {
 			const transaction = editorView.state.update({
-				changes: { from: 0, to: editorView.state.doc.length, insert: internal_code }
+				changes: { from: 0, to: editorView.state.doc.length, insert: text }
 			});
 
 			editorView.dispatch(transaction);
 		}
 	}
+
 	// Función para alternar entre solo lectura y editable
 	function toggleReadOnly() {
 		isReadOnly = !isReadOnly;
@@ -128,22 +126,25 @@
 					EditorView.updateListener.of(async (update) => {
 						if (update.changes) {
 							internal_code = update.state.doc.toString();
-							
-												
 
 							clearTimeout(timeoutParseOnChange);
 
 							timeoutParseOnChange = setTimeout(() => {
-								try {
-									formatError = false;
-									if (lang === 'json') {
-										code = JSON.parse(editorView.state.doc.toString());
-									} else {
-										code = editorView.state.doc.toString();
+								//console.warn(editorView.state.doc.toString());
+
+								//setCodeEditor(internal_code);
+								formatCode();
+
+								if (!formatError) {
+									try {
+										if (lang === 'json') {
+											code = JSON.parse(internal_code);
+										} else {
+											code = internal_code;
+										}
+									} catch (error) {
+										console.log(error);
 									}
-								} catch (error) {
-									formatError = true;
-									console.log(error);
 								}
 							}, 1500);
 						}
@@ -164,8 +165,8 @@
 		}
 	}
 
-async	function format(code_without_format) {
-		let result = { code: code_without_format, error: false };
+	function format(code_without_format) {
+		let result = { code: code_without_format, error: undefined };
 		if (lang == 'json') {
 			try {
 				if (typeof code_without_format === 'object') {
@@ -173,29 +174,8 @@ async	function format(code_without_format) {
 				} else {
 					result.code = JSON.stringify(JSON.parse(code_without_format), null, 2);
 				}
-/*
-				// Usar prettier para formatear JSON
-				result.code = await prettier.format(result.code, {
-								parser: 'json', // Parser de
-								plugins: [parserBabel, estree],
-
-								trailingComma: 'es5',
-								tabWidth: 4,
-								semi: false,
-								singleQuote: true,
-								printWidth: 1, // Forzar el valor de cada clave a estar en su propia línea
-    bracketSpacing: true // Agregar espacio entre llaves y contenido interno
-
-							});
-
-							console.log('JSON Formateado:');
-							//console.log(formattedJson);
-
-							console.log(result.code);
-							*/
-
 			} catch (error) {
-				result.error = false;
+				result.error = error;
 			}
 		}
 		//		console.log('format result > ', result);
@@ -219,7 +199,7 @@ async	function format(code_without_format) {
 		{/if}
 	</div>
 
-	<div slot="r05">
+	<div slot="l02">
 		{#if showSelectLang}
 			<div class="field is-horizontal">
 				<div class="field-label is-small">
@@ -247,6 +227,13 @@ async	function format(code_without_format) {
 							</div>
 						</div>
 					</div>
+				</div>
+			</div>
+		{:else}
+			<div class="control">
+				<div class="tags has-addons">
+					<span class="tag is-dark">Format</span>
+					<span class="tag {formatError ? 'is-danger' : 'is-success'}">{lang}</span>
 				</div>
 			</div>
 		{/if}

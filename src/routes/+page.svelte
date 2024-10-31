@@ -22,7 +22,7 @@
 		b: { c: { j: { h: 12, y: 'sdfa' } } }
 	};
 
-let code = {};
+let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"host":"192.168.138.30","dialect":"mssql","encrypt":false}};
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
@@ -155,7 +155,7 @@ let code = {};
 	}}
 ></PredictiveInput>
 
-<EditorCode bind:code={code} ></EditorCode>
+<EditorCode bind:code={code} lang={'json'}></EditorCode>
 
 <Table
 bind:columns
