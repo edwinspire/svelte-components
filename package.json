@@ -74,7 +74,7 @@
 		"@codemirror/lang-xml": "^6.1.0",
 		"@codemirror/state": "^6.4.1",
 		"@codemirror/view": "^6.32.0",
-		"@edwinspire/universal-fetch": "github:edwinspire/universal-fetch#v1.0.1",
+		"@edwinspire/universal-fetch": "https://github.com/edwinspire/universal-fetch.git#v1.0.1",
 		"@fortawesome/fontawesome-free": "^6.4.0",
 		"bulma": "^1.0.1",
 		"codemirror": "^6.0.1",
