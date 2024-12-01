@@ -125,7 +125,7 @@ let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"
 	});
 </script>
 
-<!-- <RESTTester></RESTTester> -->
+ <RESTTester></RESTTester> 
 
 <!-- 
 <Tab bind:tabs={tab_list} bind:active={active_tab}></Tab> -->

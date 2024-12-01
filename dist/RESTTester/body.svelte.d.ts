@@ -3,7 +3,7 @@
 /** @typedef {typeof __propDef.slots}  BodySlots */
 export default class Body extends SvelteComponent<{
     data?: {
-        js: {};
+        json: {};
         xml: {};
         text: {};
     };
@@ -22,7 +22,7 @@ import { SvelteComponent } from "svelte";
 declare const __propDef: {
     props: {
         data?: {
-            js: {};
+            json: {};
             xml: {};
             text: {};
         };

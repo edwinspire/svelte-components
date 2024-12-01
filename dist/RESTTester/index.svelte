@@ -90,11 +90,17 @@
 
 	function getDataBody() {
 		let dataBody;
-		//console.log(data.body);
+		console.log('getDataBody > ', data.body);
 		switch (data.body.selection) {
 			case 0:
 				try {
-					dataBody = JSON.parse(data.body.js.code);
+					let jsoncode = data?.body?.json?.code ?? undefined;
+					console.log('jsoncode >> ', jsoncode);
+					if (typeof jsoncode == 'object') {
+						dataBody = jsoncode;
+					} else {
+						dataBody = JSON.parse(jsoncode);
+					}
 				} catch (error) {
 					console.warn(error);
 					dataBody = {};
@@ -218,6 +224,8 @@
 								if (!running) {
 									running = true;
 									let data_send = {};
+
+									console.log('METHOD: ', method);
 
 									try {
 										if (

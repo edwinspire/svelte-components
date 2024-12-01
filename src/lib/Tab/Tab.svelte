@@ -1,6 +1,5 @@
 <script>
-	import { disableScrollHandling } from '$app/navigation';
-	import { createEventDispatcher } from 'svelte';
+import { createEventDispatcher } from 'svelte';
 	export let classSize = 'is-small';
 	export let tabs = [
 		{
@@ -23,7 +22,7 @@
 	$: active, changeTab();
 
 	function changeTab() {
-		console.log('changeTab');
+		//console.log('changeTab');
 		if (tabs) {
 			let last_active; // Guarda el ultimo item activo
 			let exists_active = false; // Esta variable indica si hay una item activo

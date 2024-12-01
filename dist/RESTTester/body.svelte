@@ -4,7 +4,7 @@
 
 	import KeyValue from './key_value/kv.svelte';
 
-	export let data = { js: {}, xml: {}, text: {} };
+	export let data = { json: {}, xml: {}, text: {} };
 
 //let fnJSEditor;
 	let fileName = '';
@@ -33,8 +33,8 @@
 			data = { js: {}, xml: {}, text: {} };
 		}
 
-		if (data && !data.js) {
-			data.js = {};
+		if (data && !data.json) {
+			data.json = {};
 		}
 
 		if (data && !data.xml) {
@@ -58,8 +58,8 @@
 {#if data}
 	<Tab bind:tabs={tabList} bind:active={data.selection}>
 		<div class={tabList[0].isActive ? '' : 'is-hidden'}>
-			{#if data && data.js}
-				<EditorCode lang="js" bind:code={data.js.code}></EditorCode>
+			{#if data && data.json}
+				<EditorCode lang="json" bind:code={data.json.code}></EditorCode>
 			{/if}
 		</div>
 
