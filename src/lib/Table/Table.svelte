@@ -91,7 +91,7 @@
 	function onrawDataChanged() {
 		// console.log('>> onrawDataChanged >>', hash_last_data);
 
-		if (RawDataTable) {
+		if (RawDataTableIsArray()) {
 			// Cancela el ultimo timeout
 			clearTimeout(idTimeoutDataChanged);
 
@@ -163,12 +163,12 @@
 	}
 
 	function SetColumns() {
-		if (RawDataTable && RawDataTable.length > 0) {
+		if (RawDataTableIsArray() && RawDataTable.length > 0) {
 			let MaxSizeLabel = 15;
 			internal_columns = {};
 
 			Object.keys(RawDataTable[0]).forEach((item) => {
-			//	console.log('Tabla: ', item);
+				//	console.log('Tabla: ', item);
 
 				//let icolumn = {};
 				if (item === 'internal_hash_row') {
@@ -193,31 +193,19 @@
 		}
 	}
 
-	function SetColumns_xxx() {
-		if (RawDataTable && RawDataTable.length > 0) {
-			let MaxSizeLabel = 15;
-			internal_columns = { ...columns };
-
-			Object.keys(RawDataTable[0]).forEach((data_col) => {
-				if (!internal_columns[data_col]) {
-					internal_columns[data_col] = {
-						label: data_col.substring(0, MaxSizeLabel),
-						hidden: true
-					};
-				}
-			});
-		}
-	}
-
 	function RowIsSelected(internal_hash_row) {
 		let isSelected = SelectedRows.includes(internal_hash_row);
 		return isSelected;
 	}
 
 	export function GetSelectedRows() {
-		return RawDataTable.filter((row) => {
-			return SelectedRows.includes(row.internal_hash_row);
-		});
+		let r = [];
+		if (RawDataTableIsArray()) {
+			r = RawDataTable.filter((row) => {
+				return SelectedRows.includes(row.internal_hash_row);
+			});
+		}
+		return r;
 	}
 
 	function ExportToHTML() {
@@ -225,7 +213,7 @@
 		try {
 			// Filter only selection
 
-		//	console.log('ExportTable > Columns ', columns);
+			//	console.log('ExportTable > Columns ', columns);
 
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
@@ -244,7 +232,7 @@
 		try {
 			// Filter only selection
 
-		//	console.log('ExportTable > Columns ', columns);
+			//	console.log('ExportTable > Columns ', columns);
 
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
@@ -263,7 +251,7 @@
 		try {
 			// Filter only selection
 
-		//	console.log('ExportTable > Columns ', columns);
+			//	console.log('ExportTable > Columns ', columns);
 
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
@@ -289,23 +277,6 @@
 	}, 1000);
 
 	let hash_last_data = '';
-
-	/*
-	// Check changes of data
-	let check_changes_data = setInterval(() => {
-		try {
-			//let hash_data = await hash(JSON.stringify(RawDataTable));
-			let hash_data = sha256(JSON.stringify(RawDataTable));
-
-			if (hash_last_data !== hash_data) {
-				//hash_last_data = hash_data;
-				//ProcessRawData();
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	}, 2000);
-	*/
 
 	onDestroy(() => {
 		clearInterval(auto_refresh);
@@ -405,10 +376,14 @@
 		ExportTable();
 	}
 
+	function RawDataTableIsArray() {
+		return RawDataTable && Array.isArray(RawDataTable);
+	}
+
 	function FilterData() {
 		//console.log("Filtrar", text_search);
 		let TempData;
-		if (text_search && text_search.length > 0) {
+		if (text_search && text_search.length > 0 && RawDataTableIsArray()) {
 			TempData = RawDataTable.filter((d) => {
 				let s = Object.values(d).filter((item) => {
 					if (item) {
@@ -479,9 +454,7 @@
 	}
 
 	function ProcessRawData() {
-		//console.log("ProcessRawData >> ", RawDataTable);
-
-		if (RawDataTable && Array.isArray(RawDataTable)) {
+		if (RawDataTableIsArray()) {
 			let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
 
 			RawDataTable = RawDataTable.map((row, i) => {
@@ -510,7 +483,6 @@
 
 				// Se agrega el resto de columnas que no están en la parametrizacion de columnas
 				for (let col in row) {
-				
 					if (!new_row[col]) {
 						new_row[col] = row[col];
 					}
@@ -518,34 +490,11 @@
 
 				return new_row;
 			});
-
-			/*
-			for (const row_org of RawDataTable) {
-				let row = { ...row_org };
-				row.internal_hash_row = 0;
-				let c = sha256(JSON.stringify(row));
-
-				//console.log('Registro HASH >> ', c);
-				if (Listinternal_hash_row[c]) {
-					console.error('Hay un registro duplicado en la tabla', row);
-					c = c + '-' + new Date().getTime() + '-' + Math.floor(Math.random() * 10000);
-					Listinternal_hash_row[c] = true;
-				} else {
-					Listinternal_hash_row[c] = true;
-				}
-				row.internal_hash_row = c;
-				//        tmp_RawDataTable.push({ ...row, internal_hash_row: c });
-				tmp_RawDataTable.push(row);
-			}
-			*/
 		} else {
 			console.log('RawDataTable no es array', RawDataTable);
 			RawDataTable = [];
 		}
 
-		//console.log(tmp_RawDataTable, RawDataTable);
-		//RawDataTable = tmp_RawDataTable;
-		//tmp_RawDataTable = [];
 		SetColumns();
 		FilterData();
 	}

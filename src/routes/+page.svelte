@@ -22,6 +22,65 @@
 		b: { c: { j: { h: 12, y: 'sdfa' } } }
 	};
 
+
+	let menu = {
+		root: {
+			left: [
+				{
+					type: 'image',
+					img: '/image.png'
+				},
+				{
+					type: 'link',
+					label: 'Item 01',
+					url: '/page01.html'
+				},
+				{
+					type: 'menu',
+					label: 'List',
+					submenu: [
+						{
+							type: 'link',
+							label: 'House',
+							url: '/myhouse.html'
+						},
+						{
+							type: 'link',
+							label: 'Batroom',
+							url: '/room.html'
+						},
+						{
+							type: 'menu',
+							label: 'Rooms',
+							submenu: [
+								{
+									type: 'link',
+									label: 'Pet',
+									url: '/pet.html'
+								},
+								{
+									type: 'link',
+									label: 'Shop',
+									url: '/shop.html'
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		rigth: [
+			{
+				type: 'label',
+				label: 'My Name'
+			},
+			{
+				type: 'link',
+				label: 'Logout'
+			}
+		]
+	};
+
 let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"host":"192.168.138.30","dialect":"mssql","encrypt":false}};
 	let json02 = {
 		a: 90,
@@ -125,7 +184,9 @@ let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"
 	});
 </script>
 
- <RESTTester></RESTTester> 
+<Menu bind:menuData={menu}></Menu>
+
+ <!-- <RESTTester></RESTTester>  -->
 
 <!-- 
 <Tab bind:tabs={tab_list} bind:active={active_tab}></Tab> -->
