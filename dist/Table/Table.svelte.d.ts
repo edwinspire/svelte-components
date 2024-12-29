@@ -12,6 +12,10 @@ export default class Table extends SvelteComponent<{
     iconExport?: string;
     iconDeleteRow?: string;
     ShowDeleteButton?: boolean;
+    PageSize?: number[];
+    PageSizeSelected?: number;
+    relatedTablesForAutoRefresh?: any[];
+    fileNameExport?: string;
     requestData?: {
         url: any;
         refresh_time: number;
@@ -24,10 +28,6 @@ export default class Table extends SvelteComponent<{
         };
     };
     rowClassFunction?: (row: any) => string;
-    PageSize?: number[];
-    PageSizeSelected?: number;
-    relatedTablesForAutoRefresh?: any[];
-    fileNameExport?: string;
     GetSelectedRows?: () => any[];
 }, {
     selectrows: CustomEvent<any>;
@@ -38,19 +38,19 @@ export default class Table extends SvelteComponent<{
 } & {
     [evt: string]: CustomEvent<any>;
 }, {
-    l01: {};
-    l02: {};
-    l03: {};
-    l04: {};
-    l05: {};
-    l06: {};
-    l07: {};
-    l08: {};
-    l09: {};
-    l10: {};
-    r08: {};
-    r09: {};
-    r10: {};
+    left_01: {};
+    left_02: {};
+    left_03: {};
+    left_04: {};
+    left_05: {};
+    left_06: {};
+    left_07: {};
+    left_08: {};
+    left_09: {};
+    left_10: {};
+    right_01: {};
+    right_02: {};
+    right_03: {};
 }> {
     get GetSelectedRows(): () => any[];
 }
@@ -70,6 +70,10 @@ declare const __propDef: {
         iconExport?: string;
         iconDeleteRow?: string;
         ShowDeleteButton?: boolean;
+        PageSize?: number[];
+        PageSizeSelected?: number;
+        relatedTablesForAutoRefresh?: any[];
+        fileNameExport?: string;
         requestData?: {
             url: any;
             refresh_time: number;
@@ -82,10 +86,6 @@ declare const __propDef: {
             };
         };
         rowClassFunction?: (row: any) => string;
-        PageSize?: number[];
-        PageSizeSelected?: number;
-        relatedTablesForAutoRefresh?: any[];
-        fileNameExport?: string;
         GetSelectedRows?: () => any[];
     };
     events: {
@@ -98,19 +98,19 @@ declare const __propDef: {
         [evt: string]: CustomEvent<any>;
     };
     slots: {
-        l01: {};
-        l02: {};
-        l03: {};
-        l04: {};
-        l05: {};
-        l06: {};
-        l07: {};
-        l08: {};
-        l09: {};
-        l10: {};
-        r08: {};
-        r09: {};
-        r10: {};
+        left_01: {};
+        left_02: {};
+        left_03: {};
+        left_04: {};
+        left_05: {};
+        left_06: {};
+        left_07: {};
+        left_08: {};
+        left_09: {};
+        left_10: {};
+        right_01: {};
+        right_02: {};
+        right_03: {};
     };
     exports?: {};
     bindings?: string;
