@@ -1,7 +1,7 @@
 <script>
 	'use strict';
 	//import { crypto } from "crypto";
-	import * as XLSX from 'xlsx';
+	//import * as XLSX from 'xlsx';
 	import { createEventDispatcher } from 'svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import uFetch from '@edwinspire/universal-fetch';
@@ -17,7 +17,6 @@
 	//TODO Fijar encabezado
 	//TODO Hacer celdas editables
 	//TODO Hacer columnas con ancho ajustable
-	//TODO Cuando se presiona exportar se coloca como selección multiple, sin embargo no cambia en el menú de tipo de  selección
 
 	export let RawDataTable = [];
 	export let SelectionType = 0;
@@ -121,10 +120,7 @@
 	}
 
 	onMount(() => {
-		//timeRemainingToRefresh = IntervalRefresh[requestData.refresh_time]||999;
 		timeRemainingToRefresh = 0;
-		// console.log("XLSX 2", XLSX);
-		//    GetDataTable();
 		requestData.method = requestData.method || 'GET';
 		requestData.refresh_time = Number(requestData.refresh_time)
 			? Number(requestData.refresh_time)
@@ -219,8 +215,8 @@
 			if (filteredData && filteredData.length > 0) {
 				ExportTableToHTML(filteredData, columns, fileNameExport);
 			} else {
-				alert('Select the rows to export.');
 				SelectionType = 2;
+				alert('Select the rows to export.');
 			}
 		} catch (error) {
 			console.error(error);
@@ -238,8 +234,8 @@
 			if (filteredData && filteredData.length > 0) {
 				ExportTableToXlsx(filteredData, columns, fileNameExport);
 			} else {
-				alert('Select the rows to export.');
 				SelectionType = 2;
+				alert('Select the rows to export.');
 			}
 		} catch (error) {
 			console.error(error);
@@ -502,7 +498,7 @@
 	async function GetDataTable() {
 		//console.log('GetDataTable');
 		if (loading) {
-			console.log('There is a petition in progress.');
+			console.log('There is a petition in progress...');
 		} else {
 			if (requestData && requestData.url && requestData.url.length > 0) {
 				try {
@@ -522,14 +518,14 @@
 					let method_request =
 						requestData && requestData.method ? requestData.method.toUpperCase() : 'GET';
 
-					console.log(method_request);
+					//		console.log(method_request);
 
 					let res = await FetchData[method_request]({
 						url: requestData.url,
 						data: requestData.params,
 						headers: requestData.headers
 					});
-					//console.log(res);
+					console.log('TABLE FetchData: ', res);
 					if (res && res.status == 200) {
 						let data = await res.json();
 
@@ -561,58 +557,58 @@
 </script>
 
 <Level>
-	<span slot="l01">
-		{#if $$slots.l01}
-			<slot name="l01" />
+	<span slot="left_01">
+		{#if $$slots.left_01}
+			<slot name="left_01" />
 		{/if}
 	</span>
-	<span slot="l02">
-		{#if $$slots.l02}
-			<slot name="l02" />
+	<span slot="left_02">
+		{#if $$slots.left_02}
+			<slot name="left_02" />
 		{/if}
 	</span>
-	<span slot="l03">
-		{#if $$slots.l03}
-			<slot name="l03" />
+	<span slot="left_03">
+		{#if $$slots.left_03}
+			<slot name="left_03" />
 		{/if}
 	</span>
-	<span slot="l04">
-		{#if $$slots.l04}
-			<slot name="l04" />
+	<span slot="left_04">
+		{#if $$slots.left_04}
+			<slot name="left_04" />
 		{/if}
 	</span>
-	<span slot="l05">
-		{#if $$slots.l05}
-			<slot name="l05" />
+	<span slot="left_05">
+		{#if $$slots.left_05}
+			<slot name="left_05" />
 		{/if}
 	</span>
-	<span slot="l06">
-		{#if $$slots.l06}
-			<slot name="l06" />
+	<span slot="left_06">
+		{#if $$slots.left_06}
+			<slot name="left_06" />
 		{/if}
 	</span>
-	<span slot="l07">
-		{#if $$slots.l07}
-			<slot name="l07" />
+	<span slot="left_07">
+		{#if $$slots.left_07}
+			<slot name="left_07" />
 		{/if}
 	</span>
-	<span slot="l08">
-		{#if $$slots.l08}
-			<slot name="l08" />
+	<span slot="left_08">
+		{#if $$slots.left_08}
+			<slot name="left_08" />
 		{/if}
 	</span>
-	<span slot="l09">
-		{#if $$slots.l09}
-			<slot name="l09" />
+	<span slot="left_09">
+		{#if $$slots.left_09}
+			<slot name="left_09" />
 		{/if}
 	</span>
-	<span slot="l10">
-		{#if $$slots.l10}
-			<slot name="l10" />
+	<span slot="left_10">
+		{#if $$slots.left_10}
+			<slot name="left_10" />
 		{/if}
 	</span>
 
-	<span slot="r01">
+	<span slot="right_01">
 		<div class="field has-addons">
 			<p class="control">
 				<input
@@ -631,7 +627,7 @@
 			</p>
 		</div>
 	</span>
-	<span slot="r02">
+	<span slot="right_02">
 		{#if ShowExportButton}
 			<button class="button is-small" on:click={ExportToExcel} title="Export to Excel">
 				<span class="icon">
@@ -645,9 +641,9 @@
 			</button>
 		{/if}
 	</span>
-	<span slot="r03">
+	<span slot="right_03">
 		{#if ShowSelectionButton}
-			<div class="dropdown is-hoverable is-right">
+			<div class="dropdown is-hoverable is-right" title="Selection type">
 				<div class="dropdown-trigger">
 					<button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu">
 						<span class="icon">
@@ -664,7 +660,7 @@
 								type="radio"
 								name="selection_type"
 								value="1"
-								checked
+								checked={SelectionType == 1 ? true : false}
 								on:change={() => {
 									SelectionType = 1;
 								}}
@@ -682,7 +678,7 @@
 								type="radio"
 								name="selection_type"
 								value="2"
-								checked
+								checked={SelectionType == 2 ? true : false}
 								on:change={() => {
 									SelectionType = 2;
 								}}
@@ -700,7 +696,7 @@
 								type="radio"
 								name="selection_type"
 								value="0"
-								checked
+								checked={SelectionType == 0 ? true : false}
 								on:change={() => {
 									SelectionType = 0;
 								}}
@@ -717,7 +713,7 @@
 		{/if}
 	</span>
 
-	<span slot="r04">
+	<span slot="right_04">
 		{#if ShowDeleteButton}
 			<button
 				class="button is-small"
@@ -732,7 +728,7 @@
 		{/if}
 	</span>
 
-	<span slot="r05" title="Editar">
+	<span slot="right_05" title="Edit row">
 		{#if ShowEditButton}
 			<button class="button is-small" on:click={HandleOnClickEdit}>
 				<span class="icon">
@@ -742,7 +738,7 @@
 		{/if}
 	</span>
 
-	<span slot="r06" title="Agregar fila">
+	<span slot="right_06" title="Add row">
 		{#if ShowNewButton}
 			<button class="button is-small" on:click={HClickNew}>
 				<span class="icon">
@@ -751,7 +747,7 @@
 			</button>
 		{/if}
 	</span>
-	<span slot="r07" title="Data refresh interval.">
+	<span slot="right_07" title="Data refresh interval.">
 		{#if requestData && requestData.url}
 			<button class="button is-small" on:click={ChangeIntervalRefresh}>
 				{#if loading}
@@ -766,21 +762,21 @@
 		{/if}
 	</span>
 
-	<span slot="r08">
-		{#if $$slots.r08}
-			<slot name="r08" />
+	<span slot="right_08">
+		{#if $$slots.right_01}
+			<slot name="right_01" />
 		{/if}
 	</span>
 
-	<span slot="r09">
-		{#if $$slots.r09}
-			<slot name="r09" />
+	<span slot="right_09">
+		{#if $$slots.right_02}
+			<slot name="right_02" />
 		{/if}
 	</span>
 
-	<span slot="r10">
-		{#if $$slots.r10}
-			<slot name="r10" />
+	<span slot="right_10">
+		{#if $$slots.right_03}
+			<slot name="right_03" />
 		{/if}
 	</span>
 </Level>

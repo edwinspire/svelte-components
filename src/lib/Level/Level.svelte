@@ -11,35 +11,35 @@
     is-half-fullhd"
 		>
 			<div class="container_left">
-				{#if $$slots.l01}
-					<span class="slot_padding"><slot name="l01" /></span>
+				{#if $$slots.left_01}
+					<span class="slot_padding"><slot name="left_01" /></span>
 				{/if}
-				{#if $$slots.l02}
-					<span class="slot_padding"><slot name="l02" /></span>
+				{#if $$slots.left_02}
+					<span class="slot_padding"><slot name="left_02" /></span>
 				{/if}
-				{#if $$slots.l03}
-					<span class="slot_padding"><slot name="l03" /></span>
+				{#if $$slots.left_03}
+					<span class="slot_padding"><slot name="left_03" /></span>
 				{/if}
-				{#if $$slots.l04}
-					<span class="slot_padding"><slot name="l04" /></span>
+				{#if $$slots.left_04}
+					<span class="slot_padding"><slot name="left_04" /></span>
 				{/if}
-				{#if $$slots.l05}
-					<span class="slot_padding"><slot name="l05" /></span>
+				{#if $$slots.left_05}
+					<span class="slot_padding"><slot name="left_05" /></span>
 				{/if}
-				{#if $$slots.l06}
-					<span class="slot_padding"><slot name="l06" /></span>
+				{#if $$slots.left_06}
+					<span class="slot_padding"><slot name="left_06" /></span>
 				{/if}
-				{#if $$slots.l07}
-					<span class="slot_padding"><slot name="l07" /></span>
+				{#if $$slots.left_07}
+					<span class="slot_padding"><slot name="left_07" /></span>
 				{/if}
-				{#if $$slots.l08}
-					<span class="slot_padding"><slot name="l08" /></span>
+				{#if $$slots.left_08}
+					<span class="slot_padding"><slot name="left_08" /></span>
 				{/if}
-				{#if $$slots.l09}
-					<span class="slot_padding"><slot name="l09" /></span>
+				{#if $$slots.left_09}
+					<span class="slot_padding"><slot name="left_09" /></span>
 				{/if}
-				{#if $$slots.l10}
-					<span class="slot_padding"><slot name="l10" /></span>
+				{#if $$slots.left_10}
+					<span class="slot_padding"><slot name="left_10" /></span>
 				{/if}
 			</div>
 		</div>
@@ -52,35 +52,35 @@
     is-half-fullhd"
 		>
 			<div class="container_right">
-				{#if $$slots.r10}
-					<span class="slot_padding"><slot name="r10" /></span>
+				{#if $$slots.right_10}
+					<span class="slot_padding"><slot name="right_10" /></span>
 				{/if}
-				{#if $$slots.r09}
-					<span class="slot_padding"><slot name="r09" /></span>
+				{#if $$slots.right_09}
+					<span class="slot_padding"><slot name="right_09" /></span>
 				{/if}
-				{#if $$slots.r08}
-					<span class="slot_padding"><slot name="r08" /></span>
+				{#if $$slots.right_08}
+					<span class="slot_padding"><slot name="right_08" /></span>
 				{/if}
-				{#if $$slots.r07}
-					<span class="slot_padding"><slot name="r07" /></span>
+				{#if $$slots.right_07}
+					<span class="slot_padding"><slot name="right_07" /></span>
 				{/if}
-				{#if $$slots.r06}
-					<span class="slot_padding"><slot name="r06" /></span>
+				{#if $$slots.right_06}
+					<span class="slot_padding"><slot name="right_06" /></span>
 				{/if}
-				{#if $$slots.r05}
-					<span class="slot_padding"><slot name="r05" /></span>
+				{#if $$slots.right_05}
+					<span class="slot_padding"><slot name="right_05" /></span>
 				{/if}
-				{#if $$slots.r04}
-					<span class="slot_padding"><slot name="r04" /></span>
+				{#if $$slots.right_04}
+					<span class="slot_padding"><slot name="right_04" /></span>
 				{/if}
-				{#if $$slots.r03}
-					<span class="slot_padding"><slot name="r03" /></span>
+				{#if $$slots.right_03}
+					<span class="slot_padding"><slot name="right_03" /></span>
 				{/if}
-				{#if $$slots.r02}
-					<span class="slot_padding"><slot name="r02" /></span>
+				{#if $$slots.right_02}
+					<span class="slot_padding"><slot name="right_02" /></span>
 				{/if}
-				{#if $$slots.r01}
-					<span class="slot_padding"><slot name="r01" /></span>
+				{#if $$slots.right_01}
+					<span class="slot_padding"><slot name="right_01" /></span>
 				{/if}
 			</div>
 		</div>

@@ -219,11 +219,11 @@ let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"
 <EditorCode bind:code={code} lang={'json'}></EditorCode>
 
 <Table
-bind:columns
+
 	on:newrow={()=>{
 		console.log(dataTest);
 	}}
-	bind:RawDataTable={dataTest}
+	bind:requestData={requestData}
 	ShowDeleteButton={true}
 	ShowNewButton={true}
 	ShowEditButton={true}
