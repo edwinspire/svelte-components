@@ -1,18 +1,14 @@
 <script>
 	'use strict';
-	//import { crypto } from "crypto";
-	//import * as XLSX from 'xlsx';
 	import { createEventDispatcher } from 'svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import uFetch from '@edwinspire/universal-fetch';
-	import { DateTime as DT, Auto } from './Column/DefaultTypes.js';
-	//	import { DateTime } from 'luxon';
+	import { Auto } from './Column/DefaultTypes.js';
 	import { storeChangedTables } from '../class/websocket.js';
 	import { sha256 } from '../class/sha.js';
 	import Level from '../Level/Level.svelte';
 	import { ExportTableToHTML, ExportTableToXlsx } from './utils/export_data.js';
 
-	//-      -//
 	//TODO Habilitar mostrar u ocultar columnas
 	//TODO Fijar encabezado
 	//TODO Hacer celdas editables
@@ -21,19 +17,19 @@
 	export let RawDataTable = [];
 	export let SelectionType = 0;
 	export let columns = {};
-	//export let url = '';
-	//export let params = {};
 	export let ShowNewButton = false;
 	export let ShowEditButton = false;
 	export let ShowSelectionButton = true;
 	export let ShowExportButton = true;
 	export let iconExport = 'fa-solid fa-file-excel';
 	export let iconDeleteRow = 'fa-solid fa-trash';
-
-	//export let bearerAuthorization;
-	//export let basicAuthorization; // {user: '', password: ''}
-	//export let method = 'GET';
 	export let ShowDeleteButton = false;
+	//-- Pagination --//
+	export let PageSize = [25, 50, 100, 200, 300, 500, 1000];
+	export let PageSizeSelected = 0;
+	export let relatedTablesForAutoRefresh = [];
+	// -- Nombre del archivo a exportar -- //
+	export let fileNameExport = '';
 
 	export let requestData = {
 		url: undefined,
@@ -56,22 +52,12 @@
 	let text_search;
 	let loading = false;
 	let showEdit = false;
-	// let showSelection = false;
 	let ColumnSort;
 	let ShowDialogColumn = false;
-
 	let timeRemainingToRefresh = 999;
-
 	let LastFetchResponse = true;
 	// -- Refresh -- //
 	let IntervalRefresh = [10, 20, 30, 45, 60, 120, 240, 480, 960, 1920, 3840];
-
-	//-- Pagination --//
-	export let PageSize = [25, 50, 100, 200, 300, 500, 1000];
-	export let PageSizeSelected = 0;
-	export let relatedTablesForAutoRefresh = [];
-	// -- Nombre del archivo a exportar -- //
-	export let fileNameExport = '';
 	let PageSelected = 1;
 	let totalFilteredRows = 0;
 	let TotalPages = 0;
@@ -252,7 +238,7 @@
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
 			} else {
-				alert('Select the rows to export.');
+				alert('Select the rows to delete.');
 				SelectionType = 2;
 			}
 		} catch (error) {
@@ -368,9 +354,11 @@
 		FilterData();
 	}
 
+	/*
 	function handleExportSelection(e) {
 		ExportTable();
 	}
+*/
 
 	function RawDataTableIsArray() {
 		return RawDataTable && Array.isArray(RawDataTable);
