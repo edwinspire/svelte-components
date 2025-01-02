@@ -1,33 +1,26 @@
-/** @typedef {typeof __propDef.props}  DateTimeProps */
-/** @typedef {typeof __propDef.events}  DateTimeEvents */
-/** @typedef {typeof __propDef.slots}  DateTimeSlots */
-export default class DateTime extends SvelteComponent<{
-    value: any;
-    props: any;
-    row?: {};
-}, {
-    click: MouseEvent;
-} & {
-    [evt: string]: CustomEvent<any>;
-}, {}> {
-}
-export type DateTimeProps = typeof __propDef.props;
-export type DateTimeEvents = typeof __propDef.events;
-export type DateTimeSlots = typeof __propDef.slots;
-import { SvelteComponent } from "svelte";
-declare const __propDef: {
-    props: {
-        value: any;
-        props: any;
-        row?: {};
-    };
-    events: {
-        click: MouseEvent;
-    } & {
-        [evt: string]: CustomEvent<any>;
-    };
-    slots: {};
-    exports?: {};
-    bindings?: string;
+export default DateTime;
+type DateTime = {
+    $on?(type: string, callback: (e: any) => void): () => void;
+    $set?(props: Partial<$$ComponentProps>): void;
 };
-export {};
+declare const DateTime: import("svelte").Component<{
+    value?: any;
+    onclick_cell?: Function;
+    row?: any;
+    format?: string;
+    fromFormat?: string;
+    HighlightIsntToday?: boolean;
+    editInline?: boolean;
+    css_cell?: string;
+}, {}, "value" | "row">;
+import { DateTime } from 'luxon';
+type $$ComponentProps = {
+    value?: any;
+    onclick_cell?: Function;
+    row?: any;
+    format?: string;
+    fromFormat?: string;
+    HighlightIsntToday?: boolean;
+    editInline?: boolean;
+    css_cell?: string;
+};

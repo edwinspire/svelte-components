@@ -1,59 +1,90 @@
 <script>
 	'use strict';
-	export let value;
-	export let row = {}; // Required by no user directly
-	export let props = {};
-	let option = 'default';
 
-	let config = {
-		icon: {
-			true: {
-				td_class: 'has-text-centered',
-				class: 'icon has-text-success',
-				icon: 'fas fa-check'
-			},
-			false: {
-				td_class: 'has-text-centered',
-				class: 'icon has-text-danger',
-				icon: 'fas fa-times'
-			}
+	let {
+		onclick_cell,
+		value = $bindable(),
+		row = $bindable(),
+		editInline,
+		custom,
+		css_cell = 'has-text-centered'
+	} = $props();
+
+	let defaultconfig = {
+		ontrue: {
+			label: '',
+			iconClass: 'fa-regular fa-square-check',
+			iconColorClass: ' has-text-success ',
+			css_cell: 'has-text-centered'
 		},
-		'color-icon': {
-			true: {
-				td_class: 'has-background-success has-text-white has-text-centered',
-				class: 'icon',
-				icon: 'fas fa-check'
-			},
-			false: {
-				td_class: 'has-background-danger has-text-white has-text-centered',
-				class: 'icon',
-				icon: 'fas fa-times'
-			}
+		onfalse: {
+			label: '',
+			iconClass: 'fa-regular fa-square',
+			iconColorClass: ' has-text-danger ',
+			css_cell: 'has-text-centered'
 		}
 	};
-
-	if (props && props.option) {
-		option = config[props.option];
-	} else {
-		option = null;
-	}
-	//  console.log(option, value);
 </script>
 
-{#if option}
-	<td class={option[value].td_class} on:click>
-		<div class="icon-text">
-			<span class={option[value].class}>
-				<i class={option[value].icon} />
+{#if custom}
+	<td
+		class={value
+			? custom.ontrue?.css_cell
+				? custom.ontrue.css_cell
+				: css_cell
+			: custom.onfalse?.css_cell
+				? custom.onfalse.css_cell
+				: css_cell}
+		onclick={onclick_cell}
+	>
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<span
+			class="icon-text {editInline ? 'is-clickable' : ''}"
+			onclick={() => {
+				if (editInline) {
+					value = !value;
+				}
+			}}
+		>
+			<span class="icon">
+				{#if value}
+					<i
+						class="{custom.ontrue?.iconClass
+							? custom.ontrue?.iconClass
+							: defaultconfig.ontrue?.iconClass} {custom.ontrue?.iconColorClass
+							? custom.ontrue?.iconColorClass
+							: defaultconfig.ontrue?.iconColorClass}"
+					></i>
+				{:else}
+					<i
+						class="{custom.onfalse?.iconClass
+							? custom.onfalse?.iconClass
+							: defaultconfig.onfalse?.iconClass} {custom.onfalse?.iconColorClass
+							? custom.onfalse?.iconColorClass
+							: defaultconfig.onfalse?.iconColorClass}"
+					></i>
+				{/if}
 			</span>
-		</div>
+			{#if value}
+				<span>{custom.ontrue?.label ? custom.ontrue.label : defaultconfig.ontrue.label}</span>
+			{:else}
+				<span>{custom.onfalse?.label ? custom.onfalse.label : defaultconfig.onfalse.label}</span>
+			{/if}
+		</span>
 	</td>
 {:else}
-	<td class="has-text-centered" on:click>
-		{#if props && props.editInline}
+	<td class={css_cell} onclick={onclick_cell}>
+		{#if editInline}
 			<input type="checkbox" bind:checked={value} />
 		{:else}
-			<input type="checkbox" bind:checked={value} onclick="return false;" />
+			<input
+				type="checkbox"
+				checked={value}
+				onclick={(event) => {
+					event.preventDefault();
+				}}
+			/>
 		{/if}
 	</td>
 {/if}

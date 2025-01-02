@@ -1,7 +1,5 @@
-/** @typedef {typeof __propDef.props}  BasicSelectProps */
-/** @typedef {typeof __propDef.events}  BasicSelectEvents */
-/** @typedef {typeof __propDef.slots}  BasicSelectSlots */
-export default class BasicSelect extends SvelteComponent<{
+export default BasicSelect;
+type BasicSelect = SvelteComponent<{
     option?: string;
     options?: {
         id: string;
@@ -13,29 +11,32 @@ export default class BasicSelect extends SvelteComponent<{
     select: CustomEvent<any>;
 } & {
     [evt: string]: CustomEvent<any>;
-}, {}> {
-}
-export type BasicSelectProps = typeof __propDef.props;
-export type BasicSelectEvents = typeof __propDef.events;
-export type BasicSelectSlots = typeof __propDef.slots;
-import { SvelteComponent } from "svelte";
-declare const __propDef: {
-    props: {
-        option?: string;
-        options?: {
-            id: string;
-            value: string;
-            enabled: boolean;
-        }[];
-        css_class?: string;
-    };
-    events: {
-        select: CustomEvent<any>;
-    } & {
-        [evt: string]: CustomEvent<any>;
-    };
-    slots: {};
-    exports?: {};
-    bindings?: string;
+}, {}> & {
+    $$bindings?: string;
 };
-export {};
+declare const BasicSelect: $$__sveltets_2_IsomorphicComponent<{
+    option?: string;
+    options?: {
+        id: string;
+        value: string;
+        enabled: boolean;
+    }[];
+    css_class?: string;
+}, {
+    select: CustomEvent<any>;
+} & {
+    [evt: string]: CustomEvent<any>;
+}, {}, {}, string>;
+interface $$__sveltets_2_IsomorphicComponent<Props extends Record<string, any> = any, Events extends Record<string, any> = any, Slots extends Record<string, any> = any, Exports = {}, Bindings = string> {
+    new (options: import("svelte").ComponentConstructorOptions<Props>): import("svelte").SvelteComponent<Props, Events, Slots> & {
+        $$bindings?: Bindings;
+    } & Exports;
+    (internal: unknown, props: Props & {
+        $$events?: Events;
+        $$slots?: Slots;
+    }): Exports & {
+        $set?: any;
+        $on?: any;
+    };
+    z_$$bindings?: Bindings;
+}

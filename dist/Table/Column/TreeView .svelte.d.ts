@@ -1,19 +1,15 @@
-export default TextLimit;
-type TextLimit = {
+export default TreeView;
+type TreeView = {
     $on?(type: string, callback: (e: any) => void): () => void;
     $set?(props: Partial<$$ComponentProps>): void;
 };
-declare const TextLimit: import("svelte").Component<{
+declare const TreeView: import("svelte").Component<{
     value?: any;
     onclick_cell?: Function;
-    limit?: number;
     css_cell?: string;
-    row?: any;
-}, {}, "value" | "row">;
+}, {}, "value">;
 type $$ComponentProps = {
     value?: any;
     onclick_cell?: Function;
-    limit?: number;
     css_cell?: string;
-    row?: any;
 };

@@ -10,7 +10,8 @@
 		Level,
 		PredictiveInput,
 		EditorCode,
-		Tab, RESTTester
+		Tab,
+		RESTTester
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -21,7 +22,6 @@
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdfa' } } }
 	};
-
 
 	let menu = {
 		root: {
@@ -81,12 +81,16 @@
 		]
 	};
 
-let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"host":"192.168.138.30","dialect":"mssql","encrypt":false}};
+	let code = {
+		database: 'msdb',
+		username: 'sa',
+		password: 'sqlkarma',
+		options: { host: '192.168.138.30', dialect: 'mssql', encrypt: false }
+	};
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
 	};
-
 
 	let dataTest = [
 		{ checsk: false, name: 'name', datas: 'datas', fecha: 'fecha', fecha3: 233 },
@@ -105,42 +109,39 @@ let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"
 			fecha: '2024-08-13T16:22:02.449',
 			fecha3: 'Ultima fila.'
 		}
-		
 	];
 
 	let columns = {
-
-		fecha: {
-			label: 'fechaz',
+		createdAt: {
+			label: 'FECHA',
 			decorator: {
 				component: ColumnTypes.DateTime,
-				props: { editInline: true, fromFormat: 'yyyy-MM-ddTHH:mm:ss' }
+				props: { editInline: true, HighlightIsntToday: true }
 			}
 		},
 		name: {
 			label: 'Nombre',
 			decorator: { component: ColumnTypes.Auto, props: { editInline: true } }
-		}
-		,
-		
-		checsk: {
-			label: 'checskz',
-			decorator: { component: ColumnTypes.Boolean, props: { editInline: true } }
 		},
-		datas: {
+		deleted: {
+			label: 'DELETED',
+			decorator: { component: ColumnTypes.Boolean, props: {custom: {ontrue: {label: ''}, onfalse: {css_cell: ' has-text-centered has-background-danger'}}, editInline: true, onclick_cell: ()=>{
+				console.log('Se ha pasado un click');
+			} } }
+		},
+		text: {
 			label: 'datasz',
-			decorator: { component: ColumnTypes.Auto, props: { editInline: true } }
+			decorator: { component: ColumnTypes.TextLimit, props: { editInline: true } }
 		}
-		
 	};
 	let show = false;
 	let requestData = {
 		url: 'https://cat-fact.herokuapp.com/facts/random',
-		params: { animal_type: 'cat', amount: 10 }
+		params: { animal_type: 'cat', amount: 500 }
 	};
 
 	let RawDataTable = [
-		{ fecha: new Date().toISOString(), fecha2: '2024-02-14', fecha3: '2024-02-14T10:00:00.000z' }
+		{ fecha: new Date().toISOString(), fechax: new Date(), fecha2: '2024-02-14', fecha3: '2024-02-14T10:00:00.000z', check: true, numero: 102.89, json: {hola: 34, ggd: 8, de: {er: 12, r: {rtr: 'df'}, arr: [344, 988]}} }
 	];
 
 	function generateRandomJson() {
@@ -174,8 +175,6 @@ let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"
 	let active_tab = 0;
 
 	onMount(() => {
-		
-
 		/*
 		setInterval(() => {
 			 dataTest.push(generateRandomJson());
@@ -184,13 +183,14 @@ let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"
 	});
 </script>
 
+<!-- 
 <Menu bind:menuData={menu}></Menu>
-
- <!-- <RESTTester></RESTTester>  -->
+ -->
+<!-- <RESTTester></RESTTester>  -->
 
 <!-- 
 <Tab bind:tabs={tab_list} bind:active={active_tab}></Tab> -->
-
+<!-- 
 <button
 	on:click={() => {
 		show = true;
@@ -217,17 +217,18 @@ let code = {"database":"msdb","username":"sa","password":"sqlkarma","options":{"
 ></PredictiveInput>
 
 <EditorCode bind:code={code} lang={'json'}></EditorCode>
-
+ -->
 <Table
-
-	on:newrow={()=>{
+	onnewrow={() => {
 		console.log(dataTest);
 	}}
-	bind:requestData={requestData}
+	{columns}
+	requestData={requestData}
 	ShowDeleteButton={true}
 	ShowNewButton={true}
 	ShowEditButton={true}
-></Table>
+
+	></Table>
 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->

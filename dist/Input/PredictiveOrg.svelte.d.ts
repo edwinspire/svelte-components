@@ -1,7 +1,5 @@
-/** @typedef {typeof __propDef.props}  PredictiveOrgProps */
-/** @typedef {typeof __propDef.events}  PredictiveOrgEvents */
-/** @typedef {typeof __propDef.slots}  PredictiveOrgSlots */
-export default class PredictiveOrg extends SvelteComponent<{
+export default PredictiveOrg;
+type PredictiveOrg = SvelteComponent<{
     label?: string;
     options?: {
         name: string;
@@ -11,27 +9,30 @@ export default class PredictiveOrg extends SvelteComponent<{
     select: CustomEvent<any>;
 } & {
     [evt: string]: CustomEvent<any>;
-}, {}> {
-}
-export type PredictiveOrgProps = typeof __propDef.props;
-export type PredictiveOrgEvents = typeof __propDef.events;
-export type PredictiveOrgSlots = typeof __propDef.slots;
-import { SvelteComponent } from "svelte";
-declare const __propDef: {
-    props: {
-        label?: string;
-        options?: {
-            name: string;
-            value: number;
-        }[];
-    };
-    events: {
-        select: CustomEvent<any>;
-    } & {
-        [evt: string]: CustomEvent<any>;
-    };
-    slots: {};
-    exports?: {};
-    bindings?: string;
+}, {}> & {
+    $$bindings?: string;
 };
-export {};
+declare const PredictiveOrg: $$__sveltets_2_IsomorphicComponent<{
+    label?: string;
+    options?: {
+        name: string;
+        value: number;
+    }[];
+}, {
+    select: CustomEvent<any>;
+} & {
+    [evt: string]: CustomEvent<any>;
+}, {}, {}, string>;
+interface $$__sveltets_2_IsomorphicComponent<Props extends Record<string, any> = any, Events extends Record<string, any> = any, Slots extends Record<string, any> = any, Exports = {}, Bindings = string> {
+    new (options: import("svelte").ComponentConstructorOptions<Props>): import("svelte").SvelteComponent<Props, Events, Slots> & {
+        $$bindings?: Bindings;
+    } & Exports;
+    (internal: unknown, props: Props & {
+        $$events?: Events;
+        $$slots?: Slots;
+    }): Exports & {
+        $set?: any;
+        $on?: any;
+    };
+    z_$$bindings?: Bindings;
+}

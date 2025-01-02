@@ -1,33 +1,21 @@
-/** @typedef {typeof __propDef.props}  BooleanProps */
-/** @typedef {typeof __propDef.events}  BooleanEvents */
-/** @typedef {typeof __propDef.slots}  BooleanSlots */
-export default class Boolean extends SvelteComponent<{
-    value: any;
-    row?: {};
-    props?: {};
-}, {
-    click: MouseEvent;
-} & {
-    [evt: string]: CustomEvent<any>;
-}, {}> {
-}
-export type BooleanProps = typeof __propDef.props;
-export type BooleanEvents = typeof __propDef.events;
-export type BooleanSlots = typeof __propDef.slots;
-import { SvelteComponent } from "svelte";
-declare const __propDef: {
-    props: {
-        value: any;
-        row?: {};
-        props?: {};
-    };
-    events: {
-        click: MouseEvent;
-    } & {
-        [evt: string]: CustomEvent<any>;
-    };
-    slots: {};
-    exports?: {};
-    bindings?: string;
+export default Boolean;
+type Boolean = {
+    $on?(type: string, callback: (e: any) => void): () => void;
+    $set?(props: Partial<$$ComponentProps>): void;
 };
-export {};
+declare const Boolean: import("svelte").Component<{
+    onclick_cell: any;
+    value?: any;
+    row?: any;
+    editInline: any;
+    custom: any;
+    css_cell?: string;
+}, {}, "value" | "row">;
+type $$ComponentProps = {
+    onclick_cell: any;
+    value?: any;
+    row?: any;
+    editInline: any;
+    custom: any;
+    css_cell?: string;
+};

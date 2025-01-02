@@ -1,29 +1,39 @@
-/** @typedef {typeof __propDef.props}  SlideFullScreenProps */
-/** @typedef {typeof __propDef.events}  SlideFullScreenEvents */
-/** @typedef {typeof __propDef.slots}  SlideFullScreenSlots */
-export default class SlideFullScreen extends SvelteComponent<{
+export default SlideFullScreen;
+type SlideFullScreen = SvelteComponent<$$__sveltets_2_PropsWithChildren<{
     show?: boolean;
 }, {
+    default: {};
+}>, {
     [evt: string]: CustomEvent<any>;
 }, {
     default: {};
-}> {
-}
-export type SlideFullScreenProps = typeof __propDef.props;
-export type SlideFullScreenEvents = typeof __propDef.events;
-export type SlideFullScreenSlots = typeof __propDef.slots;
-import { SvelteComponent } from "svelte";
-declare const __propDef: {
-    props: {
-        show?: boolean;
-    };
-    events: {
-        [evt: string]: CustomEvent<any>;
-    };
-    slots: {
-        default: {};
-    };
-    exports?: {};
-    bindings?: string;
+}> & {
+    $$bindings?: string;
 };
-export {};
+declare const SlideFullScreen: $$__sveltets_2_IsomorphicComponent<$$__sveltets_2_PropsWithChildren<{
+    show?: boolean;
+}, {
+    default: {};
+}>, {
+    [evt: string]: CustomEvent<any>;
+}, {
+    default: {};
+}, {}, string>;
+type $$__sveltets_2_PropsWithChildren<Props, Slots> = Props & (Slots extends {
+    default: any;
+} ? Props extends Record<string, never> ? any : {
+    children?: any;
+} : {});
+interface $$__sveltets_2_IsomorphicComponent<Props extends Record<string, any> = any, Events extends Record<string, any> = any, Slots extends Record<string, any> = any, Exports = {}, Bindings = string> {
+    new (options: import("svelte").ComponentConstructorOptions<Props>): import("svelte").SvelteComponent<Props, Events, Slots> & {
+        $$bindings?: Bindings;
+    } & Exports;
+    (internal: unknown, props: Props & {
+        $$events?: Events;
+        $$slots?: Slots;
+    }): Exports & {
+        $set?: any;
+        $on?: any;
+    };
+    z_$$bindings?: Bindings;
+}

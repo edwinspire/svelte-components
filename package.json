@@ -42,25 +42,26 @@
 		"!dist/**/*.spec.*"
 	],
 	"peerDependencies": {
-		"svelte": "^4.0.0"
+		"svelte": "^5.0.0"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/package": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0",
+		"@sveltejs/adapter-node": "^5.2.9",
 		"@types/eslint": "8.56.0",
-		"eslint": "^8.56.0",
+		"@eslint/compat": "^1.2.3",
+		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "^2.35.1",
-		"prettier": "^3.3.3",
-		"prettier-plugin-svelte": "^3.1.2",
+		"eslint-plugin-svelte": "^2.36.0",
+		"prettier": "^3.3.2",
+		"prettier-plugin-svelte": "^3.2.6",
 		"publint": "^0.1.9",
-		"svelte": "^4.2.7",
-		"svelte-check": "^3.6.0",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
-		"vite": "^5.0.3"
+		"vite": "^5.4.11"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -81,7 +82,8 @@
 		"d3": "^7.8.5",
 		"events": "^3.3.0",
 		"luxon": "^2.0.2",
-		"xlsx": "^0.18.5"
+		"xlsx": "^0.18.5",
+		"@inlang/paraglide-sveltekit": "^0.11.1"
 	},
 	"importSort": {
 		"*.js": {

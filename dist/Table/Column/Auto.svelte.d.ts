@@ -1,33 +1,19 @@
-/** @typedef {typeof __propDef.props}  AutoProps */
-/** @typedef {typeof __propDef.events}  AutoEvents */
-/** @typedef {typeof __propDef.slots}  AutoSlots */
-export default class Auto extends SvelteComponent<{
-    value: any;
-    row?: {};
-    props?: {};
-}, {
-    click: MouseEvent;
-} & {
-    [evt: string]: CustomEvent<any>;
-}, {}> {
-}
-export type AutoProps = typeof __propDef.props;
-export type AutoEvents = typeof __propDef.events;
-export type AutoSlots = typeof __propDef.slots;
-import { SvelteComponent } from "svelte";
-declare const __propDef: {
-    props: {
-        value: any;
-        row?: {};
-        props?: {};
-    };
-    events: {
-        click: MouseEvent;
-    } & {
-        [evt: string]: CustomEvent<any>;
-    };
-    slots: {};
-    exports?: {};
-    bindings?: string;
+export default Auto;
+type Auto = {
+    $on?(type: string, callback: (e: any) => void): () => void;
+    $set?(props: Partial<$$ComponentProps>): void;
 };
-export {};
+declare const Auto: import("svelte").Component<{
+    value?: any;
+    onclick_cell: any;
+    row?: any;
+    editInline?: boolean;
+    css_cell: any;
+}, {}, "value" | "row">;
+type $$ComponentProps = {
+    value?: any;
+    onclick_cell: any;
+    row?: any;
+    editInline?: boolean;
+    css_cell: any;
+};

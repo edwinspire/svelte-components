@@ -1,7 +1,5 @@
-/** @typedef {typeof __propDef.props}  PlottercopyProps */
-/** @typedef {typeof __propDef.events}  PlottercopyEvents */
-/** @typedef {typeof __propDef.slots}  PlottercopySlots */
-export default class Plottercopy extends SvelteComponent<{
+export default Plottercopy;
+type Plottercopy = SvelteComponent<{
     dataInput?: {
         date: number;
         time: number;
@@ -9,25 +7,28 @@ export default class Plottercopy extends SvelteComponent<{
     limitData?: number;
 }, {
     [evt: string]: CustomEvent<any>;
-}, {}> {
-}
-export type PlottercopyProps = typeof __propDef.props;
-export type PlottercopyEvents = typeof __propDef.events;
-export type PlottercopySlots = typeof __propDef.slots;
-import { SvelteComponent } from "svelte";
-declare const __propDef: {
-    props: {
-        dataInput?: {
-            date: number;
-            time: number;
-        }[];
-        limitData?: number;
-    };
-    events: {
-        [evt: string]: CustomEvent<any>;
-    };
-    slots: {};
-    exports?: {};
-    bindings?: string;
+}, {}> & {
+    $$bindings?: string;
 };
-export {};
+declare const Plottercopy: $$__sveltets_2_IsomorphicComponent<{
+    dataInput?: {
+        date: number;
+        time: number;
+    }[];
+    limitData?: number;
+}, {
+    [evt: string]: CustomEvent<any>;
+}, {}, {}, string>;
+interface $$__sveltets_2_IsomorphicComponent<Props extends Record<string, any> = any, Events extends Record<string, any> = any, Slots extends Record<string, any> = any, Exports = {}, Bindings = string> {
+    new (options: import("svelte").ComponentConstructorOptions<Props>): import("svelte").SvelteComponent<Props, Events, Slots> & {
+        $$bindings?: Bindings;
+    } & Exports;
+    (internal: unknown, props: Props & {
+        $$events?: Events;
+        $$slots?: Slots;
+    }): Exports & {
+        $set?: any;
+        $on?: any;
+    };
+    z_$$bindings?: Bindings;
+}

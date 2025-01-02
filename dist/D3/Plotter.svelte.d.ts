@@ -1,31 +1,32 @@
-/** @typedef {typeof __propDef.props}  PlotterProps */
-/** @typedef {typeof __propDef.events}  PlotterEvents */
-/** @typedef {typeof __propDef.slots}  PlotterSlots */
-export default class Plotter extends SvelteComponent<{
+export default Plotter;
+type Plotter = SvelteComponent<{
     dataInput?: {
         date: number;
         time: number;
     }[];
 }, {
     [evt: string]: CustomEvent<any>;
-}, {}> {
-}
-export type PlotterProps = typeof __propDef.props;
-export type PlotterEvents = typeof __propDef.events;
-export type PlotterSlots = typeof __propDef.slots;
-import { SvelteComponent } from "svelte";
-declare const __propDef: {
-    props: {
-        dataInput?: {
-            date: number;
-            time: number;
-        }[];
-    };
-    events: {
-        [evt: string]: CustomEvent<any>;
-    };
-    slots: {};
-    exports?: {};
-    bindings?: string;
+}, {}> & {
+    $$bindings?: string;
 };
-export {};
+declare const Plotter: $$__sveltets_2_IsomorphicComponent<{
+    dataInput?: {
+        date: number;
+        time: number;
+    }[];
+}, {
+    [evt: string]: CustomEvent<any>;
+}, {}, {}, string>;
+interface $$__sveltets_2_IsomorphicComponent<Props extends Record<string, any> = any, Events extends Record<string, any> = any, Slots extends Record<string, any> = any, Exports = {}, Bindings = string> {
+    new (options: import("svelte").ComponentConstructorOptions<Props>): import("svelte").SvelteComponent<Props, Events, Slots> & {
+        $$bindings?: Bindings;
+    } & Exports;
+    (internal: unknown, props: Props & {
+        $$events?: Events;
+        $$slots?: Slots;
+    }): Exports & {
+        $set?: any;
+        $on?: any;
+    };
+    z_$$bindings?: Bindings;
+}

@@ -1,8 +1,14 @@
 <script>
-	import TCellJSON from './CellJSON.svelte';
-	export let value;
-	export let row = {}; // Required by no user directly
-	export let props = {};
+	import TJson from './TreeView .svelte';
+	import TBoolean from './Boolean.svelte';
+
+	let {
+		value = $bindable(),
+		onclick_cell,
+		row = $bindable(),
+		editInline = false,
+		css_cell
+	} = $props();
 
 	function stringIsValidJSON(input) {
 		//    console.log(row);
@@ -19,34 +25,29 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<td on:click class={props.class}>
-	{#if value && (typeof value === 'object' || Array.isArray(value))}
-		<details>
-			<summary>[<b>{typeof value}</b>]</summary>
-			<TCellJSON {value} />
-		</details>
-	{:else if typeof value === 'string' || typeof value === 'number' || typeof value === 'bigint' || typeof value === 'boolean' || typeof value === 'undefined'}
-		{#if typeof value === 'string' && stringIsValidJSON(value) && (typeof JSON.parse(value) === 'object' || Array.isArray(typeof JSON.parse(value)))}
-			<details>
-				<summary>[<b>{typeof JSON.parse(value)}</b>]</summary>
-				<TCellJSON value={JSON.parse(value)} />
-			</details>
-		{:else if typeof value === 'number'}
-			{#if props && props.editInline}
-				<input class="input is-small" type="number" placeholder="Input" bind:value />
-			{:else}
-				<div class="text_end">{value}</div>
-			{/if}
-		{:else if props && props.editInline}
+{#if value && (typeof value === 'object' || Array.isArray(value))}
+	<TJson {value} {editInline} {css_cell} />
+{:else if typeof value === 'boolean'}
+	<TBoolean bind:value bind:row {editInline} {css_cell}></TBoolean>
+{:else if typeof value === 'number' || typeof value === 'bigint'}
+	<td onclick={onclick_cell}
+		>{#if editInline}
+			<input class="input is-small" type="number" placeholder="Input" bind:value />
+		{:else}
+			<div class="text_end">{value}</div>
+		{/if}</td
+	>
+{:else if typeof value === 'string'}
+	<td onclick={onclick_cell}
+		>{#if editInline}
 			<input class="input is-small" type="text" placeholder="Input" bind:value />
 		{:else}
 			<div>{value}</div>
-		{/if}
-	{:else}
-		<span>{JSON.stringify(value)}</span>
-	{/if}
-</td>
+		{/if}</td
+	>
+{:else}
+	<td onclick={onclick_cell}><span>{JSON.stringify(value)}</span></td>
+{/if}
 
 <style>
 	.text_end {

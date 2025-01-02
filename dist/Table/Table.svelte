@@ -1,36 +1,75 @@
 <script>
 	'use strict';
-	import { createEventDispatcher } from 'svelte';
+	//import { createEventDispatcher } from 'svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import uFetch from '@edwinspire/universal-fetch';
 	import { Auto } from './Column/DefaultTypes.js';
 	import { storeChangedTables } from '../class/websocket.js';
-	import { sha256 } from '../class/sha.js';
+	//import { sha256 } from '../class/sha.js';
 	import Level from '../Level/Level.svelte';
 	import { ExportTableToHTML, ExportTableToXlsx } from './utils/export_data.js';
+	//import workerUrl from './utils/worker_process_rawdata.js?worker';
 
 	//TODO Habilitar mostrar u ocultar columnas
 	//TODO Fijar encabezado
 	//TODO Hacer celdas editables
 	//TODO Hacer columnas con ancho ajustable
 
-	export let RawDataTable = [];
-	export let SelectionType = 0;
-	export let columns = {};
-	export let ShowNewButton = false;
-	export let ShowEditButton = false;
-	export let ShowSelectionButton = true;
-	export let ShowExportButton = true;
-	export let iconExport = 'fa-solid fa-file-excel';
-	export let iconDeleteRow = 'fa-solid fa-trash';
-	export let ShowDeleteButton = false;
-	//-- Pagination --//
-	export let PageSize = [25, 50, 100, 200, 300, 500, 1000];
-	export let PageSizeSelected = 0;
-	export let relatedTablesForAutoRefresh = [];
-	// -- Nombre del archivo a exportar -- //
-	export let fileNameExport = '';
+	let {
+		RawDataTable = $bindable(),
+		SelectionType = 0,
+		columns = $bindable({}),
+		ShowNewButton = false,
+		ShowEditButton = false,
+		ShowSelectionButton = true,
+		ShowExportButton = true,
+		iconExport = 'fa-solid fa-file-excel',
+		iconDeleteRow = 'fa-solid fa-trash',
+		ShowDeleteButton = false,
+		PageSize = [25, 50, 100, 200, 300, 500, 1000],
+		PageSizeSelected = 0,
+		relatedTablesForAutoRefresh = [],
+		fileNameExport = '',
+		requestData = $bindable(),
+		rowClassFunction = function (row) {
+			return '';
+		},
+		right_A,
+		right_B,
+		right_C,
+		left_A,
+		left_B,
+		left_C,
+		left_D,
+		left_E,
+		left_F,
+		left_G,
+		left_H,
+		left_I,
+		left_J,
+		onclickrow,
+		oneditrow,
+		onnewrow,
+		ondeleterow
+	} = $props();
 
+	//export let RawDataTable = [];
+	//export let SelectionType = 0;
+	//export let columns = {};
+	//export let ShowNewButton = false;
+	//export let ShowEditButton = false;
+	//export let ShowSelectionButton = true;
+	//export let ShowExportButton = true;
+	//export let iconExport = 'fa-solid fa-file-excel';
+	//export let iconDeleteRow = 'fa-solid fa-trash';
+	//export let ShowDeleteButton = false;
+	//-- Pagination --//
+	//export let PageSize = [25, 50, 100, 200, 300, 500, 1000];
+	//export let PageSizeSelected = 0;
+	//export let relatedTablesForAutoRefresh = [];
+	// -- Nombre del archivo a exportar -- //
+	//export let fileNameExport = '';
+	/*
 	export let requestData = {
 		url: undefined,
 		refresh_time: 4,
@@ -39,39 +78,49 @@
 		headers: undefined,
 		authorization: { basic: undefined, bearer: undefined }
 	};
-
+*/
+	/*
 	export let rowClassFunction = function (row) {
 		return '';
 	};
+*/
 
 	const FetchData = new uFetch();
-	const dispatch = createEventDispatcher();
-	let DataTable = [];
-	let SelectedRows = [];
+	//const dispatch = createEventDispatcher();
+	let DataTable = $state([]);
+	let SelectedRows = $state([]);
 
-	let text_search;
-	let loading = false;
-	let showEdit = false;
-	let ColumnSort;
-	let ShowDialogColumn = false;
-	let timeRemainingToRefresh = 999;
-	let LastFetchResponse = true;
+	let text_search = $state(undefined);
+	let loading = $state(false);
+	let showEdit = $state(false);
+	let ColumnSort = $state();
+	let ShowDialogColumn = $state(false);
+	let timeRemainingToRefresh = $state(999);
+	let LastFetchResponse = $state(true);
 	// -- Refresh -- //
 	let IntervalRefresh = [10, 20, 30, 45, 60, 120, 240, 480, 960, 1920, 3840];
-	let PageSelected = 1;
-	let totalFilteredRows = 0;
-	let TotalPages = 0;
-	let paginatedData = [];
+	let PageSelected = $state(1);
+	let totalFilteredRows = $state(0);
+	let TotalPages = $state(0);
+	let paginatedData = $state([]);
 
-	let SelectAll = false;
-	let orderASC = true;
-	let internal_columns = {};
+	let SelectAll = $state(false);
+	let orderASC = $state(true);
+	let internal_columns = $state({});
 
-	$: SelectedRows, OnSelection();
-	$: DataTable, RawDataTable, onrawDataChanged();
-	$: columns, SetColumns();
+	// Crea el Worker
+	let worker;
+
+	//$: SelectedRows, OnSelection();
+	//$: DataTable, RawDataTable, onrawDataChanged();
+	//$: RawDataTable, onrawDataChanged();
+	//$: columns, SetColumns();
 
 	let idTimeoutDataChanged;
+
+		function requestDataExists() {
+		return requestData && requestData.url && requestData.url.length > 0;
+	}
 
 	function onrawDataChanged() {
 		// console.log('>> onrawDataChanged >>', hash_last_data);
@@ -79,38 +128,75 @@
 		if (RawDataTableIsArray()) {
 			// Cancela el ultimo timeout
 			clearTimeout(idTimeoutDataChanged);
+			//console.log('xxxxxxxxxx');
 
 			// Setea uno nuevo
 			idTimeoutDataChanged = setTimeout(() => {
 				try {
-					let sf = JSON.stringify(RawDataTable);
+					if (worker) {
+						let datamsg = {
+							data: RawDataTable,
+							columns: columns,
+							hash_last_data: hash_last_data
+						};
 
-					//let hash_data = await hash(JSON.stringify(RawDataTable));
-					let hash_data = sha256(sf && sf.length > 0 ? sf : '0');
-
-					if (hash_last_data !== hash_data) {
-						hash_last_data = hash_data;
-						ProcessRawData();
-					} else {
-						console.log('No changes on Data on Table widget');
+						worker.postMessage(JSON.stringify(datamsg));
 					}
 				} catch (error) {
-					console.error(error, RawDataTable);
+					console.trace(error);
 				}
-			}, 1000);
+			}, 500);
 		}
 	}
 
 	function OnSelection() {
-		dispatch('selectrows', { rows: GetSelectedRows() });
+		//dispatch('selectrows', { rows: GetSelectedRows() });
+		onselectrows({ rows: GetSelectedRows() });
 	}
 
 	onMount(() => {
 		timeRemainingToRefresh = 0;
+
+		if (!requestData) {
+			requestData = {
+				url: undefined,
+				refresh_time: 4,
+				params: undefined,
+				method: 'GET',
+				headers: undefined,
+				authorization: { basic: undefined, bearer: undefined }
+			};
+		}
+
 		requestData.method = requestData.method || 'GET';
 		requestData.refresh_time = Number(requestData.refresh_time)
 			? Number(requestData.refresh_time)
 			: 4;
+
+		worker = new Worker(new URL('./utils/worker_process_rawdata.js', import.meta.url), {
+			type: 'module'
+		});
+		// Escuchar mensajes del Worker
+		worker.onmessage = (event) => {
+			//console.log('>>>>>>>>>>> ', event.data);
+
+			hash_last_data = event.data.hash_last_data;
+
+			if (event.data.different_data) {
+				RawDataTable = event.data.data;
+				//console.log('Hay cambos');
+				SetColumns();
+				FilterData();
+			}
+
+			//RawDataTable = u;
+			//console.log(RawDataTable);
+		};
+
+		// Manejar errores del Worker
+		worker.onerror = (error) => {
+			console.error('Error en Worker:', error.message);
+		};
 
 		storeChangedTables.subscribe((value) => {
 			//console.log('storeChangedTables.subscribe', value);
@@ -249,31 +335,46 @@
 	let auto_refresh_by_table_changed_request = 0;
 
 	let auto_refresh = setInterval(async () => {
-		if (timeRemainingToRefresh == 0 || auto_refresh_by_table_changed_request > 0) {
-			await GetDataTable();
-			timeRemainingToRefresh = IntervalRefresh[requestData.refresh_time];
-			auto_refresh_by_table_changed_request = 0;
-		} else {
-			timeRemainingToRefresh--;
+		//console.log('yyyyyyyyyyyy');
+		if (requestDataExists()) {
+			if (timeRemainingToRefresh == 0 || auto_refresh_by_table_changed_request > 0) {
+				await GetDataTable();
+				timeRemainingToRefresh = IntervalRefresh[requestData.refresh_time];
+				auto_refresh_by_table_changed_request = 0;
+			} else {
+				timeRemainingToRefresh--;
+			}
 		}
 	}, 1000);
 
 	let hash_last_data = '';
 
+	let check_changes_data = setInterval(async () => {
+		onrawDataChanged();
+	}, 750);
+
 	onDestroy(() => {
 		clearInterval(auto_refresh);
-		//clearInterval(check_changes_data);
+		//	clearInterval(check_changes_data);
+		clearInterval(check_changes_data);
+		if (worker) {
+			worker.terminate();
+		}
 	});
 
 	function ChangeIntervalRefresh() {
-		let i = requestData.refresh_time + 1;
-		if (IntervalRefresh[i]) {
-			requestData.refresh_time = i;
-		} else {
-			requestData.refresh_time = 0;
-		}
+		if (requestDataExists()) {
+			let i = requestData.refresh_time + 1;
+			if (IntervalRefresh[i]) {
+				requestData.refresh_time = i;
+			} else {
+				requestData.refresh_time = 0;
+			}
 
-		timeRemainingToRefresh = IntervalRefresh[requestData.refresh_time];
+			timeRemainingToRefresh = IntervalRefresh[requestData.refresh_time];
+		} else {
+			console.warn('ChangeIntervalRefresh: requestData not setted.');
+		}
 	}
 
 	function SortColumn(key, order = 'asc') {
@@ -296,18 +397,31 @@
 	}
 
 	function HClickCell(cell, row) {
-		dispatch('clickrow', { field: cell, data: row });
+		//dispatch('clickrow', { field: cell, data: row });
+		if (onclickrow) {
+			onclickrow({ field: cell, data: row });
+		}
 	}
 
 	function HClickEditRow(e) {
-		dispatch('editrow', { data: e });
+		//dispatch('editrow', { data: e });
+		if (oneditrow) {
+			oneditrow({ data: e });
+		}
 	}
 	function HClickNew(e) {
-		dispatch('newrow', e);
+		//dispatch('newrow', e);
+		if (onnewrow) {
+			onnewrow(e);
+		}
 	}
 
 	function HClickDelete(e) {
-		dispatch('deleterow', { rows: GetSelectedRows() });
+		fnDeleteRows();
+		//dispatch('deleterow', { rows: GetSelectedRows() });
+		if (ondeleterow) {
+			ondeleterow({ rows: GetSelectedRows() });
+		}
 	}
 
 	function HClickHeader(e) {
@@ -323,16 +437,8 @@
 		} else {
 			FilterData();
 			timeRemainingToRefresh = 0;
-			/*
-      setTimeout(async () => {
-        await GetDataTable();
-        FilterData();
-      }, 250);
-      */
 		}
 	}
-
-	//GetDataTable();
 
 	function handleChangeSelectAll(e) {
 		SelectAll = e.target.checked;
@@ -385,9 +491,11 @@
 		} else {
 			TempData = RawDataTable;
 		}
-		totalFilteredRows = TempData.length;
 
-		Pagination(TempData);
+		if (TempData) {
+			totalFilteredRows = TempData.length;
+			Pagination(TempData);
+		}
 	}
 
 	function Pagination(rows) {
@@ -404,6 +512,8 @@
 		//console.log('Pagination 2 >>>>>>>> ', rows);
 		paginatedData = ArrayChunk(rows, PageSize[PageSizeSelected]);
 
+		//console.log(paginatedData.length);
+
 		TotalPages = paginatedData.length;
 		if (PageSelected > TotalPages) {
 			PageSelected = 1;
@@ -412,7 +522,15 @@
 	}
 
 	function SelectPage() {
-		DataTable = paginatedData[PageSelected - 1];
+		let tmpdata = paginatedData[PageSelected - 1];
+
+		if (tmpdata) {
+			DataTable = tmpdata.filter((ev) => {
+				// Se puso este filtro para evitar errores cuando hay registros nulos o no tengan internal_hash_row
+				return ev && ev.internal_hash_row;
+			});
+			//console.log(tmpdata, DataTable);
+		}
 	}
 
 	function HandleOnClickEdit() {
@@ -437,58 +555,12 @@
 		OnSelection();
 	}
 
-	function ProcessRawData() {
-		if (RawDataTableIsArray()) {
-			let Listinternal_hash_row = {}; // Esta variable se usa unicamente para verificar que no se generen llaves duplicadas
-
-			RawDataTable = RawDataTable.map((row, i) => {
-				try {
-					row.internal_hash_row = 0;
-					let c = sha256(JSON.stringify(row));
-
-					//console.log('Registro HASH >> ', c);
-					if (Listinternal_hash_row[c]) {
-						console.error('Hay un registro duplicado en la tabla', row);
-						c = c + '-' + i;
-						Listinternal_hash_row[c] = true;
-					}
-					Listinternal_hash_row[c] = true;
-					row.internal_hash_row = c;
-				} catch (error) {
-					console.error(error, row);
-				}
-
-				// Reordenar la posicion de las columnas de acuerdo al orden de la parametrizaicion de las columnas
-				let new_row = {};
-				for (let col in columns) {
-					//console.log(`Clave: ${clave}, Valor: ${miObjeto[clave]}`);
-					new_row[col] = row[col];
-				}
-
-				// Se agrega el resto de columnas que no están en la parametrizacion de columnas
-				for (let col in row) {
-					if (!new_row[col]) {
-						new_row[col] = row[col];
-					}
-				}
-
-				return new_row;
-			});
-		} else {
-			console.log('RawDataTable no es array', RawDataTable);
-			RawDataTable = [];
-		}
-
-		SetColumns();
-		FilterData();
-	}
-
 	async function GetDataTable() {
 		//console.log('GetDataTable');
 		if (loading) {
 			console.log('There is a petition in progress...');
 		} else {
-			if (requestData && requestData.url && requestData.url.length > 0) {
+			if (requestDataExists()) {
 				try {
 					loading = true;
 
@@ -537,7 +609,7 @@
 					LastFetchResponse = false;
 				}
 			} else {
-				//console.warn('Not url asigned');
+				console.warn('Not url asigned');
 				LastFetchResponse = false;
 			}
 		}
@@ -545,58 +617,39 @@
 </script>
 
 <Level>
-	<span slot="left_01">
-		{#if $$slots.left_01}
-			<slot name="left_01" />
-		{/if}
-	</span>
-	<span slot="left_02">
-		{#if $$slots.left_02}
-			<slot name="left_02" />
-		{/if}
-	</span>
-	<span slot="left_03">
-		{#if $$slots.left_03}
-			<slot name="left_03" />
-		{/if}
-	</span>
-	<span slot="left_04">
-		{#if $$slots.left_04}
-			<slot name="left_04" />
-		{/if}
-	</span>
-	<span slot="left_05">
-		{#if $$slots.left_05}
-			<slot name="left_05" />
-		{/if}
-	</span>
-	<span slot="left_06">
-		{#if $$slots.left_06}
-			<slot name="left_06" />
-		{/if}
-	</span>
-	<span slot="left_07">
-		{#if $$slots.left_07}
-			<slot name="left_07" />
-		{/if}
-	</span>
-	<span slot="left_08">
-		{#if $$slots.left_08}
-			<slot name="left_08" />
-		{/if}
-	</span>
-	<span slot="left_09">
-		{#if $$slots.left_09}
-			<slot name="left_09" />
-		{/if}
-	</span>
-	<span slot="left_10">
-		{#if $$slots.left_10}
-			<slot name="left_10" />
-		{/if}
-	</span>
+	{#snippet left_01()}
+		{@render left_A?.()}
+	{/snippet}
 
-	<span slot="right_01">
+	{#snippet left_02()}
+		{@render left_B?.()}
+	{/snippet}
+	{#snippet left_03()}
+		{@render left_C?.()}
+	{/snippet}
+	{#snippet left_04()}
+		{@render left_D?.()}
+	{/snippet}
+	{#snippet left_05()}
+		{@render left_E?.()}
+	{/snippet}
+	{#snippet left_06()}
+		{@render left_F?.()}
+	{/snippet}
+	{#snippet left_07()}
+		{@render left_G?.()}
+	{/snippet}
+	{#snippet left_08()}
+		{@render left_H?.()}
+	{/snippet}
+	{#snippet left_09()}
+		{@render left_I?.()}
+	{/snippet}
+	{#snippet left_10()}
+		{@render left_J?.()}
+	{/snippet}
+
+	{#snippet right_01()}
 		<div class="field has-addons">
 			<p class="control">
 				<input
@@ -607,41 +660,58 @@
 				/>
 			</p>
 			<p class="control">
-				<button class="button is-small" on:click={handleClickSearch}>
+				<button aria-label="close" class="button is-small" onclick={handleClickSearch}>
 					<span class="icon is-small">
-						<i class="fas fa-search" />
+						<i class="fas fa-search"></i>
 					</span>
 				</button>
 			</p>
 		</div>
-	</span>
-	<span slot="right_02">
+	{/snippet}
+
+	{#snippet right_02()}
 		{#if ShowExportButton}
-			<button class="button is-small" on:click={ExportToExcel} title="Export to Excel">
+			<button
+				aria-label="close"
+				class="button is-small"
+				onclick={ExportToExcel}
+				title="Export to Excel"
+			>
 				<span class="icon">
-					<i class={iconExport} />
+					<i class={iconExport}></i>
 				</span>
 			</button>
-			<button class="button is-small" on:click={ExportToHTML} title="Export to Html">
+			<button
+				aria-label="close"
+				class="button is-small"
+				onclick={ExportToHTML}
+				title="Export to Html"
+			>
 				<span class="icon">
 					<i class="fa-solid fa-download"></i>
 				</span>
 			</button>
 		{/if}
-	</span>
-	<span slot="right_03">
+	{/snippet}
+
+	{#snippet right_03()}
 		{#if ShowSelectionButton}
 			<div class="dropdown is-hoverable is-right" title="Selection type">
 				<div class="dropdown-trigger">
-					<button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu">
+					<button
+						aria-label="close"
+						class="button is-small"
+						aria-haspopup="true"
+						aria-controls="dropdown-menu"
+					>
 						<span class="icon">
-							<i class="far fa-list-alt" />
+							<i class="far fa-list-alt"></i>
 						</span>
 					</button>
 				</div>
 				<div class="dropdown-menu" role="menu">
 					<div class="dropdown-content">
-						<!-- svelte-ignore a11y-missing-attribute -->
+						<!-- svelte-ignore a11y_missing_attribute -->
 						<a class="dropdown-item is-size-7">
 							<input
 								class="check_margin"
@@ -649,17 +719,17 @@
 								name="selection_type"
 								value="1"
 								checked={SelectionType == 1 ? true : false}
-								on:change={() => {
+								onchange={() => {
 									SelectionType = 1;
 								}}
 							/>
 							<span class="icon">
-								<i class="fas fa-check" />
+								<i class="fas fa-check"></i>
 							</span>
 							<span>Simple</span>
 						</a>
 
-						<!-- svelte-ignore a11y-missing-attribute -->
+						<!-- svelte-ignore a11y_missing_attribute -->
 						<a class="dropdown-item is-size-7">
 							<input
 								class="check_margin"
@@ -667,17 +737,18 @@
 								name="selection_type"
 								value="2"
 								checked={SelectionType == 2 ? true : false}
-								on:change={() => {
+								onchange={() => {
 									SelectionType = 2;
 								}}
 							/>
 							<span class="icon">
-								<i class="fas fa-check-double" />
+								<i class="fas fa-check-double"></i>
 							</span>
 							<span>Multiple</span>
 						</a>
 						<hr class="dropdown-divider" />
-						<!-- svelte-ignore a11y-missing-attribute -->
+
+						<!-- svelte-ignore a11y_missing_attribute -->
 						<a class="dropdown-item is-size-7">
 							<input
 								class="check_margin"
@@ -685,13 +756,13 @@
 								name="selection_type"
 								value="0"
 								checked={SelectionType == 0 ? true : false}
-								on:change={() => {
+								onchange={() => {
 									SelectionType = 0;
 								}}
 							/>
 
 							<span class="icon">
-								<i class="fas fa-ban" />
+								<i class="fas fa-ban"></i>
 							</span>
 							<span>None</span>
 						</a>
@@ -699,77 +770,67 @@
 				</div>
 			</div>
 		{/if}
-	</span>
+	{/snippet}
 
-	<span slot="right_04">
+	{#snippet right_04()}
 		{#if ShowDeleteButton}
-			<button
-				class="button is-small"
-				on:click={fnDeleteRows}
-				title="Delete row"
-				on:click={HClickDelete}
-			>
+			<button aria-label="close" class="button is-small" title="Delete row" onclick={HClickDelete}>
 				<span class="icon">
-					<i class={iconDeleteRow} />
+					<i class={iconDeleteRow}></i>
 				</span>
 			</button>
 		{/if}
-	</span>
+	{/snippet}
 
-	<span slot="right_05" title="Edit row">
+	{#snippet right_05()}
 		{#if ShowEditButton}
-			<button class="button is-small" on:click={HandleOnClickEdit}>
+			<button aria-label="close" class="button is-small" onclick={HandleOnClickEdit}>
 				<span class="icon">
-					<i class="far fa-edit" />
+					<i class="far fa-edit"></i>
 				</span>
 			</button>
 		{/if}
-	</span>
+	{/snippet}
 
-	<span slot="right_06" title="Add row">
+	{#snippet right_06()}
 		{#if ShowNewButton}
-			<button class="button is-small" on:click={HClickNew}>
+			<button aria-label="close" class="button is-small" onclick={HClickNew}>
 				<span class="icon">
-					<i class="far fa-file" />
+					<i class="far fa-file"></i>
 				</span>
 			</button>
 		{/if}
-	</span>
-	<span slot="right_07" title="Data refresh interval.">
+	{/snippet}
+
+	{#snippet right_07()}
 		{#if requestData && requestData.url}
-			<button class="button is-small" on:click={ChangeIntervalRefresh}>
+			<button class="button is-small" onclick={ChangeIntervalRefresh}>
 				{#if loading}
-					<span class="icon has-text-info"><i class="fas fa-spinner fa-pulse" /></span>
+					<span class="icon has-text-info"><i class="fas fa-spinner fa-pulse"></i></span>
 				{:else if LastFetchResponse}
-					<span class="icon"><i class="fas fa-hourglass-half" /></span>
+					<span class="icon"><i class="fas fa-hourglass-half"></i></span>
 				{:else}
-					<span class="icon has-text-danger"><i class="fas fa-exclamation-triangle" /></span>
+					<span class="icon has-text-danger"><i class="fas fa-exclamation-triangle"></i></span>
 				{/if}
 				<span>{timeRemainingToRefresh}s</span>
 			</button>
 		{/if}
-	</span>
+	{/snippet}
 
-	<span slot="right_08">
-		{#if $$slots.right_01}
-			<slot name="right_01" />
-		{/if}
-	</span>
+	{#snippet right_08()}
+		{@render right_A?.()}
+	{/snippet}
 
-	<span slot="right_09">
-		{#if $$slots.right_02}
-			<slot name="right_02" />
-		{/if}
-	</span>
+	{#snippet right_09()}
+		{@render right_B?.()}
+	{/snippet}
 
-	<span slot="right_10">
-		{#if $$slots.right_03}
-			<slot name="right_03" />
-		{/if}
-	</span>
+	{#snippet right_10()}
+		{@render right_C?.()}
+	{/snippet}
 </Level>
 
-{#if DataTable && DataTable.length > 0}
+{#if DataTable}
 	<div class="table-container is-size-7">
 		<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
 			<!-- Aqui escribe el encabezado de la tabla -->
@@ -780,13 +841,13 @@
 						<th class="has-text-centered has-text-white"><span>-</span></th>
 					{:else if SelectionType == 2}
 						<th class="has-text-centered has-text-white">
-							<input type="checkbox" on:click={handleChangeSelectAll} />
+							<input type="checkbox" onclick={handleChangeSelectAll} />
 						</th>
 					{/if}
 
 					{#if showEdit}
 						<th class="has-text-centered has-text-white">
-							<i class="fas fa-pen" />
+							<i class="fas fa-pen"></i>
 						</th>
 					{/if}
 
@@ -799,14 +860,14 @@
 									<th
 										class="has-text-centered show_cursor_mouse has-text-white"
 										data-column={item}
-										on:click={HClickHeader}
+										onclick={HClickHeader}
 									>
 										{internal_columns[item].label}
 										{#if ColumnSort == item}
 											{#if orderASC}
-												<i class="fas fa-caret-down" />
+												<i class="fas fa-caret-down"></i>
 											{:else}
-												<i class="fas fa-caret-up" />
+												<i class="fas fa-caret-up"></i>
 											{/if}
 										{/if}
 									</th>
@@ -817,11 +878,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#if DataTable && DataTable.length > 0}
-					{#each DataTable.filter((ev) => {
-						// Se puso este filtro para evitar errores cuando hay registros nulos o no tengan internal_hash_row
-						return ev && ev.internal_hash_row;
-					}) as dataRow, i (dataRow.internal_hash_row)}
+				{#if DataTable}
+					{#each DataTable as dataRow, i (dataRow.internal_hash_row)}
 						<tr class={rowClassFunction(dataRow)}>
 							<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
 
@@ -833,7 +891,7 @@
 										class="show_cursor_mouse"
 										checked={RowIsSelected(dataRow.internal_hash_row)}
 										data-internal_hash_row={dataRow.internal_hash_row}
-										on:click={HandleOnRowSelected}
+										onclick={HandleOnRowSelected}
 									/></td
 								>
 							{:else if SelectionType == 2}
@@ -843,16 +901,15 @@
 										type="checkbox"
 										checked={RowIsSelected(dataRow.internal_hash_row)}
 										data-internal_hash_row={dataRow.internal_hash_row}
-										on:click={HandleOnRowSelected}
+										onclick={HandleOnRowSelected}
 									/>
 								</td>
 							{/if}
 
 							{#if showEdit}
-								<!-- svelte-ignore a11y-click-events-have-key-events -->
-								<td class="has-text-centered show_cursor_mouse" on:click={HClickEditRow(dataRow)}>
+								<td class="has-text-centered show_cursor_mouse" onclick={HClickEditRow(dataRow)}>
 									<span class="icon is-small">
-										<i class="fas fa-pen" />
+										<i class="fas fa-pen"></i>
 									</span>
 								</td>
 							{/if}
@@ -862,29 +919,27 @@
 								{#if internal_columns[item]}
 									{#if !internal_columns[item].hidden || internal_columns[item].hidden == null}
 										{#if internal_columns[item].decorator && internal_columns[item].decorator.component}
-											<svelte:component
-												this={internal_columns[item].decorator.component}
-												props={internal_columns[item].decorator.props}
-												on:click={(e) => {
+											{@const Component = internal_columns[item].decorator.component}
+											<Component
+												onclick={(e) => {
 													// console.log('HClickCell 1');
 													// e.preventDefault();
 													HClickCell(item, dataRow);
 												}}
-												bind:row={dataRow}
+												{...internal_columns[item]?.decorator?.props}
+												bind:row={DataTable[i]}
 												bind:value={dataRow[item]}
 											/>
 										{:else}
-											<svelte:component
-												this={Auto}
-												props={false}
-												on:click={(e) => {
-													// console.log('HClickCell 2');
-													//  e.preventDefault();
+											<Auto
+												{...internal_columns[item]?.decorator?.props}
+												bind:value={dataRow[item]}
+												onclick={(e) => {
+													// console.log('HClickCell 1');
+													// e.preventDefault();
 													HClickCell(item, dataRow);
 												}}
-												bind:row={dataRow}
-												bind:value={dataRow[item]}
-											/>
+											></Auto>
 										{/if}
 									{/if}
 								{/if}
@@ -910,19 +965,21 @@
 					<div class="level-item">
 						<div class="buttons has-addons">
 							<button
+								aria-label="close"
 								class="button is-small"
-								on:click={() => {
+								onclick={() => {
 									PageSelected = 1;
 									SelectPage();
 								}}
 							>
 								<span class="icon">
-									<i class="fas fa-angle-double-left" />
+									<i class="fas fa-angle-double-left"></i>
 								</span>
 							</button>
 							<button
+								aria-label="close"
 								class="button is-small"
-								on:click={() => {
+								onclick={() => {
 									if (PageSelected > 1) {
 										PageSelected = PageSelected - 1;
 									}
@@ -930,12 +987,12 @@
 								}}
 							>
 								<span class="icon">
-									<i class="fas fa-angle-left" />
+									<i class="fas fa-angle-left"></i>
 								</span>
 							</button>
 							<button
 								class="button is-small is-info"
-								on:click={() => {
+								onclick={() => {
 									//PageSelected = 1;
 									SelectPage();
 								}}>{PageSelected}</button
@@ -943,7 +1000,7 @@
 							{#if PageSelected + 1 <= TotalPages}
 								<button
 									class="button is-small"
-									on:click={() => {
+									onclick={() => {
 										PageSelected = PageSelected + 1;
 										SelectPage();
 									}}>{PageSelected + 1}</button
@@ -952,7 +1009,7 @@
 							{#if PageSelected + 2 <= TotalPages}
 								<button
 									class="button is-small"
-									on:click={() => {
+									onclick={() => {
 										PageSelected = PageSelected + 2;
 										SelectPage();
 									}}>{PageSelected + 2}</button
@@ -962,7 +1019,7 @@
 							{#if PageSelected + 3 <= TotalPages}
 								<button
 									class="button is-small"
-									on:click={() => {
+									onclick={() => {
 										PageSelected = PageSelected + 3;
 										SelectPage();
 									}}>{PageSelected + 3}</button
@@ -972,7 +1029,7 @@
 							{#if PageSelected + 4 <= TotalPages}
 								<button
 									class="button is-small"
-									on:click={() => {
+									onclick={() => {
 										PageSelected = PageSelected + 4;
 										SelectPage();
 									}}>{PageSelected + 4}</button
@@ -980,8 +1037,9 @@
 							{/if}
 
 							<button
+								aria-label="close"
 								class="button is-small"
-								on:click={() => {
+								onclick={() => {
 									if (PageSelected < TotalPages) {
 										PageSelected = PageSelected + 1;
 										SelectPage();
@@ -989,19 +1047,20 @@
 								}}
 							>
 								<span class="icon">
-									<i class="fas fa-angle-right" />
+									<i class="fas fa-angle-right"></i>
 								</span>
 							</button>
 
 							<button
+								aria-label="close"
 								class="button is-small"
-								on:click={() => {
+								onclick={() => {
 									PageSelected = TotalPages;
 									SelectPage();
 								}}
 							>
 								<span class="icon">
-									<i class="fas fa-angle-double-right" />
+									<i class="fas fa-angle-double-right"></i>
 								</span>
 							</button>
 						</div>
@@ -1014,10 +1073,9 @@
 				<span class="level-item">
 					<span class="label_rows_per_page">Rows per page</span>
 					<div class="select is-small">
-						<!-- svelte-ignore a11y-no-onchange -->
 						<select
 							name="rows_per_page"
-							on:change={(e) => {
+							onchange={(e) => {
 								//console.log(e.target.value);
 								PageSizeSelected = e.target.value;
 								FilterData();
@@ -1034,13 +1092,12 @@
 	</div>
 {:else}
 	<div class="has-text-centered has-text-link-dark">
-		<i class="fa fa-table" aria-hidden="true" />
+		<i class="fa fa-table" aria-hidden="true"></i>
 		There is no data to show
 	</div>
 {/if}
 
 <div class="modal" class:is-active={ShowDialogColumn}>
-	<div class="modal-background" />
 	<div class="modal-card">
 		<header class="modal-card-head has-background-dark">
 			<p class="modal-card-title has-text-white">
@@ -1051,10 +1108,10 @@
 			<button
 				class="delete"
 				aria-label="close"
-				on:click={(e) => {
+				onclick={(e) => {
 					ShowDialogColumn = false;
 				}}
-			/>
+			></button>
 		</header>
 		<section class="modal-card-body">
 			<div class="columns">
@@ -1075,7 +1132,7 @@
 			</button>
 			<button
 				class="button is-small"
-				on:click={(e) => {
+				onclick={(e) => {
 					ShowDialogColumn = false;
 				}}
 			>
