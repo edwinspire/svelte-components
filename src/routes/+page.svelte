@@ -125,9 +125,19 @@
 		},
 		deleted: {
 			label: 'DELETED',
-			decorator: { component: ColumnTypes.Boolean, props: {custom: {ontrue: {label: ''}, onfalse: {css_cell: ' has-text-centered has-background-danger'}}, editInline: true, onclick_cell: ()=>{
-				console.log('Se ha pasado un click');
-			} } }
+			decorator: {
+				component: ColumnTypes.Boolean,
+				props: {
+					custom: {
+						ontrue: { label: '' },
+						onfalse: { css_cell: ' has-text-centered has-background-danger' }
+					},
+					editInline: true,
+					onclick_cell: () => {
+						console.log('Se ha pasado un click');
+					}
+				}
+			}
 		},
 		text: {
 			label: 'datasz',
@@ -141,7 +151,15 @@
 	};
 
 	let RawDataTable = [
-		{ fecha: new Date().toISOString(), fechax: new Date(), fecha2: '2024-02-14', fecha3: '2024-02-14T10:00:00.000z', check: true, numero: 102.89, json: {hola: 34, ggd: 8, de: {er: 12, r: {rtr: 'df'}, arr: [344, 988]}} }
+		{
+			fecha: new Date().toISOString(),
+			fechax: new Date(),
+			fecha2: '2024-02-14',
+			fecha3: '2024-02-14T10:00:00.000z',
+			check: true,
+			numero: 102.89,
+			json: { hola: 34, ggd: 8, de: { er: 12, r: { rtr: 'df' }, arr: [344, 988] } }
+		}
 	];
 
 	function generateRandomJson() {
@@ -167,12 +185,12 @@
 	}
 
 	let tab_list = [
-		{ label: 'UNO', disabled: true },
-		{ label: 'DOS', isActive: true },
-		{ label: 'TRES' },
-		{ label: 'CUATRO' }
+		{ label: 'UNO', component: tab2, classIcon : '' },
+		{ label: 'DOS',  component: tab1, classIcon: "" },
+		{ label: 'TRES', component: tab3,  classIcon: "" },
+		{ label: 'CUATRO', disabled: true, component: tab4 }
 	];
-	let active_tab = 0;
+	let active_tab = 2;
 
 	onMount(() => {
 		/*
@@ -181,7 +199,63 @@
 		}, 500);
 */
 	});
+
+	let valor = 10;
+
+	setInterval(() => {
+		valor++;
+	}, 1000);
 </script>
+
+{#snippet tab1()}
+	1 <button aria-label="close" class="button is-small" title="Delete row">
+		<span class="icon">
+			<i class="fa-solid fa-trash"></i>
+		</span>
+	</button>
+{/snippet}
+
+{#snippet tab2()}
+	2 <button aria-label="close" class="button is-small" title="Delete row">
+		<span class="icon">
+			<i class="fa-solid fa-trash"></i>
+		</span>
+	</button>
+{/snippet}
+{#snippet tab3()}
+	3 <button aria-label="close" class="button is-small" title="Delete row">
+		<span class="icon">
+			<i class="fa-solid fa-trash"></i>
+		</span>
+	</button>
+{/snippet}
+{#snippet tab4()}
+	4
+	<button aria-label="close" class="button is-small" title="Delete row">
+		<span class="icon">
+			<i class="fa-solid fa-trash"></i>
+		</span>
+	</button>
+{/snippet}
+
+<Tab bind:tabs={tab_list} elements={[chavo, chavow]} bind:active={active_tab}>
+	{#snippet chavo()}
+		<button aria-label="close" class="button is-small" title="Delete row">
+			<span class="icon">
+				<i class="fa-solid fa-trash"></i>
+			</span>
+		</button>
+	{/snippet}
+
+	{#snippet chavow()}
+		Boton
+		<button aria-label="close" class="button is-small" title="Delete row">
+			<span class="icon">
+				<i class="fa-solid fa-trash"></i>
+			</span>
+		</button>
+	{/snippet}
+</Tab>
 
 <!-- 
 <Menu bind:menuData={menu}></Menu>
@@ -189,7 +263,7 @@
 <!-- <RESTTester></RESTTester>  -->
 
 <!-- 
-<Tab bind:tabs={tab_list} bind:active={active_tab}></Tab> -->
+ -->
 <!-- 
 <button
 	on:click={() => {
@@ -198,13 +272,6 @@
 	}}>Mostrar</button
 >
 
-<Level>
-	<div slot="r05">Menu principal</div>
-	<div slot="r04"><input class="input is-danger" type="button" label="sss" /></div>
-	<div slot="r03"><input class="input" /></div>
-	<div slot="r02">este es un texto</div>
-	<div slot="r01"><input class="input" type="button" /></div>
-</Level>
 
 <PredictiveInput
 	bind:selectedValue
@@ -218,7 +285,7 @@
 
 <EditorCode bind:code={code} lang={'json'}></EditorCode>
  -->
-<Table
+<!--  <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -227,8 +294,50 @@
 	ShowDeleteButton={true}
 	ShowNewButton={true}
 	ShowEditButton={true}
+	left_items={[chao]}
+	right_items={[pepe, chavo]}
+	>
+	{#snippet chao()}
+		chao
+	{/snippet}
 
-	></Table>
+	{#snippet pepe()}
+	<button aria-label="close" class="button is-small" title="Delete row" >
+		<span class="icon">
+			<i class='fa-solid fa-trash'></i>
+		</span>
+	</button>
+	{/snippet}
+
+	{#snippet chavo()}
+	<button aria-label="close" class="button is-small" title="Delete row" >
+		<span class="icon">
+			<i class='fa-solid fa-trash'></i>
+		</span>
+	</button>
+	{/snippet}
+</Table>
+ -->
 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
+
+<!-- <Level left={[chao, MPrincipal, B1]} right={[r1]}>
+	{#snippet chao()}
+		chao
+	{/snippet}
+
+	{#snippet MPrincipal()}
+		Menu principal
+	{/snippet}
+
+	{#snippet B1()}
+		<input class="input is-danger" type="button" label="sss" bind:value={valor} />
+	{/snippet}
+
+	{#snippet r1()}
+	<input class="input is-danger" type="button" label="sss" bind:value={valor} />
+{/snippet}
+	
+</Level>
+ -->

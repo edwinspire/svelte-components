@@ -616,7 +616,7 @@
 	}
 </script>
 
-<Level>
+<Level right={[right_01]}>
 	{#snippet left_01()}
 		{@render left_A?.()}
 	{/snippet}
