@@ -36,10 +36,10 @@
 		},
 		left_items,
 		right_items,
-		onclickrow,
-		oneditrow,
-		onnewrow,
-		ondeleterow
+		onclickrow = () => {},
+		oneditrow = () => {},
+		onnewrow = () => {},
+		ondeleterow = () => {}
 	} = $props();
 
 	//export let RawDataTable = [];
@@ -780,7 +780,7 @@
 	{#snippet right_08()}
 		{#if Array.isArray(right_items)}
 			{#each right_items as r_item}
-			<span class="slot_padding">{@render r_item?.()}</span>
+				<span class="slot_padding">{@render r_item?.()}</span>
 			{/each}
 		{/if}
 	{/snippet}

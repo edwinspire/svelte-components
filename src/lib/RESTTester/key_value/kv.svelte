@@ -2,7 +2,9 @@
 	import { onMount } from 'svelte';
 	import { Table, ColumnTypes } from '../../index.js';
 
-	export let data = [];
+	let { data = $bindable() } = $props();
+
+	//export let data = [];
 	let columns = {
 		enabled: {
 			label: 'Enabled',
@@ -22,8 +24,15 @@
 		}
 	};
 
+	/*
+	$inspect(data).with((type) => {
+		console.log('lang >>>>>>>>>>>>> ', type);
+		if (type === 'update' || type === 'init') {
+			
+		}
+	});
+*/
 	function addRowEmpty() {
-
 		console.log('addRowEmpty', data);
 
 		if (!data || !Array.isArray(data)) {
@@ -53,8 +62,8 @@
 	{columns}
 	ShowNewButton={true}
 	ShowDeleteButton={true}
-	on:deleterow={(e) => {
-//		console.log(e.detail.rows, data);
+	ondeleterow={(e) => {
+		//		console.log(e.detail.rows, data);
 
 		if (e.detail.rows && e.detail.rows.length > 0) {
 			data = data.filter((item) => {
@@ -64,7 +73,7 @@
 			});
 		}
 	}}
-	on:newrow={() => {
+	onnewrow={() => {
 		//data.push({ enabled: true, key: '', value: '' });
 		addRowEmpty();
 	}}

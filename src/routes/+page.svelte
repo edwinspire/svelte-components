@@ -205,7 +205,7 @@
 	let valor = 10;
 
 	setInterval(() => {
-		console.log(code);
+	//	console.log(code);
 	}, 1000);
 </script>
 
@@ -262,7 +262,7 @@
 <!-- 
 <Menu bind:menuData={menu}></Menu>
  -->
-<!-- <RESTTester></RESTTester>  -->
+<!--  -->
 
 <!-- 
  -->
@@ -343,4 +343,6 @@
 	
 </Level>
  -->
- <EditorCode bind:code={code} lang={'json'} showResetButton={true} isReadOnly={false} showFormat={true} showCode={true} showHiddenButton={true} showSelectLang = {true}></EditorCode>
+ <!-- <EditorCode bind:code={code} lang={'json'} showResetButton={true} isReadOnly={false} showFormat={true} showCode={true} showHiddenButton={true} showSelectLang = {true}></EditorCode> -->
+
+ <RESTTester></RESTTester> 
