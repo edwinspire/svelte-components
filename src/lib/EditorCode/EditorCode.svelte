@@ -12,31 +12,33 @@
 	let editorView;
 	let elementParent;
 
-	export let code = ``;
-	export let title = '';
-	export let lang = 'json';
-	export let showFormat = false;
-	export let showSelectLang = false;
-	export let isReadOnly = false;
-	export let showHiddenButton = true;
-	export let showResetButton = false;
-	export let showCode = true;
+	let {
+		code = $bindable(''),
+		title = $bindable(''),
+		lang = $bindable('json'),
+		showFormat = $bindable(false),
+		showSelectLang = $bindable(false),
+		isReadOnly = $bindable(false),
+		showHiddenButton = $bindable(true),
+		showResetButton = $bindable(false),
+		showCode = $bindable(true)
+	} = $props();
 
 	let org_code = '';
-	let formatError = false;
+	let formatError = $state(false);
 	let internal_code = '';
 	let timeoutParseOnChange;
 
 	const languages = {
 		js: javascript(),
 		json: json(),
-		html: html(),
+		html: xml(),
 		sql: sql(),
 		xml: xml()
 	};
 
-	$: lang, initializeEditor();
-	$: code, parseCode();
+	//$: lang, initializeEditor();
+	//$: code, parseCode();
 
 	// Prettier parsers por lenguaje
 	const prettierParsers = {
@@ -45,6 +47,31 @@
 		html: 'html',
 		xml: 'html'
 	};
+
+	let list_langs = $state([
+		{ label: 'None', value: 'none' },
+		{ label: 'HTML', value: 'html' },
+		{ label: 'Javascript', value: 'js' },
+		{ label: 'JSON', value: 'json' },
+		{ label: 'SQL', value: 'sql' },
+		{ label: 'XML', value: 'xml' }
+	]);
+
+	/*	
+	$inspect(lang).with((type) => {
+		console.log('lang >>>>>>>>>>>>> ', type);
+		if (type === 'update' || type === 'init') {
+			initializeEditor();
+		}
+	});
+*/
+
+	$inspect(code).with((type) => {
+		//console.log('code >>>>>>>>>>>>> ', type);
+		if ( type === 'init') {
+			parseCode();
+		}
+	});
 
 	export function setCode(new_code) {
 		code = new_code;
@@ -66,18 +93,6 @@
 		// return JSON.parse(editorView.state.doc.toString());
 	}
 
-	/*
-	// Sincronización de cambios de code con el editor
-	$: if (editorView && editorView.state.doc.toString() !== code) {
-		console.log('>>>> state.update >>>', internal_code, editorView.state.doc.toString());
-
-		const transaction = editorView.state.update({
-			changes: { from: 0, to: editorView.state.doc.length, insert: internal_code }
-		});
-
-		editorView.dispatch(transaction);
-	}
-*/
 	export function reset() {
 		internal_code = org_code;
 		parseCode();
@@ -94,6 +109,7 @@
 	}
 
 	function setCodeEditor(text) {
+		//console.log(text);
 		if (editorView && editorView.state && text != editorView.state.doc.toString()) {
 			const transaction = editorView.state.update({
 				changes: { from: 0, to: editorView.state.doc.length, insert: text }
@@ -110,8 +126,7 @@
 	}
 
 	function initializeEditor() {
-		//		console.log('>>>> elementParent', elementParent);
-
+		
 		if (elementParent) {
 			if (editorView) editorView.destroy();
 
@@ -124,14 +139,16 @@
 					isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
 					languages[lang] ? languages[lang] : [],
 					EditorView.updateListener.of(async (update) => {
-						if (update.changes) {
+						if (update.changes && update.changedRanges.length > 0) {
+							//	console.log(update.changedRanges);
+
 							internal_code = update.state.doc.toString();
 
 							clearTimeout(timeoutParseOnChange);
 
 							timeoutParseOnChange = setTimeout(() => {
 								//console.warn(editorView.state.doc.toString());
-
+								//								console.log('Hubo cambios > timeoutParseOnChange ');
 								//setCodeEditor(internal_code);
 								formatCode();
 
@@ -142,6 +159,7 @@
 										} else {
 											code = internal_code;
 										}
+										parseCode();
 									} catch (error) {
 										console.log(error);
 									}
@@ -177,6 +195,12 @@
 			} catch (error) {
 				result.error = error;
 			}
+		} else {
+
+			result.code =
+				typeof code_without_format !== 'string'
+					? JSON.stringify(code_without_format)
+					: code_without_format;
 		}
 		//		console.log('format result > ', result);
 		return result;
@@ -187,36 +211,33 @@
 	});
 </script>
 
-<Level>
-	<!-- svelte-ignore a11y-label-has-associated-control -->
-	<div slot="l01">
-		{#if title && title.length > 0}
-			<label class="label is-small">{title}</label>
-		{/if}
+<Level left={[ltitle, l02]} right={[r01]}>
+	{#snippet ltitle()}
+		{title}
+	{/snippet}
 
-		{#if $$slots.left}
-			<span class=""><slot name="left" /></span>
-		{/if}
-	</div>
-
-	<div slot="l02">
+	{#snippet l02()}
 		{#if showSelectLang}
 			<div class="field is-horizontal">
 				<div class="field-label is-small">
-					<!-- svelte-ignore a11y-label-has-associated-control -->
+					<!-- svelte-ignore a11y_label_has_associated_control -->
 					<label class="label">Language</label>
 				</div>
 				<div class="field-body">
 					<div class="field is-narrow">
 						<div class="control has-icons-left">
 							<div class="select is-small {formatError ? 'is-danger' : ''}">
-								<select bind:value={lang}>
-									<option value="none">None</option>
-									<option value="xml">HTML</option>
-									<option value="js">JavaScript</option>
-									<option value="json">JSON</option>
-									<option value="sql">SQL</option>
-									<option value="xml">XML</option>
+								<select
+									bind:value={lang}
+									onchange={() => {
+										initializeEditor();
+									}}
+								>
+									{#each list_langs as ll}
+										<option value={ll.value}>
+											{ll.label}
+										</option>
+									{/each}
 								</select>
 
 								<span class="icon is-small is-left">
@@ -237,19 +258,13 @@
 				</div>
 			</div>
 		{/if}
-	</div>
+	{/snippet}
 
-	<div slot="r02">
-		{#if $$slots.right}
-			<span class=""><slot name="right" /></span>
-		{/if}
-	</div>
-
-	<div slot="r01">
+	{#snippet r01()}
 		{#if showFormat && lang == 'json'}
 			<button
 				class="button is-small"
-				on:click={async () => {
+				onclick={async () => {
 					await formatCode();
 				}}
 			>
@@ -260,7 +275,7 @@
 		{#if showResetButton}
 			<button
 				class="button is-small"
-				on:click={() => {
+				onclick={() => {
 					reset();
 					//console.log(code);
 				}}
@@ -276,7 +291,7 @@
 			<button
 				title="Hide or show Code"
 				class="button is-small"
-				on:click={() => {
+				onclick={() => {
 					showCode = !showCode;
 				}}
 			>
@@ -289,7 +304,7 @@
 				</span>
 			</button>
 		{/if}
-	</div>
+	{/snippet}
 </Level>
 
 <!-- Editor de CodeMirror -->

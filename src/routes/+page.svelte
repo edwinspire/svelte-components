@@ -184,6 +184,7 @@
 		};
 	}
 
+	/*
 	let tab_list = [
 		{ label: 'UNO', component: tab2, classIcon : '' },
 		{ label: 'DOS',  component: tab1, classIcon: "" },
@@ -191,6 +192,7 @@
 		{ label: 'CUATRO', disabled: true, component: tab4 }
 	];
 	let active_tab = 2;
+	*/
 
 	onMount(() => {
 		/*
@@ -203,11 +205,11 @@
 	let valor = 10;
 
 	setInterval(() => {
-		valor++;
+		console.log(code);
 	}, 1000);
 </script>
 
-{#snippet tab1()}
+<!-- {#snippet tab1()}
 	1 <button aria-label="close" class="button is-small" title="Delete row">
 		<span class="icon">
 			<i class="fa-solid fa-trash"></i>
@@ -256,7 +258,7 @@
 		</button>
 	{/snippet}
 </Tab>
-
+ -->
 <!-- 
 <Menu bind:menuData={menu}></Menu>
  -->
@@ -283,7 +285,7 @@
 	}}
 ></PredictiveInput>
 
-<EditorCode bind:code={code} lang={'json'}></EditorCode>
+
  -->
 <!--  <Table
 	onnewrow={() => {
@@ -341,3 +343,4 @@
 	
 </Level>
  -->
+ <EditorCode bind:code={code} lang={'json'} showResetButton={true} isReadOnly={false} showFormat={true} showCode={true} showHiddenButton={true} showSelectLang = {true}></EditorCode>
