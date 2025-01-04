@@ -36,10 +36,21 @@
 		},
 		left_items,
 		right_items,
-		onclickrow = () => {},
-		oneditrow = () => {},
-		onnewrow = () => {},
-		ondeleterow = () => {}
+		onclickrow = (c) => {
+			console.trace('onclickrow no implemented.');
+		},
+		oneditrow = (e) => {
+			console.trace('oneditrow no implemented.');
+		},
+		onnewrow = (n) => {
+			console.trace('onnewrow no implemented.');
+		},
+		ondeleterow = (d) => {
+			ownDeleteRows(d);
+		},
+		onselectrows = (s) => {
+			console.trace('onselectrows no implemented.');
+		}
 	} = $props();
 
 	//export let RawDataTable = [];
@@ -134,7 +145,7 @@
 				} catch (error) {
 					console.trace(error);
 				}
-			}, 500);
+			}, 1750);
 		}
 	}
 
@@ -303,23 +314,6 @@
 		}
 	}
 
-	function fnDeleteRows() {
-		//console.log(this);
-		try {
-			// Filter only selection
-
-			//	console.log('ExportTable > Columns ', columns);
-
-			let filteredData = GetSelectedRows();
-			if (filteredData && filteredData.length > 0) {
-			} else {
-				alert('Select the rows to delete.');
-				SelectionType = 2;
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	}
 
 	let auto_refresh_by_table_changed_request = 0;
 
@@ -340,7 +334,7 @@
 
 	let check_changes_data = setInterval(async () => {
 		onrawDataChanged();
-	}, 750);
+	}, 1850);
 
 	onDestroy(() => {
 		clearInterval(auto_refresh);
@@ -405,11 +399,27 @@
 		}
 	}
 
+	function ownDeleteRows(selected_rows) {
+		if (selected_rows.rows && selected_rows.rows.length > 0) {
+			RawDataTable = RawDataTable.filter((item) => {
+				return selected_rows.rows.find((r) => {
+					return r.key != item.key;
+				});
+			});
+		}
+	}
+
 	function HClickDelete(e) {
-		fnDeleteRows();
-		//dispatch('deleterow', { rows: GetSelectedRows() });
-		if (ondeleterow) {
-			ondeleterow({ rows: GetSelectedRows() });
+		try {
+			let filteredData = GetSelectedRows();
+			if (filteredData && filteredData.length > 0) {
+				ondeleterow({ rows: filteredData });
+			} else {
+				alert('Select the rows to delete.');
+				SelectionType = 2;
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	}
 

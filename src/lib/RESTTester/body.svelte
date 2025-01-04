@@ -1,44 +1,54 @@
 <script>
 	import { onMount } from 'svelte';
 	import { EditorCode, Tab } from '../index.js';
-
 	import KeyValue from './key_value/kv.svelte';
 
-	export let data = { json: {}, xml: {}, text: {} };
+	let { data = $bindable({ selection: 0, json: { code: {} }, xml: { code: '' }, text: {} }) } =
+		$props();
 
-//let fnJSEditor;
-	let fileName = '';
+	//	export let data = { json: {}, xml: {}, text: {} };
 
-	let tabList = [
-		{ label: 'JSON', isActive: true },
-		{ label: 'XML', disabled: true },
-		{ label: 'Text', disabled: true },
-		{ label: 'Form-Encode', disabled: true },
-		{ label: 'Binary', disabled: true }
-	];
+	//let fnJSEditor;
+	let fileName = $state('');
 
-	$: data, defaultValues();
+	let tabList = $state([
+		{ label: 'JSON', component: tab_json },
+		{ label: 'XML', disabled: true, component: tab_xml },
+		{ label: 'Text', disabled: true, component: tab_text },
+		{ label: 'Form-Encode', disabled: true, component: tab_form },
+		{ label: 'Binary', disabled: true, component: tab_binary }
+	]);
+
+	//	$: data, defaultValues();
 
 	export function getCode() {
 		//    console.log(">> getCode en JS.SVELTE ", );
-//		return fnJSEditor.getCode();
+		//		return fnJSEditor.getCode();
 	}
 
 	export function reset() {
-//		fnJSEditor.reset();
+		//		fnJSEditor.reset();
 	}
 
 	function defaultValues() {
 		if (!data) {
-			data = { js: {}, xml: {}, text: {} };
+			data = { selection: 0, json: { code: {} }, xml: { code: '' }, text: {} };
 		}
 
 		if (data && !data.json) {
 			data.json = {};
 		}
 
+		if (data && data.json && !data.json.code) {
+			data.json.code = {};
+		}
+
 		if (data && !data.xml) {
 			data.xml = {};
+		}
+
+		if (data && data.xml && !data.xml.code) {
+			data.xml.code = '';
 		}
 
 		if (data && !data.text) {
@@ -50,28 +60,38 @@
 		}
 	}
 
+	$inspect(data).with((type) => {
+		//console.log('>>>>>>>>>>>>> ', type);
+		if (type === 'init') {
+			/*  */
+			defaultValues();
+		}
+	});
+
 	onMount(() => {
 		defaultValues();
 	});
 </script>
 
-{#if data}
-	<Tab bind:tabs={tabList} bind:active={data.selection}>
-		<div class={tabList[0].isActive ? '' : 'is-hidden'}>
-			{#if data && data.json}
-				<EditorCode lang="json" bind:code={data.json.code}></EditorCode>
-			{/if}
-		</div>
+{#snippet tab_json()}
+	<div>
+		{#if data && data.json}
+			<EditorCode lang="json" bind:code={data.json.code}></EditorCode>
+		{/if}
+	</div>
+{/snippet}
 
-		<div class={tabList[1].isActive ? '' : 'is-hidden'}>
-			{#if data && data.xml}
-				<EditorCode lang="xml" bind:code={data.xml.code}></EditorCode>
-			{/if}
-		</div>
+{#snippet tab_xml()}
+	{#if data && data.xml}
+		<EditorCode lang="xml" bind:code={data.xml.code}></EditorCode>
+	{/if}
+{/snippet}
 
-		<div class={tabList[2].isActive ? '' : 'is-hidden'}>
+{#snippet tab_text()}
+	{#if data}
+		<div>
 			<div class="field">
-				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<!-- svelte-ignore a11y_label_has_associated_control -->
 				<label class="label is-small">Content</label>
 				<div class="control">
 					{#if data && data.text}
@@ -81,19 +101,27 @@
 				</div>
 			</div>
 		</div>
+	{/if}
+{/snippet}
 
-		<div class={tabList[3].isActive ? '' : 'is-hidden'}>
+{#snippet tab_form()}
+	{#if data}
+		<div>
 			<KeyValue></KeyValue>
 		</div>
+	{/if}
+{/snippet}
 
-		<div class={tabList[4].isActive ? '' : 'is-hidden'}>
+{#snippet tab_binary()}
+	{#if data}
+		<div>
 			<div class="file has-name is-small">
 				<label class="file-label">
 					<input
 						class="file-input is-small"
 						type="file"
 						name="resume"
-						on:change={(e) => {
+						onchange={(e) => {
 							if (e.target.files.length > 0) {
 								fileName = e.target.files[0].name;
 							}
@@ -109,5 +137,8 @@
 				</label>
 			</div>
 		</div>
-	</Tab>
+	{/if}
+{/snippet}
+{#if data}
+	<Tab bind:tabs={tabList} bind:active={data.selection}></Tab>
 {/if}

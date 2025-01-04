@@ -7,20 +7,30 @@
 	import uFetch from '@edwinspire/universal-fetch';
 	import JSONView from '../JSONView/index.svelte';
 
+	/*
 	export let url;
 	export let method = 'GET';
 	export let data = { query: [], headers: [], auth: {}, body: {} };
 	export let limitSizeResponseView = 20000;
 	export let methodDisabled = false;
+*/
+
+	let {
+		url = $bindable(),
+		method = $bindable('GET'),
+		limitSizeResponseView = $bindable(20000),
+		methodDisabled = $bindable(false),
+		data = $bindable({ query: [], headers: [], auth: {}, body: {} })
+	} = $props();
 
 	let uF = new uFetch();
-	let last_response;
-	let time_responde;
-	let response_as = 'json';
-	let active_tab = 0;
-	let data_result = '';
-	let running = false;
-	let sizeKBResponse = 0;
+	let last_response = $state();
+	let time_responde = $state();
+	let response_as = $state('json');
+	let active_tab = $state(0);
+	let data_result = $state('');
+	let running = $state(false);
+	let sizeKBResponse = $state(0);
 
 	let methods = [
 		{ method: 'CONNECT', label: 'CONNECT' },
@@ -40,13 +50,13 @@
 		{ as: 'text', label: 'Text' }
 	];
 
-	let tabList = [
-		{ label: 'Query Parameters', isActive: true },
-		{ label: 'HTTP Headers' },
-		{ label: 'Auth' },
-		{ label: 'Body' },
-		{ label: 'Result' }
-	];
+	let tabList = $state([
+		{ label: 'Query Parameters', isActive: true, component: tab_query },
+		{ label: 'HTTP Headers', component: tab_headers },
+		{ label: 'Auth', component: tab_auth },
+		{ label: 'Body', component: tab_body },
+		{ label: 'Result', component: tab_result }
+	]);
 
 	function getSizeJSON(data) {
 		// Convertimos el JSON a una cadena
@@ -90,12 +100,12 @@
 
 	function getDataBody() {
 		let dataBody;
-		console.log('getDataBody > ', data.body);
+		//console.log('getDataBody > ', data.body);
 		switch (data.body.selection) {
 			case 0:
 				try {
 					let jsoncode = data?.body?.json?.code ?? undefined;
-					console.log('jsoncode >> ', jsoncode);
+					//console.log('jsoncode >> ', jsoncode);
 					if (typeof jsoncode == 'object') {
 						dataBody = jsoncode;
 					} else {
@@ -143,13 +153,7 @@
 		return result;
 	}
 
-	function existsDataTable(data_table) {
-		if (data_table && Array.isArray(data_table)) {
-			return data_table.find((element) => element.enabled && element.key && element.key.length > 0);
-		} else {
-			return false;
-		}
-	}
+	
 </script>
 
 <Level>
@@ -163,7 +167,7 @@
 		<div class="column is-half">
 			<div class="field has-addons">
 				<p class="control">
-					<!-- svelte-ignore a11y-missing-attribute -->
+					<!-- svelte-ignore a11y_missing_attribute -->
 					<a class="button is-static is-small"> Url </a>
 				</p>
 				<p class="control is-expanded">
@@ -218,7 +222,7 @@
 					<span class="level-item">
 						<button
 							class="button is-success is-small is-outlined"
-							on:click={async () => {
+							onclick={async () => {
 								active_tab = 4;
 
 								if (!running) {
@@ -328,116 +332,127 @@
 	</div>
 </div>
 
-<Tab bind:tabs={tabList} bind:active={active_tab}>
-	<div class={tabList[0].isActive ? '' : 'is-hidden'}>
+{#snippet tab_query()}
+	{#if data}
 		<Query bind:data={data.query}></Query>
-	</div>
-	<div class={tabList[1].isActive ? '' : 'is-hidden'}>
+	{/if}
+{/snippet}
+
+{#snippet tab_headers()}
+	{#if data}
 		<Headers bind:data={data.headers}></Headers>
-	</div>
-	<div class={tabList[2].isActive ? '' : 'is-hidden'}>
+	{/if}
+{/snippet}
+
+{#snippet tab_auth()}
+	{#if data}
 		<Auth bind:data={data.auth}></Auth>
-	</div>
-	<div class={tabList[3].isActive ? '' : 'is-hidden'}>
+	{/if}
+{/snippet}
+
+{#snippet tab_body()}
+	{#if data}
 		<Body bind:data={data.body}></Body>
-	</div>
+	{/if}
+{/snippet}
 
-	<div class={tabList[4].isActive ? '' : 'is-hidden'}>
-		<div class="field is-grouped is-grouped-multiline">
-			<div class="control">
-				<div class="tags has-addons">
-					<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-danger'}"
-						>Status</span
-					>
-					{#if last_response && last_response.status}
-						<span class="tag">{last_response.status}</span>
-					{:else}
-						<span class="tag"></span>
-					{/if}
-				</div>
-			</div>
-
-			<div class="control">
-				<div class="tags has-addons">
-					<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}"
-						>Status Text</span
-					>
-					{#if last_response && last_response.statusText}
-						<span class="tag">{last_response.statusText}</span>
-					{:else}
-						<span class="tag"> </span>
-					{/if}
-				</div>
-			</div>
-
-			<div class="control">
-				<div class="tags has-addons">
-					<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}">Ok</span>
-					{#if last_response && last_response.ok}
-						<span class="tag">{last_response.ok}</span>
-					{:else}
-						<span class="tag"></span>
-					{/if}
-				</div>
-			</div>
-
-			<div class="control">
-				<div class="tags has-addons">
-					<span class="tag is-dark">Time</span>
-					{#if time_responde}
-						<span class="tag">{time_responde} ms</span>
-					{:else}
-						<span class="tag"> ms </span>
-					{/if}
-				</div>
-			</div>
-
-			<div class="control">
-				<div class="tags has-addons">
-					<span class="tag {sizeKBResponse > limitSizeResponseView ? 'is-danger' : 'is-dark'}  "
-						>Size</span
-					>
-					{#if sizeKBResponse}
-						<span class="tag">{sizeKBResponse} KB</span>
-					{:else}
-						<span class="tag"> KB </span>
-					{/if}
-				</div>
-			</div>
-		</div>
-		<div>
-			{#if Number(sizeKBResponse) < Number(limitSizeResponseView)}
-				{#if last_response && !last_response.ok && data_result}
-					<JSONView bind:jsonObject={data_result}></JSONView>
-				{:else if response_as == 'json'}
-					<JSONView bind:jsonObject={data_result}></JSONView>
-				{:else if response_as == 'text'}
-					<code>
-						{data_result}
-					</code>
-				{:else if response_as == 'datatable' && data_result}
-					<Table bind:RawDataTable={data_result}></Table>
+{#snippet tab_result()}
+	<div class="field is-grouped is-grouped-multiline">
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-danger'}"
+					>Status</span
+				>
+				{#if last_response && last_response.status}
+					<span class="tag">{last_response.status}</span>
+				{:else}
+					<span class="tag"></span>
 				{/if}
-			{:else}
-				<div class="container is-max-tablet is-small">
-					<p class="block">
-						The response exceeds {limitSizeResponseView} KB, it cannot be displayed in the view.
-					</p>
+			</div>
+		</div>
 
-					<div class="is-align-content-center">
-						<button
-							class="button is-link is-outlined is-small"
-							on:click={() => {
-								if (response_as == 'json') {
-									downloadFile(JSON.stringify(data_result), 'response.json', 'text/json');
-								} else if (response_as == 'text') {
-									downloadFile(data_result, 'response.txt', 'text/plain');
-								}
-							}}>Download</button
-						>
-					</div>
-				</div>
-			{/if}
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}"
+					>Status Text</span
+				>
+				{#if last_response && last_response.statusText}
+					<span class="tag">{last_response.statusText}</span>
+				{:else}
+					<span class="tag"> </span>
+				{/if}
+			</div>
+		</div>
+
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}">Ok</span>
+				{#if last_response && last_response.ok}
+					<span class="tag">{last_response.ok}</span>
+				{:else}
+					<span class="tag"></span>
+				{/if}
+			</div>
+		</div>
+
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag is-dark">Time</span>
+				{#if time_responde}
+					<span class="tag">{time_responde} ms</span>
+				{:else}
+					<span class="tag"> ms </span>
+				{/if}
+			</div>
+		</div>
+
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag {sizeKBResponse > limitSizeResponseView ? 'is-danger' : 'is-dark'}  "
+					>Size</span
+				>
+				{#if sizeKBResponse}
+					<span class="tag">{sizeKBResponse} KB</span>
+				{:else}
+					<span class="tag"> KB </span>
+				{/if}
+			</div>
 		</div>
 	</div>
-</Tab>
+	<div>
+		{#if Number(sizeKBResponse) < Number(limitSizeResponseView)}
+			{#if last_response && !last_response.ok && data_result}
+				<JSONView bind:jsonObject={data_result}></JSONView>
+			{:else if response_as == 'json'}
+				<JSONView bind:jsonObject={data_result}></JSONView>
+			{:else if response_as == 'text'}
+				<code>
+					{data_result}
+				</code>
+			{:else if response_as == 'datatable' && data_result}
+				<Table bind:RawDataTable={data_result}></Table>
+			{/if}
+		{:else}
+			<div class="container is-max-tablet is-small">
+				<p class="block">
+					The response exceeds {limitSizeResponseView} KB, it cannot be displayed in the view.
+				</p>
+
+				<div class="is-align-content-center">
+					<button
+						class="button is-link is-outlined is-small"
+						onclick={() => {
+							if (response_as == 'json') {
+								downloadFile(JSON.stringify(data_result), 'response.json', 'text/json');
+							} else if (response_as == 'text') {
+								downloadFile(data_result, 'response.txt', 'text/plain');
+							}
+						}}>Download</button
+					>
+				</div>
+			</div>
+		{/if}
+	</div>
+{/snippet}
+
+<Tab bind:tabs={tabList} bind:active={active_tab}></Tab>

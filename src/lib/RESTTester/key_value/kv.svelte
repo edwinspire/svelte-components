@@ -33,7 +33,7 @@
 	});
 */
 	function addRowEmpty() {
-		console.log('addRowEmpty', data);
+		//console.log('addRowEmpty', data);
 
 		if (!data || !Array.isArray(data)) {
 			data = [];
@@ -49,7 +49,7 @@
 			data.push({ enabled: true, key: '', value: '' });
 			//   alert('add111  ' + data.length)
 		}
-		data = data;
+		//data = data;
 	}
 
 	onMount(() => {
@@ -62,17 +62,7 @@
 	{columns}
 	ShowNewButton={true}
 	ShowDeleteButton={true}
-	ondeleterow={(e) => {
-		//		console.log(e.detail.rows, data);
 
-		if (e.detail.rows && e.detail.rows.length > 0) {
-			data = data.filter((item) => {
-				return e.detail.rows.find((r) => {
-					return r.key != item.key;
-				});
-			});
-		}
-	}}
 	onnewrow={() => {
 		//data.push({ enabled: true, key: '', value: '' });
 		addRowEmpty();
