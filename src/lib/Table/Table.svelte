@@ -12,7 +12,7 @@
 
 	//TODO Habilitar mostrar u ocultar columnas
 	//TODO Fijar encabezado
-	//TODO Hacer celdas editables
+	//TODO Hacer celdas editables - Parcialmente implementado
 	//TODO Hacer columnas con ancho ajustable
 
 	let {
@@ -285,7 +285,6 @@
 		}
 	}
 
-
 	let auto_refresh_by_table_changed_request = 0;
 
 	let auto_refresh = setInterval(async () => {
@@ -312,7 +311,7 @@
 	onDestroy(() => {
 		clearInterval(auto_refresh);
 		//	clearInterval(check_changes_data);
-	//	clearInterval(check_changes_data);
+		//	clearInterval(check_changes_data);
 		if (worker) {
 			worker.terminate();
 		}
@@ -775,7 +774,7 @@
 			<!-- Aqui escribe el encabezado de la tabla -->
 			<thead>
 				<tr class="has-background-link-dark">
-					<th class="has-text-centered has-text-white">#</th>
+					<th class="has-text-centered has-text-white resizable">#</th>
 					{#if SelectionType == 1}
 						<th class="has-text-centered has-text-white"><span>-</span></th>
 					{:else if SelectionType == 2}

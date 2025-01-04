@@ -287,12 +287,12 @@
 
 
  -->
-<!--   <Table
+  <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
 	{columns}
-	RawDataTable={dataTest}
+	requestData={requestData}
 	ShowDeleteButton={true}
 	ShowNewButton={true}
 	ShowEditButton={true}
@@ -319,7 +319,7 @@
 	</button>
 	{/snippet}
 </Table>
- --> 
+ 
 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
@@ -344,5 +344,5 @@
 </Level>
  -->
  <!-- <EditorCode bind:code={code} lang={'json'} showResetButton={true} isReadOnly={false} showFormat={true} showCode={true} showHiddenButton={true} showSelectLang = {true}></EditorCode> -->
-
- <RESTTester></RESTTester>  
+<!-- 
+ <RESTTester></RESTTester>  -->
