@@ -1,5 +1,6 @@
 <script>
-	export let jsonObject = {};
+	//export let jsonObject = {};
+	let { jsonObject = $bindable({}) } = $props();
 
 	function formatJsonForHtmlCode(/** @type {any} */ json) {
 		return JSON.stringify(json, null, 2).replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
