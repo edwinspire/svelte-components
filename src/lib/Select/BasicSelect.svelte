@@ -1,20 +1,20 @@
 <script>
-	import { createEventDispatcher } from 'svelte';
-
-	// Crea el despachador de eventos
-	const dispatch = createEventDispatcher();
+	let {
+		option = $bindable(''),
+		options = $bindable([{ id: 'TEST', value: `TEST`, enabled: true }]),
+		css_class = $bindable(' is-small '),
+		onselect = (s) => {
+			console.log('onselect not implemented');
+		}
+	} = $props();
 
 	function handleClick() {
-		// Despacha el evento personalizado con los datos deseados
-		dispatch('select', { value: option });
+		onselect({ value: option });
 	}
-	export let options = [{ id: 'TEST', value: `TEST`, enabled: true }];
-	export let css_class = ' is-small';
-	export let option = '';
 </script>
 
 <div class="select {css_class}">
-	<select bind:value={option} on:change={handleClick}>
+	<select bind:value={option} onchange={handleClick}>
 		{#if options && Array.isArray(options)}
 			{#each options as h}
 				<option value={h.id}>
