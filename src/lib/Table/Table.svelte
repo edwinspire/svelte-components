@@ -53,38 +53,6 @@
 		}
 	} = $props();
 
-	//export let RawDataTable = [];
-	//export let SelectionType = 0;
-	//export let columns = {};
-	//export let ShowNewButton = false;
-	//export let ShowEditButton = false;
-	//export let ShowSelectionButton = true;
-	//export let ShowExportButton = true;
-	//export let iconExport = 'fa-solid fa-file-excel';
-	//export let iconDeleteRow = 'fa-solid fa-trash';
-	//export let ShowDeleteButton = false;
-	//-- Pagination --//
-	//export let PageSize = [25, 50, 100, 200, 300, 500, 1000];
-	//export let PageSizeSelected = 0;
-	//export let relatedTablesForAutoRefresh = [];
-	// -- Nombre del archivo a exportar -- //
-	//export let fileNameExport = '';
-	/*
-	export let requestData = {
-		url: undefined,
-		refresh_time: 4,
-		params: undefined,
-		method: 'GET',
-		headers: undefined,
-		authorization: { basic: undefined, bearer: undefined }
-	};
-*/
-	/*
-	export let rowClassFunction = function (row) {
-		return '';
-	};
-*/
-
 	const FetchData = new uFetch();
 	//const dispatch = createEventDispatcher();
 	let DataTable = $state([]);
@@ -110,13 +78,15 @@
 
 	// Crea el Worker
 	let worker;
-
-	//$: SelectedRows, OnSelection();
-	//$: DataTable, RawDataTable, onrawDataChanged();
-	//$: RawDataTable, onrawDataChanged();
-	//$: columns, SetColumns();
-
 	let idTimeoutDataChanged;
+
+	$inspect(RawDataTable).with((type) => {
+		//console.log('RawDataTable >>>>>>>>>>>>> ', type);
+		if (type === 'update' || type === 'init') {
+			//initializeEditor();
+			onrawDataChanged();
+		}
+	});
 
 	function requestDataExists() {
 		return requestData && requestData.url && requestData.url.length > 0;
@@ -132,6 +102,7 @@
 
 			// Setea uno nuevo
 			idTimeoutDataChanged = setTimeout(() => {
+				//console.log('Se ha guardado los cambios');
 				try {
 					if (worker) {
 						let datamsg = {
@@ -145,7 +116,7 @@
 				} catch (error) {
 					console.trace(error);
 				}
-			}, 1750);
+			}, 750);
 		}
 	}
 
@@ -332,14 +303,16 @@
 
 	let hash_last_data = '';
 
+	/*
 	let check_changes_data = setInterval(async () => {
 		onrawDataChanged();
 	}, 1850);
+	*/
 
 	onDestroy(() => {
 		clearInterval(auto_refresh);
 		//	clearInterval(check_changes_data);
-		clearInterval(check_changes_data);
+	//	clearInterval(check_changes_data);
 		if (worker) {
 			worker.terminate();
 		}

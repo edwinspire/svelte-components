@@ -423,9 +423,9 @@
 		{#if Number(sizeKBResponse) < Number(limitSizeResponseView)}
 			{#if last_response && !last_response.ok && data_result}
 				<JSONView bind:jsonObject={data_result}></JSONView>
-			{:else if response_as == 'json'}
+			{:else if response_as == 'json' && data_result}
 				<JSONView bind:jsonObject={data_result}></JSONView>
-			{:else if response_as == 'text'}
+			{:else if response_as == 'text' && data_result}
 				<code>
 					{data_result}
 				</code>

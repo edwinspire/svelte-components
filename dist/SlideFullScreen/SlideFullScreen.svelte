@@ -1,11 +1,13 @@
 <script>
-	export let show = false;
+	//export let show = false;
+
+	let { show = $bindable(false), children } = $props();
 </script>
 
 <div>
 	<div class="overlay" style="width: {show ? '100%' : '0%'};">
 		<div class="overlay-content box">
-			<slot />
+			{@render children?.()}
 		</div>
 	</div>
 </div>

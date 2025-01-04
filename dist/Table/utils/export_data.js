@@ -167,7 +167,7 @@ export const ExportTableToHTML = (filteredData, columns, fileNameExport) => {
     try {
 
         let FormatedData = FormatDataToExport(filteredData, columns);
-        console.log('FormatedData', FormatedData);
+       // console.log('FormatedData', FormatedData);
 
         let html_content = ConvertDataToHtml(FormatedData);
 

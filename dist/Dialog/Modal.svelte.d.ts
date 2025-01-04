@@ -1,42 +1,23 @@
 export default Modal;
-type Modal = SvelteComponent<{
-    Show?: boolean;
-}, {
-    cancel: CustomEvent<any>;
-    ok: CustomEvent<any>;
-} & {
-    [evt: string]: CustomEvent<any>;
-}, {
-    title: {};
-    body: {};
-    'label-ok': {};
-    'label-cancel': {};
-}> & {
-    $$bindings?: string;
+type Modal = {
+    $on?(type: string, callback: (e: any) => void): () => void;
+    $set?(props: Partial<$$ComponentProps>): void;
 };
-declare const Modal: $$__sveltets_2_IsomorphicComponent<{
+declare const Modal: import("svelte").Component<{
     Show?: boolean;
-}, {
-    cancel: CustomEvent<any>;
-    ok: CustomEvent<any>;
-} & {
-    [evt: string]: CustomEvent<any>;
-}, {
-    title: {};
-    body: {};
-    'label-ok': {};
-    'label-cancel': {};
-}, {}, string>;
-interface $$__sveltets_2_IsomorphicComponent<Props extends Record<string, any> = any, Events extends Record<string, any> = any, Slots extends Record<string, any> = any, Exports = {}, Bindings = string> {
-    new (options: import("svelte").ComponentConstructorOptions<Props>): import("svelte").SvelteComponent<Props, Events, Slots> & {
-        $$bindings?: Bindings;
-    } & Exports;
-    (internal: unknown, props: Props & {
-        $$events?: Events;
-        $$slots?: Slots;
-    }): Exports & {
-        $set?: any;
-        $on?: any;
-    };
-    z_$$bindings?: Bindings;
-}
+    title: any;
+    oncancel: any;
+    onaccept: any;
+    body: any;
+    label_accept?: string;
+    label_cancel?: string;
+}, {}, "Show">;
+type $$ComponentProps = {
+    Show?: boolean;
+    title: any;
+    oncancel: any;
+    onaccept: any;
+    body: any;
+    label_accept?: string;
+    label_cancel?: string;
+};

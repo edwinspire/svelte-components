@@ -146,8 +146,8 @@
 	};
 	let show = false;
 	let requestData = {
-		url: 'https://cat-fact.herokuapp.com/facts/random',
-		params: { animal_type: 'cat', amount: 500 }
+		url: 'https://api.escuelajs.co/api/v1/products',
+		params: { animal_type: 'cat', amount: 100 }
 	};
 
 	let RawDataTable = [
@@ -287,12 +287,12 @@
 
 
  -->
-<!--  <Table
+<!--   <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
 	{columns}
-	requestData={requestData}
+	RawDataTable={dataTest}
 	ShowDeleteButton={true}
 	ShowNewButton={true}
 	ShowEditButton={true}
@@ -319,7 +319,7 @@
 	</button>
 	{/snippet}
 </Table>
- -->
+ --> 
 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
@@ -345,4 +345,4 @@
  -->
  <!-- <EditorCode bind:code={code} lang={'json'} showResetButton={true} isReadOnly={false} showFormat={true} showCode={true} showHiddenButton={true} showSelectLang = {true}></EditorCode> -->
 
- <RESTTester></RESTTester> 
+ <RESTTester></RESTTester>  

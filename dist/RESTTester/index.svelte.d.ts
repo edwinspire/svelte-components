@@ -1,44 +1,19 @@
 export default Index;
-type Index = SvelteComponent<{
-    url: any;
-    method?: string;
-    data?: {
-        query: any[];
-        headers: any[];
-        auth: {};
-        body: {};
-    };
-    limitSizeResponseView?: number;
-    methodDisabled?: boolean;
-}, {
-    [evt: string]: CustomEvent<any>;
-}, {}> & {
-    $$bindings?: string;
+type Index = {
+    $on?(type: string, callback: (e: any) => void): () => void;
+    $set?(props: Partial<$$ComponentProps>): void;
 };
-declare const Index: $$__sveltets_2_IsomorphicComponent<{
-    url: any;
+declare const Index: import("svelte").Component<{
+    url?: any;
     method?: string;
-    data?: {
-        query: any[];
-        headers: any[];
-        auth: {};
-        body: {};
-    };
     limitSizeResponseView?: number;
     methodDisabled?: boolean;
-}, {
-    [evt: string]: CustomEvent<any>;
-}, {}, {}, string>;
-interface $$__sveltets_2_IsomorphicComponent<Props extends Record<string, any> = any, Events extends Record<string, any> = any, Slots extends Record<string, any> = any, Exports = {}, Bindings = string> {
-    new (options: import("svelte").ComponentConstructorOptions<Props>): import("svelte").SvelteComponent<Props, Events, Slots> & {
-        $$bindings?: Bindings;
-    } & Exports;
-    (internal: unknown, props: Props & {
-        $$events?: Events;
-        $$slots?: Slots;
-    }): Exports & {
-        $set?: any;
-        $on?: any;
-    };
-    z_$$bindings?: Bindings;
-}
+    data?: Record<string, any>;
+}, {}, "url" | "method" | "data" | "limitSizeResponseView" | "methodDisabled">;
+type $$ComponentProps = {
+    url?: any;
+    method?: string;
+    limitSizeResponseView?: number;
+    methodDisabled?: boolean;
+    data?: Record<string, any>;
+};

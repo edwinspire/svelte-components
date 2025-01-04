@@ -1,47 +1,59 @@
 <script>
-	import { createEventDispatcher } from 'svelte';
-	const dispatch = createEventDispatcher();
-	export let Show = false;
+	let {
+		Show = $bindable(false),
+		title,
+		oncancel,
+		onaccept,
+		body,
+		label_accept = 'ACCEPT',
+		label_cancel = 'CANCEL'
+	} = $props();
 </script>
 
 <div class="modal" class:is-active={Show}>
-	<div class="modal-background" />
+	<div class="modal-background"></div>
 	<div class="modal-card">
 		<header class="modal-card-head has-background-dark">
 			<p class="modal-card-title has-text-white">
 				<b>
-					<slot name="title" />
+					{@render title?.()}
 				</b>
 			</p>
 			<button
 				class="delete"
 				aria-label="close"
-				on:click={(e) => {
+				onclick={(e) => {
 					Show = false;
-					dispatch('cancel', e);
+					if (oncancel) {
+						oncancel(e);
+					}
 				}}
-			/>
+			></button>
 		</header>
 		<section class="modal-card-body">
-			<slot name="body" />
+			{@render body?.()}
 		</section>
 		<footer class="modal-card-foot has-background-dark">
 			<button
 				class="button is-success is-small"
-				on:click={(e) => {
-					dispatch('ok', e);
+				onclick={(e) => {
+					if (onaccept) {
+						onaccept(e);
+					}
 				}}
 			>
-				<slot name="label-ok">Accept</slot>
+				{label_accept}
 			</button>
 			<button
 				class="button is-small"
-				on:click={(e) => {
+				onclick={(e) => {
 					Show = false;
-					dispatch('cancel', e);
+					if (oncancel) {
+						oncancel(e);
+					}
 				}}
 			>
-				<slot name="label-cancel">Cancel</slot>
+				{label_cancel}
 			</button>
 		</footer>
 	</div>

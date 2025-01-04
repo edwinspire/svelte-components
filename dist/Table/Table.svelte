@@ -34,23 +34,23 @@
 		rowClassFunction = function (row) {
 			return '';
 		},
-		right_A,
-		right_B,
-		right_C,
-		left_A,
-		left_B,
-		left_C,
-		left_D,
-		left_E,
-		left_F,
-		left_G,
-		left_H,
-		left_I,
-		left_J,
-		onclickrow,
-		oneditrow,
-		onnewrow,
-		ondeleterow
+		left_items,
+		right_items,
+		onclickrow = (c) => {
+			console.trace('onclickrow no implemented.');
+		},
+		oneditrow = (e) => {
+			console.trace('oneditrow no implemented.');
+		},
+		onnewrow = (n) => {
+			console.trace('onnewrow no implemented.');
+		},
+		ondeleterow = (d) => {
+			ownDeleteRows(d);
+		},
+		onselectrows = (s) => {
+			console.trace('onselectrows no implemented.');
+		}
 	} = $props();
 
 	//export let RawDataTable = [];
@@ -118,7 +118,7 @@
 
 	let idTimeoutDataChanged;
 
-		function requestDataExists() {
+	function requestDataExists() {
 		return requestData && requestData.url && requestData.url.length > 0;
 	}
 
@@ -145,7 +145,7 @@
 				} catch (error) {
 					console.trace(error);
 				}
-			}, 500);
+			}, 1750);
 		}
 	}
 
@@ -314,23 +314,6 @@
 		}
 	}
 
-	function fnDeleteRows() {
-		//console.log(this);
-		try {
-			// Filter only selection
-
-			//	console.log('ExportTable > Columns ', columns);
-
-			let filteredData = GetSelectedRows();
-			if (filteredData && filteredData.length > 0) {
-			} else {
-				alert('Select the rows to delete.');
-				SelectionType = 2;
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	}
 
 	let auto_refresh_by_table_changed_request = 0;
 
@@ -351,7 +334,7 @@
 
 	let check_changes_data = setInterval(async () => {
 		onrawDataChanged();
-	}, 750);
+	}, 1850);
 
 	onDestroy(() => {
 		clearInterval(auto_refresh);
@@ -416,11 +399,27 @@
 		}
 	}
 
+	function ownDeleteRows(selected_rows) {
+		if (selected_rows.rows && selected_rows.rows.length > 0) {
+			RawDataTable = RawDataTable.filter((item) => {
+				return selected_rows.rows.find((r) => {
+					return r.key != item.key;
+				});
+			});
+		}
+	}
+
 	function HClickDelete(e) {
-		fnDeleteRows();
-		//dispatch('deleterow', { rows: GetSelectedRows() });
-		if (ondeleterow) {
-			ondeleterow({ rows: GetSelectedRows() });
+		try {
+			let filteredData = GetSelectedRows();
+			if (filteredData && filteredData.length > 0) {
+				ondeleterow({ rows: filteredData });
+			} else {
+				alert('Select the rows to delete.');
+				SelectionType = 2;
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	}
 
@@ -616,39 +615,10 @@
 	}
 </script>
 
-<Level right={[right_01]}>
-	{#snippet left_01()}
-		{@render left_A?.()}
-	{/snippet}
-
-	{#snippet left_02()}
-		{@render left_B?.()}
-	{/snippet}
-	{#snippet left_03()}
-		{@render left_C?.()}
-	{/snippet}
-	{#snippet left_04()}
-		{@render left_D?.()}
-	{/snippet}
-	{#snippet left_05()}
-		{@render left_E?.()}
-	{/snippet}
-	{#snippet left_06()}
-		{@render left_F?.()}
-	{/snippet}
-	{#snippet left_07()}
-		{@render left_G?.()}
-	{/snippet}
-	{#snippet left_08()}
-		{@render left_H?.()}
-	{/snippet}
-	{#snippet left_09()}
-		{@render left_I?.()}
-	{/snippet}
-	{#snippet left_10()}
-		{@render left_J?.()}
-	{/snippet}
-
+<Level
+	left={left_items}
+	right={[right_08, right_07, right_06, right_05, right_04, right_03, right_02, right_01]}
+>
 	{#snippet right_01()}
 		<div class="field has-addons">
 			<p class="control">
@@ -818,15 +788,11 @@
 	{/snippet}
 
 	{#snippet right_08()}
-		{@render right_A?.()}
-	{/snippet}
-
-	{#snippet right_09()}
-		{@render right_B?.()}
-	{/snippet}
-
-	{#snippet right_10()}
-		{@render right_C?.()}
+		{#if Array.isArray(right_items)}
+			{#each right_items as r_item}
+				<span class="slot_padding">{@render r_item?.()}</span>
+			{/each}
+		{/if}
 	{/snippet}
 </Level>
 
@@ -1163,5 +1129,8 @@
 
 	.check_margin {
 		margin-left: 10px;
+	}
+	.slot_padding {
+		margin: 0.1em !important;
 	}
 </style>

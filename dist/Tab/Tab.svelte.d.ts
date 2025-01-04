@@ -5,13 +5,13 @@ type Tab = {
 };
 declare const Tab: import("svelte").Component<{
     classSize?: string;
+    onselect: any;
     tabs?: any[];
     active?: number;
-    children: any;
 }, {}, "classSize" | "tabs" | "active">;
 type $$ComponentProps = {
     classSize?: string;
+    onselect: any;
     tabs?: any[];
     active?: number;
-    children: any;
 };

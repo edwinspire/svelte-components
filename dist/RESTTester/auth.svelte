@@ -2,23 +2,35 @@
 	import { onMount } from 'svelte';
 	import { Tab } from '../index.js';
 
-	export let data = { basic: {}, bearer: {} };
+	let {
+		data = $bindable({
+			selection: 0,
+			basic: { username: '', passsword: '' },
+			bearer: { token: '' }
+		})
+	} = $props();
 
-	let tabList = [{ label: 'None', isActive: true }, { label: 'Basic' }, { label: 'Bearer' }];
+	//export let data = { basic: {}, bearer: {} };
 
-	$: data, defaultValues();
+	let tabList = $state([
+		{ label: 'None', component: tab_none },
+		{ label: 'Basic', component: tab_basic },
+		{ label: 'Bearer', component: tab_bearer }
+	]);
+
+	//$: data, defaultValues();
 
 	function defaultValues() {
 		if (!data) {
-			data = { basic: {}, bearer: {} };
+			data = { basic: { username: '', passsword: '' }, bearer: { token: '' } };
 		}
 
 		if (data && !data.basic) {
-			data.basic = {};
+			data.basic = { username: '', passsword: '' };
 		}
 
 		if (data && !data.bearer) {
-			data.bearer = {};
+			data.bearer = { token: '' };
 		}
 
 		if (data && !data.selection) {
@@ -26,19 +38,29 @@
 		}
 	}
 
-	onMount(() => {});
+	$inspect(data).with((type) => {
+		//console.log('>>>>>>>>>>>>> ', type);
+		if (type === 'init') {
+			defaultValues();
+		}
+	});
+
+	onMount(() => {
+		//console.log('onMount >> ', data);
+		defaultValues();
+	});
 </script>
 
-{#if data}
-	<Tab bind:tabs={tabList} bind:active={data.selection}>
-		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<div class={tabList[0].isActive ? '' : 'is-hidden'}>
-			<label class="label is-small">No Authentication Selected</label>
-		</div>
+{#snippet tab_none()}
+	<!-- svelte-ignore a11y_label_has_associated_control -->
+	<label class="label is-small">No Authentication Selected</label>
+{/snippet}
 
-		<div class={tabList[1].isActive ? '' : 'is-hidden'}>
+{#snippet tab_basic()}
+	{#if data }
+		<div>
 			<div class="field">
-				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<!-- svelte-ignore a11y_label_has_associated_control -->
 				<label class="label is-small">Username</label>
 
 				{#if data && data.basic}
@@ -57,7 +79,7 @@
 			</div>
 
 			<div class="field">
-				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<!-- svelte-ignore a11y_label_has_associated_control -->
 				<label class="label is-small">Password</label>
 				{#if data && data.basic}
 					<div class="control has-icons-left has-icons-right">
@@ -74,10 +96,14 @@
 				{/if}
 			</div>
 		</div>
+	{/if}
+{/snippet}
 
-		<div class={tabList[2].isActive ? '' : 'is-hidden'}>
+{#snippet tab_bearer()}
+	{#if data }
+		<div>
 			<div class="field">
-				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<!-- svelte-ignore a11y_label_has_associated_control -->
 				<label class="label is-small">Token</label>
 				<div class="control">
 					{#if data && data.bearer}
@@ -87,5 +113,9 @@
 				</div>
 			</div>
 		</div>
-	</Tab>
+	{/if}
+{/snippet}
+
+{#if data}
+	<Tab bind:tabs={tabList} bind:active={data.selection}></Tab>
 {/if}
