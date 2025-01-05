@@ -22,8 +22,8 @@ declare const Table: import("svelte").Component<{
     fileNameExport?: string;
     requestData?: any;
     rowClassFunction?: any;
-    left_items: any;
-    right_items: any;
+    left_items?: any[];
+    right_items?: any[];
     onclickrow?: Function;
     oneditrow?: Function;
     onnewrow?: Function;
@@ -31,7 +31,7 @@ declare const Table: import("svelte").Component<{
     onselectrows?: Function;
 }, {
     GetSelectedRows: () => any;
-}, "RawDataTable" | "columns" | "requestData">;
+}, "RawDataTable" | "SelectionType" | "columns" | "ShowNewButton" | "ShowEditButton" | "ShowSelectionButton" | "ShowExportButton" | "iconExport" | "iconDeleteRow" | "ShowDeleteButton" | "PageSize" | "PageSizeSelected" | "relatedTablesForAutoRefresh" | "fileNameExport" | "requestData" | "left_items" | "right_items">;
 type $$ComponentProps = {
     RawDataTable?: any;
     SelectionType?: number;
@@ -49,8 +49,8 @@ type $$ComponentProps = {
     fileNameExport?: string;
     requestData?: any;
     rowClassFunction?: any;
-    left_items: any;
-    right_items: any;
+    left_items?: any[];
+    right_items?: any[];
     onclickrow?: Function;
     oneditrow?: Function;
     onnewrow?: Function;
