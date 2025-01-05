@@ -147,27 +147,32 @@
 		worker = new Worker(new URL('./utils/worker_process_rawdata.js', import.meta.url), {
 			type: 'module'
 		});
-		// Escuchar mensajes del Worker
-		worker.onmessage = (event) => {
-			//console.log('>>>>>>>>>>> ', event.data);
 
-			hash_last_data = event.data.hash_last_data;
+		if (worker) {
+			// Escuchar mensajes del Worker
+			worker.onmessage = (event) => {
+				//console.log('>>>>>>>>>>> ', event.data);
 
-			if (event.data.different_data) {
-				RawDataTable = event.data.data;
-				//console.log('Hay cambos');
-				SetColumns();
-				FilterData();
-			}
+				hash_last_data = event.data.hash_last_data;
 
-			//RawDataTable = u;
-			//console.log(RawDataTable);
-		};
+				if (event.data.different_data) {
+					RawDataTable = event.data.data;
+					//console.log('Hay cambos');
+					SetColumns();
+					FilterData();
+				}
 
-		// Manejar errores del Worker
-		worker.onerror = (error) => {
-			console.error('Error en Worker:', error.message);
-		};
+				//RawDataTable = u;
+				//console.log(RawDataTable);
+			};
+
+			// Manejar errores del Worker
+			worker.onerror = (error) => {
+				console.error('Error en Worker:', error.message);
+			};
+		} else {
+			console.error('Worker not inicialized.');
+		}
 
 		storeChangedTables.subscribe((value) => {
 			//console.log('storeChangedTables.subscribe', value);
