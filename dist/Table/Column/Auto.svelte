@@ -4,7 +4,7 @@
 
 	let {
 		value = $bindable(),
-		onclick_cell,
+		onclickcell,
 		row = $bindable(),
 		editInline = false,
 		css_cell
@@ -30,7 +30,7 @@
 {:else if typeof value === 'boolean'}
 	<TBoolean bind:value bind:row {editInline} {css_cell}></TBoolean>
 {:else if typeof value === 'number' || typeof value === 'bigint'}
-	<td onclick={onclick_cell}
+	<td onclick={onclickcell}
 		>{#if editInline}
 			<input class="input is-small" type="number" placeholder="Input" bind:value />
 		{:else}
@@ -38,7 +38,7 @@
 		{/if}</td
 	>
 {:else if typeof value === 'string'}
-	<td onclick={onclick_cell}
+	<td onclick={onclickcell}
 		>{#if editInline}
 			<input class="input is-small" type="text" placeholder="Input" bind:value />
 		{:else}
@@ -46,7 +46,7 @@
 		{/if}</td
 	>
 {:else}
-	<td onclick={onclick_cell}><span>{JSON.stringify(value)}</span></td>
+	<td onclick={onclickcell}><span>{JSON.stringify(value)}</span></td>
 {/if}
 
 <style>

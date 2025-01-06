@@ -29,6 +29,7 @@ declare const Table: import("svelte").Component<{
     onnewrow?: Function;
     ondeleterow?: Function;
     onselectrows?: Function;
+    onclickcell?: Function;
 }, {
     GetSelectedRows: () => any;
 }, "RawDataTable" | "SelectionType" | "columns" | "ShowNewButton" | "ShowEditButton" | "ShowSelectionButton" | "ShowExportButton" | "iconExport" | "iconDeleteRow" | "ShowDeleteButton" | "PageSize" | "PageSizeSelected" | "relatedTablesForAutoRefresh" | "fileNameExport" | "requestData" | "left_items" | "right_items">;
@@ -56,4 +57,5 @@ type $$ComponentProps = {
     onnewrow?: Function;
     ondeleterow?: Function;
     onselectrows?: Function;
+    onclickcell?: Function;
 };

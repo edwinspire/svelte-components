@@ -51,6 +51,9 @@
 		},
 		onselectrows = (s) => {
 			console.trace('onselectrows no implemented.');
+		},
+		onclickcell = (s) => {
+			console.trace('onclickcell no implemented.');
 		}
 	} = $props();
 
@@ -382,16 +385,8 @@
 
 	function HClickCell(cell, row) {
 		//dispatch('clickrow', { field: cell, data: row });
-		if (onclickrow) {
-			onclickrow({ field: cell, data: row });
-		}
-	}
-
-	
-	function HClickNew(e) {
-		//dispatch('newrow', e);
-		if (onnewrow) {
-			onnewrow(e);
+		if (onclickcell) {
+			onclickcell({ field: cell, data: row });
 		}
 	}
 
@@ -754,7 +749,15 @@
 
 	{#snippet right_06()}
 		{#if ShowNewButton}
-			<button aria-label="close" class="button is-small" onclick={HClickNew}>
+			<button
+				aria-label="close"
+				class="button is-small"
+				onclick={() => {
+					if (onnewrow) {
+						onnewrow(e);
+					}
+				}}
+			>
 				<span class="icon">
 					<i class="far fa-file"></i>
 				</span>
@@ -836,7 +839,14 @@
 			<tbody>
 				{#if DataTable}
 					{#each DataTable as dataRow, i (dataRow.internal_hash_row)}
-						<tr class={rowClassFunction(dataRow)}>
+						<tr
+							class={rowClassFunction(dataRow)}
+							onclick={() => {
+								if (onclickrow) {
+									onclickrow({ row: $state.snapshot(dataRow), id: $state.snapshot(i) });
+								}
+							}}
+						>
 							<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
 
 							{#if SelectionType == 1}
@@ -867,7 +877,7 @@
 									class="has-text-centered show_cursor_mouse"
 									onclick={() => {
 										if (oneditrow) {
-											oneditrow({ data: DataTable[i] });
+											oneditrow({ data: $state.snapshot(DataTable[i]) });
 										}
 									}}
 								>
@@ -884,10 +894,17 @@
 										{#if internal_columns[item].decorator && internal_columns[item].decorator.component}
 											{@const Component = internal_columns[item].decorator.component}
 											<Component
-												onclick={(e) => {
+											onclickcell={(e) => {
 													// console.log('HClickCell 1');
 													// e.preventDefault();
-													HClickCell(item, dataRow);
+													//HClickCell(item, dataRow);
+													//HClickCell(item, dataRow);
+													if (onclickcell) {
+														onclickcell({
+															field: $state.snapshot(item),
+															data: $state.snapshot(dataRow)
+														});
+													}
 												}}
 												{...internal_columns[item]?.decorator?.props}
 												bind:row={DataTable[i]}
@@ -897,10 +914,15 @@
 											<Auto
 												{...internal_columns[item]?.decorator?.props}
 												bind:value={dataRow[item]}
-												onclick={(e) => {
+												onclickcell={(e) => {
 													// console.log('HClickCell 1');
 													// e.preventDefault();
-													HClickCell(item, dataRow);
+													if (onclickcell) {
+														onclickcell({
+															field: $state.snapshot(item),
+															data: $state.snapshot(dataRow)
+														});
+													}
 												}}
 											></Auto>
 										{/if}

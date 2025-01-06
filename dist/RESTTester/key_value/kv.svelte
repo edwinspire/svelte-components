@@ -9,7 +9,7 @@
 		enabled: {
 			label: 'Enabled',
 			decorator: {
-				component: ColumnTypes.BooleanIcon,
+				component: ColumnTypes.Boolean,
 				props: {
 					ontrue: { label: 'Enabled' },
 					onfalse: { label: 'Unabled' },

@@ -294,6 +294,11 @@
 	oneditrow={(e) => {
 		console.log('>>>> -> ', e);
 	}}
+
+onclickrow={(x)=>{
+console.log(x);
+}}
+
 	{columns}
 	RawDataTable={dataTest}
 	ShowDeleteButton={true}
