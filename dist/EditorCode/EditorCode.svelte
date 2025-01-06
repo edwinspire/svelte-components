@@ -4,7 +4,7 @@
 	import { EditorView, basicSetup } from 'codemirror';
 	import { javascript } from '@codemirror/lang-javascript';
 	import { json } from '@codemirror/lang-json';
-	import { html } from '@codemirror/lang-html';
+	//	import { html } from '@codemirror/lang-html';
 	import { xml } from '@codemirror/lang-xml';
 	import { sql } from '@codemirror/lang-sql';
 	import { EditorState } from '@codemirror/state';
@@ -14,7 +14,8 @@
 
 	let {
 		code = $bindable(''),
-		title = $bindable(''),
+		left,
+		right,
 		lang = $bindable('json'),
 		showFormat = $bindable(false),
 		showSelectLang = $bindable(false),
@@ -68,7 +69,7 @@
 
 	$inspect(code).with((type) => {
 		//console.log('code >>>>>>>>>>>>> ', type);
-		if ( type === 'init') {
+		if (type === 'init') {
 			parseCode();
 		}
 	});
@@ -126,7 +127,6 @@
 	}
 
 	function initializeEditor() {
-		
 		if (elementParent) {
 			if (editorView) editorView.destroy();
 
@@ -196,7 +196,6 @@
 				result.error = error;
 			}
 		} else {
-
 			result.code =
 				typeof code_without_format !== 'string'
 					? JSON.stringify(code_without_format)
@@ -211,101 +210,97 @@
 	});
 </script>
 
-<Level left={[ltitle, l02]} right={[r01]}>
-	{#snippet ltitle()}
-		{title}
-	{/snippet}
+{#snippet l02()}
+	{#if showSelectLang}
+		<div class="field is-horizontal">
+			<div class="field-label is-small">
+				<!-- svelte-ignore a11y_label_has_associated_control -->
+				<label class="label">Language</label>
+			</div>
+			<div class="field-body">
+				<div class="field is-narrow">
+					<div class="control has-icons-left">
+						<div class="select is-small {formatError ? 'is-danger' : ''}">
+							<select
+								bind:value={lang}
+								onchange={() => {
+									initializeEditor();
+								}}
+							>
+								{#each list_langs as ll}
+									<option value={ll.value}>
+										{ll.label}
+									</option>
+								{/each}
+							</select>
 
-	{#snippet l02()}
-		{#if showSelectLang}
-			<div class="field is-horizontal">
-				<div class="field-label is-small">
-					<!-- svelte-ignore a11y_label_has_associated_control -->
-					<label class="label">Language</label>
-				</div>
-				<div class="field-body">
-					<div class="field is-narrow">
-						<div class="control has-icons-left">
-							<div class="select is-small {formatError ? 'is-danger' : ''}">
-								<select
-									bind:value={lang}
-									onchange={() => {
-										initializeEditor();
-									}}
-								>
-									{#each list_langs as ll}
-										<option value={ll.value}>
-											{ll.label}
-										</option>
-									{/each}
-								</select>
-
-								<span class="icon is-small is-left">
-									{#if formatError}
-										<i class="fa-solid fa-triangle-exclamation"></i>
-									{/if}
-								</span>
-							</div>
+							<span class="icon is-small is-left">
+								{#if formatError}
+									<i class="fa-solid fa-triangle-exclamation"></i>
+								{/if}
+							</span>
 						</div>
 					</div>
 				</div>
 			</div>
-		{:else}
-			<div class="control">
-				<div class="tags has-addons">
-					<span class="tag is-dark">Format</span>
-					<span class="tag {formatError ? 'is-danger' : 'is-success'}">{lang}</span>
-				</div>
+		</div>
+	{:else}
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag is-dark">Format</span>
+				<span class="tag {formatError ? 'is-danger' : 'is-success'}">{lang}</span>
 			</div>
-		{/if}
-	{/snippet}
+		</div>
+	{/if}
+{/snippet}
 
-	{#snippet r01()}
-		{#if showFormat && lang == 'json'}
-			<button
-				class="button is-small"
-				onclick={async () => {
-					await formatCode();
-				}}
-			>
-				Format
-			</button>
-		{/if}
+{#snippet r01()}
+	{#if showFormat && lang == 'json'}
+		<button
+			class="button is-small"
+			onclick={async () => {
+				await formatCode();
+			}}
+		>
+			Format
+		</button>
+	{/if}
 
-		{#if showResetButton}
-			<button
-				class="button is-small"
-				onclick={() => {
-					reset();
-					//console.log(code);
-				}}
-			>
-				<span class="icon is-small">
-					<i class="fa-solid fa-rotate-left"></i>
-				</span>
-				<span>Reset</span>
-			</button>
-		{/if}
+	{#if showResetButton}
+		<button
+			class="button is-small"
+			onclick={() => {
+				reset();
+				//console.log(code);
+			}}
+		>
+			<span class="icon is-small">
+				<i class="fa-solid fa-rotate-left"></i>
+			</span>
+			<span>Reset</span>
+		</button>
+	{/if}
 
-		{#if showHiddenButton}
-			<button
-				title="Hide or show Code"
-				class="button is-small"
-				onclick={() => {
-					showCode = !showCode;
-				}}
-			>
-				<span class="icon is-small">
-					{#if showCode}
-						<i class="fa-solid fa-eye-slash"></i>
-					{:else}
-						<i class="fa-solid fa-eye"></i>
-					{/if}
-				</span>
-			</button>
-		{/if}
-	{/snippet}
-</Level>
+	{#if showHiddenButton}
+		<button
+			title="Hide or show Code"
+			class="button is-small"
+			onclick={() => {
+				showCode = !showCode;
+			}}
+		>
+			<span class="icon is-small">
+				{#if showCode}
+					<i class="fa-solid fa-eye-slash"></i>
+				{:else}
+					<i class="fa-solid fa-eye"></i>
+				{/if}
+			</span>
+		</button>
+	{/if}
+{/snippet}
+
+<Level left={[left, l02]} right={[right, r01]}></Level>
 
 <!-- Editor de CodeMirror -->
 <div bind:this={elementParent} class={showCode ? '' : 'is-hidden'}></div>

@@ -294,11 +294,9 @@
 	oneditrow={(e) => {
 		console.log('>>>> -> ', e);
 	}}
-
-onclickrow={(x)=>{
-console.log(x);
-}}
-
+	onclickrow={(x) => {
+		console.log(x);
+	}}
 	{columns}
 	RawDataTable={dataTest}
 	ShowDeleteButton={true}
@@ -350,6 +348,25 @@ console.log(x);
 	
 </Level>
  -->
-<!-- <EditorCode bind:code={code} lang={'json'} showResetButton={true} isReadOnly={false} showFormat={true} showCode={true} showHiddenButton={true} showSelectLang = {true}></EditorCode> -->
+{#snippet l()}
+	Hola
+{/snippet}
+
+{#snippet r()}
+	chao
+{/snippet}
+
+<EditorCode
+	left={l}
+	right={r}
+	bind:code
+	lang={'json'}
+	showResetButton={true}
+	isReadOnly={false}
+	showFormat={true}
+	showCode={true}
+	showHiddenButton={true}
+	showSelectLang={true}
+></EditorCode>
 <!-- 
  <RESTTester></RESTTester>  -->

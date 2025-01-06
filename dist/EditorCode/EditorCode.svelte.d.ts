@@ -9,7 +9,8 @@ type EditorCode = {
 };
 declare const EditorCode: import("svelte").Component<{
     code?: string;
-    title?: string;
+    left: any;
+    right: any;
     lang?: string;
     showFormat?: boolean;
     showSelectLang?: boolean;
@@ -21,10 +22,11 @@ declare const EditorCode: import("svelte").Component<{
     setCode: (new_code: any) => void;
     getCode: () => any;
     reset: () => void;
-}, "code" | "title" | "lang" | "showFormat" | "showSelectLang" | "isReadOnly" | "showHiddenButton" | "showResetButton" | "showCode">;
+}, "code" | "lang" | "showFormat" | "showSelectLang" | "isReadOnly" | "showHiddenButton" | "showResetButton" | "showCode">;
 type $$ComponentProps = {
     code?: string;
-    title?: string;
+    left: any;
+    right: any;
     lang?: string;
     showFormat?: boolean;
     showSelectLang?: boolean;
