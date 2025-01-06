@@ -8,7 +8,8 @@
 	//import { sha256 } from '../class/sha.js';
 	import Level from '../Level/Level.svelte';
 	import { ExportTableToHTML, ExportTableToXlsx } from './utils/export_data.js';
-	//import workerUrl from './utils/worker_process_rawdata.js?worker';
+	import { checkIsArray, ProcessDataTable } from './utils/utils.js';
+	//	import workerUrl from './utils/worker_process_rawdata.js';
 
 	//TODO Habilitar mostrar u ocultar columnas
 	//TODO Fijar encabezado
@@ -77,7 +78,7 @@
 	let internal_columns = $state({});
 
 	// Crea el Worker
-	let worker;
+	//let worker;
 	let idTimeoutDataChanged;
 
 	$inspect(RawDataTable).with((type) => {
@@ -101,9 +102,27 @@
 			//console.log('xxxxxxxxxx');
 
 			// Setea uno nuevo
-			idTimeoutDataChanged = setTimeout(() => {
+			idTimeoutDataChanged = setTimeout(async () => {
 				//console.log('Se ha guardado los cambios');
 				try {
+					let result_process = await ProcessDataTable({
+						data: RawDataTable,
+						columns: columns,
+						hash_last_data: hash_last_data
+					});
+
+					hash_last_data = result_process.hash_last_data;
+
+				//	console.log(result_process);
+
+					if (result_process.different_data) {
+						RawDataTable = result_process.data;
+						//console.log('Hay cambos');
+						SetColumns();
+						FilterData();
+					}
+
+					/*
 					if (worker) {
 						let datamsg = {
 							data: RawDataTable,
@@ -113,6 +132,7 @@
 
 						worker.postMessage(JSON.stringify(datamsg));
 					}
+					*/
 				} catch (error) {
 					console.trace(error);
 				}
@@ -144,6 +164,7 @@
 			? Number(requestData.refresh_time)
 			: 4;
 
+		/*
 		worker = new Worker(new URL('./utils/worker_process_rawdata.js', import.meta.url), {
 			type: 'module'
 		});
@@ -173,6 +194,7 @@
 		} else {
 			console.error('Worker not inicialized.');
 		}
+		*/
 
 		storeChangedTables.subscribe((value) => {
 			//console.log('storeChangedTables.subscribe', value);
@@ -193,7 +215,7 @@
 		let tempArray = [];
 		chunk_size = parseInt(chunk_size);
 
-		if (myArray && Array.isArray(myArray)) {
+		if (checkIsArray(myArray)) {
 			for (let index = 0; index < myArray.length; index += chunk_size) {
 				let myChunk = myArray.slice(index, index + chunk_size);
 
@@ -317,9 +339,11 @@
 		clearInterval(auto_refresh);
 		//	clearInterval(check_changes_data);
 		//	clearInterval(check_changes_data);
+		/*
 		if (worker) {
 			worker.terminate();
 		}
+		*/
 	});
 
 	function ChangeIntervalRefresh() {
@@ -436,14 +460,8 @@
 		FilterData();
 	}
 
-	/*
-	function handleExportSelection(e) {
-		ExportTable();
-	}
-*/
-
 	function RawDataTableIsArray() {
-		return RawDataTable && Array.isArray(RawDataTable);
+		return checkIsArray(RawDataTable);
 	}
 
 	function FilterData() {
@@ -565,7 +583,7 @@
 					if (res && res.status == 200) {
 						let data = await res.json();
 
-						if (Array.isArray(data)) {
+						if (checkIsArray(data)) {
 							RawDataTable = data;
 							LastFetchResponse = true;
 						} else {
@@ -765,7 +783,7 @@
 	{/snippet}
 
 	{#snippet right_08()}
-		{#if Array.isArray(right_items)}
+		{#if checkIsArray(right_items)}
 			{#each right_items as r_item}
 				<span class="slot_padding">{@render r_item?.()}</span>
 			{/each}
