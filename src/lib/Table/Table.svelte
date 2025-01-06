@@ -877,7 +877,7 @@
 									class="has-text-centered show_cursor_mouse"
 									onclick={() => {
 										if (oneditrow) {
-											oneditrow({ data: $state.snapshot(DataTable[i]) });
+											oneditrow($state.snapshot(DataTable[i]));
 										}
 									}}
 								>
@@ -894,7 +894,7 @@
 										{#if internal_columns[item].decorator && internal_columns[item].decorator.component}
 											{@const Component = internal_columns[item].decorator.component}
 											<Component
-											onclickcell={(e) => {
+												onclickcell={(e) => {
 													// console.log('HClickCell 1');
 													// e.preventDefault();
 													//HClickCell(item, dataRow);
