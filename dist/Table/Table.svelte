@@ -113,7 +113,7 @@
 
 					hash_last_data = result_process.hash_last_data;
 
-				//	console.log(result_process);
+					//	console.log(result_process);
 
 					if (result_process.different_data) {
 						RawDataTable = result_process.data;
@@ -387,12 +387,7 @@
 		}
 	}
 
-	function HClickEditRow(e) {
-		//dispatch('editrow', { data: e });
-		if (oneditrow) {
-			oneditrow({ data: e });
-		}
-	}
+	
 	function HClickNew(e) {
 		//dispatch('newrow', e);
 		if (onnewrow) {
@@ -868,7 +863,14 @@
 							{/if}
 
 							{#if showEdit}
-								<td class="has-text-centered show_cursor_mouse" onclick={HClickEditRow(dataRow)}>
+								<td
+									class="has-text-centered show_cursor_mouse"
+									onclick={() => {
+										if (oneditrow) {
+											oneditrow({ data: DataTable[i] });
+										}
+									}}
+								>
 									<span class="icon is-small">
 										<i class="fas fa-pen"></i>
 									</span>

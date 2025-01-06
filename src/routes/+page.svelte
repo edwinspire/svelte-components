@@ -205,7 +205,7 @@
 	let valor = 10;
 
 	setInterval(() => {
-	//	console.log(code);
+		//	console.log(code);
 	}, 1000);
 </script>
 
@@ -287,39 +287,41 @@
 
 
  -->
-  <Table
+<Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
+	oneditrow={(e) => {
+		console.log('>>>> -> ', e);
+	}}
 	{columns}
-RawDataTable={dataTest}
+	RawDataTable={dataTest}
 	ShowDeleteButton={true}
 	ShowNewButton={true}
 	ShowEditButton={true}
 	left_items={[chao]}
 	right_items={[pepe, chavo]}
-	>
+>
 	{#snippet chao()}
 		chao
 	{/snippet}
 
 	{#snippet pepe()}
-	<button aria-label="close" class="button is-small" title="Delete row" >
-		<span class="icon">
-			<i class='fa-solid fa-trash'></i>
-		</span>
-	</button>
+		<button aria-label="close" class="button is-small" title="Delete row">
+			<span class="icon">
+				<i class="fa-solid fa-trash"></i>
+			</span>
+		</button>
 	{/snippet}
 
 	{#snippet chavo()}
-	<button aria-label="close" class="button is-small" title="Delete row" >
-		<span class="icon">
-			<i class='fa-solid fa-trash'></i>
-		</span>
-	</button>
+		<button aria-label="close" class="button is-small" title="Delete row">
+			<span class="icon">
+				<i class="fa-solid fa-trash"></i>
+			</span>
+		</button>
 	{/snippet}
 </Table>
- 
 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
@@ -343,6 +345,6 @@ RawDataTable={dataTest}
 	
 </Level>
  -->
- <!-- <EditorCode bind:code={code} lang={'json'} showResetButton={true} isReadOnly={false} showFormat={true} showCode={true} showHiddenButton={true} showSelectLang = {true}></EditorCode> -->
+<!-- <EditorCode bind:code={code} lang={'json'} showResetButton={true} isReadOnly={false} showFormat={true} showCode={true} showHiddenButton={true} showSelectLang = {true}></EditorCode> -->
 <!-- 
  <RESTTester></RESTTester>  -->
