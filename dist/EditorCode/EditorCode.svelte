@@ -22,7 +22,8 @@
 		isReadOnly = $bindable(false),
 		showHiddenButton = $bindable(true),
 		showResetButton = $bindable(false),
-		showCode = $bindable(true)
+		showCode = $bindable(true),
+		onchange = (c) => {}
 	} = $props();
 
 	let org_code = '';
@@ -159,12 +160,13 @@
 										} else {
 											code = internal_code;
 										}
+										onchange({ lang: lang, code: code });
 										parseCode();
 									} catch (error) {
 										console.log(error);
 									}
 								}
-							}, 1500);
+							}, 1000);
 						}
 					})
 				],
@@ -207,6 +209,10 @@
 
 	onMount(() => {
 		initializeEditor();
+	});
+
+	onDestroy(() => {
+		clearTimeout(timeoutParseOnChange);
 	});
 </script>
 

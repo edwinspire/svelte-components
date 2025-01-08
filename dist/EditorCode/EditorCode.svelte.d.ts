@@ -18,6 +18,7 @@ declare const EditorCode: import("svelte").Component<{
     showHiddenButton?: boolean;
     showResetButton?: boolean;
     showCode?: boolean;
+    onchange?: Function;
 }, {
     setCode: (new_code: any) => void;
     getCode: () => any;
@@ -34,4 +35,5 @@ type $$ComponentProps = {
     showHiddenButton?: boolean;
     showResetButton?: boolean;
     showCode?: boolean;
+    onchange?: Function;
 };
