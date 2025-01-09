@@ -9,6 +9,7 @@ declare const Index: import("svelte").Component<{
     limitSizeResponseView?: number;
     methodDisabled?: boolean;
     data?: Record<string, any>;
+    onchange?: Function;
 }, {}, "url" | "method" | "data" | "limitSizeResponseView" | "methodDisabled">;
 type $$ComponentProps = {
     url?: any;
@@ -16,4 +17,5 @@ type $$ComponentProps = {
     limitSizeResponseView?: number;
     methodDisabled?: boolean;
     data?: Record<string, any>;
+    onchange?: Function;
 };

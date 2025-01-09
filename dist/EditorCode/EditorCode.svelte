@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount , onDestroy} from 'svelte';
 	import { Level } from '../index.js';
 	import { EditorView, basicSetup } from 'codemirror';
 	import { javascript } from '@codemirror/lang-javascript';
@@ -149,7 +149,7 @@
 
 							timeoutParseOnChange = setTimeout(() => {
 								//console.warn(editorView.state.doc.toString());
-								//								console.log('Hubo cambios > timeoutParseOnChange ');
+																console.log('Hubo cambios > timeoutParseOnChange ');
 								//setCodeEditor(internal_code);
 								formatCode();
 
@@ -166,7 +166,7 @@
 										console.log(error);
 									}
 								}
-							}, 1000);
+							}, 750);
 						}
 					})
 				],

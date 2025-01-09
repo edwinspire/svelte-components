@@ -79,7 +79,7 @@
 			<EditorCode lang="json" bind:code={data.json.code}></EditorCode>
 		{/if}
 	</div>
-{/snippet}
+{/snippet}<!--  -->
 
 {#snippet tab_xml()}
 	{#if data && data.xml}

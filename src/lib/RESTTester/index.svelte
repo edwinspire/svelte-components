@@ -1,5 +1,6 @@
 <script>
-	import { Tab, Table, Level } from '../index.js';
+	import { onMount, onDestroy } from 'svelte';
+	import { Tab, Table } from '../index.js';
 	import Query from './key_value/kv.svelte';
 	import Headers from './key_value/kv.svelte';
 	import Auth from './auth.svelte';
@@ -20,7 +21,8 @@
 		method = $bindable('GET'),
 		limitSizeResponseView = $bindable(20000),
 		methodDisabled = $bindable(false),
-		data = $bindable({ query: [], headers: [], auth: {}, body: {} })
+		data = $bindable({ query: [], headers: [], auth: {}, body: {} }),
+		onchange = () => {}
 	} = $props();
 
 	let uF = new uFetch();
@@ -57,6 +59,22 @@
 		{ label: 'Body', component: tab_body },
 		{ label: 'Result', component: tab_result }
 	]);
+
+	let timeoutChangeData;
+
+	$inspect([data, url, method]).with((type) => {
+		//console.log('>>>>>>>>>>>>> ', type);
+		if (type === 'update') {
+			clearTimeout(timeoutChangeData);
+			timeoutChangeData = setTimeout(() => {
+				onchange({
+					data: $state.snapshot(data),
+					url: $state.snapshot(url),
+					method: $state.snapshot(method)
+				});
+			}, 750);
+		}
+	});
 
 	function getSizeJSON(data) {
 		// Convertimos el JSON a una cadena
@@ -153,14 +171,135 @@
 		return result;
 	}
 
-	
+	onDestroy(() => {
+		clearTimeout(timeoutChangeData);
+	});
 </script>
 
-<Level>
-	<span slot="l01"></span>
-</Level>
+{#snippet tab_query()}
+	{#if data}
+		<Query bind:data={data.query}></Query>
+	{/if}
+{/snippet}
 
-<div class="block">
+{#snippet tab_headers()}
+	{#if data}
+		<Headers bind:data={data.headers}></Headers>
+	{/if}
+{/snippet}
+
+{#snippet tab_auth()}
+	{#if data}
+		<Auth bind:data={data.auth}></Auth>
+	{/if}
+{/snippet}
+
+{#snippet tab_body()}
+	{#if data}
+		<Body bind:data={data.body}></Body>
+	{/if}
+{/snippet}
+
+{#snippet tab_result()}
+	<div class="field is-grouped is-grouped-multiline">
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-danger'}"
+					>Status</span
+				>
+				{#if last_response && last_response.status}
+					<span class="tag">{last_response.status}</span>
+				{:else}
+					<span class="tag"></span>
+				{/if}
+			</div>
+		</div>
+
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}"
+					>Status Text</span
+				>
+				{#if last_response && last_response.statusText}
+					<span class="tag">{last_response.statusText}</span>
+				{:else}
+					<span class="tag"> </span>
+				{/if}
+			</div>
+		</div>
+
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}">Ok</span>
+				{#if last_response && last_response.ok}
+					<span class="tag">{last_response.ok}</span>
+				{:else}
+					<span class="tag"></span>
+				{/if}
+			</div>
+		</div>
+
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag is-dark">Time</span>
+				{#if time_responde}
+					<span class="tag">{time_responde} ms</span>
+				{:else}
+					<span class="tag"> ms </span>
+				{/if}
+			</div>
+		</div>
+
+		<div class="control">
+			<div class="tags has-addons">
+				<span class="tag {sizeKBResponse > limitSizeResponseView ? 'is-danger' : 'is-dark'}  "
+					>Size</span
+				>
+				{#if sizeKBResponse}
+					<span class="tag">{sizeKBResponse} KB</span>
+				{:else}
+					<span class="tag"> KB </span>
+				{/if}
+			</div>
+		</div>
+	</div>
+	<div>
+		{#if Number(sizeKBResponse) < Number(limitSizeResponseView)}
+			{#if last_response && !last_response.ok && data_result}
+				<JSONView bind:jsonObject={data_result}></JSONView>
+			{:else if response_as == 'json' && data_result}
+				<JSONView bind:jsonObject={data_result}></JSONView>
+			{:else if response_as == 'text' && data_result}
+				<code>
+					{data_result}
+				</code>
+			{:else if response_as == 'datatable' && data_result}
+				<Table bind:RawDataTable={data_result}></Table>
+			{/if}
+		{:else}
+			<div class="container is-max-tablet is-small">
+				<p class="block">
+					The response exceeds {limitSizeResponseView} KB, it cannot be displayed in the view.
+				</p>
+
+				<div class="is-align-content-center">
+					<button
+						class="button is-link is-outlined is-small"
+						onclick={() => {
+							if (response_as == 'json') {
+								downloadFile(JSON.stringify(data_result), 'response.json', 'text/json');
+							} else if (response_as == 'text') {
+								downloadFile(data_result, 'response.txt', 'text/plain');
+							}
+						}}>Download</button
+					>
+				</div>
+			</div>
+		{/if}
+	</div>
+{/snippet}
+
+<div class="block block_marg">
 	<!-- Main container -->
 
 	<div class="columns">
@@ -330,129 +469,12 @@
 			</nav>
 		</div>
 	</div>
+
+	<Tab bind:tabs={tabList} bind:active={active_tab}></Tab>
 </div>
 
-{#snippet tab_query()}
-	{#if data}
-		<Query bind:data={data.query}></Query>
-	{/if}
-{/snippet}
-
-{#snippet tab_headers()}
-	{#if data}
-		<Headers bind:data={data.headers}></Headers>
-	{/if}
-{/snippet}
-
-{#snippet tab_auth()}
-	{#if data}
-		<Auth bind:data={data.auth}></Auth>
-	{/if}
-{/snippet}
-
-{#snippet tab_body()}
-	{#if data}
-		<Body bind:data={data.body}></Body>
-	{/if}
-{/snippet}
-
-{#snippet tab_result()}
-	<div class="field is-grouped is-grouped-multiline">
-		<div class="control">
-			<div class="tags has-addons">
-				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-danger'}"
-					>Status</span
-				>
-				{#if last_response && last_response.status}
-					<span class="tag">{last_response.status}</span>
-				{:else}
-					<span class="tag"></span>
-				{/if}
-			</div>
-		</div>
-
-		<div class="control">
-			<div class="tags has-addons">
-				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}"
-					>Status Text</span
-				>
-				{#if last_response && last_response.statusText}
-					<span class="tag">{last_response.statusText}</span>
-				{:else}
-					<span class="tag"> </span>
-				{/if}
-			</div>
-		</div>
-
-		<div class="control">
-			<div class="tags has-addons">
-				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-dark'}">Ok</span>
-				{#if last_response && last_response.ok}
-					<span class="tag">{last_response.ok}</span>
-				{:else}
-					<span class="tag"></span>
-				{/if}
-			</div>
-		</div>
-
-		<div class="control">
-			<div class="tags has-addons">
-				<span class="tag is-dark">Time</span>
-				{#if time_responde}
-					<span class="tag">{time_responde} ms</span>
-				{:else}
-					<span class="tag"> ms </span>
-				{/if}
-			</div>
-		</div>
-
-		<div class="control">
-			<div class="tags has-addons">
-				<span class="tag {sizeKBResponse > limitSizeResponseView ? 'is-danger' : 'is-dark'}  "
-					>Size</span
-				>
-				{#if sizeKBResponse}
-					<span class="tag">{sizeKBResponse} KB</span>
-				{:else}
-					<span class="tag"> KB </span>
-				{/if}
-			</div>
-		</div>
-	</div>
-	<div>
-		{#if Number(sizeKBResponse) < Number(limitSizeResponseView)}
-			{#if last_response && !last_response.ok && data_result}
-				<JSONView bind:jsonObject={data_result}></JSONView>
-			{:else if response_as == 'json' && data_result}
-				<JSONView bind:jsonObject={data_result}></JSONView>
-			{:else if response_as == 'text' && data_result}
-				<code>
-					{data_result}
-				</code>
-			{:else if response_as == 'datatable' && data_result}
-				<Table bind:RawDataTable={data_result}></Table>
-			{/if}
-		{:else}
-			<div class="container is-max-tablet is-small">
-				<p class="block">
-					The response exceeds {limitSizeResponseView} KB, it cannot be displayed in the view.
-				</p>
-
-				<div class="is-align-content-center">
-					<button
-						class="button is-link is-outlined is-small"
-						onclick={() => {
-							if (response_as == 'json') {
-								downloadFile(JSON.stringify(data_result), 'response.json', 'text/json');
-							} else if (response_as == 'text') {
-								downloadFile(data_result, 'response.txt', 'text/plain');
-							}
-						}}>Download</button
-					>
-				</div>
-			</div>
-		{/if}
-	</div>
-{/snippet}
-
-<Tab bind:tabs={tabList} bind:active={active_tab}></Tab>
+<style>
+	.block_marg {
+		margin: 0.25em;
+	}
+</style>
