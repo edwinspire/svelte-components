@@ -208,7 +208,7 @@
 
 	setTimeout(() => {
 		lang = 'xml';
-	}, 5000);
+	}, 10000);
 	
 </script>
 
@@ -363,7 +363,7 @@
 	left={l}
 	right={r}
 	bind:code
-	lang={lang}
+	bind:lang={lang}
 	showResetButton={true}
 	isReadOnly={false}
 	showFormat={true}

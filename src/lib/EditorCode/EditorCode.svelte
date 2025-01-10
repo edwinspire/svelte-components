@@ -62,6 +62,7 @@
 
 	$inspect(lang).with((type) => {
 		//	console.log('lang >>>>>>>>>>>>> ', type);
+		console.log('Se ha cambiado el lenguaje del Editor: ', $state.snapshot(lang));
 		if (type === 'update') {
 			initializeEditor();
 		}
