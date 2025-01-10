@@ -38,7 +38,7 @@
 		left_items = $bindable([]),
 		right_items = $bindable([]),
 		onclickrow = (c) => {
-			console.trace('onclickrow no implemented.');
+//			console.trace('onclickrow no implemented.');
 		},
 		oneditrow = (e) => {
 			console.trace('oneditrow no implemented.');
@@ -50,10 +50,10 @@
 			ownDeleteRows(d);
 		},
 		onselectrows = (s) => {
-			console.trace('onselectrows no implemented.');
+//			console.trace('onselectrows no implemented.');
 		},
 		onclickcell = (s) => {
-			console.trace('onclickcell no implemented.');
+//			console.trace('onclickcell no implemented.');
 		}
 	} = $props();
 
@@ -207,7 +207,7 @@
 					auto_refresh_by_table_changed_request++;
 				}
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			}
 		});
 	});
@@ -569,7 +569,7 @@
 						data: requestData.params,
 						headers: requestData.headers
 					});
-					console.log('TABLE FetchData: ', res);
+					// console.log('TABLE FetchData: ', res);
 					if (res && res.status == 200) {
 						let data = await res.json();
 
@@ -577,12 +577,12 @@
 							RawDataTable = data;
 							LastFetchResponse = true;
 						} else {
-							console.warn(data);
+							// console.warn(data);
 							RawDataTable = [];
 							LastFetchResponse = false;
 						}
 					} else {
-						console.error(res);
+						// console.error(res);
 						LastFetchResponse = false;
 					}
 					//ProcessRawData();

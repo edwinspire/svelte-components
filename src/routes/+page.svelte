@@ -204,9 +204,12 @@
 
 	let valor = 10;
 
-	setInterval(() => {
-		//	console.log(code);
-	}, 1000);
+	let lang = 'json';
+
+	setTimeout(() => {
+		lang = 'xml';
+	}, 5000);
+	
 </script>
 
 <!-- {#snippet tab1()}
@@ -356,11 +359,11 @@
 	chao
 {/snippet}
 
-<!-- <EditorCode
+ <EditorCode
 	left={l}
 	right={r}
 	bind:code
-	lang={'json'}
+	lang={lang}
 	showResetButton={true}
 	isReadOnly={false}
 	showFormat={true}
@@ -371,10 +374,11 @@
 console.log(code);
 	}}
 ></EditorCode>
- -->
-
+ 
+<!-- 
 <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
+ -->

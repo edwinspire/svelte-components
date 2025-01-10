@@ -1,5 +1,5 @@
 <script>
-	import { onMount , onDestroy} from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { Level } from '../index.js';
 	import { EditorView, basicSetup } from 'codemirror';
 	import { javascript } from '@codemirror/lang-javascript';
@@ -56,17 +56,16 @@
 		{ label: 'Javascript', value: 'js' },
 		{ label: 'JSON', value: 'json' },
 		{ label: 'SQL', value: 'sql' },
-		{ label: 'XML', value: 'xml' }
+		{ label: 'XML', value: 'xml' },
+		{ label: 'Text', value: 'text' }
 	]);
 
-	/*	
 	$inspect(lang).with((type) => {
-		console.log('lang >>>>>>>>>>>>> ', type);
-		if (type === 'update' || type === 'init') {
+		//	console.log('lang >>>>>>>>>>>>> ', type);
+		if (type === 'update') {
 			initializeEditor();
 		}
 	});
-*/
 
 	$inspect(code).with((type) => {
 		//console.log('code >>>>>>>>>>>>> ', type);
@@ -149,7 +148,7 @@
 
 							timeoutParseOnChange = setTimeout(() => {
 								//console.warn(editorView.state.doc.toString());
-																console.log('Hubo cambios > timeoutParseOnChange ');
+								//								console.log('Hubo cambios > timeoutParseOnChange ');
 								//setCodeEditor(internal_code);
 								formatCode();
 
