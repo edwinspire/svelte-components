@@ -62,7 +62,7 @@
 
 	$inspect(lang).with((type) => {
 		//	console.log('lang >>>>>>>>>>>>> ', type);
-		console.log('Se ha cambiado el lenguaje del Editor: ', $state.snapshot(lang));
+		console.log('Se ha cambiado el lenguaje del Editor: ', $state.snapshot(lang), type);
 		if (type === 'update') {
 			initializeEditor();
 		}
@@ -121,24 +121,21 @@
 		}
 	}
 
-	// Función para alternar entre solo lectura y editable
-	function toggleReadOnly() {
-		isReadOnly = !isReadOnly;
-		initializeEditor(); // Reinicializar el editor con la nueva configuración
-	}
-
 	function initializeEditor() {
 		if (elementParent) {
 			if (editorView) editorView.destroy();
 
 			formatCode();
 
+			let languaje_editor = languages[lang] ? languages[lang] : [];
+			console.log('initializeEditor: ', languaje_editor, lang);
+
 			editorView = new EditorView({
 				doc: internal_code,
 				extensions: [
 					basicSetup,
 					isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
-					languages[lang] ? languages[lang] : [],
+					languaje_editor,
 					EditorView.updateListener.of(async (update) => {
 						if (update.changes && update.changedRanges.length > 0) {
 							//	console.log(update.changedRanges);
