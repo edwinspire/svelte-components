@@ -38,7 +38,7 @@
 		left_items = $bindable([]),
 		right_items = $bindable([]),
 		onclickrow = (c) => {
-//			console.trace('onclickrow no implemented.');
+			//			console.trace('onclickrow no implemented.');
 		},
 		oneditrow = (e) => {
 			console.trace('oneditrow no implemented.');
@@ -50,10 +50,10 @@
 			ownDeleteRows(d);
 		},
 		onselectrows = (s) => {
-//			console.trace('onselectrows no implemented.');
+			//			console.trace('onselectrows no implemented.');
 		},
 		onclickcell = (s) => {
-//			console.trace('onclickcell no implemented.');
+			//			console.trace('onclickcell no implemented.');
 		}
 	} = $props();
 
@@ -92,6 +92,19 @@
 		}
 	});
 
+	let idTimeoutSearch;
+
+	$inspect(text_search).with((type) => {
+		//console.log('RawDataTable >>>>>>>>>>>>> ', type);
+		if (type === 'update') {
+			//initializeEditor();
+			clearTimeout(idTimeoutSearch);
+			idTimeoutSearch = setTimeout(() => {
+				handleClickSearch();
+			}, 750);
+		}
+	});
+
 	function requestDataExists() {
 		return requestData && requestData.url && requestData.url.length > 0;
 	}
@@ -124,18 +137,6 @@
 						SetColumns();
 						FilterData();
 					}
-
-					/*
-					if (worker) {
-						let datamsg = {
-							data: RawDataTable,
-							columns: columns,
-							hash_last_data: hash_last_data
-						};
-
-						worker.postMessage(JSON.stringify(datamsg));
-					}
-					*/
 				} catch (error) {
 					console.trace(error);
 				}
@@ -166,38 +167,6 @@
 		requestData.refresh_time = Number(requestData.refresh_time)
 			? Number(requestData.refresh_time)
 			: 4;
-
-		/*
-		worker = new Worker(new URL('./utils/worker_process_rawdata.js', import.meta.url), {
-			type: 'module'
-		});
-
-		if (worker) {
-			// Escuchar mensajes del Worker
-			worker.onmessage = (event) => {
-				//console.log('>>>>>>>>>>> ', event.data);
-
-				hash_last_data = event.data.hash_last_data;
-
-				if (event.data.different_data) {
-					RawDataTable = event.data.data;
-					//console.log('Hay cambos');
-					SetColumns();
-					FilterData();
-				}
-
-				//RawDataTable = u;
-				//console.log(RawDataTable);
-			};
-
-			// Manejar errores del Worker
-			worker.onerror = (error) => {
-				console.error('Error en Worker:', error.message);
-			};
-		} else {
-			console.error('Worker not inicialized.');
-		}
-		*/
 
 		storeChangedTables.subscribe((value) => {
 			//console.log('storeChangedTables.subscribe', value);
@@ -332,21 +301,10 @@
 
 	let hash_last_data = '';
 
-	/*
-	let check_changes_data = setInterval(async () => {
-		onrawDataChanged();
-	}, 1850);
-	*/
-
 	onDestroy(() => {
 		clearInterval(auto_refresh);
-		//	clearInterval(check_changes_data);
-		//	clearInterval(check_changes_data);
-		/*
-		if (worker) {
-			worker.terminate();
-		}
-		*/
+		clearTimeout(idTimeoutSearch);
+		clearTimeout(idTimeoutDataChanged);
 	});
 
 	function ChangeIntervalRefresh() {
@@ -381,13 +339,6 @@
 			}
 			return order === 'desc' ? comparison * -1 : comparison;
 		};
-	}
-
-	function HClickCell(cell, row) {
-		//dispatch('clickrow', { field: cell, data: row });
-		if (onclickcell) {
-			onclickcell({ field: cell, data: row });
-		}
 	}
 
 	function ownDeleteRows(selected_rows) {
@@ -895,10 +846,6 @@
 											{@const Component = internal_columns[item].decorator.component}
 											<Component
 												onclickcell={(e) => {
-													// console.log('HClickCell 1');
-													// e.preventDefault();
-													//HClickCell(item, dataRow);
-													//HClickCell(item, dataRow);
 													if (onclickcell) {
 														onclickcell({
 															field: $state.snapshot(item),
@@ -915,8 +862,6 @@
 												{...internal_columns[item]?.decorator?.props}
 												bind:value={dataRow[item]}
 												onclickcell={(e) => {
-													// console.log('HClickCell 1');
-													// e.preventDefault();
 													if (onclickcell) {
 														onclickcell({
 															field: $state.snapshot(item),
