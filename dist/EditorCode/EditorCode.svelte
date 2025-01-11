@@ -68,10 +68,16 @@
 		}
 	});
 
+	let timeOutonchangeCode;
 	$inspect(code).with((type) => {
 		//console.log('code >>>>>>>>>>>>> ', type);
 		if (type === 'init') {
 			parseCode();
+		} else if (type === 'update') {
+			clearTimeout(timeOutonchangeCode);
+			timeOutonchangeCode = setTimeout(() => {
+				parseCode();
+			}, 500);
 		}
 	});
 
@@ -128,7 +134,7 @@
 			formatCode();
 
 			let languaje_editor = languages[lang] ? languages[lang] : [];
-			console.log('initializeEditor: ', languaje_editor, lang);
+			//console.log('initializeEditor: ', languaje_editor, lang);
 
 			editorView = new EditorView({
 				doc: internal_code,
@@ -210,6 +216,7 @@
 
 	onDestroy(() => {
 		clearTimeout(timeoutParseOnChange);
+		clearTimeout(timeOutonchangeCode);
 	});
 </script>
 

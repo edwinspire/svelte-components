@@ -204,12 +204,17 @@
 
 	let valor = 10;
 
-	let lang = 'json';
+	let lang = 'sql';
 
 	setTimeout(() => {
 		lang = 'xml';
-	}, 10000);
+	}, 30000);
 	
+
+	setTimeout(() => {
+		code = 'SELECT * FROM BBB;';
+	}, 10000);
+
 </script>
 
 <!-- {#snippet tab1()}
