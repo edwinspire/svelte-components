@@ -701,7 +701,7 @@
 				class="button is-small"
 				onclick={() => {
 					if (onnewrow) {
-						onnewrow(e);
+						onnewrow();
 					}
 				}}
 			>
