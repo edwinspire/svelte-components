@@ -63,7 +63,7 @@
 		inputValue = option.name;
 		selectedValue = option.value;
 		showDropdown = false;
-		console.log('option', option);
+	//	console.log('option', option);
 		onselect(option);
 	}
 

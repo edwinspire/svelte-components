@@ -394,7 +394,7 @@
 									running = true;
 									let data_send = {};
 
-									console.log('METHOD: ', method);
+								//	console.log('METHOD: ', method);
 
 									try {
 										if (
