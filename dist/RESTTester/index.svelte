@@ -73,8 +73,32 @@
 					method: $state.snapshot(method)
 				});
 			}, 750);
+		} else if (type === 'update') {
+			defaultValues();
 		}
 	});
+
+	function defaultValues() {
+		if (data == null) {
+			data = {};
+		}
+
+		if (data && data.auth == null) {
+			data.auth = {};
+		}
+
+		if (data && data.body == null) {
+			data.body = {};
+		}
+
+		if (data && data.query == null) {
+			data.query = {};
+		}
+
+		if (data && data.headers == null) {
+			data.headers = {};
+		}
+	}
 
 	function getSizeJSON(data) {
 		// Convertimos el JSON a una cadena
@@ -170,6 +194,8 @@
 
 		return result;
 	}
+
+	onMount(() => {});
 
 	onDestroy(() => {
 		clearTimeout(timeoutChangeData);

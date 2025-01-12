@@ -29,7 +29,6 @@
 							if (!item.disabled) {
 								active = i;
 								// Solo dispara cuando no está deshabilitado
-								console.log({ label: item.label, index: i });
 								if (onselect) {
 									onselect({ label: item.label, index: i });
 								}

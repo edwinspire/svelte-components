@@ -1,15 +1,11 @@
 <script>
-	'use strict';
-	//import { createEventDispatcher } from 'svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import uFetch from '@edwinspire/universal-fetch';
 	import { Auto } from './Column/DefaultTypes.js';
 	import { storeChangedTables } from '../class/websocket.js';
-	//import { sha256 } from '../class/sha.js';
 	import Level from '../Level/Level.svelte';
 	import { ExportTableToHTML, ExportTableToXlsx } from './utils/export_data.js';
 	import { checkIsArray, ProcessDataTable } from './utils/utils.js';
-	//	import workerUrl from './utils/worker_process_rawdata.js';
 
 	//TODO Habilitar mostrar u ocultar columnas
 	//TODO Fijar encabezado
@@ -101,7 +97,7 @@
 			clearTimeout(idTimeoutSearch);
 			idTimeoutSearch = setTimeout(() => {
 				handleClickSearch();
-			}, 750);
+			}, 500);
 		}
 	});
 
@@ -140,7 +136,7 @@
 				} catch (error) {
 					console.trace(error);
 				}
-			}, 750);
+			}, 500);
 		}
 	}
 

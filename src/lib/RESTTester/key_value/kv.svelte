@@ -4,7 +4,6 @@
 
 	let { data = $bindable() } = $props();
 
-	//export let data = [];
 	let columns = {
 		enabled: {
 			label: 'Enabled',
@@ -24,14 +23,7 @@
 		}
 	};
 
-	/*
-	$inspect(data).with((type) => {
-		console.log('lang >>>>>>>>>>>>> ', type);
-		if (type === 'update' || type === 'init') {
-			
-		}
-	});
-*/
+
 	function addRowEmpty() {
 		//console.log('addRowEmpty', data);
 
@@ -64,7 +56,6 @@
 	ShowDeleteButton={true}
 
 	onnewrow={() => {
-		//data.push({ enabled: true, key: '', value: '' });
 		addRowEmpty();
 	}}
 ></Table>
