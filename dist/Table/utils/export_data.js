@@ -135,7 +135,7 @@ export const ExportTableToXlsx = (filteredData, columns, fileNameExport) => {
         // let filteredData = GetSelectedRows();
         let ExceedsCharacterLimitPerCell = false;
         let FormatedData = FormatDataToExport(filteredData, columns, 32767);
-        console.log('FormatedData', FormatedData, XLSX);
+      //  console.log('FormatedData', FormatedData, XLSX);
 
         if (FormatedData && FormatedData.length > 0) {
             /* Create a worksheet */

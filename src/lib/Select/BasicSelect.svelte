@@ -4,7 +4,7 @@
 		options = $bindable([{ id: 'TEST', value: `TEST`, enabled: true }]),
 		css_class = $bindable(' is-small '),
 		onselect = (s) => {
-			console.log('onselect not implemented');
+		//	console.log('onselect not implemented');
 		}
 	} = $props();
 
