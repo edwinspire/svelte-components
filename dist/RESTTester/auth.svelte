@@ -21,19 +21,19 @@
 	//$: data, defaultValues();
 
 	function defaultValues() {
-		if (!data) {
+		if (data == null) {
 			data = { basic: { username: '', passsword: '' }, bearer: { token: '' } };
 		}
 
-		if (data && !data.basic) {
+		if (data && data.basic == null) {
 			data.basic = { username: '', passsword: '' };
 		}
 
-		if (data && !data.bearer) {
+		if (data && data.bearer == null) {
 			data.bearer = { token: '' };
 		}
 
-		if (data && !data.selection) {
+		if (data && data.selection == null) {
 			data.selection = 0;
 		}
 	}
@@ -57,7 +57,7 @@
 {/snippet}
 
 {#snippet tab_basic()}
-	{#if data }
+	{#if data}
 		<div>
 			<div class="field">
 				<!-- svelte-ignore a11y_label_has_associated_control -->
@@ -100,7 +100,7 @@
 {/snippet}
 
 {#snippet tab_bearer()}
-	{#if data }
+	{#if data != null}
 		<div>
 			<div class="field">
 				<!-- svelte-ignore a11y_label_has_associated_control -->
@@ -116,6 +116,6 @@
 	{/if}
 {/snippet}
 
-{#if data}
+{#if data != null}
 	<Tab bind:tabs={tabList} bind:active={data.selection}></Tab>
 {/if}

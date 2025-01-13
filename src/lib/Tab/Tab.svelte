@@ -57,7 +57,7 @@
 {#if Array.isArray(tabs)}
 	{#each tabs as element, i}
 		{#if active == i}
-			{#if !element.disabled}
+			{#if element && element.component && !element.disabled}
 				{@render element.component?.()}
 			{/if}
 		{/if}

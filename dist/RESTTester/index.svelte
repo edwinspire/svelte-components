@@ -8,14 +8,6 @@
 	import uFetch from '@edwinspire/universal-fetch';
 	import JSONView from '../JSONView/index.svelte';
 
-	/*
-	export let url;
-	export let method = 'GET';
-	export let data = { query: [], headers: [], auth: {}, body: {} };
-	export let limitSizeResponseView = 20000;
-	export let methodDisabled = false;
-*/
-
 	let {
 		url = $bindable(),
 		method = $bindable('GET'),
@@ -63,7 +55,7 @@
 	let timeoutChangeData;
 
 	$inspect([data, url, method]).with((type) => {
-		//console.log('>>>>>>>>>>>>> ', type);
+		console.log(' inspect >>>>>>>>>>>>> ', type, data);
 		if (type === 'update') {
 			clearTimeout(timeoutChangeData);
 			timeoutChangeData = setTimeout(() => {
@@ -84,11 +76,19 @@
 		}
 
 		if (data && data.auth == null) {
-			data.auth = {};
+			data.auth = { selection: 0 };
+		}
+
+		if (data && data.auth && data.auth.selection == null) {
+			data.auth.selection = 0;
 		}
 
 		if (data && data.body == null) {
-			data.body = {};
+			data.body = { selection: 0 };
+		}
+
+		if (data && data.body && data.body.selection == null) {
+			data.body.selection = 0;
 		}
 
 		if (data && data.query == null) {
@@ -195,7 +195,9 @@
 		return result;
 	}
 
-	onMount(() => {});
+	onMount(() => {
+		defaultValues();
+	});
 
 	onDestroy(() => {
 		clearTimeout(timeoutChangeData);
@@ -209,13 +211,13 @@
 {/snippet}
 
 {#snippet tab_headers()}
-	{#if data}
+	{#if data != null}
 		<Headers bind:data={data.headers}></Headers>
 	{/if}
 {/snippet}
 
 {#snippet tab_auth()}
-	{#if data}
+	{#if data != null}
 		<Auth bind:data={data.auth}></Auth>
 	{/if}
 {/snippet}
@@ -394,7 +396,7 @@
 									running = true;
 									let data_send = {};
 
-								//	console.log('METHOD: ', method);
+									//	console.log('METHOD: ', method);
 
 									try {
 										if (

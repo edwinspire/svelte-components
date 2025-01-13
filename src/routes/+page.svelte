@@ -295,6 +295,7 @@
 
 
  -->
+<!-- 
  <Table
 	onnewrow={() => {
 		console.log(dataTest);
@@ -333,8 +334,9 @@
 		</button>
 	{/snippet}
 </Table>
- 
-<!-- 
+ --> 
+
+ <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
 
 <!-- <Level left={[chao, MPrincipal, B1]} right={[r1]}>
@@ -362,7 +364,9 @@
 
 {#snippet r()}
 	chao
-{/snippet}<!-- 
+{/snippet}
+
+<!-- 
 
  <EditorCode
 	left={l}
@@ -380,10 +384,10 @@ console.log(code);
 	}}
 ></EditorCode>
   -->
-<!-- 
+ 
 <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
- -->
+ 

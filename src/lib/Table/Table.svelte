@@ -81,7 +81,7 @@
 	let idTimeoutDataChanged;
 
 	$effect(() => {
-		console.log('>>>>>>>>>> ', RawDataTable);
+		//console.log('>>>>>>>>>> ', RawDataTable);
 		if (RawDataTable) {
 			onrawDataChanged();
 		}
@@ -128,7 +128,7 @@
 
 					if (result_process.different_data) {
 						RawDataTable = result_process.data;
-						console.log('Hay cambos');
+						//console.log('Hay cambos');
 						SetColumns();
 						FilterData();
 					}
