@@ -85,8 +85,13 @@
 		if (RawDataTable) {
 			onrawDataChanged();
 		}
+
+		if (text_search) {
+			handleClickSearch();
+		}
 	});
 
+	/*
 	let idTimeoutSearch;
 
 	$inspect(text_search).with((type) => {
@@ -99,6 +104,16 @@
 			}, 500);
 		}
 	});
+*/
+
+	/*
+	$effect(() => {
+		//console.log('>>>>>>>>>> ', RawDataTable);
+		if (RawDataTable) {
+			handleClickSearch();
+		}
+	});
+	*/
 
 	function requestDataExists() {
 		return requestData && requestData.url && requestData.url.length > 0;
@@ -298,7 +313,7 @@
 
 	onDestroy(() => {
 		clearInterval(auto_refresh);
-		clearTimeout(idTimeoutSearch);
+		//clearTimeout(idTimeoutSearch);
 		clearTimeout(idTimeoutDataChanged);
 	});
 
@@ -521,7 +536,7 @@
 
 						if (checkIsArray(data)) {
 							RawDataTable = data;
-							console.log('GetDataTable -> RawDataTable: > ', RawDataTable);
+						//	console.log('GetDataTable -> RawDataTable: > ', RawDataTable);
 
 							LastFetchResponse = true;
 						} else {

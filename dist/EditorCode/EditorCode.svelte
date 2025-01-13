@@ -68,18 +68,11 @@
 		}
 	});
 
-	let timeOutonchangeCode;
-	$inspect(code).with((type) => {
-		//console.log('code >>>>>>>>>>>>> ', type);
-		if (type === 'init') {
-			parseCode();
-		} else if (type === 'update') {
-			clearTimeout(timeOutonchangeCode);
-			timeOutonchangeCode = setTimeout(() => {
-				parseCode();
-			}, 500);
-		}
+
+	$effect(() => {
+		parseCode();
 	});
+
 
 	export function setCode(new_code) {
 		code = new_code;
@@ -216,7 +209,7 @@
 
 	onDestroy(() => {
 		clearTimeout(timeoutParseOnChange);
-		clearTimeout(timeOutonchangeCode);
+		//clearTimeout(timeOutonchangeCode);
 	});
 </script>
 
