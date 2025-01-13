@@ -3,7 +3,10 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+    build: {
+		sourcemap: true // Facilita la depuración
+	},
 	optimizeDeps: {
-        exclude: ["codemirror", "@codemirror/lang-javascript", "@codemirror/lang-json", "@codemirror/lang-xml", "@codemirror/lang-sql", "@codemirror/state"],
+        exclude: [],
     },
 });

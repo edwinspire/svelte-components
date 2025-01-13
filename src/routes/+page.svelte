@@ -295,7 +295,7 @@
 
 
  -->
-<!-- <Table
+ <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -306,7 +306,7 @@
 		console.log(x);
 	}}
 	{columns}
-	RawDataTable={dataTest}
+ requestData={requestData}
 	ShowDeleteButton={true}
 	ShowNewButton={true}
 	ShowEditButton={true}
@@ -333,7 +333,7 @@
 		</button>
 	{/snippet}
 </Table>
- -->
+ 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
 
@@ -362,7 +362,7 @@
 
 {#snippet r()}
 	chao
-{/snippet}
+{/snippet}<!-- 
 
  <EditorCode
 	left={l}
@@ -379,7 +379,7 @@
 console.log(code);
 	}}
 ></EditorCode>
- 
+  -->
 <!-- 
 <RESTTester
 	onchange={(data) => {

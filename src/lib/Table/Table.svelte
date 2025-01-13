@@ -80,10 +80,9 @@
 	//let worker;
 	let idTimeoutDataChanged;
 
-	$inspect(RawDataTable).with((type) => {
-		//console.log('RawDataTable >>>>>>>>>>>>> ', type);
-		if (type === 'update' || type === 'init') {
-			//initializeEditor();
+	$effect(() => {
+		console.log('>>>>>>>>>> ', RawDataTable);
+		if (RawDataTable) {
 			onrawDataChanged();
 		}
 	});
@@ -129,7 +128,7 @@
 
 					if (result_process.different_data) {
 						RawDataTable = result_process.data;
-						//console.log('Hay cambos');
+						console.log('Hay cambos');
 						SetColumns();
 						FilterData();
 					}
@@ -522,6 +521,8 @@
 
 						if (checkIsArray(data)) {
 							RawDataTable = data;
+							console.log('GetDataTable -> RawDataTable: > ', RawDataTable);
+
 							LastFetchResponse = true;
 						} else {
 							// console.warn(data);
