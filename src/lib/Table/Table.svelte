@@ -86,20 +86,8 @@
 			onrawDataChanged();
 		}
 
-		if (text_search) {
-			handleClickSearch();
-		}
 	});
 
-
-	/*
-	$effect(() => {
-		//console.log('>>>>>>>>>> ', RawDataTable);
-		if (RawDataTable) {
-			handleClickSearch();
-		}
-	});
-	*/
 
 	function requestDataExists() {
 		return requestData && requestData.url && requestData.url.length > 0;
@@ -561,6 +549,7 @@
 					type="text"
 					placeholder="Search"
 					bind:value={text_search}
+					onchange={handleClickSearch}
 				/>
 			</p>
 			<p class="control">
