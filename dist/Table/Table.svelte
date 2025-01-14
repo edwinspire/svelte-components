@@ -91,20 +91,6 @@
 		}
 	});
 
-	/*
-	let idTimeoutSearch;
-
-	$inspect(text_search).with((type) => {
-		//console.log('RawDataTable >>>>>>>>>>>>> ', type);
-		if (type === 'update') {
-			//initializeEditor();
-			clearTimeout(idTimeoutSearch);
-			idTimeoutSearch = setTimeout(() => {
-				handleClickSearch();
-			}, 500);
-		}
-	});
-*/
 
 	/*
 	$effect(() => {

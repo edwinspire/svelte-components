@@ -4,7 +4,6 @@
 	import { EditorView, basicSetup } from 'codemirror';
 	import { javascript } from '@codemirror/lang-javascript';
 	import { json } from '@codemirror/lang-json';
-	//	import { html } from '@codemirror/lang-html';
 	import { xml } from '@codemirror/lang-xml';
 	import { sql } from '@codemirror/lang-sql';
 	import { EditorState } from '@codemirror/state';
@@ -68,11 +67,11 @@
 		}
 	});
 
+	let timeOutonchangeCode;
 
 	$effect(() => {
 		parseCode();
 	});
-
 
 	export function setCode(new_code) {
 		code = new_code;
@@ -209,7 +208,7 @@
 
 	onDestroy(() => {
 		clearTimeout(timeoutParseOnChange);
-		//clearTimeout(timeOutonchangeCode);
+		clearTimeout(timeOutonchangeCode);
 	});
 </script>
 

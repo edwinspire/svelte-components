@@ -112,7 +112,7 @@
 	];
 
 	let columns = {
-		createdAt: {
+		fecha: {
 			label: 'FECHA',
 			decorator: {
 				component: ColumnTypes.DateTime,
@@ -209,12 +209,10 @@
 	setTimeout(() => {
 		lang = 'xml';
 	}, 30000);
-	
 
 	setTimeout(() => {
 		code = 'SELECT * FROM BBB;';
 	}, 10000);
-
 </script>
 
 <!-- {#snippet tab1()}
@@ -295,8 +293,8 @@
 
 
  -->
- 
- <Table
+
+<Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -307,7 +305,7 @@
 		console.log(x);
 	}}
 	{columns}
- requestData={requestData}
+	RawDataTable={dataTest}
 	ShowDeleteButton={true}
 	ShowNewButton={true}
 	ShowEditButton={true}
@@ -334,9 +332,8 @@
 		</button>
 	{/snippet}
 </Table>
- 
 
- <!-- 
+<!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
 
 <!-- <Level left={[chao, MPrincipal, B1]} right={[r1]}>
@@ -365,7 +362,7 @@
 {#snippet r()}
 	chao
 {/snippet}
-
+<!-- 
  <EditorCode
 	left={l}
 	right={r}
@@ -381,11 +378,11 @@
 console.log(code);
 	}}
 ></EditorCode>
-  
- <!-- 
+  -->
+<!-- 
 <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
-  -->
+   -->
