@@ -155,8 +155,9 @@
 										} else {
 											code = internal_code;
 										}
-										onchange($state.snapshot({ lang: lang, code: code }));
 										parseCode();
+										onchange($state.snapshot({ lang: lang, code: code }));
+										
 									} catch (error) {
 										console.log(error);
 									}
