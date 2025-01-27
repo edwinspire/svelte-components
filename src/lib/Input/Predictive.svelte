@@ -1,31 +1,4 @@
-<!-- App.svelte -->
 <script>
-	//	import { createEventDispatcher } from 'svelte';
-	//	const dispatch = createEventDispatcher();
-	/*
-	export let options = [
-		{ name: 'Manzana', value: '1' },
-		{ name: 'Durazno', value: '2' },
-		{ name: 'Limón', value: '3' },
-		{ name: 'Mandarina', value: '4' },
-		{ name: 'Naranja', value: '5' },
-		{ name: 'Toronja', value: '6' },
-		{ name: 'Fresa', value: '7' },
-		{ name: 'Plátano', value: '8' },
-		{ name: 'kiwi', value: '9' },
-		{ name: 'Maracuyá', value: '10' },
-		{ name: 'Chirimoya', value: '11' },
-		{ name: 'Babaco', value: '12' },
-		{ name: 'Aguacate', value: '13' },
-		{ name: 'Pera', value: '14' },
-		{ name: 'Mispero', value: '15' },
-		{ name: 'Guaba', value: '16' },
-		{ name: 'Guanabana', value: '17' },
-		{ name: 'Mora', value: '18' },
-		{ name: 'Taxo', value: '19' },
-		{ name: 'Tamarindo', value: '20' }
-	];
-*/
 	let {
 		options = $bindable([
 			{ name: 'Manzana', value: '1' },
@@ -43,13 +16,6 @@
 	let showDropdown = $state(false);
 	let inputValue = $state('');
 
-	//	export let label = '';
-	/*
-	export let selectedValue = '';
-	export let classLabel = 'is-normal';
-	export let classInput = '';
-	export let placeholder = 'Type to see options';
-*/
 
 	function handleInput(event) {
 		inputValue = event.target.value;

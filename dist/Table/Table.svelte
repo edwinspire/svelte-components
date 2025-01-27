@@ -405,7 +405,7 @@
 					return false;
 				}
 			});
-			console.log('>>>> TempData >>>', text_search, TempData);
+			//console.log('>>>> TempData >>>', text_search, TempData);
 			//TempData = RawDataTable;
 		} else {
 			TempData = RawDataTable;
