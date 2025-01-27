@@ -405,6 +405,8 @@
 					return false;
 				}
 			});
+			console.log('>>>> TempData >>>', text_search, TempData);
+			//TempData = RawDataTable;
 		} else {
 			TempData = RawDataTable;
 		}
@@ -416,7 +418,7 @@
 	}
 
 	function Pagination(rows) {
-		//console.log('Pagination 1 >>>>>>>> ', rows);
+		// console.log('Pagination 1 >>>>>>>> ', rows);
 
 		if (ColumnSort) {
 			if (orderASC) {
@@ -439,7 +441,7 @@
 	}
 
 	function SelectPage() {
-		let tmpdata = paginatedData[PageSelected - 1];
+		let tmpdata = paginatedData[PageSelected - 1] ?? [];
 
 		if (tmpdata) {
 			DataTable = tmpdata.filter((ev) => {
