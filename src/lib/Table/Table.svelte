@@ -85,9 +85,7 @@
 		if (RawDataTable) {
 			onrawDataChanged();
 		}
-
 	});
-
 
 	function requestDataExists() {
 		return requestData && requestData.url && requestData.url.length > 0;
@@ -339,7 +337,7 @@
 		try {
 			let filteredData = GetSelectedRows();
 			if (filteredData && filteredData.length > 0) {
-				ondeleterow({ rows: filteredData });
+				ondeleterow({ rows: $state.snapshot(filteredData) });
 			} else {
 				alert('Select the rows to delete.');
 				SelectionType = 2;
@@ -407,6 +405,8 @@
 					return false;
 				}
 			});
+			console.log('>>>> TempData >>>', text_search, TempData);
+			//TempData = RawDataTable;
 		} else {
 			TempData = RawDataTable;
 		}
@@ -418,7 +418,7 @@
 	}
 
 	function Pagination(rows) {
-		//console.log('Pagination 1 >>>>>>>> ', rows);
+		// console.log('Pagination 1 >>>>>>>> ', rows);
 
 		if (ColumnSort) {
 			if (orderASC) {
@@ -441,7 +441,7 @@
 	}
 
 	function SelectPage() {
-		let tmpdata = paginatedData[PageSelected - 1];
+		let tmpdata = paginatedData[PageSelected - 1] ?? [];
 
 		if (tmpdata) {
 			DataTable = tmpdata.filter((ev) => {
@@ -510,7 +510,7 @@
 
 						if (checkIsArray(data)) {
 							RawDataTable = data;
-						//	console.log('GetDataTable -> RawDataTable: > ', RawDataTable);
+							//	console.log('GetDataTable -> RawDataTable: > ', RawDataTable);
 
 							LastFetchResponse = true;
 						} else {

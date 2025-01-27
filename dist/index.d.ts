@@ -15,4 +15,5 @@ import { sha256 } from './class/sha.js';
 import RESTTester from './RESTTester/index.svelte';
 import JSONView from './JSONView/index.svelte';
 import { copyTextToClipboard } from './class/browserClipboard.js';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard };
+import MenuMega from './MenuMega/index.svelte';
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega };

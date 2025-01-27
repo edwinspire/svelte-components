@@ -14,6 +14,7 @@ import BasicSelect from './Select/BasicSelect.svelte';
 import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
 import RESTTester from './RESTTester/index.svelte';
 import JSONView from './JSONView/index.svelte';
+import MenuMega from './MenuMega/index.svelte';
 
 import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 import { sha256 } from './class/sha.js';
@@ -37,6 +38,7 @@ export {
 	sha256,
 	RESTTester,
 	JSONView,
-	copyTextToClipboard
+	copyTextToClipboard,
+	MenuMega
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";

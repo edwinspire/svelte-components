@@ -11,7 +11,7 @@
 		PredictiveInput,
 		EditorCode,
 		Tab,
-		RESTTester
+		RESTTester, MenuMega
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -294,7 +294,7 @@
 
  -->
 
-<Table
+ <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -332,7 +332,7 @@
 		</button>
 	{/snippet}
 </Table>
-
+ 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
 
@@ -386,3 +386,6 @@ console.log(code);
 	}}
 ></RESTTester>
    -->
+
+
+   <!-- <MenuMega></MenuMega> -->
