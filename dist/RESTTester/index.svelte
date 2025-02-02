@@ -55,7 +55,7 @@
 	let timeoutChangeData;
 
 	$inspect([data, url, method]).with((type) => {
-		console.log(' inspect >>>>>>>>>>>>> ', type, data);
+	//	console.log(' inspect >>>>>>>>>>>>> ', type, data);
 		if (type === 'update') {
 			clearTimeout(timeoutChangeData);
 			timeoutChangeData = setTimeout(() => {

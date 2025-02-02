@@ -26,22 +26,12 @@
 		}
 	}
 
-	/*
-	$inspect(value).with((type) => {
-		//console.log('>>>>>>>>>>>>> ', type);
-		if (type === 'update' || type === 'init') {
-			fn_DC01();
-		}
-		if (editInline) {
-			console.warn('editInline on DateTime isnt enabled.');
-		}
-	});
-*/
+
 </script>
 
 <td onclick={onclick_cell} class:has-text-danger={DC001}>
 	{#if DC001}
-		<span class="icon-text">
+		<span class="icon-text" title="Incorrect date">
 			<span class="icon">
 				<i class="fas fa-exclamation-triangle"></i>
 			</span>

@@ -537,195 +537,203 @@
 	}
 </script>
 
-<Level
-	left={left_items}
-	right={[right_08, right_07, right_06, right_05, right_04, right_03, right_02, right_01]}
->
-	{#snippet right_01()}
-		<div class="field has-addons">
-			<p class="control">
-				<input
-					class="input size_search is-small"
-					type="text"
-					placeholder="Search"
-					bind:value={text_search}
-					onchange={handleClickSearch}
-				/>
-			</p>
-			<p class="control">
-				<button aria-label="close" class="button is-small" onclick={handleClickSearch}>
-					<span class="icon is-small">
-						<i class="fas fa-search"></i>
+{#snippet t_refresh()}
+	{#if requestData && requestData.url}
+		<button class="button is-small" onclick={ChangeIntervalRefresh} title="Refresh time">
+			{#if loading}
+				<span class="icon has-text-info"><i class="fas fa-spinner fa-pulse"></i></span>
+			{:else if LastFetchResponse}
+				<span class="icon"><i class="fas fa-hourglass-half"></i></span>
+			{:else}
+				<span class="icon has-text-danger"><i class="fas fa-exclamation-triangle"></i></span>
+			{/if}
+			<span>{timeRemainingToRefresh}s</span>
+		</button>
+	{/if}
+{/snippet}
+
+{#snippet t_search()}
+	<div class="field has-addons">
+		<p class="control">
+			<input
+				class="input size_search is-small"
+				type="text"
+				placeholder="Search"
+				bind:value={text_search}
+				onchange={handleClickSearch}
+			/>
+		</p>
+		<p class="control">
+			<button aria-label="close" class="button is-small" title="Search" onclick={handleClickSearch}>
+				<span class="icon is-small">
+					<i class="fas fa-search"></i>
+				</span>
+			</button>
+		</p>
+	</div>
+{/snippet}
+
+{#snippet t_export_excel()}
+	{#if ShowExportButton}
+		<button
+			aria-label="close"
+			class="button is-small"
+			onclick={ExportToExcel}
+			title="Export to Excel"
+		>
+			<span class="icon">
+				<i class={iconExport}></i>
+			</span>
+		</button>
+	{/if}
+{/snippet}
+
+{#snippet t_export_html()}
+	{#if ShowExportButton}
+		<button
+			aria-label="close"
+			class="button is-small"
+			onclick={ExportToHTML}
+			title="Export to Html"
+		>
+			<span class="icon">
+				<i class="fa-solid fa-download"></i>
+			</span>
+		</button>
+	{/if}
+{/snippet}
+
+{#snippet t_selecttion_type()}
+	{#if ShowSelectionButton}
+		<div class="dropdown is-hoverable is-right" title="Selection type">
+			<div class="dropdown-trigger">
+				<button
+					aria-label="close"
+					class="button is-small"
+					aria-haspopup="true"
+					aria-controls="dropdown-menu"
+				>
+					<span class="icon">
+						<i class="far fa-list-alt"></i>
 					</span>
 				</button>
-			</p>
-		</div>
-	{/snippet}
-
-	{#snippet right_02()}
-		{#if ShowExportButton}
-			<button
-				aria-label="close"
-				class="button is-small"
-				onclick={ExportToExcel}
-				title="Export to Excel"
-			>
-				<span class="icon">
-					<i class={iconExport}></i>
-				</span>
-			</button>
-			<button
-				aria-label="close"
-				class="button is-small"
-				onclick={ExportToHTML}
-				title="Export to Html"
-			>
-				<span class="icon">
-					<i class="fa-solid fa-download"></i>
-				</span>
-			</button>
-		{/if}
-	{/snippet}
-
-	{#snippet right_03()}
-		{#if ShowSelectionButton}
-			<div class="dropdown is-hoverable is-right" title="Selection type">
-				<div class="dropdown-trigger">
-					<button
-						aria-label="close"
-						class="button is-small"
-						aria-haspopup="true"
-						aria-controls="dropdown-menu"
-					>
+			</div>
+			<div class="dropdown-menu" role="menu">
+				<div class="dropdown-content">
+					<!-- svelte-ignore a11y_missing_attribute -->
+					<a class="dropdown-item is-size-7">
+						<input
+							class="check_margin"
+							type="radio"
+							name="selection_type"
+							value="1"
+							checked={SelectionType == 1 ? true : false}
+							onchange={() => {
+								SelectionType = 1;
+							}}
+						/>
 						<span class="icon">
-							<i class="far fa-list-alt"></i>
+							<i class="fas fa-check"></i>
 						</span>
-					</button>
-				</div>
-				<div class="dropdown-menu" role="menu">
-					<div class="dropdown-content">
-						<!-- svelte-ignore a11y_missing_attribute -->
-						<a class="dropdown-item is-size-7">
-							<input
-								class="check_margin"
-								type="radio"
-								name="selection_type"
-								value="1"
-								checked={SelectionType == 1 ? true : false}
-								onchange={() => {
-									SelectionType = 1;
-								}}
-							/>
-							<span class="icon">
-								<i class="fas fa-check"></i>
-							</span>
-							<span>Simple</span>
-						</a>
+						<span>Simple</span>
+					</a>
 
-						<!-- svelte-ignore a11y_missing_attribute -->
-						<a class="dropdown-item is-size-7">
-							<input
-								class="check_margin"
-								type="radio"
-								name="selection_type"
-								value="2"
-								checked={SelectionType == 2 ? true : false}
-								onchange={() => {
-									SelectionType = 2;
-								}}
-							/>
-							<span class="icon">
-								<i class="fas fa-check-double"></i>
-							</span>
-							<span>Multiple</span>
-						</a>
-						<hr class="dropdown-divider" />
+					<!-- svelte-ignore a11y_missing_attribute -->
+					<a class="dropdown-item is-size-7">
+						<input
+							class="check_margin"
+							type="radio"
+							name="selection_type"
+							value="2"
+							checked={SelectionType == 2 ? true : false}
+							onchange={() => {
+								SelectionType = 2;
+							}}
+						/>
+						<span class="icon">
+							<i class="fas fa-check-double"></i>
+						</span>
+						<span>Multiple</span>
+					</a>
+					<hr class="dropdown-divider" />
 
-						<!-- svelte-ignore a11y_missing_attribute -->
-						<a class="dropdown-item is-size-7">
-							<input
-								class="check_margin"
-								type="radio"
-								name="selection_type"
-								value="0"
-								checked={SelectionType == 0 ? true : false}
-								onchange={() => {
-									SelectionType = 0;
-								}}
-							/>
+					<!-- svelte-ignore a11y_missing_attribute -->
+					<a class="dropdown-item is-size-7">
+						<input
+							class="check_margin"
+							type="radio"
+							name="selection_type"
+							value="0"
+							checked={SelectionType == 0 ? true : false}
+							onchange={() => {
+								SelectionType = 0;
+							}}
+						/>
 
-							<span class="icon">
-								<i class="fas fa-ban"></i>
-							</span>
-							<span>None</span>
-						</a>
-					</div>
+						<span class="icon">
+							<i class="fas fa-ban"></i>
+						</span>
+						<span>None</span>
+					</a>
 				</div>
 			</div>
-		{/if}
-	{/snippet}
+		</div>
+	{/if}
+{/snippet}
 
-	{#snippet right_04()}
-		{#if ShowDeleteButton}
-			<button aria-label="close" class="button is-small" title="Delete row" onclick={HClickDelete}>
-				<span class="icon">
-					<i class={iconDeleteRow}></i>
-				</span>
-			</button>
-		{/if}
-	{/snippet}
+{#snippet t_delete()}
+	{#if ShowDeleteButton}
+		<button aria-label="close" class="button is-small" title="Delete row" onclick={HClickDelete}>
+			<span class="icon">
+				<i class={iconDeleteRow}></i>
+			</span>
+		</button>
+	{/if}
+{/snippet}
 
-	{#snippet right_05()}
-		{#if ShowEditButton}
-			<button aria-label="close" class="button is-small" onclick={HandleOnClickEdit}>
-				<span class="icon">
-					<i class="far fa-edit"></i>
-				</span>
-			</button>
-		{/if}
-	{/snippet}
+{#snippet t_edit()}
+	{#if ShowEditButton}
+		<button aria-label="close" class="button is-small" title="Edit row" onclick={HandleOnClickEdit}>
+			<span class="icon">
+				<i class="far fa-edit"></i>
+			</span>
+		</button>
+	{/if}
+{/snippet}
 
-	{#snippet right_06()}
-		{#if ShowNewButton}
-			<button
-				aria-label="close"
-				class="button is-small"
-				onclick={() => {
-					if (onnewrow) {
-						onnewrow();
-					}
-				}}
-			>
-				<span class="icon">
-					<i class="far fa-file"></i>
-				</span>
-			</button>
-		{/if}
-	{/snippet}
+{#snippet t_new()}
+	{#if ShowNewButton}
+		<button
+			aria-label="close"
+			class="button is-small"
+			title="New row"
+			onclick={() => {
+				if (onnewrow) {
+					onnewrow();
+				}
+			}}
+		>
+			<span class="icon">
+				<i class="far fa-file"></i>
+			</span>
+		</button>
+	{/if}
+{/snippet}
 
-	{#snippet right_07()}
-		{#if requestData && requestData.url}
-			<button class="button is-small" onclick={ChangeIntervalRefresh}>
-				{#if loading}
-					<span class="icon has-text-info"><i class="fas fa-spinner fa-pulse"></i></span>
-				{:else if LastFetchResponse}
-					<span class="icon"><i class="fas fa-hourglass-half"></i></span>
-				{:else}
-					<span class="icon has-text-danger"><i class="fas fa-exclamation-triangle"></i></span>
-				{/if}
-				<span>{timeRemainingToRefresh}s</span>
-			</button>
-		{/if}
-	{/snippet}
-
-	{#snippet right_08()}
-		{#if checkIsArray(right_items)}
-			{#each right_items as r_item}
-				<span class="slot_padding">{@render r_item?.()}</span>
-			{/each}
-		{/if}
-	{/snippet}
-</Level>
+<Level
+	left={left_items}
+	right={[
+		...right_items,
+		t_refresh,
+		t_new,
+		t_edit,
+		t_delete,
+		t_selecttion_type,
+		t_export_excel,
+		t_export_html,
+		t_search
+	]}
+></Level>
 
 {#if DataTable}
 	<div class="table-container is-size-7">

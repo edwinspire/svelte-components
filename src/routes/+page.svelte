@@ -11,7 +11,8 @@
 		PredictiveInput,
 		EditorCode,
 		Tab,
-		RESTTester, MenuMega
+		RESTTester,
+		MenuMega
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -93,9 +94,9 @@
 	};
 
 	let dataTest = [
-		{ checsk: false, name: 'name', datas: 'datas', fecha: 'fecha', fecha3: 233 },
-		{ checsk: false, name: '33112321', datas: 'sdasdsad', fecha: '2024-08-13T16:55:13' },
-		{ checsk: true, name: '232322', datas: 'this es field test', fecha: new Date().toISOString() },
+		{ checsk: false, name: 'name', datas: 'datas', fecha: 'fecha incorrecta', fecha3: 233 },
+		{ checsk: false, name: '33112321', datas: 'Fecha en texto', fecha: '2024-08-13T16:55:13' },
+		{ checsk: true, name: '232322', datas: 'Fecha en toISOString', fecha: new Date().toISOString() },
 		{
 			checsk: true,
 			name: 'kkhkññkjjhmamá',
@@ -104,7 +105,7 @@
 		},
 		{
 			checsk: true,
-			name: 'ddfff',
+			name: 'fecha en formtao texto',
 			datas: '12.988',
 			fecha: '2024-08-13T16:22:02.449',
 			fecha3: 'Ultima fila.'
@@ -294,7 +295,7 @@
 
  -->
 
- <Table
+<Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -310,8 +311,45 @@
 	ShowNewButton={true}
 	ShowEditButton={true}
 	left_items={[chao]}
-	right_items={[pepe, chavo]}
+	right_items={[rt1, rt2, rt3, pepe, chavo]}
 >
+	{#snippet rt1()}
+		<div class="field has-addons has-addons-centered">
+			<span class="control">
+				<input class="input is-small" type="datetime-local" placeholder="Start" />
+			</span>
+			<span class="control">
+				<!-- svelte-ignore a11y_missing_attribute -->
+				<a class="button is-static is-small"> Start </a>
+			</span>
+		</div>
+	{/snippet}
+
+	{#snippet rt2()}
+		<div class="field has-addons has-addons-centered">
+			<span class="control">
+				<input class="input is-small" type="datetime-local" placeholder="Start" />
+			</span>
+			<span class="control">
+				<!-- svelte-ignore a11y_missing_attribute -->
+				<a class="button is-static is-small"> End </a>
+			</span>
+		</div>
+	
+	{/snippet}
+
+	{#snippet rt3()}
+		<div class="field has-addons has-addons-centered">
+			<span class="control">
+				<input class="input is-small" type="number" placeholder="Limit" />
+			</span>
+			<span class="control">
+				<!-- svelte-ignore a11y_missing_attribute -->
+				<a class="button is-static is-small"> Limit </a>
+			</span>
+		</div>
+	{/snippet}
+
 	{#snippet chao()}
 		chao
 	{/snippet}
@@ -332,7 +370,7 @@
 		</button>
 	{/snippet}
 </Table>
- 
+
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
 
@@ -387,5 +425,4 @@ console.log(code);
 ></RESTTester>
    -->
 
-
-   <!-- <MenuMega></MenuMega> -->
+<!-- <MenuMega></MenuMega> -->
