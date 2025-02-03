@@ -19,9 +19,9 @@
 
 	let selectedValue = '1';
 
-setTimeout(() => {
-	selectedValue = '0';
-}, 5000);
+	setTimeout(() => {
+		selectedValue = '0';
+	}, 5000);
 
 	let mostrar_dialogo = true;
 	let json01 = {
@@ -101,7 +101,12 @@ setTimeout(() => {
 	let dataTest = [
 		{ checsk: false, name: 'name', datas: 'datas', fecha: 'fecha incorrecta', fecha3: 233 },
 		{ checsk: false, name: '33112321', datas: 'Fecha en texto', fecha: '2024-08-13T16:55:13' },
-		{ checsk: true, name: '232322', datas: 'Fecha en toISOString', fecha: new Date().toISOString() },
+		{
+			checsk: true,
+			name: '232322',
+			datas: 'Fecha en toISOString',
+			fecha: new Date().toISOString()
+		},
 		{
 			checsk: true,
 			name: 'kkhkññkjjhmamá',
@@ -278,7 +283,7 @@ setTimeout(() => {
 
 <!-- 
  -->
- 
+
 <!-- <button
 	on:click={() => {
 		show = true;
@@ -290,13 +295,12 @@ setTimeout(() => {
 <PredictiveInput
 	bind:selectedValue
 	classInput="is-small"
-	label="Opciones"
+	
 	classLabel="is-small"
 	on:select={(p) => {
 		console.log('selectedValue', selectedValue, p);
 	}}
 ></PredictiveInput>
-
 
 <Table
 	onnewrow={() => {
@@ -338,7 +342,6 @@ setTimeout(() => {
 				<a class="button is-static is-small"> End </a>
 			</span>
 		</div>
-	
 	{/snippet}
 
 	{#snippet rt3()}
@@ -373,7 +376,6 @@ setTimeout(() => {
 		</button>
 	{/snippet}
 </Table>
-
 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->

@@ -69,48 +69,52 @@
 </script>
 
 <div class="field is-horizontal">
-	<div class="field-label {classLabel}">
-		<!-- svelte-ignore a11y_label_has_associated_control -->
-		<label class="label">{label}</label>
-	</div>
+	{#if label && label.length > 0}
+		<div class="field-label {classLabel}">
+			<!-- svelte-ignore a11y_label_has_associated_control -->
+			<label class="label">{label}</label>
+		</div>
+	{/if}
 	<div class="field-body">
-		<div class="field is-narrow">
-			<div class="control">
-				<div class="control has-icons-left">
-					<input
-						class="input {classInput} {selectedValueIsValid ? classOnSucess : classOnError}"
-						type="text"
-						bind:value={inputValue}
-						oninput={handleInput}
-						onfocus={handleFocus}
-						{placeholder}
-					/>
-					<span class="icon is-small is-left">
-						<i class={classIcon}></i>
-					</span>
-				</div>
+		<div class="field">
 
-				{#if !selectedValueIsValid}
-					<p class="help {classOnError} is-small">The selected value {selectedValue} is not valid.</p>
-				{/if}
+			<div class="control has-icons-left">
+				<input
+					class="input {classInput} {selectedValueIsValid ? classOnSucess : classOnError}"
+					type="text"
+					bind:value={inputValue}
+					oninput={handleInput}
+					onfocus={handleFocus}
+					{placeholder}
+				/>
+				<span class="icon is-small is-left">
+					<i class={classIcon}></i>
+				</span>
+			</div>
 
-				<input type="hidden" bind:value={selectedValue} />
+			{#if !selectedValueIsValid}
+				<p class="help {classOnError} is-small">
+					The selected value {selectedValue} is not valid.
+				</p>
+			{/if}
 
-				{#if showDropdown && filteredOptions.length > 0}
-					<div class="dropdown is-active">
-						<div class="dropdown-menu" role="menu">
-							<div class="dropdown-content">
-								{#each filteredOptions as option}
-									<!-- svelte-ignore a11y_invalid_attribute -->
-									<a href="#" class="dropdown-item" onclick={() => handleClick(option)}>
-										{option.name}
-									</a>
-								{/each}
-							</div>
+			<input type="hidden" bind:value={selectedValue} />
+
+			{#if showDropdown && filteredOptions.length > 0}
+				<div class="dropdown is-active">
+					<div class="dropdown-menu" role="menu">
+						<div class="dropdown-content">
+							{#each filteredOptions as option}
+								<!-- svelte-ignore a11y_invalid_attribute -->
+								<a href="#" class="dropdown-item" onclick={() => handleClick(option)}>
+									{option.name}
+								</a>
+							{/each}
 						</div>
 					</div>
-				{/if}
-			</div>
+				</div>
+			{/if}
+			
 		</div>
 	</div>
 </div>
