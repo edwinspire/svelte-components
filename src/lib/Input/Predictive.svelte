@@ -26,7 +26,7 @@
 		filteredOptions = options.filter((option) =>
 			option.name.toLowerCase().includes(inputValue.toLowerCase())
 		);
-		console.log(filteredOptions);
+		//	console.log(filteredOptions);
 		selectedValue = null;
 		showDropdown = true;
 	}
@@ -36,7 +36,7 @@
 		selectedValue = option.value;
 		showDropdown = false;
 		//	console.log('option', option);
-		onselect(option);
+		onselect($state.snapshot(option));
 	}
 
 	function handleFocus() {
@@ -77,7 +77,6 @@
 	{/if}
 	<div class="field-body">
 		<div class="field">
-
 			<div class="control has-icons-left">
 				<input
 					class="input {classInput} {selectedValueIsValid ? classOnSucess : classOnError}"
@@ -106,7 +105,7 @@
 						<div class="dropdown-content">
 							{#each filteredOptions as option}
 								<!-- svelte-ignore a11y_invalid_attribute -->
-								<a href="#" class="dropdown-item" onclick={() => handleClick(option)}>
+								<a href="#" class="dropdown-item ajust-item" onclick={() => handleClick(option)}>
 									{option.name}
 								</a>
 							{/each}
@@ -114,7 +113,6 @@
 					</div>
 				</div>
 			{/if}
-			
 		</div>
 	</div>
 </div>
@@ -123,5 +121,9 @@
 	.dropdown-content {
 		max-height: 200px;
 		overflow-y: auto;
+	}
+	.ajust-item {
+		padding: 0.1rem 0.1rem 0.1rem 1rem;
+		font-size: .75rem;
 	}
 </style>
