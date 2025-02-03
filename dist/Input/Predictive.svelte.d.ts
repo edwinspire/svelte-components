@@ -6,18 +6,24 @@ type Predictive = {
 declare const Predictive: import("svelte").Component<{
     options?: any[];
     label?: string;
-    selectedValue?: string;
+    selectedValue?: any;
     classLabel?: string;
     classInput?: string;
     placeholder?: string;
+    classIcon?: string;
+    classOnSucess?: string;
+    classOnError?: string;
     onselect?: Function;
-}, {}, "label" | "options" | "selectedValue" | "classLabel" | "classInput" | "placeholder">;
+}, {}, "label" | "options" | "selectedValue" | "classLabel" | "classInput" | "placeholder" | "classIcon" | "classOnSucess" | "classOnError">;
 type $$ComponentProps = {
     options?: any[];
     label?: string;
-    selectedValue?: string;
+    selectedValue?: any;
     classLabel?: string;
     classInput?: string;
     placeholder?: string;
+    classIcon?: string;
+    classOnSucess?: string;
+    classOnError?: string;
     onselect?: Function;
 };

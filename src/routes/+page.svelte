@@ -17,7 +17,12 @@
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
 
-	let selectedValue = '';
+	let selectedValue = '1';
+
+setTimeout(() => {
+	selectedValue = '0';
+}, 5000);
+
 	let mostrar_dialogo = true;
 	let json01 = {
 		a: 90,
@@ -273,14 +278,14 @@
 
 <!-- 
  -->
-<!-- 
-<button
+ 
+<!-- <button
 	on:click={() => {
 		show = true;
 		active_tab = 1;
 	}}>Mostrar</button
 >
-
+ -->
 
 <PredictiveInput
 	bind:selectedValue
@@ -292,8 +297,6 @@
 	}}
 ></PredictiveInput>
 
-
- -->
 
 <Table
 	onnewrow={() => {
@@ -370,6 +373,7 @@
 		</button>
 	{/snippet}
 </Table>
+
 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
