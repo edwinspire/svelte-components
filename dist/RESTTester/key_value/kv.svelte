@@ -40,8 +40,8 @@
 		) {
 			data.push({ enabled: true, key: '', value: '' });
 			//   alert('add111  ' + data.length)
-		}
-		//data = data;
+		}/*  */
+		data = [...data];
 	}
 
 	onMount(() => {

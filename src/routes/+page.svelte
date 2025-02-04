@@ -291,7 +291,7 @@
 	}}>Mostrar</button
 >
  -->
-
+<!-- 
 <PredictiveInput
 	bind:selectedValue
 	classInput="is-small"
@@ -301,7 +301,7 @@
 		console.log('selectedValue', selectedValue, p);
 	}}
 ></PredictiveInput>
-
+ -->
 <Table
 	onnewrow={() => {
 		console.log(dataTest);
@@ -423,12 +423,12 @@ console.log(code);
 	}}
 ></EditorCode>
   -->
-<!-- 
+ 
 <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
-   -->
+   
 
 <!-- <MenuMega></MenuMega> -->
