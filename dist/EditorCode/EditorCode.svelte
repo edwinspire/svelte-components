@@ -7,6 +7,7 @@
 	import { xml } from '@codemirror/lang-xml';
 	import { sql } from '@codemirror/lang-sql';
 	import { EditorState } from '@codemirror/state';
+	import { oneDark } from '@codemirror/theme-one-dark';
 
 	let editorView;
 	let elementParent;
@@ -38,9 +39,6 @@
 		xml: xml()
 	};
 
-	//$: lang, initializeEditor();
-	//$: code, parseCode();
-
 	// Prettier parsers por lenguaje
 	const prettierParsers = {
 		js: 'babel',
@@ -60,8 +58,6 @@
 	]);
 
 	$inspect(lang).with((type) => {
-		//	console.log('lang >>>>>>>>>>>>> ', type);
-		// console.log('Se ha cambiado el lenguaje del Editor: ', $state.snapshot(lang), type);
 		if (type === 'update') {
 			initializeEditor();
 		}
@@ -89,8 +85,6 @@
 			formatError = true;
 			return editorView.state.doc.toString();
 		}
-
-		// return JSON.parse(editorView.state.doc.toString());
 	}
 
 	export function reset() {
@@ -109,7 +103,6 @@
 	}
 
 	function setCodeEditor(text) {
-		//console.log(text);
 		if (editorView && editorView.state && text != editorView.state.doc.toString()) {
 			const transaction = editorView.state.update({
 				changes: { from: 0, to: editorView.state.doc.length, insert: text }
@@ -121,12 +114,14 @@
 
 	function initializeEditor() {
 		if (elementParent) {
-			if (editorView) editorView.destroy();
+			if (editorView) {
+				editorView.destroy();
+				editorView = undefined;
+			}
 
 			formatCode();
 
 			let languaje_editor = languages[lang] ? languages[lang] : [];
-			//console.log('initializeEditor: ', languaje_editor, lang);
 
 			editorView = new EditorView({
 				doc: internal_code,
@@ -136,16 +131,11 @@
 					languaje_editor,
 					EditorView.updateListener.of(async (update) => {
 						if (update.changes && update.changedRanges.length > 0) {
-							//	console.log(update.changedRanges);
-
 							internal_code = update.state.doc.toString();
 
 							clearTimeout(timeoutParseOnChange);
 
 							timeoutParseOnChange = setTimeout(() => {
-								//console.warn(editorView.state.doc.toString());
-								//								console.log('Hubo cambios > timeoutParseOnChange ');
-								//setCodeEditor(internal_code);
 								formatCode();
 
 								if (!formatError) {
@@ -157,18 +147,20 @@
 										}
 										parseCode();
 										onchange($state.snapshot({ lang: lang, code: code }));
-										
 									} catch (error) {
 										console.log(error);
 									}
 								}
 							}, 750);
 						}
-					})
+					}),
+					oneDark,
 				],
 
 				parent: elementParent
 			});
+
+			console.log(editorView.themeClasses);
 		}
 	}
 
@@ -199,7 +191,7 @@
 					? JSON.stringify(code_without_format)
 					: code_without_format;
 		}
-		//		console.log('format result > ', result);
+
 		return result;
 	}
 
@@ -274,7 +266,6 @@
 			class="button is-small"
 			onclick={() => {
 				reset();
-				//console.log(code);
 			}}
 		>
 			<span class="icon is-small">
@@ -306,4 +297,10 @@
 <Level left={[left, l02]} right={[right, r01]}></Level>
 
 <!-- Editor de CodeMirror -->
-<div bind:this={elementParent} class={showCode ? '' : 'is-hidden'}></div>
+<div class={showCode ? '' : 'is-hidden'}>
+	<div bind:this={elementParent} ></div>
+</div>
+
+<style>
+	
+</style>

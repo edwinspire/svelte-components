@@ -1,19 +1,13 @@
 <script>
 	import {
 		Table,
-		DialogModal,
-		Plotter,
-		Menu,
+		
 		ColumnTypes,
-		SlideFullScreen,
-		BasicSelect,
-		Level,
-		PredictiveInput,
 		EditorCode,
-		Tab,
-		RESTTester,
-		MenuMega
+		
 	} from '../lib/index.js';
+
+	import EdTest from "../lib/EditorCode/EditorTest.svelte"
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
 
@@ -226,6 +220,8 @@
 	}, 10000);
 </script>
 
+<EdTest></EdTest>
+
 <!-- {#snippet tab1()}
 	1 <button aria-label="close" class="button is-small" title="Delete row">
 		<span class="icon">
@@ -406,7 +402,7 @@
 {#snippet r()}
 	chao
 {/snippet}
-<!-- 
+ 
  <EditorCode
 	left={l}
 	right={r}
@@ -422,13 +418,13 @@
 console.log(code);
 	}}
 ></EditorCode>
-  -->
+  
  
-<RESTTester
+<!-- <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
-   
+ -->   
 
 <!-- <MenuMega></MenuMega> -->
