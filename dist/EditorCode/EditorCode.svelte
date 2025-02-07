@@ -7,7 +7,7 @@
 	import { xml } from '@codemirror/lang-xml';
 	import { sql } from '@codemirror/lang-sql';
 	import { EditorState } from '@codemirror/state';
-	import { oneDark } from '@codemirror/theme-one-dark';
+	//import { oneDark } from '@codemirror/theme-one-dark';
 
 	let editorView;
 	let elementParent;
@@ -154,13 +154,13 @@
 							}, 750);
 						}
 					}),
-					oneDark,
+	//				oneDark,
 				],
 
 				parent: elementParent
 			});
 
-			console.log(editorView.themeClasses);
+			// console.log(editorView.themeClasses);
 		}
 	}
 
