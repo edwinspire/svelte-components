@@ -9,7 +9,7 @@
 	import { EditorState } from '@codemirror/state';
 	import { oneDark } from '@codemirror/theme-one-dark';
 	import * as Prettier from 'prettier/standalone.js';
-	import prettierPluginJson from 'prettier/plugins/babel.mjs';
+	import prettierPluginBabel from 'prettier/plugins/babel.mjs';
 	import Estree from 'prettier/plugins/estree.mjs';
 	import prettierPluginHtml from 'prettier/plugins/html.mjs';
 	import prettierPluginSql from 'prettier-plugin-sql';
@@ -47,8 +47,8 @@
 	let list_langs = $state([
 		{ label: 'None', value: 'none', prettier: '', plugins: [] },
 		{ label: 'HTML', value: 'html', prettier: 'html', plugins: [prettierPluginHtml] },
-		{ label: 'Javascript', value: 'js', prettier: 'babel', plugins: [] },
-		{ label: 'JSON', value: 'json', prettier: 'json', plugins: [Estree, prettierPluginJson] },
+		{ label: 'Javascript', value: 'js', prettier: 'babel', plugins: [prettierPluginBabel, Estree] },
+		{ label: 'JSON', value: 'json', prettier: 'json-stringify', plugins: [prettierPluginBabel, Estree] },
 		{ label: 'SQL', value: 'sql', prettier: 'sql', plugins: [prettierPluginSql] },
 		{ label: 'XML', value: 'xml', prettier: 'html', plugins: [prettierPluginHtml] },
 		{ label: 'Text', value: 'text', prettier: '', plugins: [] }
