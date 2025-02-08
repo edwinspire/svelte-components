@@ -8,6 +8,11 @@
 	import { sql } from '@codemirror/lang-sql';
 	import { EditorState } from '@codemirror/state';
 	import { oneDark } from '@codemirror/theme-one-dark';
+	import * as Prettier from 'prettier/standalone.js';
+	import prettierPluginJson from 'prettier/plugins/babel.mjs';
+	import Estree from 'prettier/plugins/estree.mjs';
+	import prettierPluginHtml from 'prettier/plugins/html.mjs';
+	import prettierPluginSql from 'prettier-plugin-sql';
 
 	let editorView;
 	let elementParent;
@@ -17,7 +22,7 @@
 		left,
 		right,
 		lang = $bindable('json'),
-		showFormat = $bindable(false),
+		showFormat = $bindable(true),
 		showSelectLang = $bindable(false),
 		isReadOnly = $bindable(false),
 		showHiddenButton = $bindable(true),
@@ -39,23 +44,43 @@
 		xml: xml()
 	};
 
-	// Prettier parsers por lenguaje
-	const prettierParsers = {
-		js: 'babel',
-		json: 'json',
-		html: 'html',
-		xml: 'html'
-	};
-
 	let list_langs = $state([
-		{ label: 'None', value: 'none' },
-		{ label: 'HTML', value: 'html' },
-		{ label: 'Javascript', value: 'js' },
-		{ label: 'JSON', value: 'json' },
-		{ label: 'SQL', value: 'sql' },
-		{ label: 'XML', value: 'xml' },
-		{ label: 'Text', value: 'text' }
+		{ label: 'None', value: 'none', prettier: '', plugins: [] },
+		{ label: 'HTML', value: 'html', prettier: 'html', plugins: [prettierPluginHtml] },
+		{ label: 'Javascript', value: 'js', prettier: 'babel', plugins: [] },
+		{ label: 'JSON', value: 'json', prettier: 'json', plugins: [Estree, prettierPluginJson] },
+		{ label: 'SQL', value: 'sql', prettier: 'sql', plugins: [prettierPluginSql] },
+		{ label: 'XML', value: 'xml', prettier: 'html', plugins: [prettierPluginHtml] },
+		{ label: 'Text', value: 'text', prettier: '', plugins: [] }
 	]);
+
+	let lang_prettier = $derived.by(() => {
+		let l = 'text';
+
+		let ll = list_langs.find((la) => {
+			return la.value == lang;
+		});
+
+		if (ll) {
+			l = ll.prettier;
+		}
+
+		return l;
+	});
+
+	let plugings_prettier = $derived.by(() => {
+		let p = [];
+
+		let ll = list_langs.find((la) => {
+			return la.value == lang;
+		});
+
+		if (ll) {
+			p = ll.plugins;
+		}
+		console.log(p);
+		return p;
+	});
 
 	$inspect(lang).with((type) => {
 		if (type === 'update') {
@@ -94,10 +119,11 @@
 
 	function parseCode() {
 		org_code = code;
-		let f = format(org_code);
+		//let f = format(org_code);
 
-		formatError = f.error;
-		internal_code = f.code;
+		//formatError = f.error;
+		//internal_code = f.code;
+		internal_code = code;
 
 		setCodeEditor(internal_code);
 	}
@@ -119,7 +145,7 @@
 				editorView = undefined;
 			}
 
-			formatCode();
+			//			await formatCode();
 
 			let languaje_editor = languages[lang] ? languages[lang] : [];
 
@@ -135,26 +161,13 @@
 
 							clearTimeout(timeoutParseOnChange);
 
-							timeoutParseOnChange = setTimeout(() => {
-								formatCode();
-
-								if (!formatError) {
-									try {
-										if (lang === 'json') {
-											code = JSON.parse(internal_code);
-										} else {
-											code = internal_code;
-										}
-										parseCode();
-										onchange($state.snapshot({ lang: lang, code: code }));
-									} catch (error) {
-										console.log(error);
-									}
-								}
+							timeoutParseOnChange = setTimeout(async () => {
+								onchange($state.snapshot({ lang: lang, code: code }));
+								//await formatCode();
 							}, 750);
 						}
 					}),
-					oneDark,
+					oneDark
 				],
 
 				parent: elementParent
@@ -165,14 +178,29 @@
 	}
 
 	// Formatear el código
-	function formatCode() {
+	async function formatCode() {
 		if (editorView && editorView.state) {
-			let f = format(editorView.state.doc.toString());
-			formatError = f.error;
-			internal_code = f.code;
+			try {
+				if (lang_prettier && lang_prettier.length > 0) {
+					let formatted_code = await Prettier.format(editorView.state.doc.toString(), {
+						parser: lang_prettier,
+						tabWidth: 2, // Indentación de 4 espacios
+						useTabs: false, // Usa espacios en lugar de tabulaciones
+						plugins: plugings_prettier
+					});
+					formatError = undefined;
+					internal_code = formatted_code + '';
+					//console.log(internal_code);
+					setCodeEditor(internal_code);
+				}
+			} catch (error) {
+				formatError = error;
+				console.warn(error);
+			}
 		}
 	}
 
+	/*
 	function format(code_without_format) {
 		let result = { code: code_without_format, error: undefined };
 		if (lang == 'json') {
@@ -194,6 +222,7 @@
 
 		return result;
 	}
+	*/
 
 	onMount(() => {
 		initializeEditor();
@@ -250,7 +279,7 @@
 {/snippet}
 
 {#snippet r01()}
-	{#if showFormat && lang == 'json'}
+	{#if showFormat && lang_prettier && lang_prettier.length > 0}
 		<button
 			class="button is-small"
 			onclick={async () => {
@@ -298,9 +327,8 @@
 
 <!-- Editor de CodeMirror -->
 <div class={showCode ? '' : 'is-hidden'}>
-	<div bind:this={elementParent} ></div>
+	<div bind:this={elementParent}></div>
 </div>
 
 <style>
-	
 </style>

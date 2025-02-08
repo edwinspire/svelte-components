@@ -81,12 +81,7 @@
 		]
 	};
 
-	let code = {
-		database: 'msdb',
-		username: 'sa',
-		password: 'sqlkarma',
-		options: { host: '192.168.138.30', dialect: 'mssql', encrypt: false }
-	};
+	let code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
@@ -209,18 +204,17 @@
 
 	let valor = 10;
 
-	let lang = 'sql';
+	let lang = 'json';
 
 	setTimeout(() => {
-		lang = 'xml';
+		// lang = 'xml';
 	}, 30000);
 
 	setTimeout(() => {
-		code = 'SELECT * FROM BBB;';
+		code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
 	}, 10000);
 </script>
 
-<EdTest></EdTest>
 
 <!-- {#snippet tab1()}
 	1 <button aria-label="close" class="button is-small" title="Delete row">
@@ -298,7 +292,8 @@
 	}}
 ></PredictiveInput>
  -->
-<Table
+
+<!-- <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -322,7 +317,7 @@
 				<input class="input is-small" type="datetime-local" placeholder="Start" />
 			</span>
 			<span class="control">
-				<!-- svelte-ignore a11y_missing_attribute -->
+
 				<a class="button is-static is-small"> Start </a>
 			</span>
 		</div>
@@ -334,7 +329,6 @@
 				<input class="input is-small" type="datetime-local" placeholder="Start" />
 			</span>
 			<span class="control">
-				<!-- svelte-ignore a11y_missing_attribute -->
 				<a class="button is-static is-small"> End </a>
 			</span>
 		</div>
@@ -346,7 +340,6 @@
 				<input class="input is-small" type="number" placeholder="Limit" />
 			</span>
 			<span class="control">
-				<!-- svelte-ignore a11y_missing_attribute -->
 				<a class="button is-static is-small"> Limit </a>
 			</span>
 		</div>
@@ -372,6 +365,7 @@
 		</button>
 	{/snippet}
 </Table>
+ -->
 
 <!-- 
 <DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->

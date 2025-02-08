@@ -54,7 +54,7 @@
 		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
-		"prettier": "^3.3.2",
+		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.2.6",
 		"publint": "^0.1.9",
 		"svelte": "^5.0.0",
@@ -85,6 +85,7 @@
 		"d3": "^7.8.5",
 		"events": "^3.3.0",
 		"luxon": "^2.0.2",
+		"prettier-plugin-sql": "^0.18.1",
 		"xlsx": "^0.18.5"
 	},
 	"importSort": {
