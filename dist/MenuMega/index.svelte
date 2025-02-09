@@ -1,273 +1,147 @@
-<nav class="navbar">
+<script>
+	let { brand = $bindable([]), start = $bindable([]), end = $bindable([]) } = $props();
+
+	let showMenu = $state(false);
+</script>
+
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+{#snippet basic_item(item)}
+	{#if item.link && item.link.length > 1}
+		<a class="navbar-item" href={item.link}>
+			{#if item.icon}
+				<i class={item.icon}></i>
+			{/if}
+			{item.label}
+		</a>
+	{:else if item.component}
+		<!-- svelte-ignore a11y_missing_attribute -->
+		<a class="navbar-item">
+			{@render item.component?.()}
+			{item.label}
+		</a>
+	{:else}
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<!-- svelte-ignore a11y_missing_attribute -->
+		<a class="navbar-item" onclick={item.onclick}>
+			{#if item.icon}
+				<i class={item.icon}></i>
+			{/if}
+			{item.label}
+		</a>
+	{/if}
+{/snippet}
+
+{#snippet navbar_item(item)}
+	{#if item}
+		{#if item.divider}
+			<hr class="navbar-divider" />
+		{:else if item.submenu?.columns && Array.isArray(item.submenu?.columns)}
+			<div class="navbar-item has-dropdown is-hoverable is-mega">
+				<div class="navbar-link flex">
+					{item.label}
+				</div>
+				<div class="navbar-dropdown" data-style="width: 18rem;">
+					<div class="container is-fluid">
+						<div class="columns">
+							{#each item.submenu.columns as column}
+								<div class="column">
+									<h1 class="title is-6 is-mega-menu-title">{column.title}</h1>
+
+									{#each column.items as item}
+										{@render navbar_item(item)}
+									{/each}
+								</div>
+							{/each}
+						</div>
+					</div>
+
+					{#if item.submenu.footer}
+						<hr class="navbar-divider" />
+						<div class="navbar-item">
+							<div class="navbar-content">
+								<div class="level is-mobile">
+									<div class="level-left">
+										<div class="level-item">
+											{#if item.submenu.footer.left}
+												{@render basic_item(item.submenu.footer.left)}
+											{/if}
+										</div>
+									</div>
+									<div class="level-right">
+										<div class="level-item">
+											{#if item.submenu.footer.right}
+												{@render basic_item(item.submenu.footer.right)}
+											{/if}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{/if}
+				</div>
+			</div>
+		{:else if item.submenu && Array.isArray(item.submenu)}
+			<div class="navbar-item has-dropdown is-hoverable">
+				<span class="navbar-link"
+					>{#if item.icon}
+						<i class={item.icon}></i>
+					{/if}
+					{item.label}
+				</span>
+				<div class="navbar-dropdown">
+					{#each item.submenu as submenu}
+						{@render navbar_item(submenu)}
+					{/each}
+				</div>
+			</div>
+		{:else}
+			{@render basic_item(item)}
+		{/if}
+	{/if}
+{/snippet}
+
+<nav class="navbar is-shadowless border-bottom-grey">
 	<div class="navbar-brand">
-		<a class="navbar-item" href="http://bulma.io">
-			<img
-				src="http://bulma.io/images/bulma-logo.png"
-				alt="Bulma: a modern CSS framework based on Flexbox"
-				width="112"
-				height="28"
-			/>
-		</a>
+		{#if Array.isArray(brand)}
+			{#each brand as brand_item}
+				{@render navbar_item?.(brand_item)}
+			{/each}
+		{/if}
 
-		<a class="navbar-item is-hidden-desktop" href="https://github.com/jgthms/bulma" target="_blank">
-			<span class="icon" style="color: #333;">
-				<i class="fa fa-github"></i>
-			</span>
-		</a>
-
-		<a class="navbar-item is-hidden-desktop" href="https://twitter.com/jgthms" target="_blank">
-			<span class="icon" style="color: #55acee;">
-				<i class="fa fa-twitter"></i>
-			</span>
-		</a>
-
-		<div class="navbar-burger burger" data-target="navMenubd-example">
-			<span></span>
-			<span></span>
-			<span></span>
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div
+			class="navbar-burger {showMenu ? 'is-active' : ''}"
+			onclick={() => {
+				showMenu = !showMenu;
+				console.log(showMenu);
+			}}
+		>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
 		</div>
 	</div>
 
-	<div id="navMenubd-example" class="navbar-menu">
+	<div class="navbar-menu {showMenu ? 'is-active' : ''}">
 		<div class="navbar-start">
-			<div class="navbar-item has-dropdown is-hoverable">
-				<a class="navbar-link is-active" href="/documentation/overview/start/"> Docs </a>
-				<div class="navbar-dropdown">
-					<a class="navbar-item" href="/documentation/overview/start/"> Overview </a>
-					<a class="navbar-item" href="http://bulma.io/documentation/modifiers/syntax/">
-						Modifiers
-					</a>
-					<a class="navbar-item" href="http://bulma.io/documentation/columns/basics/"> Columns </a>
-					<a class="navbar-item" href="http://bulma.io/documentation/layout/container/"> Layout </a>
-					<a class="navbar-item" href="http://bulma.io/documentation/form/general/"> Form </a>
-					<a class="navbar-item" href="http://bulma.io/documentation/elements/box/"> Elements </a>
-
-					<a
-						class="navbar-item is-active"
-						href="http://bulma.io/documentation/components/breadcrumb/"
-					>
-						Components
-					</a>
-
-					<hr class="navbar-divider" />
-					<div class="navbar-item">
-						<div>
-							<p class="is-size-6-desktop">
-								<strong class="has-text-info">0.5.1</strong>
-							</p>
-
-							<small>
-								<a class="bd-view-all-versions" href="/versions">View all versions</a>
-							</small>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="navbar-item has-dropdown is-hoverable is-mega">
-				<div class="navbar-link flex">
-					Blog <span class="tag is-info ml-2">Hover here<span> </span></span>
-				</div>
-				<div id="blogDropdown" class="navbar-dropdown" data-style="width: 18rem;">
-					<div class="container is-fluid">
-						<div class="columns">
-							<div class="column">
-								<h1 class="title is-6 is-mega-menu-title">Sub Menu Title</h1>
-								<a class="navbar-item" href="/2017/08/03/list-of-tags/">
-									<div class="navbar-content">
-										<p>
-											<small class="has-text-info">03 Aug 2017</small>
-										</p>
-										<p>New feature: list of tags</p>
-									</div>
-								</a>
-								<a class="navbar-item" href="/2017/08/03/list-of-tags/">
-									<div class="navbar-content">
-										<p>
-											<small class="has-text-info">03 Aug 2017</small>
-										</p>
-										<p>New feature: list of tags</p>
-									</div>
-								</a>
-								<a class="navbar-item" href="/2017/08/03/list-of-tags/">
-									<div class="navbar-content">
-										<p>
-											<small class="has-text-info">03 Aug 2017</small>
-										</p>
-										<p>New feature: list of tags</p>
-									</div>
-								</a>
-							</div>
-							<div class="column">
-								<h1 class="title is-6 is-mega-menu-title">Sub Menu Title</h1>
-								<a class="navbar-item" href="/2017/08/03/list-of-tags/">
-									<div class="navbar-content">
-										<p>
-											<small class="has-text-info">03 Aug 2017</small>
-										</p>
-										<p>New feature: list of tags</p>
-									</div>
-								</a>
-								<a class="navbar-item" href="/documentation/overview/start/"> Overview </a>
-								<a class="navbar-item" href="http://bulma.io/documentation/modifiers/syntax/">
-									Modifiers
-								</a>
-								<a class="navbar-item" href="http://bulma.io/documentation/columns/basics/">
-									Columns
-								</a>
-							</div>
-							<div class="column">
-								<h1 class="title is-6 is-mega-menu-title">Sub Menu Title</h1>
-								<a class="navbar-item" href="/2017/08/03/list-of-tags/">
-									<div class="navbar-content">
-										<p>
-											<small class="has-text-info">03 Aug 2017</small>
-										</p>
-										<p>New feature: list of tags</p>
-									</div>
-								</a>
-								<a class="navbar-item" href="/2017/08/03/list-of-tags/">
-									<div class="navbar-content">
-										<p>
-											<small class="has-text-info">03 Aug 2017</small>
-										</p>
-										<p>New feature: list of tags</p>
-									</div>
-								</a>
-								<a class="navbar-item" href="/2017/08/03/list-of-tags/">
-									<div class="navbar-content">
-										<p>
-											<small class="has-text-info">03 Aug 2017</small>
-										</p>
-										<p>New feature: list of tags</p>
-									</div>
-								</a>
-							</div>
-							<div class="column">
-								<h1 class="title is-6 is-mega-menu-title">Sub Menu Title</h1>
-								<a class="navbar-item" href="/documentation/overview/start/"> Overview </a>
-								<a class="navbar-item" href="http://bulma.io/documentation/modifiers/syntax/">
-									Modifiers
-								</a>
-								<a class="navbar-item" href="http://bulma.io/documentation/columns/basics/">
-									Columns
-								</a>
-								<a class="navbar-item" href="http://bulma.io/documentation/layout/container/">
-									Layout
-								</a>
-							</div>
-						</div>
-					</div>
-
-					<hr class="navbar-divider" />
-					<div class="navbar-item">
-						<div class="navbar-content">
-							<div class="level is-mobile">
-								<div class="level-left">
-									<div class="level-item">
-										<strong>Stay up to date!</strong>
-									</div>
-								</div>
-								<div class="level-right">
-									<div class="level-item">
-										<a class="button bd-is-rss is-small" href="http://bulma.io/atom.xml">
-											<span class="icon is-small">
-												<i class="fa fa-rss"></i>
-											</span>
-											<span>Subscribe</span>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="navbar-item has-dropdown is-hoverable">
-				<div class="navbar-link">More</div>
-				<div id="moreDropdown" class="navbar-dropdown">
-					<a class="navbar-item" href="http://bulma.io/extensions/">
-						<div class="level is-mobile">
-							<div class="level-left">
-								<div class="level-item">
-									<p>
-										<strong>Extensions</strong>
-										<br />
-										<small>Side projects to enhance Bulma</small>
-									</p>
-								</div>
-							</div>
-							<div class="level-right">
-								<div class="level-item">
-									<span class="icon has-text-info">
-										<i class="fa fa-plug"></i>
-									</span>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-			<a class="navbar-item" href="http://bulma.io/expo/">
-				<span class="bd-emoji">🎨</span> &nbsp;Expo
-			</a>
-			<a class="navbar-item" href="http://bulma.io/love/">
-				<span class="bd-emoji">❤️</span> &nbsp;Love
-			</a>
+			{#if Array.isArray(start)}
+				{#each start as start_item}
+					{@render navbar_item?.(start_item)}
+				{/each}
+			{/if}
 		</div>
 
 		<div class="navbar-end">
-			<a
-				class="navbar-item is-hidden-desktop-only"
-				href="https://github.com/jgthms/bulma"
-				target="_blank"
-			>
-				<span class="icon" style="color: #333;">
-					<i class="fa fa-github"></i>
-				</span>
-			</a>
-			<a
-				class="navbar-item is-hidden-desktop-only"
-				href="https://twitter.com/jgthms"
-				target="_blank"
-			>
-				<span class="icon" style="color: #55acee;">
-					<i class="fa fa-twitter"></i>
-				</span>
-			</a>
-			<div class="navbar-item">
-				<div class="field is-grouped">
-					<p class="control">
-						<a
-							class="bd-tw-button button"
-							data-social-network="Twitter"
-							data-social-action="tweet"
-							data-social-target="http://bulma.io"
-							target="_blank"
-							href="https://twitter.com/intent/tweet?text=Bulma: a modern CSS framework based on Flexbox&hashtags=bulmaio&url=http://bulma.io&via=jgthms"
-						>
-							<span class="icon">
-								<i class="fa fa-twitter"></i>
-							</span>
-							<span> Tweet </span>
-						</a>
-					</p>
-					<p class="control">
-						<a class="button is-primary" href="https://github.com/jgthms/bulma/archive/0.5.1.zip">
-							<span class="icon">
-								<i class="fa fa-download"></i>
-							</span>
-							<span>Download</span>
-						</a>
-					</p>
-				</div>
-			</div>
+			{#if Array.isArray(end)}
+				{#each end as end_item}
+					{@render navbar_item?.(end_item)}
+				{/each}
+			{/if}
 		</div>
 	</div>
 </nav>
-
-<section>
-    Hola
-</section>
 
 <style>
 	.navbar-item.is-mega {
@@ -275,7 +149,12 @@
 
 		.is-mega-menu-title {
 			margin-bottom: 0;
-			padding: 0.375rem 1rem;
+			padding: 0.375rem;
 		}
+	}
+
+	.navbar-item,
+	.navbar-link {
+		display: inline-block;
 	}
 </style>

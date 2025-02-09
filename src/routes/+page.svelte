@@ -1,17 +1,40 @@
 <script>
-	import {
-		Table,
-		
-		ColumnTypes,
-		EditorCode,
-		
-	} from '../lib/index.js';
-
-	import EdTest from "../lib/EditorCode/EditorTest.svelte"
+	import { lab } from 'd3';
+	import { Table, ColumnTypes, EditorCode, MenuMega } from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
 
 	let selectedValue = '1';
+
+	let menujson = {
+		start: [
+			{ label: 'PRUEBA', icon: ' fa-solid fa-delete-left ', link: '/ffsfffs/fff' },
+			{
+				label: 'SEgundo',
+				onclick: () => {
+					console.log('Evento externo');
+				}
+			},
+			{ component: tab1 },
+			{
+				label: 'MENU',
+				icon: 'fa-solid fa-delete-left',
+				submenu: [{ label: 'ggggg' }, { divider: true }, { label: 'TTgh' }]
+			},
+			{
+				label: 'GRANDE',
+				submenu: {
+					columns: [
+						{ title: 'Titulo', items: [{ label: 1212 }, { label: 22 }] },
+						{ title: 'Otra opción', items: [{ label: 1212 }, { label: 22 }, { component: tab1 }] }
+					],
+					footer: { left: { label: 'GGGG' }, right: { label: 'sdsdsdyyyy' } }
+				}
+			}
+		],
+		brand: [{ label: 'ddddddd' }],
+		end: [{ label: 'tab1' }, {component: user}]
+	};
 
 	setTimeout(() => {
 		selectedValue = '0';
@@ -215,15 +238,31 @@
 	}, 10000);
 </script>
 
+{#snippet user()}
+<span class="icon-text">
+	<span class="icon">
+		<i class="fa-solid fa-user"></i>
+	</span>
+	<span>User</span>
+  </span>
+{/snippet}
 
-<!-- {#snippet tab1()}
-	1 <button aria-label="close" class="button is-small" title="Delete row">
+{#snippet tab1()}
+	<button
+		aria-label="close"
+		class="button is-small"
+		title="Delete row"
+		onclick={() => {
+			console.log('Boton...');
+		}}
+	>
 		<span class="icon">
 			<i class="fa-solid fa-trash"></i>
 		</span>
 	</button>
 {/snippet}
 
+<!--
 {#snippet tab2()}
 	2 <button aria-label="close" class="button is-small" title="Delete row">
 		<span class="icon">
@@ -396,7 +435,8 @@
 {#snippet r()}
 	chao
 {/snippet}
- 
+
+<!-- 
  <EditorCode
 	left={l}
 	right={r}
@@ -412,13 +452,71 @@
 console.log(code);
 	}}
 ></EditorCode>
-  
- 
+   -->
+
 <!-- <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
- -->   
+ -->
 
-<!-- <MenuMega></MenuMega> -->
+<MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
+
+<!-- 
+<MenuMega brand={[b1, b2]} end={[e1, e2]}>
+	{#snippet b1()}
+		<a class="navbar-item" href="https://github.com/jgthms/bulmaXXX" target="_blank">
+			Perfecto <span class="icon" style="color: #333;">
+				<i class="fa fa-github"></i>
+			</span>
+		</a>
+	{/snippet}
+
+	{#snippet b2()}
+		<a class="navbar-item" href="https://twitter.com/jgthms" target="_blank">
+			<span class="icon" style="color: #55acee;">
+				<i class="fa fa-twitter"></i>
+			</span>
+		</a>
+	{/snippet}
+
+	{#snippet e1()}
+		<a class="navbar-item" href="https://github.com/jgthms/bulma" target="_blank">
+			GITGUB <span class="icon is-small" style="color: #333;">
+				<i class="fa fa-github"></i>
+			</span>
+		</a>
+	{/snippet}
+
+	{#snippet e2()}
+		<div class="navbar-item">
+			<div class="field is-grouped">
+				<p class="control">
+					<a
+						class="bd-tw-button button is-small"
+						data-social-network="Twitter"
+						data-social-action="tweet"
+						data-social-target="http://bulma.io"
+						target="_blank"
+						href="https://twitter.com/intent/tweet?text=Bulma: a modern CSS framework based on Flexbox&hashtags=bulmaio&url=http://bulma.io&via=jgthms"
+					>
+						<span class="icon">
+							<i class="fa fa-twitter"></i>
+						</span>
+						<span> Tweet </span>
+					</a>
+				</p>
+				<p class="control">
+					<a class="button is-primary is-small" href="https://github.com/jgthms/bulma/archive/0.5.1.zip">
+						<span class="icon">
+							<i class="fa fa-download"></i>
+						</span>
+						<span>Download</span>
+					</a>
+				</p>
+			</div>
+		</div>
+	{/snippet}
+</MenuMega>
+ -->
