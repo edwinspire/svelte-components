@@ -104,7 +104,7 @@
 		]
 	};
 
-	let code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
+	let code = 10;
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
@@ -436,7 +436,7 @@
 	chao
 {/snippet}
 
-<!-- 
+ 
  <EditorCode
 	left={l}
 	right={r}
@@ -452,14 +452,14 @@
 console.log(code);
 	}}
 ></EditorCode>
-   -->
+   
 
- <RESTTester
+ <!-- <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
- 
+  -->
 
 <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 

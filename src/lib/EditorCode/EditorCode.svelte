@@ -22,7 +22,7 @@
 		left,
 		right,
 		lang = $bindable('json'),
-		showFormat = $bindable(true),
+		showFormat = $bindable(false),
 		showSelectLang = $bindable(false),
 		isReadOnly = $bindable(false),
 		showHiddenButton = $bindable(true),
@@ -131,9 +131,9 @@
 		//internal_code = code;
 		if (lang === 'json') {
 			try {
-				internal_code = typeof code === 'object' ? JSON.stringify(code) : code;
+				internal_code = typeof code !== 'string' ? JSON.stringify(code) : code;
 			} catch (error) {
-				internal_code = '';
+				internal_code = code;
 				console.warn(error);
 			}
 		} else {
@@ -168,6 +168,8 @@
 				doc: internal_code,
 				extensions: [
 					basicSetup,
+
+
 					isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
 					languaje_editor,
 					EditorView.updateListener.of(async (update) => {
