@@ -130,7 +130,12 @@
 		//internal_code = f.code;
 		//internal_code = code;
 		if (lang === 'json') {
-			internal_code = typeof code === 'object' ? JSON.stringify(code) : code;
+			try {
+				internal_code = typeof code === 'object' ? JSON.stringify(code) : code;
+			} catch (error) {
+				internal_code = '';
+				console.warn(error);
+			}
 		} else {
 			internal_code = code;
 		}
