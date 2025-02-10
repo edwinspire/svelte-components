@@ -124,20 +124,12 @@
 
 	function parseCode() {
 		org_code = code;
-		//let f = format(org_code);
 
-		//formatError = f.error;
-		//internal_code = f.code;
-		//internal_code = code;
-		if (lang === 'json') {
-			try {
-				internal_code = typeof code !== 'string' ? JSON.stringify(code) : code;
-			} catch (error) {
-				internal_code = code;
-				console.warn(error);
-			}
-		} else {
+		try {
+			internal_code = typeof code !== 'string' ? JSON.stringify(code) : code;
+		} catch (error) {
 			internal_code = code;
+			console.warn(error);
 		}
 
 		setCodeEditor(internal_code);
@@ -160,16 +152,13 @@
 				editorView = undefined;
 			}
 
-			//			await formatCode();
-
 			let languaje_editor = languages[lang] ? languages[lang] : [];
-
+			console.log(lang, internal_code, languaje_editor);
 			editorView = new EditorView({
 				doc: internal_code,
 				extensions: [
 					basicSetup,
-
-
+					languaje_editor,
 					isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
 					languaje_editor,
 					EditorView.updateListener.of(async (update) => {
@@ -216,30 +205,6 @@
 			}
 		}
 	}
-
-	/*
-	function format(code_without_format) {
-		let result = { code: code_without_format, error: undefined };
-		if (lang == 'json') {
-			try {
-				if (typeof code_without_format === 'object') {
-					result.code = JSON.stringify(code_without_format, null, 2);
-				} else {
-					result.code = JSON.stringify(JSON.parse(code_without_format), null, 2);
-				}
-			} catch (error) {
-				result.error = error;
-			}
-		} else {
-			result.code =
-				typeof code_without_format !== 'string'
-					? JSON.stringify(code_without_format)
-					: code_without_format;
-		}
-
-		return result;
-	}
-	*/
 
 	onMount(() => {
 		initializeEditor();

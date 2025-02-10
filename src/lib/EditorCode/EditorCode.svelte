@@ -153,7 +153,7 @@
 			}
 
 			let languaje_editor = languages[lang] ? languages[lang] : [];
-
+			console.log(lang, internal_code, languaje_editor);
 			editorView = new EditorView({
 				doc: internal_code,
 				extensions: [
