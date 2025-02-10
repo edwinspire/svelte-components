@@ -35,29 +35,35 @@
 			data = { selection: 0, json: { code: {} }, xml: { code: '' }, text: {} };
 		}
 
-		if (data && !data.json) {
+		if (data && data.json == null) {
 			data.json = {};
 		}
 
-		if (data && data.json && !data.json.code) {
+		if (data && data.json && data.json.code == null) {
 			data.json.code = {};
 		}
 
-		if (data && !data.xml) {
+		if (data && data.xml == null) {
 			data.xml = {};
 		}
 
-		if (data && data.xml && !data.xml.code) {
+		if (data && data.xml && data.xml.code == null) {
 			data.xml.code = '';
 		}
 
-		if (data && !data.text) {
-			data.text = {};
+		if (data && data.text == null) {
+			data.text = { value: '' };
 		}
 
-		if (data && !data.selection) {
+		if (data && data.text.value && data.text.value == null) {
+			data.text.value = '';
+		}
+
+		if (data && data.selection == null) {
 			data.selection = 0;
 		}
+
+		console.log('defaultValues >> BODY =>', data);
 	}
 
 	$inspect(data).with((type) => {

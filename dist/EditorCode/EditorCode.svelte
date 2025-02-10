@@ -48,7 +48,12 @@
 		{ label: 'None', value: 'none', prettier: '', plugins: [] },
 		{ label: 'HTML', value: 'html', prettier: 'html', plugins: [prettierPluginHtml] },
 		{ label: 'Javascript', value: 'js', prettier: 'babel', plugins: [prettierPluginBabel, Estree] },
-		{ label: 'JSON', value: 'json', prettier: 'json-stringify', plugins: [prettierPluginBabel, Estree] },
+		{
+			label: 'JSON',
+			value: 'json',
+			prettier: 'json-stringify',
+			plugins: [prettierPluginBabel, Estree]
+		},
 		{ label: 'SQL', value: 'sql', prettier: 'sql', plugins: [prettierPluginSql] },
 		{ label: 'XML', value: 'xml', prettier: 'html', plugins: [prettierPluginHtml] },
 		{ label: 'Text', value: 'text', prettier: '', plugins: [] }
@@ -123,7 +128,12 @@
 
 		//formatError = f.error;
 		//internal_code = f.code;
-		internal_code = code;
+		//internal_code = code;
+		if (lang === 'json') {
+			internal_code = typeof code === 'object' ? JSON.stringify(code) : code;
+		} else {
+			internal_code = code;
+		}
 
 		setCodeEditor(internal_code);
 	}

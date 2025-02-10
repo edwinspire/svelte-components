@@ -65,7 +65,7 @@
 					method: $state.snapshot(method)
 				});
 			}, 750);
-		} else if (type === 'update') {
+		} else if (type === 'init') {
 			defaultValues();
 		}
 	});
@@ -98,6 +98,7 @@
 		if (data && data.headers == null) {
 			data.headers = {};
 		}
+		console.log('>>>>>>> ', data);
 	}
 
 	function getSizeJSON(data) {
@@ -142,12 +143,12 @@
 
 	function getDataBody() {
 		let dataBody;
-		//console.log('getDataBody > ', data.body);
+		console.log('getDataBody > ', data.body);
 		switch (data.body.selection) {
 			case 0:
 				try {
 					let jsoncode = data?.body?.json?.code ?? undefined;
-					//console.log('jsoncode >> ', jsoncode);
+					console.log('jsoncode >> ', jsoncode);
 					if (typeof jsoncode == 'object') {
 						dataBody = jsoncode;
 					} else {

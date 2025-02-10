@@ -1,6 +1,6 @@
 <script>
-	import { lab } from 'd3';
-	import { Table, ColumnTypes, EditorCode, MenuMega } from '../lib/index.js';
+	
+	import { Table, ColumnTypes, EditorCode, MenuMega , RESTTester} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
 
@@ -454,12 +454,12 @@ console.log(code);
 ></EditorCode>
    -->
 
-<!-- <RESTTester
+ <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
- -->
+ 
 
 <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 
