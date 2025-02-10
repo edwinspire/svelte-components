@@ -63,7 +63,7 @@
 			data.selection = 0;
 		}
 
-		console.log('defaultValues >> BODY =>', data);
+	//	console.log('defaultValues >> BODY =>', data);
 	}
 
 	$inspect(data).with((type) => {
@@ -82,10 +82,10 @@
 {#snippet tab_json()}
 	<div>
 		{#if data && data.json}
-			<EditorCode lang="json" bind:code={data.json.code}></EditorCode>
+			<EditorCode lang="json" bind:code={data.json.code} showFormat={true}></EditorCode>
 		{/if}
 	</div>
-{/snippet}<!--  -->
+{/snippet}
 
 {#snippet tab_xml()}
 	{#if data && data.xml}

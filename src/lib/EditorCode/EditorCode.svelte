@@ -124,7 +124,7 @@
 
 	function parseCode() {
 		org_code = code;
-
+		console.log('parseCode >>>>>> ', code);
 		try {
 			internal_code = typeof code !== 'string' ? JSON.stringify(code) : code;
 		} catch (error) {
