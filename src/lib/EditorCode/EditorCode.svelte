@@ -124,15 +124,12 @@
 
 	function parseCode() {
 		org_code = code;
-		if (lang === 'json') {
-			try {
-				internal_code = typeof code !== 'string' ? JSON.stringify(code) : code;
-			} catch (error) {
-				internal_code = code;
-				console.warn(error);
-			}
-		} else {
+
+		try {
+			internal_code = typeof code !== 'string' ? JSON.stringify(code) : code;
+		} catch (error) {
 			internal_code = code;
+			console.warn(error);
 		}
 
 		setCodeEditor(internal_code);
@@ -161,8 +158,7 @@
 				doc: internal_code,
 				extensions: [
 					basicSetup,
-
-
+					languaje_editor,
 					isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
 					languaje_editor,
 					EditorView.updateListener.of(async (update) => {
@@ -209,7 +205,6 @@
 			}
 		}
 	}
-
 
 	onMount(() => {
 		initializeEditor();
