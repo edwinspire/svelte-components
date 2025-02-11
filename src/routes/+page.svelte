@@ -1,6 +1,12 @@
 <script>
-	
-	import { Table, ColumnTypes, EditorCode, MenuMega , RESTTester} from '../lib/index.js';
+	import {
+		Table,
+		ColumnTypes,
+		EditorCode,
+		MenuMega,
+		RESTTester,
+		PredictiveInput
+	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
 
@@ -33,7 +39,7 @@
 			}
 		],
 		brand: [{ label: 'ddddddd' }],
-		end: [{ label: 'tab1' }, {component: user}]
+		end: [{ label: 'tab1' }, { component: user }]
 	};
 
 	setTimeout(() => {
@@ -234,17 +240,17 @@
 	}, 30000);
 
 	setTimeout(() => {
-	//	code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
+		//	code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
 	}, 10000);
 </script>
 
 {#snippet user()}
-<span class="icon-text">
-	<span class="icon">
-		<i class="fa-solid fa-user"></i>
+	<span class="icon-text">
+		<span class="icon">
+			<i class="fa-solid fa-user"></i>
+		</span>
+		<span>User</span>
 	</span>
-	<span>User</span>
-  </span>
 {/snippet}
 
 {#snippet tab1()}
@@ -320,17 +326,16 @@
 	}}>Mostrar</button
 >
  -->
-<!-- 
+
 <PredictiveInput
 	bind:selectedValue
+	label=""
 	classInput="is-small"
-	
 	classLabel="is-small"
 	on:select={(p) => {
 		console.log('selectedValue', selectedValue, p);
 	}}
 ></PredictiveInput>
- -->
 
 <!-- <Table
 	onnewrow={() => {
@@ -436,25 +441,23 @@
 	chao
 {/snippet}
 
- 
- <EditorCode
+<EditorCode
 	left={l}
 	right={r}
 	bind:code
-	bind:lang={lang}
+	bind:lang
 	showResetButton={true}
 	isReadOnly={false}
 	showFormat={true}
 	showCode={true}
 	showHiddenButton={true}
 	showSelectLang={true}
-	onchange={(code)=>{
-console.log(code);
+	onchange={(code) => {
+		console.log(code);
 	}}
 ></EditorCode>
-   
 
- <!-- <RESTTester
+<!-- <RESTTester
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}

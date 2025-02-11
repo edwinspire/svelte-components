@@ -6,7 +6,7 @@
 			{ name: 'Manzana', value: '1' },
 			{ name: 'Durazno', value: '2' }
 		]),
-		label = $bindable(''),
+		label = $bindable('Select'),
 		selectedValue = $bindable(null),
 		classLabel = $bindable('is-small'),
 		classInput = $bindable('is-small'),
@@ -68,53 +68,58 @@
 	});
 </script>
 
-<div class="field is-horizontal">
+<div class="field has-addons">
 	{#if label && label.length > 0}
-		<div class="field-label {classLabel}">
-			<!-- svelte-ignore a11y_label_has_associated_control -->
-			<label class="label">{label}</label>
-		</div>
-	{/if}
-	<div class="field-body">
-		<div class="field">
-			<div class="control has-icons-left">
-				<input
-					class="input {classInput} {selectedValueIsValid ? classOnSucess : classOnError}"
-					type="text"
-					bind:value={inputValue}
-					oninput={handleInput}
-					onfocus={handleFocus}
-					{placeholder}
-				/>
-				<span class="icon is-small is-left">
+		<p class="control">
+			<span class="button {classLabel} is-static">
+				<span class="icon">
 					<i class={classIcon}></i>
 				</span>
-			</div>
-
-			{#if !selectedValueIsValid}
-				<p class="help {classOnError} is-small">
-					The selected value {selectedValue} is not valid.
-				</p>
-			{/if}
-
-			<input type="hidden" bind:value={selectedValue} />
-
-			{#if showDropdown && filteredOptions.length > 0}
-				<div class="dropdown is-active">
-					<div class="dropdown-menu" role="menu">
-						<div class="dropdown-content">
-							{#each filteredOptions as option}
-								<!-- svelte-ignore a11y_invalid_attribute -->
-								<a href="#" class="dropdown-item ajust-item" onclick={() => handleClick(option)}>
-									{option.name}
-								</a>
-							{/each}
-						</div>
+				<span>{label}</span>
+			</span>
+		</p>
+	{/if}
+	<div class="control">
+		<input
+			class="input {classInput} is-outlined"
+			type="text"
+			bind:value={inputValue}
+			oninput={handleInput}
+			onfocus={handleFocus}
+			{placeholder}
+		/>
+		<input type="hidden" bind:value={selectedValue} />
+		{#if !selectedValueIsValid}
+			<p class="help {classOnError} is-small">
+				The selected value <strong>{inputValue}</strong> is not valid.
+			</p>
+		{/if}
+		{#if showDropdown && filteredOptions.length > 0}
+			<div class="dropdown is-active">
+				<div class="dropdown-menu" role="menu">
+					<div class="dropdown-content">
+						{#each filteredOptions as option}
+							<!-- svelte-ignore a11y_invalid_attribute -->
+							<a href="#" class="dropdown-item ajust-item" onclick={() => handleClick(option)}>
+								{option.name}
+							</a>
+						{/each}
 					</div>
 				</div>
-			{/if}
-		</div>
+			</div>
+		{/if}
 	</div>
+	<p class="control">
+		<span class="button {classLabel} {selectedValueIsValid ? classOnSucess : classOnError}">
+			<span class="icon">
+				{#if selectedValueIsValid}
+					<i class="fa-solid fa-check"></i>
+				{:else}
+					<i class="fa-solid fa-triangle-exclamation"></i>
+				{/if}
+			</span>
+		</span>
+	</p>
 </div>
 
 <style>
@@ -124,6 +129,6 @@
 	}
 	.ajust-item {
 		padding: 0.1rem 0.1rem 0.1rem 1rem;
-		font-size: .75rem;
+		font-size: 0.75rem;
 	}
 </style>
