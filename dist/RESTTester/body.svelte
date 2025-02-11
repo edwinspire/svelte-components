@@ -74,9 +74,7 @@
 		}
 	});
 
-setInterval(() => {
-	console.log('>> data Body JSON', data.json.code);
-}, 3000);
+
 
 	onMount(() => {
 		defaultValues();

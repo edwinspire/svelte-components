@@ -132,7 +132,8 @@
 			console.warn(error);
 		}
 
-		setCodeEditor(internal_code);
+		//setCodeEditor(internal_code);
+		formatCode();	
 	}
 
 	function setCodeEditor(text) {
@@ -153,7 +154,7 @@
 			}
 
 			let languaje_editor = languages[lang] ? languages[lang] : [];
-			console.log(lang, internal_code, languaje_editor);
+			//console.log(lang, internal_code, languaje_editor);
 			editorView = new EditorView({
 				doc: internal_code,
 				extensions: [
@@ -172,7 +173,7 @@
 									if (lang === 'json') {
 										code = JSON.parse(internal_code);
 									} else {
-										code = code = internal_code;
+										code = internal_code;
 									}
 									formatError = false;
 									onchange($state.snapshot({ lang: lang, code: code }));
@@ -190,7 +191,7 @@
 				parent: elementParent
 			});
 
-			// console.log(editorView.themeClasses);
+			// console.log(editorView.themrrrrrrrrrrrrrrr5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555eClasses);
 		}
 	}
 

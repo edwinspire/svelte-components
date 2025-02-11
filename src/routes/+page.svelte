@@ -12,7 +12,20 @@
 
 	let selectedValue = '1';
 
-	let data_test = {};
+	let data_test = {
+		body: {
+			selection: 0,
+			json: {
+				code: { sd: 12, dff:77, rtt: 899 }
+			},
+			xml: {
+				code: ''
+			},
+			text: {
+				value: ''
+			}
+		}
+	};
 
 	let menujson = {
 		start: [
@@ -45,8 +58,21 @@
 	};
 
 	setInterval(() => {
-		console.log(data_test)
-	}, 5000);
+		data_test = {
+		body: {
+			selection: 0,
+			json: {
+				code: { sd: 12, dff:77, rtt: 899, ggg: "JGKGKJDFGKJSDGKJFGDS" }
+			},
+			xml: {
+				code: ''
+			},
+			text: {
+				value: ''
+			}
+		}
+	};
+	}, 10000);
 
 	let mostrar_dialogo = true;
 	let json01 = {
@@ -461,13 +487,12 @@
 ></EditorCode>
  -->
 
- <RESTTester
- bind:data={data_test}
+<RESTTester
+	bind:data={data_test}
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
-  
 
 <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 
