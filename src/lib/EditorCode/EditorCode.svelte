@@ -167,8 +167,19 @@
 
 							clearTimeout(timeoutParseOnChange);
 
-							timeoutParseOnChange = setTimeout(async () => {
-								onchange($state.snapshot({ lang: lang, code: code }));
+							timeoutParseOnChange = setTimeout(() => {
+								try {
+									if (lang === 'json') {
+										code = JSON.parse(internal_code);
+									} else {
+										code = code = internal_code;
+									}
+									formatError = false;
+									onchange($state.snapshot({ lang: lang, code: code }));
+								} catch (error) {
+									console.warn(error);
+									formatError = true;
+								}
 								//await formatCode();
 							}, 750);
 						}

@@ -12,6 +12,8 @@
 
 	let selectedValue = '1';
 
+	let data_test = {};
+
 	let menujson = {
 		start: [
 			{ label: 'PRUEBA', icon: ' fa-solid fa-delete-left ', link: '/ffsfffs/fff' },
@@ -42,8 +44,8 @@
 		end: [{ label: 'tab1' }, { component: user }]
 	};
 
-	setTimeout(() => {
-		selectedValue = '0';
+	setInterval(() => {
+		console.log(data_test)
 	}, 5000);
 
 	let mostrar_dialogo = true;
@@ -327,7 +329,7 @@
 >
  -->
 
-<PredictiveInput
+<!-- <PredictiveInput
 	bind:selectedValue
 	label=""
 	classInput="is-small"
@@ -336,6 +338,7 @@
 		console.log('selectedValue', selectedValue, p);
 	}}
 ></PredictiveInput>
+ -->
 
 <!-- <Table
 	onnewrow={() => {
@@ -440,7 +443,7 @@
 {#snippet r()}
 	chao
 {/snippet}
-
+<!-- 
 <EditorCode
 	left={l}
 	right={r}
@@ -456,13 +459,15 @@
 		console.log(code);
 	}}
 ></EditorCode>
+ -->
 
-<!-- <RESTTester
+ <RESTTester
+ bind:data={data_test}
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
-  -->
+  
 
 <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 
