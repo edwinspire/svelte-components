@@ -264,8 +264,8 @@
 	let lang = 'sql';
 
 	setTimeout(() => {
-		// lang = 'xml';
-	}, 30000);
+		 code = 'xml';
+	}, 10000);
 
 	setTimeout(() => {
 		//	code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';

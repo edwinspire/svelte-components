@@ -83,7 +83,7 @@
 		if (ll) {
 			p = ll.plugins;
 		}
-		console.log(p);
+		//		console.log(p);
 		return p;
 	});
 
@@ -93,9 +93,18 @@
 		}
 	});
 
+	/*
 	$inspect(code).with((type) => {
 		if (type === 'update') {
 			//console.log('code ++++++++++++++>>>>>> ', code);
+			setCodeEditor(code);
+		}
+	});
+	*/
+
+	$effect(() => {
+		console.log('EditorCode	==> ', $state.snapshot(code));
+		if (code) {
 			setCodeEditor(code);
 		}
 	});
@@ -260,7 +269,7 @@
 
 	onDestroy(() => {
 		clearTimeout(timeoutParseOnChange);
-	//	clearTimeout(timeOutonchangeCode);
+		//	clearTimeout(timeOutonchangeCode);
 	});
 </script>
 
