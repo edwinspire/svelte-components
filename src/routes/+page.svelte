@@ -138,7 +138,7 @@
 		]
 	};
 
-	let code = 10;
+	let code = `SELECT IdLog, DateLog, TipoMensaje, Topico, Mensaje, UserId, GETDATE() AS fecha_descarga  FROM [EasygestionEmpresarial].[dbo].[Log] WITH(NOLOCK) WHERE topico = 'Portal' AND datelog >= DATEADD(DAY, -30, datelog)`;
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
@@ -261,7 +261,7 @@
 
 	let valor = 10;
 
-	let lang = 'json';
+	let lang = 'sql';
 
 	setTimeout(() => {
 		// lang = 'xml';
@@ -469,7 +469,7 @@
 {#snippet r()}
 	chao
 {/snippet}
-<!-- 
+ 
 <EditorCode
 	left={l}
 	right={r}
@@ -485,15 +485,15 @@
 		console.log(code);
 	}}
 ></EditorCode>
- -->
-
+ 
+<!-- 
 <RESTTester
 	bind:data={data_test}
 	onchange={(data) => {
 		console.log('RESTTester: ', data);
 	}}
 ></RESTTester>
-
+ -->
 <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 
 <!-- 

@@ -1,12 +1,12 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { Level } from '../index.js';
+	import { EditorState, StateEffect } from '@codemirror/state';
 	import { EditorView, basicSetup } from 'codemirror';
 	import { javascript } from '@codemirror/lang-javascript';
 	import { json } from '@codemirror/lang-json';
 	import { xml } from '@codemirror/lang-xml';
 	import { sql } from '@codemirror/lang-sql';
-	import { EditorState } from '@codemirror/state';
 	import { oneDark } from '@codemirror/theme-one-dark';
 	import * as Prettier from 'prettier/standalone.js';
 	import prettierPluginBabel from 'prettier/plugins/babel.mjs';
@@ -89,15 +89,74 @@
 
 	$inspect(lang).with((type) => {
 		if (type === 'update') {
-			initializeEditor();
+			_reconfigureExtensions();
 		}
 	});
 
-	let timeOutonchangeCode;
-
-	$effect(() => {
-		parseCode();
+	$inspect(code).with((type) => {
+		if (type === 'update') {
+			//console.log('code ++++++++++++++>>>>>> ', code);
+			setCodeEditor(code);
+		}
 	});
+
+	function create_extensions() {
+		let languaje_editor = languages[lang] ? languages[lang] : [];
+		return [
+			basicSetup,
+			languaje_editor,
+			isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
+			languaje_editor,
+			EditorView.updateListener.of(async (update) => {
+				if (update.changes && update.changedRanges.length > 0) {
+					internal_code = update.state.doc.toString();
+
+					try {
+						if (lang === 'json') {
+							code = JSON.parse(internal_code);
+						} else {
+							code = internal_code;
+						}
+						formatError = false;
+						onchange($state.snapshot({ lang: lang, code: code }));
+					} catch (error) {
+						console.warn(error);
+						formatError = true;
+					}
+
+					/*
+					clearTimeout(timeoutParseOnChange);
+
+					timeoutParseOnChange = setTimeout(() => {
+						try {
+							if (lang === 'json') {
+								code = JSON.parse(internal_code);
+							} else {
+								code = internal_code;
+							}
+							formatError = false;
+							onchange($state.snapshot({ lang: lang, code: code }));
+						} catch (error) {
+							console.warn(error);
+							formatError = true;
+						}
+						//await formatCode();
+					}, 10000);
+					*/
+				}
+			}),
+			oneDark
+		];
+	}
+
+	function _reconfigureExtensions() {
+		if (editorView === null) return;
+		editorView.dispatch({
+			effects: StateEffect.reconfigure.of(create_extensions())
+		});
+	}
+
+	//let timeOutonchangeCode;
 
 	export function setCode(new_code) {
 		code = new_code;
@@ -119,10 +178,10 @@
 
 	export function reset() {
 		internal_code = org_code;
-		parseCode();
+		//parseCode();
 	}
 
-	function parseCode() {
+	/* 	function parseCode() {
 		org_code = code;
 		console.log('parseCode >>>>>> ', code);
 		try {
@@ -133,10 +192,19 @@
 		}
 
 		//setCodeEditor(internal_code);
-		formatCode();	
-	}
+		//	formatCode();
+	} */
 
-	function setCodeEditor(text) {
+	function setCodeEditor(code_value) {
+		let text = code_value;
+		try {
+			text = typeof code_value !== 'string' ? JSON.stringify(code_value) : code_value;
+		} catch (error) {
+			console.warn(error);
+		}
+
+		console.log('setCodeEditor >>>>>> ', text);
+
 		if (editorView && editorView.state && text != editorView.state.doc.toString()) {
 			const transaction = editorView.state.update({
 				changes: { from: 0, to: editorView.state.doc.length, insert: text }
@@ -147,51 +215,19 @@
 	}
 
 	function initializeEditor() {
+		console.log('initializeEditor >>>>>> ', internal_code);
 		if (elementParent) {
 			if (editorView) {
 				editorView.destroy();
 				editorView = undefined;
 			}
 
-			let languaje_editor = languages[lang] ? languages[lang] : [];
-			//console.log(lang, internal_code, languaje_editor);
 			editorView = new EditorView({
 				doc: internal_code,
-				extensions: [
-					basicSetup,
-					languaje_editor,
-					isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
-					languaje_editor,
-					EditorView.updateListener.of(async (update) => {
-						if (update.changes && update.changedRanges.length > 0) {
-							internal_code = update.state.doc.toString();
-
-							clearTimeout(timeoutParseOnChange);
-
-							timeoutParseOnChange = setTimeout(() => {
-								try {
-									if (lang === 'json') {
-										code = JSON.parse(internal_code);
-									} else {
-										code = internal_code;
-									}
-									formatError = false;
-									onchange($state.snapshot({ lang: lang, code: code }));
-								} catch (error) {
-									console.warn(error);
-									formatError = true;
-								}
-								//await formatCode();
-							}, 750);
-						}
-					}),
-					oneDark
-				],
-
+				extensions: create_extensions(),
 				parent: elementParent
 			});
-
-			// console.log(editorView.themrrrrrrrrrrrrrrr5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555eClasses);
+			setCodeEditor(code);
 		}
 	}
 
@@ -213,7 +249,7 @@
 				}
 			} catch (error) {
 				formatError = error;
-				console.warn(error);
+				console.warn($state.snapshot(error));
 			}
 		}
 	}
@@ -224,7 +260,7 @@
 
 	onDestroy(() => {
 		clearTimeout(timeoutParseOnChange);
-		clearTimeout(timeOutonchangeCode);
+	//	clearTimeout(timeOutonchangeCode);
 	});
 </script>
 
@@ -242,7 +278,7 @@
 							<select
 								bind:value={lang}
 								onchange={() => {
-									initializeEditor();
+									//initializeEditor();
 								}}
 							>
 								{#each list_langs as ll}
