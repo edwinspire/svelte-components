@@ -149,10 +149,11 @@
 	}
 
 	function _reconfigureExtensions() {
-		if (editorView === null) return;
-		editorView.dispatch({
-			effects: StateEffect.reconfigure.of(create_extensions())
-		});
+		if (editorView != null) {
+			editorView.dispatch({
+				effects: StateEffect.reconfigure.of(create_extensions())
+			});
+		}
 	}
 
 	//let timeOutonchangeCode;
