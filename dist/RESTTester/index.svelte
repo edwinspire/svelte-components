@@ -54,9 +54,9 @@
 
 	let timeoutChangeData;
 
-	$inspect([data, url, method]).with((type) => {
-	//	console.log(' inspect >>>>>>>>>>>>> ', type, data);
-		if (type === 'update') {
+	$effect(() => {
+		if (data || url || method) {
+			
 			clearTimeout(timeoutChangeData);
 			timeoutChangeData = setTimeout(() => {
 				onchange({
@@ -65,10 +65,9 @@
 					method: $state.snapshot(method)
 				});
 			}, 750);
-		} else if (type === 'init') {
-			defaultValues();
 		}
 	});
+
 
 	function defaultValues() {
 		if (data == null) {

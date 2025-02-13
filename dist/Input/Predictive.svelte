@@ -55,8 +55,8 @@
 		options.find((option) => option.value.includes(selectedValue))
 	);
 
-	$inspect(selectedValue).with((type) => {
-		if (type === 'update') {
+	$effect(() => {
+		if (selectedValue != null) {
 			if (!selectedValueIsValid) {
 				inputValue = '';
 			}

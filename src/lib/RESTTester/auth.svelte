@@ -38,13 +38,6 @@
 		}
 	}
 
-	$inspect(data).with((type) => {
-		//console.log('>>>>>>>>>>>>> ', type);
-		if (type === 'init') {
-			defaultValues();
-		}
-	});
-
 	onMount(() => {
 		//console.log('onMount >> ', data);
 		defaultValues();

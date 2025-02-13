@@ -63,18 +63,8 @@
 			data.selection = 0;
 		}
 
-	//	console.log('defaultValues >> BODY =>', data);
+		//	console.log('defaultValues >> BODY =>', data);
 	}
-
-	$inspect(data).with((type) => {
-		//console.log('>>>>>>>>>>>>> ', type);
-		if (type === 'init') {
-			/*  */
-			defaultValues();
-		}
-	});
-
-
 
 	onMount(() => {
 		defaultValues();

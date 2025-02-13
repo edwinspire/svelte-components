@@ -87,23 +87,13 @@
 		return p;
 	});
 
-	$inspect(lang).with((type) => {
-		if (type === 'update') {
+	$effect(() => {
+		if (lang) {
 			_reconfigureExtensions();
 		}
 	});
 
-	/*
-	$inspect(code).with((type) => {
-		if (type === 'update') {
-			//console.log('code ++++++++++++++>>>>>> ', code);
-			setCodeEditor(code);
-		}
-	});
-	*/
-
 	$effect(() => {
-		console.log('EditorCode	==> ', $state.snapshot(code));
 		if (code) {
 			setCodeEditor(code);
 		}
