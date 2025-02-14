@@ -95,7 +95,7 @@
 
 	$effect(() => {
 		if (code) {
-			setCodeEditor(code);
+			setCodeEditor(code, false);
 		}
 	});
 
@@ -195,15 +195,25 @@
 		//	formatCode();
 	} */
 
-	function setCodeEditor(code_value) {
+	async function setCodeEditor(code_value, with_format = false) {
 		let text = code_value;
 		try {
-			text = typeof code_value !== 'string' ? JSON.stringify(code_value) : code_value;
+			text = typeof code_value !== 'string' ? JSON.stringify(code_value, null, 2) : code_value;
 		} catch (error) {
 			console.warn(error);
 		}
 
-		console.log('setCodeEditor >>>>>> ', text);
+		if (with_format) {
+			try {
+				let formatted_code = await formatter(editorView.state.doc.toString());
+				formatError = formatted_code.error;
+				text = formatted_code.code;
+			} catch (error) {
+				console.warn(error);
+			}
+		}
+
+	//	console.log('setCodeEditor >>>>>> ', text);
 
 		if (editorView && editorView.state && text != editorView.state.doc.toString()) {
 			const transaction = editorView.state.update({
@@ -214,7 +224,7 @@
 		}
 	}
 
-	function initializeEditor() {
+	async function initializeEditor() {
 		console.log('initializeEditor >>>>>> ', internal_code);
 		if (elementParent) {
 			if (editorView) {
@@ -227,7 +237,7 @@
 				extensions: create_extensions(),
 				parent: elementParent
 			});
-			setCodeEditor(code);
+			await setCodeEditor(code);
 		}
 	}
 
@@ -235,27 +245,40 @@
 	async function formatCode() {
 		if (editorView && editorView.state) {
 			try {
-				if (lang_prettier && lang_prettier.length > 0) {
-					let formatted_code = await Prettier.format(editorView.state.doc.toString(), {
-						parser: lang_prettier,
-						tabWidth: 2, // Indentación de 4 espacios
-						useTabs: false, // Usa espacios en lugar de tabulaciones
-						plugins: plugings_prettier
-					});
-					formatError = undefined;
-					internal_code = formatted_code + '';
-					//console.log(internal_code);
-					setCodeEditor(internal_code);
-				}
+				await setCodeEditor(editorView.state.doc.toString(), true);
 			} catch (error) {
-				formatError = error;
-				console.warn($state.snapshot(error));
+				console.error($state.snapshot(error));
 			}
 		}
 	}
 
-	onMount(() => {
-		initializeEditor();
+	// Formatear el código
+	async function formatter(code_to_format) {
+		let result = { error: undefined, code: code_to_format };
+
+		try {
+			result.code =
+				typeof code_to_format !== 'string' ? JSON.stringify(code_to_format) : code_to_format;
+
+			if (lang_prettier && lang_prettier.length > 0) {
+				let formatted_code = await Prettier.format(result.code, {
+					parser: lang_prettier,
+					tabWidth: 2, // Indentación de 4 espacios
+					useTabs: false, // Usa espacios en lugar de tabulaciones
+					plugins: plugings_prettier
+				});
+				result.error = undefined;
+				result.code = formatted_code;
+			}
+		} catch (error) {
+			result.error = error;
+			console.warn($state.snapshot(error));
+		}
+		return result;
+	}
+
+	onMount(async () => {
+		await initializeEditor();
 	});
 
 	onDestroy(() => {

@@ -138,7 +138,9 @@
 		]
 	};
 
-	let code = `SELECT IdLog, DateLog, TipoMensaje, Topico, Mensaje, UserId, GETDATE() AS fecha_descarga  FROM [EasygestionEmpresarial].[dbo].[Log] WITH(NOLOCK) WHERE topico = 'Portal' AND datelog >= DATEADD(DAY, -30, datelog)`;
+	//let code = `SELECT IdLog, DateLog, TipoMensaje, Topico, Mensaje, UserId, GETDATE() AS fecha_descarga  FROM [EasygestionEmpresarial].[dbo].[Log] WITH(NOLOCK) WHERE topico = 'Portal' AND datelog >= DATEADD(DAY, -30, datelog)`;
+	let code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
+
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
@@ -261,10 +263,11 @@
 
 	let valor = 10;
 
-	let lang = 'sql';
+	let lang = 'json';
 
 	setTimeout(() => {
-		 code = 'xml';
+		 code = {aa: 898, sss: 12, ddd: 90, ddd: {dd: 90, ddd: 90, kk: {ee: 77, q: 'dddd'}}};
+		 console.log('Cambia de codigo');
 	}, 10000);
 
 	setTimeout(() => {
