@@ -245,6 +245,8 @@
 		};
 	}
 
+	let mostrar = true;
+
 	/*
 	let tab_list = [
 		{ label: 'UNO', component: tab2, classIcon : '' },
@@ -367,16 +369,25 @@
 	}}>Cambiar</button
 >
 
-<PredictiveInput
-	bind:selectedValue
-	label="SELECT"
-	{freeTyping}
-	classInput="is-small"
-	classLabel="is-small"
-	onselect={(p) => {
-		console.log('selectedValue', selectedValue, p);
-	}}
-></PredictiveInput>
+<button
+	onclick={() => {
+		mostrar = !mostrar;
+		console.log('Mostrar', freeTyping);
+	}}>Mostrar</button
+>
+
+{#if mostrar}
+	<PredictiveInput
+		bind:selectedValue
+		label="SELECT"
+		{freeTyping}
+		classInput="is-small"
+		classLabel="is-small"
+		onselect={(p) => {
+			console.log('selectedValue', selectedValue, p);
+		}}
+	></PredictiveInput>
+{/if}
 
 <!-- <Table
 	onnewrow={() => {
@@ -482,21 +493,23 @@
 	chao
 {/snippet}
 
-<EditorCode
-	left={l}
-	right={r}
-	bind:code
-	bind:lang
-	showResetButton={true}
-	isReadOnly={false}
-	showFormat={true}
-	showCode={true}
-	showHiddenButton={true}
-	showSelectLang={true}
-	onchange={(code) => {
-		console.log(code);
-	}}
-></EditorCode>
+{#if mostrar}
+	<EditorCode
+		left={l}
+		right={r}
+		bind:code
+		bind:lang
+		showResetButton={true}
+		isReadOnly={false}
+		showFormat={true}
+		showCode={true}
+		showHiddenButton={true}
+		showSelectLang={true}
+		onchange={(code) => {
+			console.log(' EditorCode >>>> ', code);
+		}}
+	></EditorCode>
+{/if}
 
 <!-- 
 <RESTTester

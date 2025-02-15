@@ -16,6 +16,7 @@
 
 	let editorView;
 	let elementParent;
+	let initialized = false;
 
 	let {
 		code = $bindable(''),
@@ -110,17 +111,19 @@
 				if (update.changes && update.changedRanges.length > 0) {
 					internal_code = update.state.doc.toString();
 
-					try {
-						if (lang === 'json') {
-							code = JSON.parse(internal_code);
-						} else {
-							code = internal_code;
+					if (initialized) {
+						try {
+							if (lang === 'json') {
+								code = JSON.parse(internal_code);
+							} else {
+								code = internal_code;
+							}
+							formatError = false;
+							onchange($state.snapshot({ lang: lang, code: code }));
+						} catch (error) {
+							console.warn(error);
+							formatError = true;
 						}
-						formatError = false;
-						onchange($state.snapshot({ lang: lang, code: code }));
-					} catch (error) {
-						console.warn(error);
-						formatError = true;
 					}
 
 					/*
@@ -213,7 +216,7 @@
 			}
 		}
 
-	//	console.log('setCodeEditor >>>>>> ', text);
+		//	console.log('setCodeEditor >>>>>> ', text);
 
 		if (editorView && editorView.state && text != editorView.state.doc.toString()) {
 			const transaction = editorView.state.update({
@@ -279,6 +282,7 @@
 
 	onMount(async () => {
 		await initializeEditor();
+		initialized = true;
 	});
 
 	onDestroy(() => {
