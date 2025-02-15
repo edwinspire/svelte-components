@@ -13,8 +13,9 @@ declare const Predictive: import("svelte").Component<{
     classIcon?: string;
     classOnSucess?: string;
     classOnError?: string;
+    freeTyping?: boolean;
     onselect?: Function;
-}, {}, "label" | "options" | "selectedValue" | "classLabel" | "classInput" | "placeholder" | "classIcon" | "classOnSucess" | "classOnError">;
+}, {}, "label" | "options" | "selectedValue" | "classLabel" | "classInput" | "placeholder" | "classIcon" | "classOnSucess" | "classOnError" | "freeTyping">;
 type $$ComponentProps = {
     options?: any[];
     label?: string;
@@ -25,5 +26,6 @@ type $$ComponentProps = {
     classIcon?: string;
     classOnSucess?: string;
     classOnError?: string;
+    freeTyping?: boolean;
     onselect?: Function;
 };

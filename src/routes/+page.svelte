@@ -16,7 +16,7 @@
 		body: {
 			selection: 0,
 			json: {
-				code: { sd: 12, dff:77, rtt: 899 }
+				code: { sd: 12, dff: 77, rtt: 899 }
 			},
 			xml: {
 				code: ''
@@ -59,19 +59,19 @@
 
 	setInterval(() => {
 		data_test = {
-		body: {
-			selection: 0,
-			json: {
-				code: { sd: 12, dff:77, rtt: 899, ggg: "JGKGKJDFGKJSDGKJFGDS" }
-			},
-			xml: {
-				code: ''
-			},
-			text: {
-				value: ''
+			body: {
+				selection: 0,
+				json: {
+					code: { sd: 12, dff: 77, rtt: 899, ggg: 'JGKGKJDFGKJSDGKJFGDS' }
+				},
+				xml: {
+					code: ''
+				},
+				text: {
+					value: ''
+				}
 			}
-		}
-	};
+		};
 	}, 10000);
 
 	let mostrar_dialogo = true;
@@ -209,6 +209,8 @@
 		params: { animal_type: 'cat', amount: 100 }
 	};
 
+	let freeTyping = false;
+
 	let RawDataTable = [
 		{
 			fecha: new Date().toISOString(),
@@ -266,8 +268,8 @@
 	let lang = 'json';
 
 	setTimeout(() => {
-		 code = {aa: 898, sss: 12, ddd: 90, ddd: {dd: 90, ddd: 90, kk: {ee: 77, q: 'dddd'}}};
-		 console.log('Cambia de codigo');
+		code = { aa: 898, sss: 12, ddd: 90, ddd: { dd: 90, ddd: 90, kk: { ee: 77, q: 'dddd' } } };
+		console.log('Cambia de codigo');
 	}, 10000);
 
 	setTimeout(() => {
@@ -358,16 +360,23 @@
 >
  -->
 
-<!-- <PredictiveInput
+<button
+	onclick={() => {
+		freeTyping = !freeTyping;
+		console.log('freeTyping', freeTyping);
+	}}>Cambiar</button
+>
+
+<PredictiveInput
 	bind:selectedValue
-	label=""
+	label="SELECT"
+	{freeTyping}
 	classInput="is-small"
 	classLabel="is-small"
-	on:select={(p) => {
+	onselect={(p) => {
 		console.log('selectedValue', selectedValue, p);
 	}}
 ></PredictiveInput>
- -->
 
 <!-- <Table
 	onnewrow={() => {
@@ -472,7 +481,7 @@
 {#snippet r()}
 	chao
 {/snippet}
- 
+
 <EditorCode
 	left={l}
 	right={r}
@@ -488,7 +497,7 @@
 		console.log(code);
 	}}
 ></EditorCode>
- 
+
 <!-- 
 <RESTTester
 	bind:data={data_test}

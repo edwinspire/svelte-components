@@ -6,20 +6,33 @@
 			{ name: 'Manzana', value: '1' },
 			{ name: 'Durazno', value: '2' }
 		]),
-		label = $bindable('Select'),
+		label = $bindable('SELECT'),
 		selectedValue = $bindable(null),
 		classLabel = $bindable('is-small'),
 		classInput = $bindable('is-small'),
-		placeholder = $bindable('Type to see options'),
-		classIcon = $bindable('fa-solid fa-keyboard'),
+		placeholder = $bindable(''),
+		classIcon = $bindable(''),
 		classOnSucess = $bindable('is-success'),
 		classOnError = $bindable('is-danger'),
+		freeTyping = $bindable(false),
 		onselect = () => {}
 	} = $props();
 
 	let filteredOptions = $state(options);
 	let showDropdown = $state(false);
 	let inputValue = $state('');
+
+	let placeholderInternal = $derived(
+		placeholder && placeholder.length > 0 ? placeholder : 'Type to see options'
+	);
+
+	let classIconInternal = $derived(
+		classIcon && classIcon.length > 0
+			? classIcon
+			: freeTyping
+				? 'fa-regular fa-keyboard'
+				: 'fa-solid fa-angle-down'
+	);
 
 	function handleInput(event) {
 		inputValue = event.target.value;
@@ -36,7 +49,17 @@
 		selectedValue = option.value;
 		showDropdown = false;
 		//	console.log('option', option);
-		onselect($state.snapshot(option));
+		if (!freeTyping) {
+			onselect($state.snapshot(option));
+		} else {
+			blurHandler();
+		}
+	}
+
+	function blurHandler() {
+		if (freeTyping) {
+			onselect($state.snapshot({ name: 'freeTyping', value: inputValue }));
+		}
 	}
 
 	function handleFocus() {
@@ -47,12 +70,11 @@
 		} else {
 			filteredOptions = [];
 		}
-
 		// showDropdown = true;
 	}
 
 	let selectedValueIsValid = $derived(
-		options.find((option) => option.value.includes(selectedValue))
+		freeTyping ? true : options.find((option) => option.value.includes(selectedValue))
 	);
 
 	$effect(() => {
@@ -72,21 +94,19 @@
 	{#if label && label.length > 0}
 		<p class="control">
 			<span class="button {classLabel} is-static">
-				<span class="icon">
-					<i class={classIcon}></i>
-				</span>
 				<span>{label}</span>
 			</span>
 		</p>
 	{/if}
-	<div class="control">
+	<div class="control is-expanded">
 		<input
 			class="input {classInput} is-outlined"
 			type="text"
 			bind:value={inputValue}
 			oninput={handleInput}
 			onfocus={handleFocus}
-			{placeholder}
+			onblur={blurHandler}
+			placeholder={placeholderInternal}
 		/>
 		<input type="hidden" bind:value={selectedValue} />
 		{#if !selectedValueIsValid}
@@ -110,13 +130,16 @@
 		{/if}
 	</div>
 	<p class="control">
-		<span class="button {classLabel} {selectedValueIsValid ? classOnSucess : classOnError}">
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<span
+			class="button is-outlined {classLabel} {selectedValueIsValid ? classOnSucess : classOnError}"
+			onclick={() => {
+				showDropdown = !showDropdown;
+			}}
+		>
 			<span class="icon">
-				{#if selectedValueIsValid}
-					<i class="fa-solid fa-check"></i>
-				{:else}
-					<i class="fa-solid fa-triangle-exclamation"></i>
-				{/if}
+				<i class={classIconInternal}></i>
 			</span>
 		</span>
 	</p>
