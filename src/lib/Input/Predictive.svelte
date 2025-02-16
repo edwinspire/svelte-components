@@ -58,6 +58,7 @@
 
 	function blurHandler() {
 		if (freeTyping) {
+			selectedValue = inputValue;
 			onselect($state.snapshot({ name: 'freeTyping', value: inputValue }));
 		}
 	}
@@ -77,18 +78,8 @@
 		freeTyping ? true : options.find((option) => option.value.includes(selectedValue))
 	);
 
-	$effect(() => {
-		if (selectedValue != null) {
-			if (!selectedValueIsValid) {
-				inputValue = '';
-			} else {
-				setinputValue();
-			}
-		}
-	});
-
 	function setinputValue() {
-		inputValue = options.find((option) => option.value === selectedValue)?.name;
+		inputValue = freeTyping ? selectedValue : options.find((option) => option.value === selectedValue)?.name;
 	}
 
 	onMount(() => {
@@ -114,10 +105,10 @@
 			onblur={blurHandler}
 			placeholder={placeholderInternal}
 		/>
-		<input type="hidden" bind:value={selectedValue} />
+
 		{#if !selectedValueIsValid}
 			<p class="help {classOnError} is-small">
-				The selected value <strong>{inputValue}</strong> is not valid.
+				The selected value <strong>{inputValue}</strong> is not valid. {JSON.stringify( selectedValue)}
 			</p>
 		{/if}
 		{#if showDropdown && filteredOptions.length > 0}
