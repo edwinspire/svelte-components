@@ -81,12 +81,18 @@
 		if (selectedValue != null) {
 			if (!selectedValueIsValid) {
 				inputValue = '';
+			} else {
+				setinputValue();
 			}
 		}
 	});
 
-	onMount(() => {
+	function setinputValue() {
 		inputValue = options.find((option) => option.value === selectedValue)?.name;
+	}
+
+	onMount(() => {
+		setinputValue();
 	});
 </script>
 
