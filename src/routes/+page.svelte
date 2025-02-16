@@ -258,11 +258,11 @@
 	*/
 
 	onMount(() => {
-		/*
+		
 		setInterval(() => {
-			 dataTest.push(generateRandomJson());
-		}, 500);
-*/
+			selectedValue = '2';
+		}, 10000);
+
 	});
 
 	let valor = 10;

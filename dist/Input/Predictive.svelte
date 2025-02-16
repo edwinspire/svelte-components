@@ -34,6 +34,13 @@
 				: 'fa-solid fa-angle-down'
 	);
 
+	$effect(() => {
+		if (selectedValue != null) {
+			console.log('selectedValue', selectedValue);
+			setinputValue();
+		}
+	});
+
 	function handleInput(event) {
 		inputValue = event.target.value;
 		filteredOptions = options.filter((option) =>
@@ -45,7 +52,7 @@
 	}
 
 	function handleClick(option) {
-		inputValue = option.name;
+		//inputValue = option.name;
 		selectedValue = option.value;
 		showDropdown = false;
 		//	console.log('option', option);
@@ -79,7 +86,14 @@
 	);
 
 	function setinputValue() {
-		inputValue = freeTyping ? selectedValue : options.find((option) => option.value === selectedValue)?.name;
+		let new_inputValue = freeTyping
+			? selectedValue
+			: options.find((option) => option.value == selectedValue)?.name;
+		//console.log('setinputValue >> ', selectedValue, new_inputValue, inputValue);
+
+		if (new_inputValue != inputValue) {
+			inputValue = new_inputValue;
+		}
 	}
 
 	onMount(() => {
@@ -108,7 +122,9 @@
 
 		{#if !selectedValueIsValid}
 			<p class="help {classOnError} is-small">
-				The selected value <strong>{inputValue}</strong> is not valid. {JSON.stringify( selectedValue)}
+				The selected value <strong>{inputValue}</strong> is not valid. {JSON.stringify(
+					selectedValue
+				)}
 			</p>
 		{/if}
 		{#if showDropdown && filteredOptions.length > 0}
