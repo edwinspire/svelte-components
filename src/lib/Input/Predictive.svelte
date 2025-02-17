@@ -20,7 +20,7 @@
 
 	let filteredOptions = $state(options);
 	let showDropdown = $state(false);
-	let inputValue = $state('');
+	let inputValue = $state(' ');
 
 	let placeholderInternal = $derived(
 		placeholder && placeholder.length > 0 ? placeholder : 'Type to see options'

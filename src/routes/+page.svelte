@@ -260,7 +260,7 @@
 	onMount(() => {
 		
 		setInterval(() => {
-		//	selectedValue = '2';
+			selectedValue = '2';
 		}, 10000);
 
 	});
