@@ -52,7 +52,7 @@
 	}
 
 	function handleClick(option) {
-		//inputValue = option.name;
+		inputValue = option.name;
 		selectedValue = option.value;
 		showDropdown = false;
 		//	console.log('option', option);
@@ -66,6 +66,7 @@
 	function blurHandler() {
 		if (freeTyping) {
 			selectedValue = inputValue;
+			console.log('blurHandler', inputValue);
 			onselect($state.snapshot({ name: 'freeTyping', value: inputValue }));
 		}
 	}
