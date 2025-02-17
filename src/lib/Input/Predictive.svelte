@@ -36,7 +36,7 @@
 
 	$effect(() => {
 		if (selectedValue != null) {
-			console.log('selectedValue', selectedValue);
+			console.log('selectedValue', selectedValue, inputValue);
 			setinputValue();
 		}
 	});
@@ -89,11 +89,15 @@
 	function setinputValue() {
 		let new_inputValue = freeTyping
 			? selectedValue
-			: options.find((option) => option.value == selectedValue)?.name;
-		//console.log('setinputValue >> ', selectedValue, new_inputValue, inputValue);
+			: options.find((option) => option.value == selectedValue && inputValue != '')?.name;
+		console.log('setinputValue >> ', selectedValue, new_inputValue, inputValue);
 
-		if (new_inputValue != inputValue) {
-			inputValue = new_inputValue;
+		if (new_inputValue != null) {
+			if (new_inputValue != inputValue) {
+				inputValue = new_inputValue;
+			}
+		} else {
+			selectedValue = null;
 		}
 	}
 

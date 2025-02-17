@@ -260,7 +260,7 @@
 	onMount(() => {
 		
 		setInterval(() => {
-			selectedValue = '2';
+		//	selectedValue = '2';
 		}, 10000);
 
 	});
@@ -493,7 +493,7 @@
 	chao
 {/snippet}
 
-{#if mostrar}
+<!-- {#if mostrar}
 	<EditorCode
 		left={l}
 		right={r}
@@ -510,6 +510,7 @@
 		}}
 	></EditorCode>
 {/if}
+ -->
 
 <!-- 
 <RESTTester
@@ -519,8 +520,9 @@
 	}}
 ></RESTTester>
  -->
-<MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 
+<!-- <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
+ -->
 <!-- 
 <MenuMega brand={[b1, b2]} end={[e1, e2]}>
 	{#snippet b1()}
