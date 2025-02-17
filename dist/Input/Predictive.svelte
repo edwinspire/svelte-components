@@ -18,6 +18,7 @@
 		onselect = () => {}
 	} = $props();
 
+	let old_selectedValue;
 	let filteredOptions = $state(options);
 	let showDropdown = $state(false);
 	let inputValue = $state('');
@@ -35,10 +36,11 @@
 	);
 
 	$effect(() => {
-		if (selectedValue != null) {
-			console.log('selectedValue', selectedValue, inputValue);
-			setinputValue();
-		}
+		//if (selectedValue != null) {
+			//console.log('selectedValue', selectedValue, inputValue);
+			//setinputValue();
+			checkUpdateSelectedValue();
+		//}
 	});
 
 	function handleInput(event) {
@@ -47,6 +49,7 @@
 			option.name.toLowerCase().includes(inputValue.toLowerCase())
 		);
 		//	console.log(filteredOptions);
+		console.log('handleInput >> ', inputValue);
 		selectedValue = null;
 		showDropdown = true;
 	}
@@ -86,23 +89,50 @@
 		freeTyping ? true : options.find((option) => option.value.includes(selectedValue))
 	);
 
-	function setinputValue() {
-		let new_inputValue = freeTyping
-			? selectedValue
-			: options.find((option) => option.value == selectedValue && inputValue != '')?.name;
-		console.log('setinputValue >> ', selectedValue, new_inputValue, inputValue);
+	function checkUpdateSelectedValue() {
+		if (old_selectedValue != selectedValue) {
+			console.log('UPDATED setinputValue Compare >> ', old_selectedValue, selectedValue, inputValue);
+			old_selectedValue = selectedValue;
 
-		if (new_inputValue != null) {
-			if (new_inputValue != inputValue) {
-				inputValue = new_inputValue;
+			if (freeTyping) {
+				inputValue = selectedValue;
+			} else {
+				let new_inputValue = options.find((option) => option.value == selectedValue)?.name;
+
+				if (new_inputValue) {
+					inputValue = new_inputValue;
+				} else {
+					selectedValue = null;
+				}
 			}
 		} else {
-			selectedValue = null;
+			console.log('NOT UPDATED setinputValue Compare >> ',  old_selectedValue, selectedValue, inputValue);
 		}
 	}
 
+	/*
+	function setinputValue() {
+		if (freeTyping) {
+			inputValue = selectedValue;
+		} else {
+			let new_inputValue = options.find((option) => option.value == selectedValue)?.name;
+
+			console.log('setinputValue >> ', selectedValue, new_inputValue, inputValue);
+
+			if (new_inputValue != null) {
+				if (new_inputValue != inputValue) {
+					inputValue = new_inputValue;
+				}
+			} else {
+				selectedValue = null;
+			}
+		}
+	}
+	*/
+
 	onMount(() => {
-		setinputValue();
+		//setinputValue();
+		checkUpdateSelectedValue();	
 	});
 </script>
 
