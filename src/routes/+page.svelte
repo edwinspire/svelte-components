@@ -139,7 +139,7 @@
 	};
 
 	//let code = `SELECT IdLog, DateLog, TipoMensaje, Topico, Mensaje, UserId, GETDATE() AS fecha_descarga  FROM [EasygestionEmpresarial].[dbo].[Log] WITH(NOLOCK) WHERE topico = 'Portal' AND datelog >= DATEADD(DAY, -30, datelog)`;
-	let code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
+	let code = {"dd": 4, "dtt": 788, "sss": {"dd": 78}};
 
 	let json02 = {
 		a: 90,
@@ -265,7 +265,7 @@
 
 	});
 
-	let valor = 10;
+	let valor = {};
 
 	let lang = 'json';
 
@@ -376,7 +376,7 @@
 	}}>Mostrar</button
 >
 
-{#if mostrar}
+<!-- {#if mostrar}
 	<PredictiveInput
 		bind:selectedValue
 		label="SELECT"
@@ -387,7 +387,7 @@
 			console.log('selectedValue', selectedValue, p);
 		}}
 	></PredictiveInput>
-{/if}
+{/if} -->
 
 <!-- <Table
 	onnewrow={() => {
@@ -493,7 +493,7 @@
 	chao
 {/snippet}
 
-<!-- {#if mostrar}
+ {#if mostrar}
 	<EditorCode
 		left={l}
 		right={r}
@@ -510,7 +510,7 @@
 		}}
 	></EditorCode>
 {/if}
- -->
+ 
 
 <!-- 
 <RESTTester
