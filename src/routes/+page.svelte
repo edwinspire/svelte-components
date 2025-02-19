@@ -122,8 +122,13 @@
 	};
 
 	//let code = `SELECT IdLog, DateLog, TipoMensaje, Topico, Mensaje, UserId, GETDATE() AS fecha_descarga  FROM [EasygestionEmpresarial].[dbo].[Log] WITH(NOLOCK) WHERE topico = 'Portal' AND datelog >= DATEADD(DAY, -30, datelog)`;
-	let code = {"dd": 4, "dtt": 788, "sss": {"dd": 78}};
-
+	let code = {
+  "wsdl": "https://www.dataaccess.com/webservicesserver/numberconversion.wso?WSDL",
+  "BasicAuthSecurity": {
+    "User": "any",
+    "Password": "any"
+  }
+};
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
@@ -488,19 +493,20 @@
 		showCode={true}
 		showHiddenButton={true}
 		showSelectLang={true}
-		onchange={(code) => {
-			console.log(' EditorCode >>>> ', code);
+		onchange={(c) => {
+			console.log(' EditorCode >>>> ', c, code);
 		}}
 	></EditorCode>
 {/if}
  
 
-<RESTTester
+<!-- <RESTTester
 	bind:data={data_test}
 	onchange={(data) => {
 		console.trace('RESTTester: ', data);
 	}}
 ></RESTTester>
+ -->
 
 <!-- <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
  -->
