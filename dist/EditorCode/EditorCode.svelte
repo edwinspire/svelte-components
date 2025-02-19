@@ -114,12 +114,17 @@
 					if (initialized) {
 						try {
 							if (lang === 'json') {
-								code = JSON.parse(internal_code);
+								let tmp_internal_code = JSON.stringify(JSON.parse(internal_code));
+								let tmp_code = typeof code === 'object' ? JSON.stringify(code) : code;
+console.log('=> ', internal_code, code,  tmp_internal_code , tmp_code);
+								if (tmp_internal_code != tmp_code) {
+									onchange($state.snapshot({ lang: lang, code: code }));
+								}
 							} else {
 								code = internal_code;
+								onchange($state.snapshot({ lang: lang, code: code }));
 							}
 							formatError = false;
-							onchange($state.snapshot({ lang: lang, code: code }));
 						} catch (error) {
 							console.warn(error);
 							formatError = true;
