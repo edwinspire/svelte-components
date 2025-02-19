@@ -228,7 +228,7 @@
 	}
 
 	async function initializeEditor() {
-		console.log('initializeEditor >>>>>> ', internal_code);
+		// console.log('initializeEditor >>>>>> ', internal_code);
 		if (elementParent) {
 			if (editorView) {
 				editorView.destroy();
@@ -325,25 +325,25 @@
 				</div>
 			</div>
 		</div>
-	{:else}
-		<div class="control">
-			<div class="tags has-addons">
-				<span class="tag is-dark">Format</span>
-				<span class="tag {formatError ? 'is-danger' : 'is-success'}">{lang}</span>
-			</div>
-		</div>
 	{/if}
 {/snippet}
 
 {#snippet r01()}
 	{#if showFormat && lang_prettier && lang_prettier.length > 0}
 		<button
-			class="button is-small"
+			class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}"
 			onclick={async () => {
 				await formatCode();
 			}}
 		>
-			Format
+			<span class="icon is-small">
+				{#if formatError}
+					<i class="fa-solid fa-triangle-exclamation"></i>
+				{:else}
+					<i class="fa-solid fa-check"></i>
+				{/if}
+			</span>
+			<span>Format {lang}</span>
 		</button>
 	{/if}
 
@@ -388,4 +388,7 @@
 </div>
 
 <style>
+	.format_buttons {
+		display: inline-flex;
+	}
 </style>

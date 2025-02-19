@@ -330,33 +330,21 @@
 
 {#snippet r01()}
 	{#if showFormat && lang_prettier && lang_prettier.length > 0}
-		<div class="field has-addons format_buttons">
-			<p class="control">
-				<button
-					class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}"
-					onclick={async () => {
-						await formatCode();
-					}}
-				>
-					
-					<span>Format</span>
-				</button>
-			</p>
-			<p class="control">
-				<button class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}" onclick={async () => {
-					await formatCode();
-				}}>
-					<span class="icon is-small">
-						{#if formatError}
-							<i class="fa-solid fa-triangle-exclamation"></i>
-						{:else}
-							<i class="fa-solid fa-check"></i>
-						{/if}
-					</span>
-					<span>Format {lang}</span>
-				</button>
-			</p>
-		</div>
+		<button
+			class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}"
+			onclick={async () => {
+				await formatCode();
+			}}
+		>
+			<span class="icon is-small">
+				{#if formatError}
+					<i class="fa-solid fa-triangle-exclamation"></i>
+				{:else}
+					<i class="fa-solid fa-check"></i>
+				{/if}
+			</span>
+			<span>Format {lang}</span>
+		</button>
 	{/if}
 
 	{#if showResetButton}
