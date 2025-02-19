@@ -35,7 +35,7 @@
 	let last_code = '';
 	let formatError = $state(false);
 	let internal_code = '';
-	let timeoutParseOnChange;
+	//let timeoutParseOnChange;
 
 	const languages = {
 		js: javascript(),
@@ -284,7 +284,7 @@
 	});
 
 	onDestroy(() => {
-		clearTimeout(timeoutParseOnChange);
+		//clearTimeout(timeoutParseOnChange);
 		//	clearTimeout(timeOutonchangeCode);
 	});
 </script>
