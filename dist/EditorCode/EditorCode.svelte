@@ -32,10 +32,10 @@
 		onchange = (c) => {}
 	} = $props();
 
-	let org_code = '';
+	let last_code = '';
 	let formatError = $state(false);
 	let internal_code = '';
-	let timeoutParseOnChange;
+	//let timeoutParseOnChange;
 
 	const languages = {
 		js: javascript(),
@@ -96,9 +96,32 @@
 
 	$effect(() => {
 		if (code) {
-			setCodeEditor(code, false);
+			internalOnchange();
 		}
 	});
+
+	function internalOnchange() {
+		setCodeEditor(code, false);
+		onchange($state.snapshot({ lang: lang, code: code }));
+	}
+
+	function checkUpdateCode() {
+		let result = false;
+		if (lang === 'json') {
+			let tmp_internal_code = JSON.stringify(JSON.parse(internal_code));
+			let tmp_code = typeof code === 'object' ? JSON.stringify(code) : code;
+			if (tmp_internal_code != tmp_code) {
+				code = JSON.parse(internal_code);
+				internalOnchange();
+				result = true;
+			}
+		} else if (internal_code != code) {
+			code = internal_code;
+			internalOnchange();
+			result = true;
+		}
+		return result;
+	}
 
 	function create_extensions() {
 		let languaje_editor = languages[lang] ? languages[lang] : [];
@@ -113,43 +136,13 @@
 
 					if (initialized) {
 						try {
-							if (lang === 'json') {
-								let tmp_internal_code = JSON.stringify(JSON.parse(internal_code));
-								let tmp_code = typeof code === 'object' ? JSON.stringify(code) : code;
-console.log('=> ', internal_code, code,  tmp_internal_code , tmp_code);
-								if (tmp_internal_code != tmp_code) {
-									onchange($state.snapshot({ lang: lang, code: code }));
-								}
-							} else {
-								code = internal_code;
-								onchange($state.snapshot({ lang: lang, code: code }));
-							}
+							checkUpdateCode();
 							formatError = false;
 						} catch (error) {
 							console.warn(error);
 							formatError = true;
 						}
 					}
-
-					/*
-					clearTimeout(timeoutParseOnChange);
-
-					timeoutParseOnChange = setTimeout(() => {
-						try {
-							if (lang === 'json') {
-								code = JSON.parse(internal_code);
-							} else {
-								code = internal_code;
-							}
-							formatError = false;
-							onchange($state.snapshot({ lang: lang, code: code }));
-						} catch (error) {
-							console.warn(error);
-							formatError = true;
-						}
-						//await formatCode();
-					}, 10000);
-					*/
 				}
 			}),
 			oneDark
@@ -185,12 +178,12 @@ console.log('=> ', internal_code, code,  tmp_internal_code , tmp_code);
 	}
 
 	export function reset() {
-		internal_code = org_code;
+		internal_code = last_code;
 		//parseCode();
 	}
 
 	/* 	function parseCode() {
-		org_code = code;
+		last_code = code;
 		console.log('parseCode >>>>>> ', code);
 		try {
 			internal_code = typeof code !== 'string' ? JSON.stringify(code) : code;
@@ -291,7 +284,7 @@ console.log('=> ', internal_code, code,  tmp_internal_code , tmp_code);
 	});
 
 	onDestroy(() => {
-		clearTimeout(timeoutParseOnChange);
+		//clearTimeout(timeoutParseOnChange);
 		//	clearTimeout(timeOutonchangeCode);
 	});
 </script>

@@ -49,7 +49,7 @@
 			option.name.toLowerCase().includes(inputValue.toLowerCase())
 		);
 		//	console.log(filteredOptions);
-		console.log('handleInput >> ', inputValue);
+	//	console.log('handleInput >> ', inputValue);
 		selectedValue = null;
 		showDropdown = true;
 	}
@@ -91,7 +91,7 @@
 
 	function checkUpdateSelectedValue() {
 		if (old_selectedValue != selectedValue) {
-			console.log('UPDATED setinputValue Compare >> ', old_selectedValue, selectedValue, inputValue);
+		//	console.log('UPDATED setinputValue Compare >> ', old_selectedValue, selectedValue, inputValue);
 			old_selectedValue = selectedValue;
 
 			if (freeTyping) {
@@ -105,30 +105,9 @@
 					selectedValue = null;
 				}
 			}
-		} else {
-			console.log('NOT UPDATED setinputValue Compare >> ',  old_selectedValue, selectedValue, inputValue);
-		}
+		} 
 	}
 
-	/*
-	function setinputValue() {
-		if (freeTyping) {
-			inputValue = selectedValue;
-		} else {
-			let new_inputValue = options.find((option) => option.value == selectedValue)?.name;
-
-			console.log('setinputValue >> ', selectedValue, new_inputValue, inputValue);
-
-			if (new_inputValue != null) {
-				if (new_inputValue != inputValue) {
-					inputValue = new_inputValue;
-				}
-			} else {
-				selectedValue = null;
-			}
-		}
-	}
-	*/
 
 	onMount(() => {
 		//setinputValue();
