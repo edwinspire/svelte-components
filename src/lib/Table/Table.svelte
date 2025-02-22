@@ -95,7 +95,7 @@
 	}
 
 	function onrawDataChanged() {
-		console.log('>> onrawDataChanged >>', hash_last_data);
+		console.log('>> onrawDataChanged >>', hash_last_data, RawDataTable);
 
 		if (RawDataTableIsArray()) {
 			// Cancela el ultimo timeout
@@ -328,11 +328,18 @@
 
 	function ownDeleteRows(selected_rows) {
 		if (selected_rows.rows && selected_rows.rows.length > 0) {
+			//console.log('Hay filas por eliminar', selected_rows);
 			RawDataTable = RawDataTable.filter((item) => {
-				return selected_rows.rows.find((r) => {
-					return r.key != item.key;
+				let r = selected_rows.rows.find((r) => {
+					//console.log(r, item);
+					return r.internal_hash_row == item.internal_hash_row;
 				});
+
+				console.log('R: ', r);
+
+				return !r;
 			});
+			
 		}
 	}
 
@@ -421,15 +428,11 @@
 	}
 
 	function eventOnChangeCell(item, dataRow) {
-		console.log('ANTES: ', RawDataTable);
-
 		let idrow = RawDataTable.findIndex((row) => {
 			return row.internal_hash_row == dataRow.internal_hash_row;
 		});
 
 		RawDataTable[idrow] = dataRow;
-
-		console.log('DESPUES: ', RawDataTable);
 
 		if (onchangecell) {
 			onchangecell(
@@ -1062,22 +1065,20 @@
 	</tbody>
 {/snippet}
 
-{#if DataTable && DataTable.length > 0}
-	{#key DataTable}
-		<div class="table-container is-size-7">
-			<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-				{@render table_header()}
-				{@render table_body()}
-			</table>
+<div class="table-container is-size-7">
+	{#if DataTable && DataTable.length > 0}
+		<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+			{@render table_header()}
+			{@render table_body()}
+		</table>
+	{:else}
+		<div class="has-text-centered has-text-link-dark">
+			<i class="fa fa-table" aria-hidden="true"></i>
+			There is no data to show
 		</div>
-		{@render pagination()}
-	{/key}
-{:else}
-	<div class="has-text-centered has-text-link-dark">
-		<i class="fa fa-table" aria-hidden="true"></i>
-		There is no data to show
-	</div>
-{/if}
+	{/if}
+	{@render pagination()}
+</div>
 
 <div class="modal" class:is-active={ShowDialogColumn}>
 	<div class="modal-card">

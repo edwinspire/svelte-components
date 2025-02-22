@@ -75,7 +75,6 @@
 				url: $state.snapshot(url),
 				method: $state.snapshot(method)
 			});
-			
 		}
 	}
 
