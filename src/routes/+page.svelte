@@ -233,7 +233,7 @@
 		};
 	}
 
-	let mostrar = true;
+	let mostrar = false;
 
 	/*
 	let tab_list = [
@@ -247,9 +247,7 @@
 
 	onMount(() => {
 		
-		setInterval(() => {
-			selectedValue = '2';
-		}, 10000);
+	
 
 	});
 
@@ -500,13 +498,13 @@
 {/if}
  
 
-<!-- <RESTTester
+ <RESTTester
 	bind:data={data_test}
 	onchange={(data) => {
-		console.trace('RESTTester: ', data);
+		console.trace('RESTTester change: ', data);
 	}}
 ></RESTTester>
- -->
+ 
 
 <!-- <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
  -->

@@ -50,6 +50,9 @@
 		},
 		onclickcell = (s) => {
 			//			console.trace('onclickcell no implemented.');
+		},
+		onchangecell = (s) => {
+			//			console.trace('onchangecell no implemented.');
 		}
 	} = $props();
 
@@ -69,8 +72,10 @@
 	let IntervalRefresh = [10, 20, 30, 45, 60, 120, 240, 480, 960, 1920, 3840];
 	let PageSelected = $state(1);
 	let totalFilteredRows = $state(0);
-	let TotalPages = $state(0);
 	let paginatedData = $state([]);
+	let TotalPages = $derived.by(() => {
+		return paginatedData.length;
+	});
 
 	let SelectAll = $state(false);
 	let orderASC = $state(true);
@@ -81,10 +86,8 @@
 	let idTimeoutDataChanged;
 
 	$effect(() => {
-		//console.log('>>>>>>>>>> ', RawDataTable);
-		if (RawDataTable) {
-			onrawDataChanged();
-		}
+		RawDataTable;
+		onrawDataChanged();
 	});
 
 	function requestDataExists() {
@@ -92,7 +95,7 @@
 	}
 
 	function onrawDataChanged() {
-		// console.log('>> onrawDataChanged >>', hash_last_data);
+		console.log('>> onrawDataChanged >>', hash_last_data);
 
 		if (RawDataTableIsArray()) {
 			// Cancela el ultimo timeout
@@ -417,6 +420,27 @@
 		}
 	}
 
+	function eventOnChangeCell(item, dataRow) {
+		console.log('ANTES: ', RawDataTable);
+
+		let idrow = RawDataTable.findIndex((row) => {
+			return row.internal_hash_row == dataRow.internal_hash_row;
+		});
+
+		RawDataTable[idrow] = dataRow;
+
+		console.log('DESPUES: ', RawDataTable);
+
+		if (onchangecell) {
+			onchangecell(
+				$state.snapshot({
+					field: item,
+					data: dataRow
+				})
+			);
+		}
+	}
+
 	function Pagination(rows) {
 		// console.log('Pagination 1 >>>>>>>> ', rows);
 
@@ -433,7 +457,7 @@
 
 		//console.log(paginatedData.length);
 
-		TotalPages = paginatedData.length;
+		//TotalPages = paginatedData.length;
 		if (PageSelected > TotalPages) {
 			PageSelected = 1;
 		}
@@ -735,146 +759,7 @@
 	]}
 ></Level>
 
-{#if DataTable}
-	<div class="table-container is-size-7">
-		<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-			<!-- Aqui escribe el encabezado de la tabla -->
-			<thead>
-				<tr class="has-background-link-dark">
-					<th class="has-text-centered has-text-white resizable">#</th>
-					{#if SelectionType == 1}
-						<th class="has-text-centered has-text-white"><span>-</span></th>
-					{:else if SelectionType == 2}
-						<th class="has-text-centered has-text-white">
-							<input type="checkbox" onclick={handleChangeSelectAll} />
-						</th>
-					{/if}
-
-					{#if showEdit}
-						<th class="has-text-centered has-text-white">
-							<i class="fas fa-pen"></i>
-						</th>
-					{/if}
-
-					{#if internal_columns}
-						{#each Object.keys(internal_columns) as item, ith}
-							<!-- Muestra las columnas que no se hayan especificado como ocultas -->
-							{#if internal_columns[item]}
-								{#if !internal_columns[item].hidden || !internal_columns[item].hidden == null}
-									<!-- Mostramos label si es que existe -->
-									<th
-										class="has-text-centered show_cursor_mouse has-text-white"
-										data-column={item}
-										onclick={HClickHeader}
-									>
-										{internal_columns[item].label}
-										{#if ColumnSort == item}
-											{#if orderASC}
-												<i class="fas fa-caret-down"></i>
-											{:else}
-												<i class="fas fa-caret-up"></i>
-											{/if}
-										{/if}
-									</th>
-								{/if}
-							{/if}
-						{/each}
-					{/if}
-				</tr>
-			</thead>
-			<tbody>
-				{#if DataTable}
-					{#each DataTable as dataRow, i (dataRow.internal_hash_row)}
-						<tr
-							class={rowClassFunction(dataRow)}
-							onclick={() => {
-								if (onclickrow) {
-									onclickrow({ row: $state.snapshot(dataRow), id: $state.snapshot(i) });
-								}
-							}}
-						>
-							<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
-
-							{#if SelectionType == 1}
-								<td class="has-text-centered"
-									><input
-										type="radio"
-										name="single_select"
-										class="show_cursor_mouse"
-										checked={RowIsSelected(dataRow.internal_hash_row)}
-										data-internal_hash_row={dataRow.internal_hash_row}
-										onclick={HandleOnRowSelected}
-									/></td
-								>
-							{:else if SelectionType == 2}
-								<td class="has-text-centered">
-									<input
-										class="show_cursor_mouse"
-										type="checkbox"
-										checked={RowIsSelected(dataRow.internal_hash_row)}
-										data-internal_hash_row={dataRow.internal_hash_row}
-										onclick={HandleOnRowSelected}
-									/>
-								</td>
-							{/if}
-
-							{#if showEdit}
-								<td
-									class="has-text-centered show_cursor_mouse"
-									onclick={() => {
-										if (oneditrow) {
-											oneditrow($state.snapshot(DataTable[i]));
-										}
-									}}
-								>
-									<span class="icon is-small">
-										<i class="fas fa-pen"></i>
-									</span>
-								</td>
-							{/if}
-
-							{#each Object.keys(dataRow) as item, itd}
-								<!-- Muestra las columnas que no se hayan especificado como ocultas -->
-								{#if internal_columns[item]}
-									{#if !internal_columns[item].hidden || internal_columns[item].hidden == null}
-										{#if internal_columns[item].decorator && internal_columns[item].decorator.component}
-											{@const Component = internal_columns[item].decorator.component}
-											<Component
-												onclickcell={(e) => {
-													if (onclickcell) {
-														onclickcell({
-															field: $state.snapshot(item),
-															data: $state.snapshot(dataRow)
-														});
-													}
-												}}
-												{...internal_columns[item]?.decorator?.props}
-												bind:row={DataTable[i]}
-												bind:value={dataRow[item]}
-											/>
-										{:else}
-											<Auto
-												{...internal_columns[item]?.decorator?.props}
-												bind:value={dataRow[item]}
-												onclickcell={(e) => {
-													if (onclickcell) {
-														onclickcell({
-															field: $state.snapshot(item),
-															data: $state.snapshot(dataRow)
-														});
-													}
-												}}
-											></Auto>
-										{/if}
-									{/if}
-								{/if}
-							{/each}
-						</tr>
-					{/each}
-				{/if}
-			</tbody>
-		</table>
-	</div>
+{#snippet pagination()}
 	<div class="table_pagination">
 		<!-- Main container -->
 		<nav class="level">
@@ -1015,6 +900,178 @@
 			</div>
 		</nav>
 	</div>
+{/snippet}
+
+{#snippet table_header()}
+	<!-- Aqui escribe el encabezado de la tabla -->
+	<thead>
+		<tr class="has-background-link-dark">
+			<th class="has-text-centered has-text-white resizable">#</th>
+			{#if SelectionType == 1}
+				<th class="has-text-centered has-text-white"><span>-</span></th>
+			{:else if SelectionType == 2}
+				<th class="has-text-centered has-text-white">
+					<input type="checkbox" onclick={handleChangeSelectAll} />
+				</th>
+			{/if}
+
+			{#if showEdit}
+				<th class="has-text-centered has-text-white">
+					<i class="fas fa-pen"></i>
+				</th>
+			{/if}
+
+			{#if internal_columns}
+				{#each Object.keys(internal_columns) as item, ith}
+					<!-- Muestra las columnas que no se hayan especificado como ocultas -->
+					{#if internal_columns[item]}
+						{#if !internal_columns[item].hidden || !internal_columns[item].hidden == null}
+							<!-- Mostramos label si es que existe -->
+							<th
+								class="has-text-centered show_cursor_mouse has-text-white"
+								data-column={item}
+								onclick={HClickHeader}
+							>
+								{internal_columns[item].label}
+								{#if ColumnSort == item}
+									{#if orderASC}
+										<i class="fas fa-caret-down"></i>
+									{:else}
+										<i class="fas fa-caret-up"></i>
+									{/if}
+								{/if}
+							</th>
+						{/if}
+					{/if}
+				{/each}
+			{/if}
+		</tr>
+	</thead>
+{/snippet}
+
+{#snippet table_body()}
+	<tbody>
+		{#if DataTable}
+			{#each DataTable as dataRow, i (dataRow.internal_hash_row)}
+				<tr
+					class={rowClassFunction(dataRow)}
+					onclick={() => {
+						if (onclickrow) {
+							onclickrow({ row: $state.snapshot(dataRow), id: $state.snapshot(i) });
+						}
+					}}
+				>
+					<!-- Muestra número de fila -->
+					<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
+
+					{#if SelectionType == 1}
+						<!-- Columna selección unica -->
+						<td class="has-text-centered"
+							><input
+								type="radio"
+								name="single_select"
+								class="show_cursor_mouse"
+								checked={RowIsSelected(dataRow.internal_hash_row)}
+								data-internal_hash_row={dataRow.internal_hash_row}
+								onclick={HandleOnRowSelected}
+							/></td
+						>
+					{:else if SelectionType == 2}
+						<!-- Columna selección multiple -->
+						<td class="has-text-centered">
+							<input
+								class="show_cursor_mouse"
+								type="checkbox"
+								checked={RowIsSelected(dataRow.internal_hash_row)}
+								data-internal_hash_row={dataRow.internal_hash_row}
+								onclick={HandleOnRowSelected}
+							/>
+						</td>
+					{/if}
+
+					{#if showEdit}
+						<!-- Columna que muestra icono de editar -->
+						<td
+							class="has-text-centered show_cursor_mouse"
+							onclick={() => {
+								if (oneditrow) {
+									oneditrow($state.snapshot(DataTable[i]));
+								}
+							}}
+						>
+							<span class="icon is-small">
+								<i class="fas fa-pen"></i>
+							</span>
+						</td>
+					{/if}
+
+					{#each Object.keys(dataRow) as item, itd}
+						<!-- Muestra las columnas que no se hayan especificado como ocultas -->
+						{#if internal_columns[item]}
+							{#if !internal_columns[item].hidden || internal_columns[item].hidden == null}
+								{#if internal_columns[item].decorator && internal_columns[item].decorator.component}
+									{@const Component = internal_columns[item].decorator.component}
+									<Component
+										{...internal_columns[item]?.decorator?.props}
+										bind:row={DataTable[i]}
+										bind:value={dataRow[item]}
+										onchangecell={(e) => {
+											console.log('Componente ', item, dataRow[item]);
+											eventOnChangeCell(item, dataRow);
+										}}
+										onclickcell={(e) => {
+											if (onclickcell) {
+												onclickcell(
+													$state.snapshot({
+														field: item,
+														data: dataRow
+													})
+												);
+											}
+										}}
+									/>
+								{:else}
+									<Auto
+										{...internal_columns[item]?.decorator?.props}
+										bind:row={DataTable[i]}
+										bind:value={dataRow[item]}
+										onchangecell={(e) => {
+											console.log('Auto', item, dataRow[item]);
+											eventOnChangeCell(item, dataRow);
+										}}
+										onclickcell={(e) => {
+											// TODO: No está funcionando
+											console.log('Auto clic');
+											if (onclickcell) {
+												onclickcell(
+													$state.snapshot({
+														field: item,
+														data: dataRow
+													})
+												);
+											}
+										}}
+									></Auto>
+								{/if}
+							{/if}
+						{/if}
+					{/each}
+				</tr>
+			{/each}
+		{/if}
+	</tbody>
+{/snippet}
+
+{#if DataTable && DataTable.length > 0}
+	{#key DataTable}
+		<div class="table-container is-size-7">
+			<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+				{@render table_header()}
+				{@render table_body()}
+			</table>
+		</div>
+		{@render pagination()}
+	{/key}
 {:else}
 	<div class="has-text-centered has-text-link-dark">
 		<i class="fa fa-table" aria-hidden="true"></i>

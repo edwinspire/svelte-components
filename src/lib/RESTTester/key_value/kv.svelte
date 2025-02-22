@@ -23,7 +23,6 @@
 		}
 	};
 
-
 	function addRowEmpty() {
 		//console.log('addRowEmpty', data);
 
@@ -40,7 +39,8 @@
 		) {
 			data.push({ enabled: true, key: '', value: '' });
 			//   alert('add111  ' + data.length)
-		}/*  */
+		}
+
 		data = [...data];
 	}
 
@@ -54,7 +54,6 @@
 	{columns}
 	ShowNewButton={true}
 	ShowDeleteButton={true}
-
 	onnewrow={() => {
 		addRowEmpty();
 	}}
