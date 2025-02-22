@@ -7,14 +7,14 @@ export function ProcessDataTable(values) {
 		let hash_last_data = values.hash_last_data;
 		let different_data = false;
 		let result = [];
-			console.log('Datos recibidos en Worker:', columns, data.data);
+		//	console.log('Datos recibidos en Worker:', columns, data.data);
 
 		if (checkIsArray(data)) {
 			try {
 				let sf = JSON.stringify(data);
 				let hash_data = sha256(sf && sf.length > 0 ? sf : '0');
 
-				console.log(hash_last_data, hash_data);
+			//	console.log(hash_last_data, hash_data);
 
 				if (hash_last_data !== hash_data) {
 					hash_last_data = hash_data;

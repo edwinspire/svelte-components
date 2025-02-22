@@ -95,7 +95,7 @@
 	}
 
 	function onrawDataChanged() {
-		console.log('>> onrawDataChanged >>', hash_last_data, RawDataTable);
+		//console.log('>> onrawDataChanged >>', hash_last_data, RawDataTable);
 
 		if (RawDataTableIsArray()) {
 			// Cancela el ultimo timeout
@@ -125,7 +125,7 @@
 				} catch (error) {
 					console.trace(error);
 				}
-			}, 500);
+			}, 200);
 		}
 	}
 
@@ -339,7 +339,6 @@
 
 				return !r;
 			});
-			
 		}
 	}
 
@@ -1066,17 +1065,20 @@
 {/snippet}
 
 <div class="table-container is-size-7">
-	{#if DataTable && DataTable.length > 0}
-		<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+	<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+		{#if DataTable && DataTable.length > 0}
 			{@render table_header()}
 			{@render table_body()}
-		</table>
-	{:else}
-		<div class="has-text-centered has-text-link-dark">
+		{/if}
+	</table>
+
+	{#if !DataTable || DataTable.length < 1}
+		<div class="has-text-centered">
 			<i class="fa fa-table" aria-hidden="true"></i>
 			There is no data to show
 		</div>
 	{/if}
+
 	{@render pagination()}
 </div>
 
