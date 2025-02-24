@@ -101,6 +101,7 @@
 	});
 
 	function internalOnchange() {
+		console.log('HuBO CAMBIOS >>>');
 		setCodeEditor(code, false);
 		onchange($state.snapshot({ lang: lang, code: code }));
 	}
@@ -108,9 +109,12 @@
 	function checkUpdateCode() {
 		let result = false;
 		if (lang === 'json') {
+			
 			let tmp_internal_code = JSON.stringify(JSON.parse(internal_code));
 			let tmp_code = typeof code === 'object' ? JSON.stringify(code) : code;
+			
 			if (tmp_internal_code != tmp_code) {
+				
 				code = JSON.parse(internal_code);
 				internalOnchange();
 				result = true;
@@ -332,6 +336,7 @@
 			class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}"
 			onclick={async () => {
 				await formatCode();
+				checkUpdateCode();
 			}}
 		>
 			<span class="icon is-small">
