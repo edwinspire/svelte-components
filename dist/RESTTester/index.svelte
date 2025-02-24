@@ -7,6 +7,7 @@
 	import Body from './body.svelte';
 	import uFetch from '@edwinspire/universal-fetch';
 	import JSONView from '../JSONView/index.svelte';
+	import { equalObjs } from '../class/utils.js';
 
 	let {
 		url = $bindable(),
@@ -52,22 +53,30 @@
 		{ label: 'Result', component: tab_result }
 	]);
 
+	let last_data = $state();
 	let timeoutChangeData;
 
 	$effect(() => {
 		if (data || url || method) {
-			
+			console.log('>>>>>>>', data);
 			clearTimeout(timeoutChangeData);
 			timeoutChangeData = setTimeout(() => {
-				onchange({
-					data: $state.snapshot(data),
-					url: $state.snapshot(url),
-					method: $state.snapshot(method)
-				});
+				internalOnChange();
 			}, 750);
 		}
 	});
 
+	function internalOnChange() {
+		if (!equalObjs(last_data, data)) {
+			last_data = data;
+
+			onchange({
+				data: $state.snapshot(data),
+				url: $state.snapshot(url),
+				method: $state.snapshot(method)
+			});
+		}
+	}
 
 	function defaultValues() {
 		if (data == null) {
@@ -206,25 +215,45 @@
 
 {#snippet tab_query()}
 	{#if data}
-		<Query bind:data={data.query}></Query>
+		<Query
+			bind:data={data.query}
+			onchange={() => {
+				internalOnChange();
+			}}
+		></Query>
 	{/if}
 {/snippet}
 
 {#snippet tab_headers()}
 	{#if data != null}
-		<Headers bind:data={data.headers}></Headers>
+		<Headers
+			bind:data={data.headers}
+			onchange={() => {
+				internalOnChange();
+			}}
+		></Headers>
 	{/if}
 {/snippet}
 
 {#snippet tab_auth()}
 	{#if data != null}
-		<Auth bind:data={data.auth}></Auth>
+		<Auth
+			bind:data={data.auth}
+			onchange={() => {
+				internalOnChange();
+			}}
+		></Auth>
 	{/if}
 {/snippet}
 
 {#snippet tab_body()}
 	{#if data}
-		<Body bind:data={data.body}></Body>
+		<Body
+			bind:data={data.body}
+			onchange={() => {
+				internalOnChange();
+			}}
+		></Body>
 	{/if}
 {/snippet}
 

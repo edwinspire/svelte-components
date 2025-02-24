@@ -386,7 +386,5 @@
 </div>
 
 <style>
-	.format_buttons {
-		display: inline-flex;
-	}
+	
 </style>

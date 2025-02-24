@@ -2,14 +2,23 @@
 	import { onMount } from 'svelte';
 	import { EditorCode, Tab } from '../index.js';
 	import KeyValue from './key_value/kv.svelte';
+	import { equalObjs } from '../class/utils.js';
 
-	let { data = $bindable({ selection: 0, json: { code: {} }, xml: { code: '' }, text: {} }) } =
-		$props();
+	let {
+		data = $bindable({
+			selection: 0,
+			json: { code: {} },
+			xml: { code: '' },
+			text: {}
+		}),
+		onchange = () => {}
+	} = $props();
 
 	//	export let data = { json: {}, xml: {}, text: {} };
 
 	//let fnJSEditor;
 	let fileName = $state('');
+	let last_data = $state();
 
 	let tabList = $state([
 		{ label: 'JSON', component: tab_json },
@@ -66,6 +75,14 @@
 		//	console.log('defaultValues >> BODY =>', data);
 	}
 
+	function internalOnChange() {
+		if (!equalObjs(data, last_data)) {
+			console.log('internalOnChange >> BODY =>', data);
+			last_data = data;
+			onchange(data);
+		}
+	}
+
 	onMount(() => {
 		defaultValues();
 	});
@@ -74,14 +91,27 @@
 {#snippet tab_json()}
 	<div>
 		{#if data && data.json}
-			<EditorCode lang="json" bind:code={data.json.code} showFormat={true}></EditorCode>
+			<EditorCode
+				lang="json"
+				bind:code={data.json.code}
+				showFormat={true}
+				onchange={() => {
+					internalOnChange();
+				}}
+			></EditorCode>
 		{/if}
 	</div>
 {/snippet}
 
 {#snippet tab_xml()}
 	{#if data && data.xml}
-		<EditorCode lang="xml" bind:code={data.xml.code}></EditorCode>
+		<EditorCode
+			lang="xml"
+			bind:code={data.xml.code}
+			onchange={() => {
+				internalOnChange();
+			}}
+		></EditorCode>
 	{/if}
 {/snippet}
 
@@ -93,7 +123,13 @@
 				<label class="label is-small">Content</label>
 				<div class="control">
 					{#if data && data.text}
-						<textarea class="textarea is-small" placeholder="Content" bind:value={data.text.value}
+						<textarea
+							class="textarea is-small"
+							placeholder="Content"
+							bind:value={data.text.value}
+							oninput={() => {
+								internalOnChange();
+							}}
 						></textarea>
 					{/if}
 				</div>

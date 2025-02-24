@@ -1,32 +1,40 @@
 <script>
+	import { onMount } from 'svelte';
 	import TJson from './TreeView .svelte';
 	import TBoolean from './Boolean.svelte';
-
+	let initialized = false;
+	//	let last_value;
 	let {
 		value = $bindable(),
 		onclickcell,
 		row = $bindable(),
 		editInline = false,
-		css_cell
+		css_cell,
+		onchangecell
 	} = $props();
 
-	function stringIsValidJSON(input) {
-		//    console.log(row);
-		if (typeof input === 'string') {
-			try {
-				let x = JSON.parse(input);
-				return true;
-			} catch (error) {
-				return false;
+	$effect(() => {
+		value;
+		if (initialized && editInline) {
+			//console.log(onchangecell);
+			//	console.log('Auto', $state.snapshot(value), $state.snapshot(row));
+			if (onchangecell) {
+				onchangecell(value);
+			} else {
+				console.warn(
+					'Cell component without onchangecell event implemented. The onchangecell event will not be fired when there are changes in the cell value.'
+				);
 			}
-		} else {
-			return false;
 		}
-	}
+	});
+
+	onMount(() => {
+		initialized = true;
+	});
 </script>
 
 {#if value && (typeof value === 'object' || Array.isArray(value))}
-	<TJson {value} {editInline} {css_cell} />
+	<TJson bind:value {editInline} {css_cell} />
 {:else if typeof value === 'boolean'}
 	<TBoolean bind:value bind:row {editInline} {css_cell}></TBoolean>
 {:else if typeof value === 'number' || typeof value === 'bigint'}

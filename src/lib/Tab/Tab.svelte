@@ -26,6 +26,7 @@
 					<!-- svelte-ignore a11y_missing_attribute -->
 					<a
 						onclick={() => {
+							console.log('click ', active);
 							if (!item.disabled) {
 								active = i;
 								// Solo dispara cuando no está deshabilitado

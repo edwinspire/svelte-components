@@ -8,10 +8,12 @@ type Body = {
 };
 declare const Body: import("svelte").Component<{
     data?: Record<string, any>;
+    onchange?: Function;
 }, {
     getCode: () => void;
     reset: () => void;
 }, "data">;
 type $$ComponentProps = {
     data?: Record<string, any>;
+    onchange?: Function;
 };

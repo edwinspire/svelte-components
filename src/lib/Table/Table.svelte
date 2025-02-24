@@ -1018,7 +1018,7 @@
 										bind:row={DataTable[i]}
 										bind:value={dataRow[item]}
 										onchangecell={(e) => {
-											console.log('Componente ', item, dataRow[item]);
+										//	console.log('Componente ', item, dataRow[item]);
 											eventOnChangeCell(item, dataRow);
 										}}
 										onclickcell={(e) => {
@@ -1038,12 +1038,12 @@
 										bind:row={DataTable[i]}
 										bind:value={dataRow[item]}
 										onchangecell={(e) => {
-											console.log('Auto', item, dataRow[item]);
+										//	console.log('Auto', item, dataRow[item]);
 											eventOnChangeCell(item, dataRow);
 										}}
 										onclickcell={(e) => {
 											// TODO: No está funcionando
-											console.log('Auto clic');
+										//	console.log('Auto clic');
 											if (onclickcell) {
 												onclickcell(
 													$state.snapshot({
