@@ -13,6 +13,7 @@
 	let selectedValue = '1';
 
 	let data_test = {
+		auth: {selection: 1, basic: {username: 'ddddd'}, bearer: {token: 'DDDDDDDDDD'}},
 		body: {
 			selection: 0,
 			json: {

@@ -5,12 +5,16 @@
 	let {
 		data = $bindable({
 			selection: 0,
-			basic: { username: '', passsword: '' },
+			basic: { username: '', password: '' },
 			bearer: { token: '' }
-		})
+		}),
+		onchange = () => {}
 	} = $props();
 
-	//export let data = { basic: {}, bearer: {} };
+	// Variable que apunta a `basic.username` de manera reactiva
+	let username = $state(data?.basic?.username || '');
+	let password = $state(data?.basic?.password || '');
+	let token = $state(data?.bearer?.token || '');
 
 	let tabList = $state([
 		{ label: 'None', component: tab_none },
@@ -18,15 +22,30 @@
 		{ label: 'Bearer', component: tab_bearer }
 	]);
 
-	//$: data, defaultValues();
+	$effect(() => {
+		data;
+		defaultValues();
+	});
+
+	$effect(() => {
+		username;
+		password;
+		token;
+
+		data.basic.username = username;
+		data.basic.password = password;
+		data.bearer.token = token;
+
+		onchange(data);
+	});
 
 	function defaultValues() {
 		if (data == null) {
-			data = { basic: { username: '', passsword: '' }, bearer: { token: '' } };
+			data = { basic: { username: '', password: '' }, bearer: { token: '' } };
 		}
 
 		if (data && data.basic == null) {
-			data.basic = { username: '', passsword: '' };
+			data.basic = { username: '', password: '' };
 		}
 
 		if (data && data.bearer == null) {
@@ -36,6 +55,11 @@
 		if (data && data.selection == null) {
 			data.selection = 0;
 		}
+		console.log('DEFAULT', data);
+
+		username = data.basic.username;
+		password = data.basic.password;
+		token = data.bearer.token;
 	}
 
 	onMount(() => {
@@ -50,7 +74,7 @@
 {/snippet}
 
 {#snippet tab_basic()}
-	{#if data}
+	{#if data != null}
 		<div>
 			<div class="field">
 				<!-- svelte-ignore a11y_label_has_associated_control -->
@@ -62,7 +86,7 @@
 							class="input is-small"
 							type="text"
 							placeholder="Username"
-							bind:value={data.basic.username}
+							bind:value={username}
 						/>
 						<span class="icon is-small is-left">
 							<i class="fa-solid fa-user"></i>
@@ -80,7 +104,7 @@
 							class="input is-small"
 							type="text"
 							placeholder="Password"
-							bind:value={data.basic.passsword}
+							bind:value={password}
 						/>
 						<span class="icon is-small is-left">
 							<i class="fa-solid fa-key"></i>
@@ -100,8 +124,7 @@
 				<label class="label is-small">Token</label>
 				<div class="control">
 					{#if data && data.bearer}
-						<textarea class="textarea is-small" placeholder="Token" bind:value={data.bearer.token}
-						></textarea>
+						<textarea class="textarea is-small" placeholder="Token" bind:value={token}></textarea>
 					{/if}
 				</div>
 			</div>
@@ -110,5 +133,12 @@
 {/snippet}
 
 {#if data != null}
-	<Tab bind:tabs={tabList} bind:active={data.selection}></Tab>
+	<Tab
+		bind:tabs={tabList}
+		bind:active={data.selection}
+		onselect={() => {
+			//console.log(data);
+			data = data; // Sin esta asignación no se estaba refrescando la selección.
+		}}
+	></Tab>
 {/if}

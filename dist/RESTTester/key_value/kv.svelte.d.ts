@@ -5,7 +5,9 @@ type Kv = {
 };
 declare const Kv: import("svelte").Component<{
     data?: any;
+    onchange?: Function;
 }, {}, "data">;
 type $$ComponentProps = {
     data?: any;
+    onchange?: Function;
 };

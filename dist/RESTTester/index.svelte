@@ -58,7 +58,7 @@
 
 	$effect(() => {
 		if (data || url || method) {
-			console.log('>>>>>>>', data);
+			//			console.log('>>>>>>>', data);
 			clearTimeout(timeoutChangeData);
 			timeoutChangeData = setTimeout(() => {
 				internalOnChange();
@@ -67,15 +67,14 @@
 	});
 
 	function internalOnChange() {
-		if (!equalObjs(last_data, data)) {
-			last_data = data;
+		
 
-			onchange({
-				data: $state.snapshot(data),
-				url: $state.snapshot(url),
-				method: $state.snapshot(method)
-			});
-		}
+		//	last_data = {...data};
+		onchange({
+			data: $state.snapshot(data),
+			url: $state.snapshot(url),
+			method: $state.snapshot(method)
+		});
 	}
 
 	function defaultValues() {
@@ -106,7 +105,7 @@
 		if (data && data.headers == null) {
 			data.headers = {};
 		}
-		console.log('>>>>>>> ', data);
+		//console.log('>>>>>>> ', data);
 	}
 
 	function getSizeJSON(data) {
@@ -214,7 +213,7 @@
 </script>
 
 {#snippet tab_query()}
-	{#if data}
+	{#if data != null}
 		<Query
 			bind:data={data.query}
 			onchange={() => {
@@ -240,6 +239,7 @@
 		<Auth
 			bind:data={data.auth}
 			onchange={() => {
+				console.log(data);
 				internalOnChange();
 			}}
 		></Auth>

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Table, ColumnTypes } from '../../index.js';
 
-	let { data = $bindable() } = $props();
+	let { data = $bindable(), onchange = () => {} } = $props();
 
 	let columns = {
 		enabled: {
@@ -44,6 +44,14 @@
 		data = [...data];
 	}
 
+	$effect(() => {
+		data;
+		//console.log('KKKKKVVVV');
+		if (onchange) {
+			onchange(data);
+		}
+	});
+
 	onMount(() => {
 		addRowEmpty();
 	});
@@ -57,4 +65,5 @@
 	onnewrow={() => {
 		addRowEmpty();
 	}}
+	
 ></Table>

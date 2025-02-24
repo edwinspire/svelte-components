@@ -16,8 +16,6 @@
 	let password = $state(data?.basic?.password || '');
 	let token = $state(data?.bearer?.token || '');
 
-	$inspect(data.basic.username).with(console.trace);
-
 	let tabList = $state([
 		{ label: 'None', component: tab_none },
 		{ label: 'Basic', component: tab_basic },
