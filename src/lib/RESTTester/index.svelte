@@ -251,6 +251,7 @@
 		<Body
 			bind:data={data.body}
 			onchange={() => {
+				console.log('tab_body cambia', data.body);
 				internalOnChange();
 			}}
 		></Body>

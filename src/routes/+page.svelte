@@ -501,6 +501,7 @@
 
  <RESTTester
 	bind:data={data_test}
+	methodDisabled={true}
 	onchange={(data) => {
 		console.trace('RESTTester change: ', data);
 	}}

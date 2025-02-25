@@ -96,6 +96,7 @@
 				bind:code={data.json.code}
 				showFormat={true}
 				onchange={() => {
+					console.log('tab_json body', data.json.code);
 					internalOnChange();
 				}}
 			></EditorCode>

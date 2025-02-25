@@ -101,7 +101,7 @@
 	});
 
 	function internalOnchange() {
-		console.log('HuBO CAMBIOS >>>');
+	//	console.log('HuBO CAMBIOS >>>');
 		setCodeEditor(code, false);
 		onchange($state.snapshot({ lang: lang, code: code }));
 	}
