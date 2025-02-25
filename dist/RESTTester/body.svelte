@@ -76,11 +76,15 @@
 	}
 
 	function internalOnChange() {
+		/*
 		if (!equalObjs(data, last_data)) {
 			console.log('internalOnChange >> BODY =>', $state.snapshot(data));
 			last_data = { ...data };
 			onchange(data);
 		}
+		*/
+		console.log('internalOnChange >> BODY =>', $state.snapshot(data));
+		onchange(data);
 	}
 
 	onMount(() => {
