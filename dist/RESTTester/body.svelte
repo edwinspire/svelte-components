@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { EditorCode, Tab } from '../index.js';
 	import KeyValue from './key_value/kv.svelte';
-	import { equalObjs } from '../class/utils.js';
+	//import { equalObjs } from '../class/utils.js';
 
 	let {
 		data = $bindable({
@@ -83,7 +83,7 @@
 			onchange(data);
 		}
 		*/
-		console.log('internalOnChange >> BODY =>', $state.snapshot(data));
+		//console.log('internalOnChange >> BODY =>', $state.snapshot(data));
 		onchange(data);
 	}
 
@@ -179,5 +179,8 @@
 	{/if}
 {/snippet}
 {#if data}
-	<Tab bind:tabs={tabList} bind:active={data.selection}></Tab>
+	<Tab bind:tabs={tabList} bind:active={data.selection} onselect={(r)=>{
+		//console.log('>>>>>>>>>>>>>>< ', r);
+		defaultValues();
+	}}></Tab>
 {/if}

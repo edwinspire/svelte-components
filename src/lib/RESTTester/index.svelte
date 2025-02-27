@@ -528,7 +528,10 @@
 		</div>
 	</div>
 
-	<Tab bind:tabs={tabList} bind:active={active_tab}></Tab>
+	<Tab bind:tabs={tabList} bind:active={active_tab} onselect={(s)=>{
+	//	console.log('----->>>>>>>>>>>>>>>>', s);
+		defaultValues();
+	}}></Tab>
 </div>
 
 <style>
