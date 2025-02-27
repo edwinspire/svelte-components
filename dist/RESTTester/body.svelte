@@ -45,7 +45,7 @@
 		}
 
 		if (data && data.json == null) {
-			data.json = {};
+			data.json = {code: {}};
 		}
 
 		if (data && data.json && data.json.code == null) {
@@ -94,7 +94,7 @@
 
 {#snippet tab_json()}
 	<div>
-		{#if data && data.json}
+		{#if data && data?.json && data?.json?.code}
 			<EditorCode
 				lang="json"
 				bind:code={data.json.code}
