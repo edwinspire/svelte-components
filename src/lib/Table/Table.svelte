@@ -16,16 +16,16 @@
 		RawDataTable = $bindable(),
 		selectionType = $bindable(0),
 		columns = $bindable({}),
-		ShowNewButton = $bindable(false),
-		ShowEditButton = $bindable(false),
+		showNewButton = $bindable(false),
+		showEditButton = $bindable(false),
 		showEditRow = $bindable(false),
-		ShowSelectionButton = $bindable(true),
-		ShowExportButton = $bindable(true),
+		showSelectionButton = $bindable(true),
+		showExportButton = $bindable(true),
 		iconExport = $bindable('fa-solid fa-file-excel'),
 		iconDeleteRow = $bindable('fa-solid fa-trash'),
-		ShowDeleteButton = $bindable(false),
-		PageSize = $bindable([25, 50, 100, 200, 300, 500, 1000]),
-		PageSizeSelected = $bindable(0),
+		showDeleteButton = $bindable(false),
+		pageSize = $bindable([25, 50, 100, 200, 300, 500, 1000]),
+		pageSizeSelected = $bindable(0),
 		relatedTablesForAutoRefresh = $bindable([]),
 		fileNameExport = $bindable(''),
 		requestData = $bindable(),
@@ -453,9 +453,9 @@
 				rows = rows.sort(SortColumn(ColumnSort, 'desc'));
 			}
 		}
-		//console.log(PageSize, PageSizeSelected);
+		//console.log(pageSize, pageSizeSelected);
 		//console.log('Pagination 2 >>>>>>>> ', rows);
-		paginatedData = ArrayChunk(rows, PageSize[PageSizeSelected]);
+		paginatedData = ArrayChunk(rows, pageSize[pageSizeSelected]);
 
 		//console.log(paginatedData.length);
 
@@ -600,7 +600,7 @@
 {/snippet}
 
 {#snippet t_export_excel()}
-	{#if ShowExportButton}
+	{#if showExportButton}
 		<button
 			aria-label="close"
 			class="button is-small"
@@ -615,7 +615,7 @@
 {/snippet}
 
 {#snippet t_export_html()}
-	{#if ShowExportButton}
+	{#if showExportButton}
 		<button
 			aria-label="close"
 			class="button is-small"
@@ -630,7 +630,7 @@
 {/snippet}
 
 {#snippet t_selecttion_type()}
-	{#if ShowSelectionButton}
+	{#if showSelectionButton}
 		<div class="dropdown is-hoverable is-right" title="Selection type">
 			<div class="dropdown-trigger">
 				<button
@@ -708,7 +708,7 @@
 {/snippet}
 
 {#snippet t_delete()}
-	{#if ShowDeleteButton}
+	{#if showDeleteButton}
 		<button aria-label="close" class="button is-small" title="Delete row" onclick={HClickDelete}>
 			<span class="icon">
 				<i class={iconDeleteRow}></i>
@@ -718,7 +718,7 @@
 {/snippet}
 
 {#snippet t_edit()}
-	{#if ShowEditButton}
+	{#if showEditButton}
 		<button aria-label="close" class="button is-small" title="Edit row" onclick={HandleOnClickEdit}>
 			<span class="icon">
 				<i class="far fa-edit"></i>
@@ -728,7 +728,7 @@
 {/snippet}
 
 {#snippet t_new()}
-	{#if ShowNewButton}
+	{#if showNewButton}
 		<button
 			aria-label="close"
 			class="button is-small"
@@ -889,12 +889,12 @@
 							name="rows_per_page"
 							onchange={(e) => {
 								//console.log(e.target.value);
-								PageSizeSelected = e.target.value;
+								pageSizeSelected = e.target.value;
 								FilterData();
 							}}
 						>
-							{#each PageSize as item, itd}
-								<option value={itd} selected={item == PageSize[PageSizeSelected]}>{item}</option>
+							{#each pageSize as item, itd}
+								<option value={itd} selected={item == pageSize[pageSizeSelected]}>{item}</option>
 							{/each}
 						</select>
 					</div>
@@ -964,7 +964,7 @@
 					}}
 				>
 					<!-- Muestra número de fila -->
-					<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
+					<td>{i + 1 + pageSize[pageSizeSelected] * (PageSelected - 1)}</td>
 
 					{#if selectionType == 1}
 						<!-- Columna selección unica -->

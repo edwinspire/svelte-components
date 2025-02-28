@@ -7,7 +7,7 @@
 	import Body from './body.svelte';
 	import uFetch from '@edwinspire/universal-fetch';
 	import JSONView from '../JSONView/index.svelte';
-	import { equalObjs } from '../class/utils.js';
+	//	import { equalObjs } from '../class/utils.js';
 
 	let {
 		url = $bindable(),
@@ -67,8 +67,6 @@
 	});
 
 	function internalOnChange() {
-		
-
 		//	last_data = {...data};
 		onchange({
 			data: $state.snapshot(data),
@@ -528,10 +526,14 @@
 		</div>
 	</div>
 
-	<Tab bind:tabs={tabList} bind:active={active_tab} onselect={(s)=>{
-	//	console.log('----->>>>>>>>>>>>>>>>', s);
-		defaultValues();
-	}}></Tab>
+	<Tab
+		bind:tabs={tabList}
+		bind:active={active_tab}
+		onselect={(s) => {
+			//	console.log('----->>>>>>>>>>>>>>>>', s);
+			defaultValues();
+		}}
+	></Tab>
 </div>
 
 <style>

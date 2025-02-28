@@ -60,8 +60,8 @@
 <Table
 	bind:RawDataTable={data}
 	{columns}
-	ShowNewButton={true}
-	ShowDeleteButton={true}
+	showNewButton={true}
+	showDeleteButton={true}
 	onnewrow={() => {
 		addRowEmpty();
 	}}

@@ -452,9 +452,9 @@
 	}}
 	{columns}
 	RawDataTable={dataTest}
-	ShowDeleteButton={true}
-	ShowNewButton={true}
-	ShowEditButton={true}
+	showDeleteButton={true}
+	showNewButton={true}
+	showEditButton={true}
 	left_items={[chao]}
 	right_items={[rt1, rt2, rt3, pepe, chavo]}
 >

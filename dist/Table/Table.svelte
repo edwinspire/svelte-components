@@ -14,18 +14,18 @@
 
 	let {
 		RawDataTable = $bindable(),
-		SelectionType = $bindable(0),
+		selectionType = $bindable(0),
 		columns = $bindable({}),
-		ShowNewButton = $bindable(false),
-		ShowEditButton = $bindable(false),
+		showNewButton = $bindable(false),
+		showEditButton = $bindable(false),
 		showEditRow = $bindable(false),
-		ShowSelectionButton = $bindable(true),
-		ShowExportButton = $bindable(true),
+		showSelectionButton = $bindable(true),
+		showExportButton = $bindable(true),
 		iconExport = $bindable('fa-solid fa-file-excel'),
 		iconDeleteRow = $bindable('fa-solid fa-trash'),
-		ShowDeleteButton = $bindable(false),
-		PageSize = $bindable([25, 50, 100, 200, 300, 500, 1000]),
-		PageSizeSelected = $bindable(0),
+		showDeleteButton = $bindable(false),
+		pageSize = $bindable([25, 50, 100, 200, 300, 500, 1000]),
+		pageSizeSelected = $bindable(0),
 		relatedTablesForAutoRefresh = $bindable([]),
 		fileNameExport = $bindable(''),
 		requestData = $bindable(),
@@ -242,7 +242,7 @@
 			if (filteredData && filteredData.length > 0) {
 				ExportTableToHTML(filteredData, columns, fileNameExport);
 			} else {
-				SelectionType = 2;
+				selectionType = 2;
 				alert('Select the rows to export.');
 			}
 		} catch (error) {
@@ -261,7 +261,7 @@
 			if (filteredData && filteredData.length > 0) {
 				ExportTableToXlsx(filteredData, columns, fileNameExport);
 			} else {
-				SelectionType = 2;
+				selectionType = 2;
 				alert('Select the rows to export.');
 			}
 		} catch (error) {
@@ -349,7 +349,7 @@
 				ondeleterow({ rows: $state.snapshot(filteredData) });
 			} else {
 				alert('Select the rows to delete.');
-				SelectionType = 2;
+				selectionType = 2;
 			}
 		} catch (error) {
 			console.error(error);
@@ -453,9 +453,9 @@
 				rows = rows.sort(SortColumn(ColumnSort, 'desc'));
 			}
 		}
-		//console.log(PageSize, PageSizeSelected);
+		//console.log(pageSize, pageSizeSelected);
 		//console.log('Pagination 2 >>>>>>>> ', rows);
-		paginatedData = ArrayChunk(rows, PageSize[PageSizeSelected]);
+		paginatedData = ArrayChunk(rows, pageSize[pageSizeSelected]);
 
 		//console.log(paginatedData.length);
 
@@ -485,7 +485,7 @@
 	}
 
 	function HandleOnRowSelected(event) {
-		if (SelectionType == 1) {
+		if (selectionType == 1) {
 			SelectedRows = [];
 		}
 
@@ -600,7 +600,7 @@
 {/snippet}
 
 {#snippet t_export_excel()}
-	{#if ShowExportButton}
+	{#if showExportButton}
 		<button
 			aria-label="close"
 			class="button is-small"
@@ -615,7 +615,7 @@
 {/snippet}
 
 {#snippet t_export_html()}
-	{#if ShowExportButton}
+	{#if showExportButton}
 		<button
 			aria-label="close"
 			class="button is-small"
@@ -630,7 +630,7 @@
 {/snippet}
 
 {#snippet t_selecttion_type()}
-	{#if ShowSelectionButton}
+	{#if showSelectionButton}
 		<div class="dropdown is-hoverable is-right" title="Selection type">
 			<div class="dropdown-trigger">
 				<button
@@ -653,9 +653,9 @@
 							type="radio"
 							name="selection_type"
 							value="1"
-							checked={SelectionType == 1 ? true : false}
+							checked={selectionType == 1 ? true : false}
 							onchange={() => {
-								SelectionType = 1;
+								selectionType = 1;
 							}}
 						/>
 						<span class="icon">
@@ -671,9 +671,9 @@
 							type="radio"
 							name="selection_type"
 							value="2"
-							checked={SelectionType == 2 ? true : false}
+							checked={selectionType == 2 ? true : false}
 							onchange={() => {
-								SelectionType = 2;
+								selectionType = 2;
 							}}
 						/>
 						<span class="icon">
@@ -690,9 +690,9 @@
 							type="radio"
 							name="selection_type"
 							value="0"
-							checked={SelectionType == 0 ? true : false}
+							checked={selectionType == 0 ? true : false}
 							onchange={() => {
-								SelectionType = 0;
+								selectionType = 0;
 							}}
 						/>
 
@@ -708,7 +708,7 @@
 {/snippet}
 
 {#snippet t_delete()}
-	{#if ShowDeleteButton}
+	{#if showDeleteButton}
 		<button aria-label="close" class="button is-small" title="Delete row" onclick={HClickDelete}>
 			<span class="icon">
 				<i class={iconDeleteRow}></i>
@@ -718,7 +718,7 @@
 {/snippet}
 
 {#snippet t_edit()}
-	{#if ShowEditButton}
+	{#if showEditButton}
 		<button aria-label="close" class="button is-small" title="Edit row" onclick={HandleOnClickEdit}>
 			<span class="icon">
 				<i class="far fa-edit"></i>
@@ -728,7 +728,7 @@
 {/snippet}
 
 {#snippet t_new()}
-	{#if ShowNewButton}
+	{#if showNewButton}
 		<button
 			aria-label="close"
 			class="button is-small"
@@ -889,12 +889,12 @@
 							name="rows_per_page"
 							onchange={(e) => {
 								//console.log(e.target.value);
-								PageSizeSelected = e.target.value;
+								pageSizeSelected = e.target.value;
 								FilterData();
 							}}
 						>
-							{#each PageSize as item, itd}
-								<option value={itd} selected={item == PageSize[PageSizeSelected]}>{item}</option>
+							{#each pageSize as item, itd}
+								<option value={itd} selected={item == pageSize[pageSizeSelected]}>{item}</option>
 							{/each}
 						</select>
 					</div>
@@ -909,9 +909,9 @@
 	<thead>
 		<tr class="has-background-link-dark">
 			<th class="has-text-centered has-text-white resizable">#</th>
-			{#if SelectionType == 1}
+			{#if selectionType == 1}
 				<th class="has-text-centered has-text-white"><span>-</span></th>
-			{:else if SelectionType == 2}
+			{:else if selectionType == 2}
 				<th class="has-text-centered has-text-white">
 					<input type="checkbox" onclick={handleChangeSelectAll} />
 				</th>
@@ -964,9 +964,9 @@
 					}}
 				>
 					<!-- Muestra número de fila -->
-					<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
+					<td>{i + 1 + pageSize[pageSizeSelected] * (PageSelected - 1)}</td>
 
-					{#if SelectionType == 1}
+					{#if selectionType == 1}
 						<!-- Columna selección unica -->
 						<td class="has-text-centered"
 							><input
@@ -978,7 +978,7 @@
 								onclick={HandleOnRowSelected}
 							/></td
 						>
-					{:else if SelectionType == 2}
+					{:else if selectionType == 2}
 						<!-- Columna selección multiple -->
 						<td class="has-text-centered">
 							<input

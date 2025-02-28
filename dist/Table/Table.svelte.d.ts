@@ -7,18 +7,18 @@ type Table = {
 };
 declare const Table: import("svelte").Component<{
     RawDataTable?: any;
-    SelectionType?: number;
+    selectionType?: number;
     columns?: Record<string, any>;
-    ShowNewButton?: boolean;
-    ShowEditButton?: boolean;
+    showNewButton?: boolean;
+    showEditButton?: boolean;
     showEditRow?: boolean;
-    ShowSelectionButton?: boolean;
-    ShowExportButton?: boolean;
+    showSelectionButton?: boolean;
+    showExportButton?: boolean;
     iconExport?: string;
     iconDeleteRow?: string;
-    ShowDeleteButton?: boolean;
-    PageSize?: any[];
-    PageSizeSelected?: number;
+    showDeleteButton?: boolean;
+    pageSize?: any[];
+    pageSizeSelected?: number;
     relatedTablesForAutoRefresh?: any[];
     fileNameExport?: string;
     requestData?: any;
@@ -34,21 +34,21 @@ declare const Table: import("svelte").Component<{
     onchangecell?: Function;
 }, {
     GetSelectedRows: () => any;
-}, "RawDataTable" | "SelectionType" | "columns" | "ShowNewButton" | "ShowEditButton" | "showEditRow" | "ShowSelectionButton" | "ShowExportButton" | "iconExport" | "iconDeleteRow" | "ShowDeleteButton" | "PageSize" | "PageSizeSelected" | "relatedTablesForAutoRefresh" | "fileNameExport" | "requestData" | "left_items" | "right_items">;
+}, "RawDataTable" | "selectionType" | "columns" | "showNewButton" | "showEditButton" | "showEditRow" | "showSelectionButton" | "showExportButton" | "iconExport" | "iconDeleteRow" | "showDeleteButton" | "pageSize" | "pageSizeSelected" | "relatedTablesForAutoRefresh" | "fileNameExport" | "requestData" | "left_items" | "right_items">;
 type $$ComponentProps = {
     RawDataTable?: any;
-    SelectionType?: number;
+    selectionType?: number;
     columns?: Record<string, any>;
-    ShowNewButton?: boolean;
-    ShowEditButton?: boolean;
+    showNewButton?: boolean;
+    showEditButton?: boolean;
     showEditRow?: boolean;
-    ShowSelectionButton?: boolean;
-    ShowExportButton?: boolean;
+    showSelectionButton?: boolean;
+    showExportButton?: boolean;
     iconExport?: string;
     iconDeleteRow?: string;
-    ShowDeleteButton?: boolean;
-    PageSize?: any[];
-    PageSizeSelected?: number;
+    showDeleteButton?: boolean;
+    pageSize?: any[];
+    pageSizeSelected?: number;
     relatedTablesForAutoRefresh?: any[];
     fileNameExport?: string;
     requestData?: any;
