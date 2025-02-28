@@ -41,57 +41,62 @@
 					{item.label}
 				</div>
 				<div class="navbar-dropdown" data-style="width: 18rem;">
-					<div class="container is-fluid">
-						<div class="columns">
-							{#each item.submenu.columns as column}
-								<div class="column">
-									<h1 class="title is-6 is-mega-menu-title">{column.title}</h1>
+					<div class="box">
+						<div class="container is-fluid">
+							<div class="columns">
+								{#each item.submenu.columns as column}
+									<div class="column">
+										<h1 class="title is-6 is-mega-menu-title">{column.title}</h1>
 
-									{#each column.items as item}
-										{@render navbar_item(item)}
-									{/each}
-								</div>
-							{/each}
-						</div>
-					</div>
-
-					{#if item.submenu.footer}
-						<hr class="navbar-divider" />
-						<div class="navbar-item">
-							<div class="navbar-content">
-								<div class="level is-mobile">
-									<div class="level-left">
-										<div class="level-item">
-											{#if item.submenu.footer.left}
-												{@render basic_item(item.submenu.footer.left)}
-											{/if}
-										</div>
+										{#each column.items as item}
+											{@render navbar_item(item)}
+										{/each}
 									</div>
-									<div class="level-right">
-										<div class="level-item">
-											{#if item.submenu.footer.right}
-												{@render basic_item(item.submenu.footer.right)}
-											{/if}
+								{/each}
+							</div>
+						</div>
+						{#if item.submenu.footer}
+							<hr class="navbar-divider" />
+
+							<div class="navbar-item">
+								<div class="navbar-content">
+									<div class="level is-mobile">
+										<div class="level-left">
+											<div class="level-item">
+												{#if item.submenu.footer.left}
+													{@render basic_item(item.submenu.footer.left)}
+												{/if}
+											</div>
+										</div>
+										<div class="level-right">
+											<div class="level-item">
+												{#if item.submenu.footer.right}
+													{@render basic_item(item.submenu.footer.right)}
+												{/if}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					{/if}
+						{/if}
+					</div>
 				</div>
 			</div>
 		{:else if item.submenu && Array.isArray(item.submenu)}
-			<div class="navbar-item has-dropdown is-hoverable shadow_menu">
+			<div class="navbar-item has-dropdown is-hoverable is-shadowless">
 				<span class="navbar-link link_dropdown"
 					>{#if item.icon}
 						<i class={item.icon}></i>
 					{/if}
 					{item.label}
 				</span>
-				<div class="navbar-dropdown shadow_menu">
-					{#each item.submenu as submenu}
-						{@render navbar_item(submenu)}
-					{/each}
+
+				<div class="navbar-dropdown">
+					<div class="box">
+						{#each item.submenu as submenu}
+							{@render navbar_item(submenu)}
+						{/each}
+					</div>
 				</div>
 			</div>
 		{:else}
@@ -161,7 +166,6 @@ llll
 	.navbar-link {
 		display: flex;
 		padding: 0.2rem 0.5rem 0.2rem 0.5rem;
-		
 	}
 
 	.link_dropdown {
@@ -172,8 +176,7 @@ llll
 		margin-top: -0.5em;
 		margin-right: -0.3rem;
 	}
-
-	.shadow_menu{
-		box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+	.navbar-dropdown {
+		padding-bottom: 0.0rem;
 	}
 </style>

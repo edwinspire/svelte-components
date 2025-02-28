@@ -14,7 +14,7 @@
 
 	let {
 		RawDataTable = $bindable(),
-		SelectionType = $bindable(0),
+		selectionType = $bindable(0),
 		columns = $bindable({}),
 		ShowNewButton = $bindable(false),
 		ShowEditButton = $bindable(false),
@@ -242,7 +242,7 @@
 			if (filteredData && filteredData.length > 0) {
 				ExportTableToHTML(filteredData, columns, fileNameExport);
 			} else {
-				SelectionType = 2;
+				selectionType = 2;
 				alert('Select the rows to export.');
 			}
 		} catch (error) {
@@ -261,7 +261,7 @@
 			if (filteredData && filteredData.length > 0) {
 				ExportTableToXlsx(filteredData, columns, fileNameExport);
 			} else {
-				SelectionType = 2;
+				selectionType = 2;
 				alert('Select the rows to export.');
 			}
 		} catch (error) {
@@ -349,7 +349,7 @@
 				ondeleterow({ rows: $state.snapshot(filteredData) });
 			} else {
 				alert('Select the rows to delete.');
-				SelectionType = 2;
+				selectionType = 2;
 			}
 		} catch (error) {
 			console.error(error);
@@ -485,7 +485,7 @@
 	}
 
 	function HandleOnRowSelected(event) {
-		if (SelectionType == 1) {
+		if (selectionType == 1) {
 			SelectedRows = [];
 		}
 
@@ -653,9 +653,9 @@
 							type="radio"
 							name="selection_type"
 							value="1"
-							checked={SelectionType == 1 ? true : false}
+							checked={selectionType == 1 ? true : false}
 							onchange={() => {
-								SelectionType = 1;
+								selectionType = 1;
 							}}
 						/>
 						<span class="icon">
@@ -671,9 +671,9 @@
 							type="radio"
 							name="selection_type"
 							value="2"
-							checked={SelectionType == 2 ? true : false}
+							checked={selectionType == 2 ? true : false}
 							onchange={() => {
-								SelectionType = 2;
+								selectionType = 2;
 							}}
 						/>
 						<span class="icon">
@@ -690,9 +690,9 @@
 							type="radio"
 							name="selection_type"
 							value="0"
-							checked={SelectionType == 0 ? true : false}
+							checked={selectionType == 0 ? true : false}
 							onchange={() => {
-								SelectionType = 0;
+								selectionType = 0;
 							}}
 						/>
 
@@ -909,9 +909,9 @@
 	<thead>
 		<tr class="has-background-link-dark">
 			<th class="has-text-centered has-text-white resizable">#</th>
-			{#if SelectionType == 1}
+			{#if selectionType == 1}
 				<th class="has-text-centered has-text-white"><span>-</span></th>
-			{:else if SelectionType == 2}
+			{:else if selectionType == 2}
 				<th class="has-text-centered has-text-white">
 					<input type="checkbox" onclick={handleChangeSelectAll} />
 				</th>
@@ -966,7 +966,7 @@
 					<!-- Muestra número de fila -->
 					<td>{i + 1 + PageSize[PageSizeSelected] * (PageSelected - 1)}</td>
 
-					{#if SelectionType == 1}
+					{#if selectionType == 1}
 						<!-- Columna selección unica -->
 						<td class="has-text-centered"
 							><input
@@ -978,7 +978,7 @@
 								onclick={HandleOnRowSelected}
 							/></td
 						>
-					{:else if SelectionType == 2}
+					{:else if selectionType == 2}
 						<!-- Columna selección multiple -->
 						<td class="has-text-centered">
 							<input

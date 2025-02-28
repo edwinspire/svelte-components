@@ -12,10 +12,8 @@
 
 	let selectedValue = '1';
 
-
-	
 	let data_test = {
-		auth: {selection: 1, basic: {username: 'ddddd'}, bearer: {token: 'DDDDDDDDDD'}},
+		auth: { selection: 1, basic: { username: 'ddddd' }, bearer: { token: 'DDDDDDDDDD' } },
 		body: {
 			selection: 0,
 			json: {
@@ -33,7 +31,7 @@
 	let menujson = {
 		start: [
 			{ label: 'PRUEBA', icon: ' fa-solid fa-delete-left ', link: '/ffsfffs/fff' },
-			{component: bt1},
+			{ component: bt1 },
 			{
 				label: 'SEgundo',
 				onclick: () => {
@@ -127,12 +125,12 @@
 
 	//let code = `SELECT IdLog, DateLog, TipoMensaje, Topico, Mensaje, UserId, GETDATE() AS fecha_descarga  FROM [EasygestionEmpresarial].[dbo].[Log] WITH(NOLOCK) WHERE topico = 'Portal' AND datelog >= DATEADD(DAY, -30, datelog)`;
 	let code = {
-  "wsdl": "https://www.dataaccess.com/webservicesserver/numberconversion.wso?WSDL",
-  "BasicAuthSecurity": {
-    "User": "any",
-    "Password": "any"
-  }
-};
+		wsdl: 'https://www.dataaccess.com/webservicesserver/numberconversion.wso?WSDL',
+		BasicAuthSecurity: {
+			User: 'any',
+			Password: 'any'
+		}
+	};
 	let json02 = {
 		a: 90,
 		b: { c: { j: { h: 12, y: 'sdf' } } }
@@ -249,11 +247,7 @@
 	let active_tab = 2;
 	*/
 
-	onMount(() => {
-		
-	
-
-	});
+	onMount(() => {});
 
 	let valor = {};
 
@@ -412,7 +406,7 @@
 	chao
 {/snippet}
 
- {#if mostrar}
+{#if mostrar}
 	<EditorCode
 		left={l}
 		right={r}
@@ -429,7 +423,7 @@
 		}}
 	></EditorCode>
 {/if}
- 
+
 <!-- 
  <RESTTester
 	bind:data={data_test}
@@ -441,12 +435,12 @@
  
  -->
 
- {#snippet bt1()}
- <button class="button is-dark">Dark</button>
- {/snippet}
- <button class="button is-dark">Dark</button>
- <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
- <Table
+{#snippet bt1()}
+	<button class="button is-dark">Dark</button>
+{/snippet}
+<button class="button is-dark">Dark</button>
+<MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
+<Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -470,7 +464,6 @@
 				<input class="input is-small" type="datetime-local" placeholder="Start" />
 			</span>
 			<span class="control">
-
 				<a class="button is-static is-small"> Start </a>
 			</span>
 		</div>
@@ -518,3 +511,59 @@
 		</button>
 	{/snippet}
 </Table>
+
+<div class="glowing-border">Hola mundo</div>
+
+<style>
+	.glowing-border {
+  width: 200px;
+  height: 100px;
+  position: relative;
+  border: 3px solid transparent;
+}
+
+.glowing-border::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  border: 3px solid transparent;
+  border-radius: 5px;
+  animation: borderMove 3s linear infinite;
+}
+
+@keyframes borderMove {
+  0% {
+    border-top: 3px solid white;
+    border-right: 3px solid black;
+    border-bottom: 3px solid black;
+    border-left: 3px solid black;
+  }
+  25% {
+    border-top: 3px solid black;
+    border-right: 3px solid white;
+    border-bottom: 3px solid black;
+    border-left: 3px solid black;
+  }
+  50% {
+    border-top: 3px solid black;
+    border-right: 3px solid black;
+    border-bottom: 3px solid white;
+    border-left: 3px solid black;
+  }
+  75% {
+    border-top: 3px solid black;
+    border-right: 3px solid black;
+    border-bottom: 3px solid black;
+    border-left: 3px solid white;
+  }
+  100% {
+    border-top: 3px solid white;
+    border-right: 3px solid black;
+    border-bottom: 3px solid black;
+    border-left: 3px solid black;
+  }
+}
+</style>
