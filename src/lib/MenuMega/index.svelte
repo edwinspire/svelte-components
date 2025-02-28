@@ -37,7 +37,7 @@
 			<hr class="navbar-divider" />
 		{:else if item.submenu?.columns && Array.isArray(item.submenu?.columns)}
 			<div class="navbar-item has-dropdown is-hoverable is-mega">
-				<div class="navbar-link flex">
+				<div class="navbar-link flex link_dropdown">
 					{item.label}
 				</div>
 				<div class="navbar-dropdown" data-style="width: 18rem;">
@@ -81,14 +81,14 @@
 				</div>
 			</div>
 		{:else if item.submenu && Array.isArray(item.submenu)}
-			<div class="navbar-item has-dropdown is-hoverable">
-				<span class="navbar-link"
+			<div class="navbar-item has-dropdown is-hoverable shadow_menu">
+				<span class="navbar-link link_dropdown"
 					>{#if item.icon}
 						<i class={item.icon}></i>
 					{/if}
 					{item.label}
 				</span>
-				<div class="navbar-dropdown">
+				<div class="navbar-dropdown shadow_menu">
 					{#each item.submenu as submenu}
 						{@render navbar_item(submenu)}
 					{/each}
@@ -99,7 +99,7 @@
 		{/if}
 	{/if}
 {/snippet}
-
+llll
 <nav class="navbar is-shadowless border-bottom-grey">
 	<div class="navbar-brand">
 		{#if Array.isArray(brand)}
@@ -144,6 +144,10 @@
 </nav>
 
 <style>
+	.navbar-brand,
+	.navbar-tabs {
+		min-height: auto;
+	}
 	.navbar-item.is-mega {
 		position: static;
 
@@ -155,6 +159,21 @@
 
 	.navbar-item,
 	.navbar-link {
-		display: inline-block;
+		display: flex;
+		padding: 0.2rem 0.5rem 0.2rem 0.5rem;
+		
+	}
+
+	.link_dropdown {
+		padding: 0.1rem 2.1rem 0.4rem 0.5rem !important;
+	}
+
+	.navbar-link:not(.is-arrowless):after {
+		margin-top: -0.5em;
+		margin-right: -0.3rem;
+	}
+
+	.shadow_menu{
+		box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 	}
 </style>
