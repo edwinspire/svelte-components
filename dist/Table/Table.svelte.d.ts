@@ -11,6 +11,7 @@ declare const Table: import("svelte").Component<{
     columns?: Record<string, any>;
     ShowNewButton?: boolean;
     ShowEditButton?: boolean;
+    showEditRow?: boolean;
     ShowSelectionButton?: boolean;
     ShowExportButton?: boolean;
     iconExport?: string;
@@ -33,13 +34,14 @@ declare const Table: import("svelte").Component<{
     onchangecell?: Function;
 }, {
     GetSelectedRows: () => any;
-}, "RawDataTable" | "SelectionType" | "columns" | "ShowNewButton" | "ShowEditButton" | "ShowSelectionButton" | "ShowExportButton" | "iconExport" | "iconDeleteRow" | "ShowDeleteButton" | "PageSize" | "PageSizeSelected" | "relatedTablesForAutoRefresh" | "fileNameExport" | "requestData" | "left_items" | "right_items">;
+}, "RawDataTable" | "SelectionType" | "columns" | "ShowNewButton" | "ShowEditButton" | "showEditRow" | "ShowSelectionButton" | "ShowExportButton" | "iconExport" | "iconDeleteRow" | "ShowDeleteButton" | "PageSize" | "PageSizeSelected" | "relatedTablesForAutoRefresh" | "fileNameExport" | "requestData" | "left_items" | "right_items">;
 type $$ComponentProps = {
     RawDataTable?: any;
     SelectionType?: number;
     columns?: Record<string, any>;
     ShowNewButton?: boolean;
     ShowEditButton?: boolean;
+    showEditRow?: boolean;
     ShowSelectionButton?: boolean;
     ShowExportButton?: boolean;
     iconExport?: string;

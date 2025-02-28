@@ -18,6 +18,7 @@
 		columns = $bindable({}),
 		ShowNewButton = $bindable(false),
 		ShowEditButton = $bindable(false),
+		showEditRow = $bindable(false),
 		ShowSelectionButton = $bindable(true),
 		ShowExportButton = $bindable(true),
 		iconExport = $bindable('fa-solid fa-file-excel'),
@@ -63,7 +64,6 @@
 
 	let text_search = $state(undefined);
 	let loading = $state(false);
-	let showEdit = $state(false);
 	let ColumnSort = $state();
 	let ShowDialogColumn = $state(false);
 	let timeRemainingToRefresh = $state(999);
@@ -480,7 +480,7 @@
 
 	function HandleOnClickEdit() {
 		//console.log(showEdit);
-		showEdit = !showEdit;
+		showEditRow = !showEditRow;
 		return false;
 	}
 
@@ -917,7 +917,7 @@
 				</th>
 			{/if}
 
-			{#if showEdit}
+			{#if showEditRow}
 				<th class="has-text-centered has-text-white">
 					<i class="fas fa-pen"></i>
 				</th>
@@ -991,7 +991,7 @@
 						</td>
 					{/if}
 
-					{#if showEdit}
+					{#if showEditRow}
 						<!-- Columna que muestra icono de editar -->
 						<td
 							class="has-text-centered show_cursor_mouse"
