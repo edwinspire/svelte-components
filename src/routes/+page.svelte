@@ -451,7 +451,7 @@
 		console.log(x);
 	}}
 	{columns}
-	RawDataTable={dataTest}
+	{requestData}
 	showDeleteButton={true}
 	showNewButton={true}
 	showEditButton={true}
@@ -515,55 +515,5 @@
 <div class="glowing-border">Hola mundo</div>
 
 <style>
-	.glowing-border {
-  width: 200px;
-  height: 100px;
-  position: relative;
-  border: 3px solid transparent;
-}
 
-.glowing-border::before {
-  content: "";
-  position: absolute;
-  top: -3px;
-  left: -3px;
-  width: calc(100% + 6px);
-  height: calc(100% + 6px);
-  border: 3px solid transparent;
-  border-radius: 5px;
-  animation: borderMove 3s linear infinite;
-}
-
-@keyframes borderMove {
-  0% {
-    border-top: 3px solid white;
-    border-right: 3px solid black;
-    border-bottom: 3px solid black;
-    border-left: 3px solid black;
-  }
-  25% {
-    border-top: 3px solid black;
-    border-right: 3px solid white;
-    border-bottom: 3px solid black;
-    border-left: 3px solid black;
-  }
-  50% {
-    border-top: 3px solid black;
-    border-right: 3px solid black;
-    border-bottom: 3px solid white;
-    border-left: 3px solid black;
-  }
-  75% {
-    border-top: 3px solid black;
-    border-right: 3px solid black;
-    border-bottom: 3px solid black;
-    border-left: 3px solid white;
-  }
-  100% {
-    border-top: 3px solid white;
-    border-right: 3px solid black;
-    border-bottom: 3px solid black;
-    border-left: 3px solid black;
-  }
-}
 </style>

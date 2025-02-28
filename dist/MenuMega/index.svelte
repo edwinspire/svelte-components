@@ -104,7 +104,7 @@
 		{/if}
 	{/if}
 {/snippet}
-llll
+
 <nav class="navbar is-shadowless border-bottom-grey">
 	<div class="navbar-brand">
 		{#if Array.isArray(brand)}

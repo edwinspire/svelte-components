@@ -1151,4 +1151,12 @@
 	.slot_padding {
 		margin: 0.1em !important;
 	}
+
+	thead th {
+  background-color: #f8f8f8;
+  position: sticky;
+  top: 0; /* Fija la cabecera en la parte superior */
+  z-index: 2; /* Asegura que la cabecera esté sobre el contenido */
+}
+
 </style>
