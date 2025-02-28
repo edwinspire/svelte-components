@@ -4,7 +4,9 @@
 	let {
 		options = $bindable([
 			{ name: 'Manzana', value: '1' },
-			{ name: 'Durazno', value: '2' }
+			{ name: 'Durazno', value: '2' },
+			{ name: 'Pera', value: 'pera' },
+			{ name: 'Kiwi', value: '34' }
 		]),
 		label = $bindable('SELECT'),
 		selectedValue = $bindable(null),
@@ -13,7 +15,7 @@
 		placeholder = $bindable(''),
 		classIcon = $bindable(''),
 		classOnSucess = $bindable('is-success'),
-		classOnError = $bindable('is-danger'),
+		classOnError = $bindable('is-danger fa-beat-fade'),
 		freeTyping = $bindable(false),
 		onselect = () => {}
 	} = $props();
@@ -37,9 +39,9 @@
 
 	$effect(() => {
 		//if (selectedValue != null) {
-			//console.log('selectedValue', selectedValue, inputValue);
-			//setinputValue();
-			checkUpdateSelectedValue();
+		//console.log('selectedValue', selectedValue, inputValue);
+		//setinputValue();
+		checkUpdateSelectedValue();
 		//}
 	});
 
@@ -49,7 +51,7 @@
 			option.name.toLowerCase().includes(inputValue.toLowerCase())
 		);
 		//	console.log(filteredOptions);
-	//	console.log('handleInput >> ', inputValue);
+		//	console.log('handleInput >> ', inputValue);
 		selectedValue = null;
 		showDropdown = true;
 	}
@@ -69,7 +71,7 @@
 	function blurHandler() {
 		if (freeTyping) {
 			selectedValue = inputValue;
-			console.log('blurHandler', inputValue);
+			//console.log('blurHandler', inputValue);
 			onselect($state.snapshot({ name: 'freeTyping', value: inputValue }));
 		}
 	}
@@ -91,7 +93,7 @@
 
 	function checkUpdateSelectedValue() {
 		if (old_selectedValue != selectedValue) {
-		//	console.log('UPDATED setinputValue Compare >> ', old_selectedValue, selectedValue, inputValue);
+			//	console.log('UPDATED setinputValue Compare >> ', old_selectedValue, selectedValue, inputValue);
 			old_selectedValue = selectedValue;
 
 			if (freeTyping) {
@@ -105,13 +107,12 @@
 					selectedValue = null;
 				}
 			}
-		} 
+		}
 	}
-
 
 	onMount(() => {
 		//setinputValue();
-		checkUpdateSelectedValue();	
+		checkUpdateSelectedValue();
 	});
 </script>
 
@@ -134,26 +135,24 @@
 			placeholder={placeholderInternal}
 		/>
 
-		{#if !selectedValueIsValid}
-			<p class="help {classOnError} is-small">
-				The selected value <strong>{inputValue}</strong> is not valid. {JSON.stringify(
-					selectedValue
-				)}
-			</p>
-		{/if}
+	
 		{#if showDropdown && filteredOptions.length > 0}
-			<div class="dropdown is-active">
-				<div class="dropdown-menu" role="menu">
-					<div class="dropdown-content">
-						{#each filteredOptions as option}
-							<!-- svelte-ignore a11y_invalid_attribute -->
-							<a href="#" class="dropdown-item ajust-item" onclick={() => handleClick(option)}>
+		<div class="menu_items">
+			<div class="box">
+				<ul>
+					
+					{#each filteredOptions as option}
+						<!-- svelte-ignore a11y_invalid_attribute -->
+						<li>
+							<a class="is-size-7" href="#" onclick={() => handleClick(option)}>
 								{option.name}
 							</a>
-						{/each}
-					</div>
-				</div>
+						</li>
+					{/each}
+					
+				</ul>
 			</div>
+		</div>
 		{/if}
 	</div>
 	<p class="control">
@@ -180,5 +179,12 @@
 	.ajust-item {
 		padding: 0.1rem 0.1rem 0.1rem 1rem;
 		font-size: 0.75rem;
+	}
+
+	.menu_items {
+		position: absolute; /* Hace que el mensaje flote */
+		top: 100%; /* Coloca el mensaje justo debajo del input */
+		left: 0;
+		z-index: 5;
 	}
 </style>

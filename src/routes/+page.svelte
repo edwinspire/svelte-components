@@ -360,7 +360,8 @@
 	}}>Mostrar</button
 >
 
-<!-- {#if mostrar}
+
+{#if mostrar}
 	<PredictiveInput
 		bind:selectedValue
 		label="SELECT"
@@ -371,7 +372,9 @@
 			console.log('selectedValue', selectedValue, p);
 		}}
 	></PredictiveInput>
-{/if} -->
+	TENGO A DIOS, TENGO PAZ, TENGO FE DE MAS, LO QUE EL MUNDO NO ME DA...
+{/if} 
+
 
 <!-- 
  -->
