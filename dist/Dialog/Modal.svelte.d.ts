@@ -4,16 +4,17 @@ type Modal = {
     $set?(props: Partial<$$ComponentProps>): void;
 };
 declare const Modal: import("svelte").Component<{
-    Show?: boolean;
+    show?: boolean;
     title: any;
     oncancel: any;
     onaccept: any;
     body: any;
     label_accept?: string;
     label_cancel?: string;
-}, {}, "Show">;
+}, {}, "show">;
+import Modal from '../Modal/Modal.svelte';
 type $$ComponentProps = {
-    Show?: boolean;
+    show?: boolean;
     title: any;
     oncancel: any;
     onaccept: any;

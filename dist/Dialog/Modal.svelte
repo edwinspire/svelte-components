@@ -1,6 +1,7 @@
 <script>
+	import Modal from '../Modal/Modal.svelte';
 	let {
-		Show = $bindable(false),
+		show = $bindable(false),
 		title,
 		oncancel,
 		onaccept,
@@ -10,8 +11,7 @@
 	} = $props();
 </script>
 
-<div class="modal" class:is-active={Show}>
-	<div class="modal-background"></div>
+<Modal bind:show>
 	<div class="modal-card">
 		<header class="modal-card-head has-background-dark">
 			<p class="modal-card-title has-text-white">
@@ -23,7 +23,7 @@
 				class="delete"
 				aria-label="close"
 				onclick={(e) => {
-					Show = false;
+					show = false;
 					if (oncancel) {
 						oncancel(e);
 					}
@@ -47,7 +47,7 @@
 			<button
 				class="button is-small"
 				onclick={(e) => {
-					Show = false;
+					show = false;
 					if (oncancel) {
 						oncancel(e);
 					}
@@ -57,7 +57,7 @@
 			</button>
 		</footer>
 	</div>
-</div>
+</Modal>
 
 <style>
 	.modal-card-foot,

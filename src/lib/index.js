@@ -15,9 +15,11 @@ import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
 import RESTTester from './RESTTester/index.svelte';
 import JSONView from './JSONView/index.svelte';
 import MenuMega from './MenuMega/index.svelte';
-
+import Modal from './Modal/Modal.svelte';
+import Notify from './Notifications/index.svelte';
 import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 import { sha256 } from './class/sha.js';
+import { Notifications } from './class/utils.js';
 import { copyTextToClipboard } from './class/browserClipboard.js';
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
 
@@ -39,6 +41,8 @@ export {
 	RESTTester,
 	JSONView,
 	copyTextToClipboard,
-	MenuMega
+	MenuMega,
+	Modal,
+	Notify, Notifications
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";

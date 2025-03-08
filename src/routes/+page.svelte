@@ -5,11 +5,16 @@
 		EditorCode,
 		MenuMega,
 		RESTTester,
-		PredictiveInput
+		PredictiveInput,
+		Modal,
+		Notify,
+		Notifications
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
+	let not = new Notifications();
 
+	not.push({ message: 'inicio', color: 'success', title: 'Inicio App' });
 	let selectedValue = '1';
 
 	let data_test = {
@@ -360,7 +365,6 @@
 	}}>Mostrar</button
 >
 
-
 {#if mostrar}
 	<PredictiveInput
 		bind:selectedValue
@@ -373,8 +377,7 @@
 		}}
 	></PredictiveInput>
 	TENGO A DIOS, TENGO PAZ, TENGO FE DE MAS, LO QUE EL MUNDO NO ME DA...
-{/if} 
-
+{/if}
 
 <!-- 
  -->
@@ -443,6 +446,9 @@
 {/snippet}
 <button class="button is-dark">Dark</button>
 <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
+
+<Notify></Notify>
+
 <Table
 	onnewrow={() => {
 		console.log(dataTest);
@@ -515,8 +521,5 @@
 	{/snippet}
 </Table>
 
-<div class="glowing-border">Hola mundo</div>
-
 <style>
-
 </style>
