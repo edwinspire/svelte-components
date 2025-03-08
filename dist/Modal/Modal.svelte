@@ -1,12 +1,13 @@
 <script>
-	
 	let { show = $bindable(false), children, showCloseButton = $bindable(false) } = $props();
 </script>
 
 <div class="modal" class:is-active={show}>
 	<div class="modal-background"></div>
 
-	{@render children?.()}
+	<div class="modal-content">
+		{@render children?.()}
+	</div>
 
 	{#if showCloseButton}
 		<button

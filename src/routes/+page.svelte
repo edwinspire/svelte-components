@@ -449,6 +449,8 @@
 
 <Notify></Notify>
 
+<Modal show={true}><div class="box">Hola mundo</div></Modal>
+
 <Table
 	onnewrow={() => {
 		console.log(dataTest);
