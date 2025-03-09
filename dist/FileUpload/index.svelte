@@ -78,7 +78,7 @@
 					if (selectedFiles) {
 						try {
 							let result = await uploadFile();
-							console.log('yyyyyyyyy ', result);
+							//console.log('yyyyyyyyy ', result);
 							statusSend = 1;
 							onupload(result);
 						} catch (error) {

@@ -11,13 +11,15 @@ export const equalObjs = (value, new_value) => {
 
 export class Notifications {
 	constructor() {
+		/*
 		notifications_store.subscribe((value) => {
 			console.log('notifications_store: ', value);
-		}); // logs '0'
+		}); 
+		*/
 	}
 
 	push(new_notify) {
-		console.log(notifications_store);
+		//	console.log(notifications_store);
 		new_notify.id = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
 		//notifications_store.set(['Hola mundo']);
@@ -36,7 +38,7 @@ export class Notifications {
 			const index = u.findIndex((obj) => obj.id === id);
 			if (index !== -1) {
 				u.splice(index, 1);
-				console.log(`Objeto con ID ${id} eliminado. Lista actualizada:`, u);
+				//	console.log(`Objeto con ID ${id} eliminado. Lista actualizada:`, u);
 			}
 			return u;
 		});

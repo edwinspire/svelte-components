@@ -85,7 +85,7 @@
 		"events": "^3.3.0",
 		"luxon": "^2.0.2",
 		"prettier-plugin-sql": "^0.18.1",
-		"xlsx": "^0.18.5"
+		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
 	},
 	"importSort": {
 		"*.js": {

@@ -452,7 +452,7 @@
 <Notify></Notify>
 
 <FileUpload url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}></FileUpload>
-<!-- <Table
+ <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -522,7 +522,7 @@
 			</span>
 		</button>
 	{/snippet}
-</Table> -->
+</Table> 
 
 <style>
 </style>
