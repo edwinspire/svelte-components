@@ -17,6 +17,7 @@ import JSONView from './JSONView/index.svelte';
 import MenuMega from './MenuMega/index.svelte';
 import Modal from './Modal/Modal.svelte';
 import Notify from './Notifications/index.svelte';
+import FileUpload from './FileUpload/index.svelte';
 import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 import { sha256 } from './class/sha.js';
 import { Notifications } from './class/utils.js';
@@ -43,6 +44,6 @@ export {
 	copyTextToClipboard,
 	MenuMega,
 	Modal,
-	Notify, Notifications
+	Notify, Notifications, FileUpload
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";

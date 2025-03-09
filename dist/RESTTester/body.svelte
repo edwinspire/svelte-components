@@ -2,14 +2,15 @@
 	import { onMount } from 'svelte';
 	import { EditorCode, Tab } from '../index.js';
 	import KeyValue from './key_value/kv.svelte';
-	//import { equalObjs } from '../class/utils.js';
+	import FileUpload from '../FileUpload/index.svelte';
 
 	let {
 		data = $bindable({
 			selection: 0,
 			json: { code: {} },
 			xml: { code: '' },
-			text: {}
+			text: {},
+			form: {}
 		}),
 		onchange = () => {}
 	} = $props();
@@ -24,7 +25,8 @@
 		{ label: 'JSON', component: tab_json },
 		{ label: 'XML', disabled: true, component: tab_xml },
 		{ label: 'Text', disabled: true, component: tab_text },
-		{ label: 'Form-Encode', disabled: true, component: tab_form },
+		{ label: 'Form', disabled: false, component: tab_form },
+		{ label: 'Form-Encode', disabled: true, component: tab_form_encode },
 		{ label: 'Binary', disabled: true, component: tab_binary }
 	]);
 
@@ -39,13 +41,18 @@
 		//		fnJSEditor.reset();
 	}
 
+	$effect(() => {
+		data.selection;
+		console.log('Volvio a cambiar');
+	});
+
 	function defaultValues() {
 		if (!data) {
 			data = { selection: 0, json: { code: {} }, xml: { code: '' }, text: {} };
 		}
 
 		if (data && data.json == null) {
-			data.json = {code: {}};
+			data.json = { code: {} };
 		}
 
 		if (data && data.json && data.json.code == null) {
@@ -72,6 +79,10 @@
 			data.selection = 0;
 		}
 
+		if (data && data.form == null) {
+			data.form = {};
+		}
+
 		//	console.log('defaultValues >> BODY =>', data);
 	}
 
@@ -83,7 +94,7 @@
 			onchange(data);
 		}
 		*/
-		//console.log('internalOnChange >> BODY =>', $state.snapshot(data));
+		console.log('internalOnChange >> BODY =>', $state.snapshot(data));
 		onchange(data);
 	}
 
@@ -100,7 +111,7 @@
 				bind:code={data.json.code}
 				showFormat={true}
 				onchange={() => {
-					console.log('tab_json body', data.json.code);
+					//					console.log('tab_json body', data.json.code);
 					internalOnChange();
 				}}
 			></EditorCode>
@@ -143,7 +154,7 @@
 	{/if}
 {/snippet}
 
-{#snippet tab_form()}
+{#snippet tab_form_encode()}
 	{#if data}
 		<div>
 			<KeyValue></KeyValue>
@@ -151,36 +162,37 @@
 	{/if}
 {/snippet}
 
+{#snippet tab_form()}
+	{#if data}
+		<div>
+			<FileUpload
+				showUploadButton={false}
+				accept={''}
+				multiple={true}
+				onselect={(file_selected) => {
+					data.form = file_selected.FormData;
+
+					internalOnChange();
+				}}
+			></FileUpload>
+		</div>
+	{/if}
+{/snippet}
+
 {#snippet tab_binary()}
 	{#if data}
 		<div>
-			<div class="file has-name is-small">
-				<label class="file-label">
-					<input
-						class="file-input is-small"
-						type="file"
-						name="resume"
-						onchange={(e) => {
-							if (e.target.files.length > 0) {
-								fileName = e.target.files[0].name;
-							}
-						}}
-					/>
-					<span class="file-cta">
-						<span class="file-icon is-small">
-							<i class="fas fa-upload"></i>
-						</span>
-						<span class="file-label"> Choose a file… </span>
-					</span>
-					<span class="file-name">{fileName}</span>
-				</label>
-			</div>
+			<FileUpload showUploadButton={false}></FileUpload>
 		</div>
 	{/if}
 {/snippet}
 {#if data}
-	<Tab bind:tabs={tabList} bind:active={data.selection} onselect={(r)=>{
-		//console.log('>>>>>>>>>>>>>>< ', r);
-		defaultValues();
-	}}></Tab>
+	<Tab
+		bind:tabs={tabList}
+		active={data.selection}
+		onselect={(r) => {
+			defaultValues();
+			data.selection = r.index;
+		}}
+	></Tab>
 {/if}

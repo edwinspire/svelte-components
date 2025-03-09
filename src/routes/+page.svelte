@@ -8,7 +8,7 @@
 		PredictiveInput,
 		Modal,
 		Notify,
-		Notifications
+		Notifications, FileUpload
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -428,30 +428,31 @@
 			console.log(' EditorCode >>>> ', c, code);
 		}}
 	></EditorCode>
-{/if}
 
-<!-- 
- <RESTTester
+	{/if}
+
+	<MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
+
+
+<RESTTester
 	bind:data={data_test}
-	methodDisabled={true}
+	methodDisabled={false}
 	onchange={(data) => {
 		console.trace('RESTTester change: ', data);
 	}}
 ></RESTTester>
  
- -->
+ 
 
 {#snippet bt1()}
 	<button class="button is-dark">Dark</button>
 {/snippet}
 <button class="button is-dark">Dark</button>
-<MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 
 <Notify></Notify>
 
-<Modal show={true}><div class="box">Hola mundo</div></Modal>
-
-<Table
+<FileUpload url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}></FileUpload>
+<!-- <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -521,7 +522,7 @@
 			</span>
 		</button>
 	{/snippet}
-</Table>
+</Table> -->
 
 <style>
 </style>

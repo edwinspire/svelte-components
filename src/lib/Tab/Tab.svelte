@@ -2,7 +2,7 @@
 	//import { createEventDispatcher } from 'svelte';
 	let {
 		classSize = $bindable('is-small'),
-		onselect = (e)=>{},
+		onselect = (e) => {},
 		tabs = $bindable([
 			{
 				label: 'Pictures',
@@ -26,7 +26,6 @@
 					<!-- svelte-ignore a11y_missing_attribute -->
 					<a
 						onclick={() => {
-							console.log('click ', active, onselect);
 							if (!item.disabled) {
 								active = i;
 								// Solo dispara cuando no está deshabilitado

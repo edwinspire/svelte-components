@@ -7,7 +7,6 @@
 	import Body from './body.svelte';
 	import uFetch from '@edwinspire/universal-fetch';
 	import JSONView from '../JSONView/index.svelte';
-	//	import { equalObjs } from '$lib/class/utils.js';
 
 	let {
 		url = $bindable(),
@@ -148,7 +147,8 @@
 
 	function getDataBody() {
 		let dataBody;
-		console.log('getDataBody > ', data.body);
+		//console.log('getDataBody > ', data.body);
+
 		switch (data.body.selection) {
 			case 0:
 				try {
@@ -163,6 +163,9 @@
 					console.warn(error);
 					dataBody = {};
 				}
+				break;
+			case 3:
+				dataBody = data.body.form;
 				break;
 
 			default:
@@ -249,7 +252,7 @@
 		<Body
 			bind:data={data.body}
 			onchange={() => {
-				console.log('tab_body cambia', data.body);
+				console.log('tab_body cambia', $state.snapshot(data.body));
 				internalOnChange();
 			}}
 		></Body>
@@ -448,14 +451,12 @@
 											}
 										}
 
-										//console.log(data_send, url, method);
+										//console.log('>>>>>>>>>> ', typeof data_send, url, method);
 										resetResponse();
 										// Capturamos el tiempo inicial
 										let startTime = Date.now();
 
 										//let headers = {"access-control-expose-headers": "Content-Disposition", "access-control-allow-headers": "Authorization"}
-
-										//console.log(data);
 
 										last_response = await uF[method]({
 											url: url,
