@@ -8,7 +8,7 @@
 		PredictiveInput,
 		Modal,
 		Notify,
-		Notifications, FileUpload
+		Notifications, FileUpload, EditorContent
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -267,6 +267,9 @@
 		//	code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
 	}, 10000);
 </script>
+
+<EditorContent></EditorContent>
+
 
 {#snippet user()}
 	<span class="icon-text">

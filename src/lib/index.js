@@ -10,6 +10,7 @@ import Plotter from './D3/Plotter.svelte';
 import Tab from './Tab/Tab.svelte';
 import Menu from './Menu/Menu.svelte';
 import EditorCode from './EditorCode/EditorCode.svelte';
+import EditorContent from './EditorContent/index.svelte';
 import BasicSelect from './Select/BasicSelect.svelte';
 import SlideFullScreen from './SlideFullScreen/SlideFullScreen.svelte';
 import RESTTester from './RESTTester/index.svelte';
@@ -44,6 +45,9 @@ export {
 	copyTextToClipboard,
 	MenuMega,
 	Modal,
-	Notify, Notifications, FileUpload
+	Notify,
+	Notifications,
+	FileUpload,
+	EditorContent
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";
