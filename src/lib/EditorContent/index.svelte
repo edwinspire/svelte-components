@@ -10,6 +10,8 @@
 		urlUploadImages = undefined
 	} = $props();
 
+    let editorEl;
+
 	$effect(async () => {
 		await setContent(content);
 	});
