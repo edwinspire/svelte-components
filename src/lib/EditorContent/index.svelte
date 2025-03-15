@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import Level from '$lib/Level/Level.svelte';
+//	import { on } from 'events';
 
 	let {
 		readOnly = $bindable(true),
@@ -10,7 +11,8 @@
 		urlUploadImages = undefined
 	} = $props();
 
-    let editorEl;
+    let editor;
+	let editorEl;
 
 	$effect(async () => {
 		await setContent(content);
@@ -45,13 +47,18 @@
 			const InlineCode = (await import('@editorjs/inline-code')).default;
 			const Checklist = (await import('@editorjs/checklist')).default;
 
-			console.log('EditorJS', content);
+	//		console.log('EditorJS', content);
 			//			const { default: Header } = await import('@editorjs/header');
 			editor = new EditorJS({
 				holder: editorEl,
 				placeholder: 'Write...',
 				autofocus: true,
 				readOnly: readOnly,
+				onReady: async () => {
+					if (content) {
+						await setContent(content);
+					}
+				},
 				onChange: async () => {
 					const content = await editor.saver.save();
 					//console.log('El contenido ha cambiado:', content);
@@ -71,10 +78,6 @@
 					checklist: { class: Checklist, inlineToolbar: true }
 				}
 			});
-
-			if (content) {
-				await setContent(content);
-			}
 		} catch (error) {
 			console.error('Failed to load EditorJS:', error);
 		}
