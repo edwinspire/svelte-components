@@ -6,19 +6,19 @@
 		readOnly = $bindable(true),
 		readOnlyButton = $bindable(true),
 		onchange = () => {},
-		content = undefined,
+		content = $bindable(undefined),
 		urlUploadImages = undefined
 	} = $props();
 
-	/**
-	 * @type {EditorJS | null}
-	 */
-	let editor = $state(null);
-	/** @type {HTMLElement | null} */
-	let editorEl = null;
+	$effect(async () => {
+		await setContent(content);
+	});
 
-	export function setContent(content_json) {
-		editor.render(content_json);
+	export async function setContent(content_json) {
+		if (editor) {
+			console.log('setContent>>>', content_json);
+			await editor.render(content_json);
+		}
 	}
 
 	function setreadOnly(value) {
@@ -43,7 +43,7 @@
 			const InlineCode = (await import('@editorjs/inline-code')).default;
 			const Checklist = (await import('@editorjs/checklist')).default;
 
-			//			console.log(EditorJS);
+			console.log('EditorJS', content);
 			//			const { default: Header } = await import('@editorjs/header');
 			editor = new EditorJS({
 				holder: editorEl,
@@ -71,7 +71,7 @@
 			});
 
 			if (content) {
-				setContent(content);
+				await setContent(content);
 			}
 		} catch (error) {
 			console.error('Failed to load EditorJS:', error);

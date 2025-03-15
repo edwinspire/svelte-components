@@ -8,7 +8,9 @@
 		PredictiveInput,
 		Modal,
 		Notify,
-		Notifications, FileUpload, EditorContent
+		Notifications,
+		FileUpload,
+		EditorContent
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -252,6 +254,42 @@
 	let active_tab = 2;
 	*/
 
+	let docs = {
+		time: 1742007989316,
+		blocks: [
+			{
+				id: 'qomiKhnfSk',
+				type: 'header',
+				data: {
+					text: `Application: `,
+					level: 2
+				}
+			},
+			{
+				id: 'oKtRnOC0U1',
+				type: 'paragraph',
+				data: {
+					text: `Environment: `
+				}
+			},
+			{
+				id: 'RtXfAPnL5s',
+				type: 'paragraph',
+				data: {
+					text: `Method: `
+				}
+			},
+			{
+				id: 'EAQyNTovro',
+				type: 'paragraph',
+				data: {
+					text: `Handler:`
+				}
+			}
+		],
+		version: '2.31.0-rc.7'
+	};
+
 	onMount(() => {});
 
 	let valor = {};
@@ -268,8 +306,7 @@
 	}, 10000);
 </script>
 
-<EditorContent></EditorContent>
-
+<EditorContent content={docs}></EditorContent>
 
 {#snippet user()}
 	<span class="icon-text">
@@ -431,11 +468,9 @@
 			console.log(' EditorCode >>>> ', c, code);
 		}}
 	></EditorCode>
+{/if}
 
-	{/if}
-
-	<MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
-
+<MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 
 <RESTTester
 	bind:data={data_test}
@@ -444,8 +479,6 @@
 		console.trace('RESTTester change: ', data);
 	}}
 ></RESTTester>
- 
- 
 
 {#snippet bt1()}
 	<button class="button is-dark">Dark</button>
@@ -454,8 +487,9 @@
 
 <Notify></Notify>
 
-<FileUpload url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}></FileUpload>
- <Table
+<FileUpload url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}
+></FileUpload>
+<Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -525,7 +559,7 @@
 			</span>
 		</button>
 	{/snippet}
-</Table> 
+</Table>
 
 <style>
 </style>
