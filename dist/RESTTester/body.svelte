@@ -42,7 +42,7 @@
 	}
 
 	$effect(() => {
-		data.selection;
+		data;
 		console.log('Volvio a cambiar');
 	});
 
@@ -83,7 +83,7 @@
 			data.form = {};
 		}
 
-		//	console.log('defaultValues >> BODY =>', data);
+			console.log('defaultValues >> BODY =>', $state.snapshot( data));
 	}
 
 	function internalOnChange() {
@@ -94,7 +94,7 @@
 			onchange(data);
 		}
 		*/
-		console.log('internalOnChange >> BODY =>', $state.snapshot(data));
+		//console.log('internalOnChange >> BODY =>', $state.snapshot(data));
 		onchange(data);
 	}
 
@@ -105,7 +105,7 @@
 
 {#snippet tab_json()}
 	<div>
-		{#if data && data?.json && data?.json?.code}
+		{#if data?.json?.code}
 			<EditorCode
 				lang="json"
 				bind:code={data.json.code}

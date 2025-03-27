@@ -248,11 +248,11 @@
 {/snippet}
 
 {#snippet tab_body()}
-	{#if data}
+	{#if data?.body != null}
 		<Body
 			bind:data={data.body}
 			onchange={() => {
-				console.log('tab_body cambia', $state.snapshot(data.body));
+				//console.log('tab_body cambia', $state.snapshot(data.body));
 				internalOnChange();
 			}}
 		></Body>
