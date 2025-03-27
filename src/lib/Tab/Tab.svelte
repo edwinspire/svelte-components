@@ -12,7 +12,8 @@
 			{ label: 'Calcs', classIcon: 'fas fa-picture' },
 			{ label: 'Film', classIcon: 'fas fa-film', disabled: true }
 		]),
-		active = $bindable(0)
+		active = $bindable(0),
+		children
 	} = $props();
 </script>
 
@@ -30,7 +31,7 @@
 								active = i;
 								// Solo dispara cuando no está deshabilitado
 								if (onselect) {
-									onselect({ label: item.label, index: i });
+									onselect({ label: item.label, index: i, alias: item.alias });
 								}
 							}
 						}}
@@ -62,6 +63,10 @@
 			{/if}
 		{/if}
 	{/each}
+{/if}
+
+{#if children}
+	{@render children()}
 {/if}
 
 <style>

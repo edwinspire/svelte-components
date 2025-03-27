@@ -8,10 +8,12 @@ declare const Tab: import("svelte").Component<{
     onselect?: Function;
     tabs?: any[];
     active?: number;
+    children: any;
 }, {}, "classSize" | "tabs" | "active">;
 type $$ComponentProps = {
     classSize?: string;
     onselect?: Function;
     tabs?: any[];
     active?: number;
+    children: any;
 };

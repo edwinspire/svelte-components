@@ -10,7 +10,8 @@
 		Notify,
 		Notifications,
 		FileUpload,
-		EditorContent
+		EditorContent,
+		Tab
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -306,7 +307,9 @@
 	}, 10000);
 </script>
 
-<EditorContent content={docs}></EditorContent>
+<EditorContent content={docs} onchange={(c)=>{
+    console.log(c);
+}}></EditorContent>
 
 {#snippet user()}
 	<span class="icon-text">
@@ -470,7 +473,7 @@
 	></EditorCode>
 {/if}
 
-<MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
+<!-- <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
 
 <RESTTester
 	bind:data={data_test}
@@ -479,7 +482,7 @@
 		console.trace('RESTTester change: ', data);
 	}}
 ></RESTTester>
-
+ -->
 {#snippet bt1()}
 	<button class="button is-dark">Dark</button>
 {/snippet}
@@ -487,9 +490,14 @@
 
 <Notify></Notify>
 
+<Tab>
+	
+</Tab>
+
 <FileUpload url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}
 ></FileUpload>
-<Table
+
+<!-- <Table
 	onnewrow={() => {
 		console.log(dataTest);
 	}}
@@ -560,6 +568,6 @@
 		</button>
 	{/snippet}
 </Table>
-
+ -->
 <style>
 </style>
