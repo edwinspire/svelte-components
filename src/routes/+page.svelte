@@ -307,9 +307,6 @@
 	}, 10000);
 </script>
 
-<EditorContent content={docs} onchange={(c)=>{
-    console.log(c);
-}}></EditorContent>
 
 {#snippet user()}
 	<span class="icon-text">
@@ -473,16 +470,16 @@
 	></EditorCode>
 {/if}
 
-<!-- <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
-
+<!--  <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
+ -->
 <RESTTester
-	bind:data={data_test}
+	
 	methodDisabled={false}
 	onchange={(data) => {
 		console.trace('RESTTester change: ', data);
 	}}
 ></RESTTester>
- -->
+ 
 {#snippet bt1()}
 	<button class="button is-dark">Dark</button>
 {/snippet}
@@ -490,9 +487,6 @@
 
 <Notify></Notify>
 
-<Tab>
-	
-</Tab>
 
 <FileUpload url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}
 ></FileUpload>

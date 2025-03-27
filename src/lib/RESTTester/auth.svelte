@@ -132,7 +132,7 @@
 	{/if}
 {/snippet}
 
-{#if data != null}
+{#if data?.selection != null}
 	<Tab
 		bind:tabs={tabList}
 		bind:active={data.selection}

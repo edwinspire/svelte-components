@@ -236,7 +236,7 @@
 {/snippet}
 
 {#snippet tab_auth()}
-	{#if data != null}
+	{#if data?.auth != null}
 		<Auth
 			bind:data={data.auth}
 			onchange={() => {
