@@ -57,11 +57,13 @@
 
 {#if Array.isArray(tabs)}
 	{#each tabs as element, i}
-		{#if active == i}
-			{#if element && element.component && !element.disabled}
-				{@render element.component?.()}
-			{/if}
-		{/if}
+		<div
+			style="display: {active == i && element && element.component && !element.disabled
+				? 'block'
+				: 'none'};"
+		>
+			{@render element.component?.()}
+		</div>
 	{/each}
 {/if}
 
