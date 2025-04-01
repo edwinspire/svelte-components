@@ -223,7 +223,7 @@
 </script>
 
 {#snippet tab_query()}
-	{#if data != null}
+	{#if data?.query != null}
 		<Query
 			bind:data={data.query}
 			onchange={() => {
@@ -234,7 +234,7 @@
 {/snippet}
 
 {#snippet tab_headers()}
-	{#if data != null}
+	{#if data?.headers != null}
 		<Headers
 			bind:data={data.headers}
 			onchange={() => {
@@ -536,14 +536,25 @@
 		</div>
 	</div>
 
-	<Tab
-		bind:tabs={tabList}
-		bind:active={active_tab}
-		onselect={(s) => {
-			//	console.log('----->>>>>>>>>>>>>>>>', s);
-			defaultValues();
-		}}
-	></Tab>
+	{#if data}
+		<Tab
+			bind:tabs={tabList}
+			bind:active={active_tab}
+			onselect={(s) => {
+				//	console.log('----->>>>>>>>>>>>>>>>', s);
+				defaultValues();
+			}}
+		></Tab>
+	{:else}
+		<div>
+			<span class="icon-text">
+				<span class="icon has-text-warning">
+					<i class="fa-solid fa-triangle-exclamation"></i>
+				</span>
+				<span>There is no data to start.</span>
+			</span>
+		</div>
+	{/if}
 </div>
 
 <style>
