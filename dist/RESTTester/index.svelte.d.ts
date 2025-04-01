@@ -4,18 +4,18 @@ type Index = {
     $set?(props: Partial<$$ComponentProps>): void;
 };
 declare const Index: import("svelte").Component<{
-    url?: any;
+    url?: string;
     method?: string;
     limitSizeResponseView?: number;
     methodDisabled?: boolean;
-    data?: Record<string, any>;
+    data?: any;
     onchange?: Function;
 }, {}, "url" | "method" | "data" | "limitSizeResponseView" | "methodDisabled">;
 type $$ComponentProps = {
-    url?: any;
+    url?: string;
     method?: string;
     limitSizeResponseView?: number;
     methodDisabled?: boolean;
-    data?: Record<string, any>;
+    data?: any;
     onchange?: Function;
 };

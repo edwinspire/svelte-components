@@ -255,6 +255,8 @@
 	let active_tab = 2;
 	*/
 
+let row = {};
+
 	let docs = {
 		time: 1742007989316,
 		blocks: [
@@ -473,7 +475,10 @@
 <!--  <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
  -->
 <RESTTester
-	
+bind:data={row.data_test}
+method={row.method}
+url={row.endpoint}
+
 	methodDisabled={false}
 	onchange={(data) => {
 		console.trace('RESTTester change: ', data);

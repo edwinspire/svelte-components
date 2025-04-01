@@ -9,11 +9,11 @@
 	import JSONView from '../JSONView/index.svelte';
 
 	let {
-		url = $bindable(),
+		url = $bindable(''),
 		method = $bindable('GET'),
 		limitSizeResponseView = $bindable(20000),
 		methodDisabled = $bindable(false),
-		data = $bindable({ query: [], headers: [], auth: {}, body: {} }),
+		data = $bindable(),
 		onchange = () => {}
 	} = $props();
 
@@ -76,7 +76,7 @@
 
 	function defaultValues() {
 		if (data == null) {
-			data = {};
+			data = { query: [], headers: [], auth: { selection: 0 }, body: {} };
 		}
 
 		if (data && data.auth == null) {
@@ -102,6 +102,15 @@
 		if (data && data.headers == null) {
 			data.headers = {};
 		}
+
+		if (!method) {
+			method = 'GET';
+		}
+
+		if (!url) {
+			url = '';
+		}
+
 		//console.log('>>>>>>> ', data);
 	}
 
