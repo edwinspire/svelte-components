@@ -224,47 +224,97 @@
 
 {#snippet tab_query()}
 	{#if data?.query != null}
-		<Query
-			bind:data={data.query}
-			onchange={() => {
-				internalOnChange();
-			}}
-		></Query>
+		<svelte:boundary onerror={(e) => console.error(e)}>
+			<Query
+				bind:data={data.query}
+				onchange={() => {
+					internalOnChange();
+				}}
+			></Query>
+
+			{#snippet failed(error)}
+				<div>
+					<span class="icon-text">
+						<span class="icon has-text-warning">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+						</span>
+						<span>{error.message}</span>
+					</span>
+				</div>
+			{/snippet}
+		</svelte:boundary>
 	{/if}
 {/snippet}
 
 {#snippet tab_headers()}
 	{#if data?.headers != null}
-		<Headers
-			bind:data={data.headers}
-			onchange={() => {
-				internalOnChange();
-			}}
-		></Headers>
+		<svelte:boundary onerror={(e) => console.error(e)}>
+			<Headers
+				bind:data={data.headers}
+				onchange={() => {
+					internalOnChange();
+				}}
+			></Headers>
+			{#snippet failed(error)}
+				<div>
+					<span class="icon-text">
+						<span class="icon has-text-warning">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+						</span>
+						<span>{error.message}</span>
+					</span>
+				</div>
+			{/snippet}
+		</svelte:boundary>
 	{/if}
 {/snippet}
 
 {#snippet tab_auth()}
 	{#if data?.auth != null}
-		<Auth
-			bind:data={data.auth}
-			onchange={() => {
-				console.log(data);
-				internalOnChange();
-			}}
-		></Auth>
+		<svelte:boundary onerror={(e) => console.error(e)}>
+			<Auth
+				bind:data={data.auth}
+				onchange={() => {
+					console.log(data);
+					internalOnChange();
+				}}
+			></Auth>
+			{#snippet failed(error)}
+				<div>
+					<span class="icon-text">
+						<span class="icon has-text-warning">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+						</span>
+						<span>{error.message}</span>
+					</span>
+				</div>
+			{/snippet}
+		</svelte:boundary>
 	{/if}
 {/snippet}
 
 {#snippet tab_body()}
 	{#if data?.body != null}
-		<Body
-			bind:data={data.body}
-			onchange={() => {
-				//console.log('tab_body cambia', $state.snapshot(data.body));
-				internalOnChange();
-			}}
-		></Body>
+		<svelte:boundary onerror={(e) => console.error(e)}>
+			<Body
+				bind:data={data.body}
+				onchange={() => {
+					//console.log('tab_body cambia', $state.snapshot(data.body));
+					internalOnChange();
+				}}
+			></Body>
+
+			{#snippet failed(error)}
+				<div>
+					<span class="icon-text">
+						<span class="icon has-text-warning">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+						</span>
+						<span>{error.message}</span>
+					</span>
+				</div>
+			{/snippet}
+		</svelte:boundary>
 	{/if}
 {/snippet}
 
