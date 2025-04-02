@@ -101,7 +101,7 @@
 	});
 
 	function internalOnchange() {
-	//	console.log('HuBO CAMBIOS >>>');
+		//	console.log('HuBO CAMBIOS >>>');
 		setCodeEditor(code, false);
 		onchange($state.snapshot({ lang: lang, code: code }));
 	}
@@ -109,12 +109,10 @@
 	function checkUpdateCode() {
 		let result = false;
 		if (lang === 'json') {
-			
 			let tmp_internal_code = JSON.stringify(JSON.parse(internal_code));
 			let tmp_code = typeof code === 'object' ? JSON.stringify(code) : code;
-			
+
 			if (tmp_internal_code != tmp_code) {
-				
 				code = JSON.parse(internal_code);
 				internalOnchange();
 				result = true;
@@ -282,7 +280,14 @@
 		return result;
 	}
 
+	function defaultValues() {
+		if (code == null) {
+			code = '';
+		}
+	}
+
 	onMount(async () => {
+		defaultValues();
 		await initializeEditor();
 		initialized = true;
 	});
@@ -391,5 +396,4 @@
 </div>
 
 <style>
-	
 </style>

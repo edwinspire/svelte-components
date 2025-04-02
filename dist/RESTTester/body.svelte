@@ -83,7 +83,7 @@
 			data.form = {};
 		}
 
-			console.log('defaultValues >> BODY =>', $state.snapshot( data));
+		//console.log('defaultValues >> BODY =>', $state.snapshot(data));
 	}
 
 	function internalOnChange() {
@@ -106,28 +106,54 @@
 {#snippet tab_json()}
 	<div>
 		{#if data?.json?.code}
-			<EditorCode
-				lang="json"
-				bind:code={data.json.code}
-				showFormat={true}
-				onchange={() => {
-					//					console.log('tab_json body', data.json.code);
-					internalOnChange();
-				}}
-			></EditorCode>
+			<svelte:boundary onerror={(e) => console.error(e)}>
+				<EditorCode
+					lang="json"
+					bind:code={data.json.code}
+					showFormat={true}
+					onchange={() => {
+						//					console.log('tab_json body', data.json.code);
+						internalOnChange();
+					}}
+				></EditorCode>
+
+				{#snippet failed(error)}
+					<div>
+						<span class="icon-text">
+							<span class="icon has-text-warning">
+								<i class="fa-solid fa-triangle-exclamation"></i>
+							</span>
+							<span>{error.message}</span>
+						</span>
+					</div>
+				{/snippet}
+			</svelte:boundary>
 		{/if}
 	</div>
 {/snippet}
 
 {#snippet tab_xml()}
 	{#if data && data.xml}
-		<EditorCode
-			lang="xml"
-			bind:code={data.xml.code}
-			onchange={() => {
-				internalOnChange();
-			}}
-		></EditorCode>
+		<svelte:boundary onerror={(e) => console.error(e)}>
+			<EditorCode
+				lang="xml"
+				bind:code={data.xml.code}
+				onchange={() => {
+					internalOnChange();
+				}}
+			></EditorCode>
+
+			{#snippet failed(error)}
+				<div>
+					<span class="icon-text">
+						<span class="icon has-text-warning">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+						</span>
+						<span>{error.message}</span>
+					</span>
+				</div>
+			{/snippet}
+		</svelte:boundary>
 	{/if}
 {/snippet}
 
