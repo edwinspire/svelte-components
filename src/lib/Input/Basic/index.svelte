@@ -95,9 +95,9 @@ let dateFormated = $derived.by(()=>{
                     console.log(value);
                 }}/>
 			{:else if type == 'number'}
-				<input class="input {sizeClass}" type="number" {placeholder} {value} {max} {min} {step} />
+				<input class="input {sizeClass}" type="number" {placeholder} bind:value {max} {min} {step} />
 			{:else}
-				<input class="input {sizeClass}" type="text" {placeholder} {value} />
+				<input class="input {sizeClass}" type="text" {placeholder} bind:value />
 			{/if}
 		</p>
 	</div>
