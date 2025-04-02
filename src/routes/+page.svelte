@@ -11,7 +11,7 @@
 		Notifications,
 		FileUpload,
 		EditorContent,
-		Tab
+		Tab, Input
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -490,10 +490,13 @@ url={row.endpoint}
 {/snippet}
 <button class="button is-dark">Dark</button>
 
+<Input placeholder='Hola' label='Texto:' type='number'></Input>
+
+
 <Notify></Notify>
 
 
-<FileUpload url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}
+<FileUpload label='Prueba' url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}
 ></FileUpload>
 
 <!-- <Table

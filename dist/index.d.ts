@@ -21,4 +21,5 @@ import Notify from './Notifications/index.svelte';
 import { Notifications } from './class/utils.js';
 import FileUpload from './FileUpload/index.svelte';
 import EditorContent from './EditorContent/index.svelte';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega, Modal, Notify, Notifications, FileUpload, EditorContent };
+import Input from './Input/Basic/index.svelte';
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Plotter, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega, Modal, Notify, Notifications, FileUpload, EditorContent, Input };

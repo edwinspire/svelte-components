@@ -5,6 +5,7 @@ import Table from './Table/Table.svelte';
 import * as types from './Table/Column/DefaultTypes.js';
 import DialogModal from './Dialog/Modal.svelte';
 import Predictive from './Input/Predictive.svelte';
+import Input from './Input/Basic/index.svelte';
 import Level from './Level/Level.svelte';
 import Plotter from './D3/Plotter.svelte';
 import Tab from './Tab/Tab.svelte';
@@ -48,6 +49,6 @@ export {
 	Notify,
 	Notifications,
 	FileUpload,
-	EditorContent
+	EditorContent, Input
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";

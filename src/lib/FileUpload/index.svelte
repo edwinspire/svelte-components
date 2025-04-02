@@ -1,12 +1,14 @@
 <script>
 	import { Notifications } from '../class/utils.js';
 	let {
+		label = $bindable(),
 		accept = $bindable('.json'),
 		url = 'http://localhost:3000/upload',
 		multiple = false,
 		onselect = () => {},
 		onupload = () => {},
-		showUploadButton = $bindable(true)
+		showUploadButton = $bindable(true),
+		sizeClass=$bindable('is-small')
 	} = $props();
 
 	let notify = new Notifications();
@@ -35,10 +37,10 @@
 
 		for (let index = 0; index < selectedFiles.length; index++) {
 			const f = selectedFiles[index];
-		//		console.log('FFFFF: ', f);
+			//		console.log('FFFFF: ', f);
 			formData.append(f.name, f);
 		}
-		
+
 		return formData;
 	}
 
@@ -53,9 +55,15 @@
 </script>
 
 <div class="field has-addons">
+	{#if label != null}
+		<p class="control">
+			<!-- svelte-ignore a11y_missing_attribute -->
+			<a class="button is-static {sizeClass} "> {label} </a>
+		</p>
+	{/if}
 	<p class="control file">
 		<input
-			class="input is-small"
+			class="input {sizeClass}"
 			type="file"
 			{multiple}
 			{accept}
@@ -71,7 +79,7 @@
 	{#if showUploadButton}
 		<p class="control">
 			<button
-				class="button is-small {class_status_upload}"
+				class="button {sizeClass} {class_status_upload}"
 				onclick={async () => {
 					statusSend = 0;
 					//		alert('Ha hecho click');
@@ -90,7 +98,7 @@
 					}
 				}}
 			>
-				<span class="icon is-small">
+				<span class="icon {sizeClass}">
 					<i class="fa-solid fa-upload"></i>
 				</span>
 
