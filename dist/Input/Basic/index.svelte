@@ -31,11 +31,9 @@
 		return DateTime.fromFormat(localDateTime, "yyyy-MM-dd'T'HH:mm").toUTC().toISO();
 	}
 
-let dateFormated = $derived.by(()=>{
-    return DateTime.fromISO(value, { zone: "utc" }).toFormat("yyyy-MM-dd");
-});
-
-
+	let dateFormated = $derived.by(() => {
+		return DateTime.fromISO(value, { zone: 'utc' }).toFormat('yyyy-MM-dd');
+	});
 </script>
 
 {#if type == 'file'}
@@ -84,18 +82,42 @@ let dateFormated = $derived.by(()=>{
 					value={localDateTime}
 					onchange={(e) => {
 						console.log(e, localDateTime);
-                        value = localDateTimeToUTC(e.target.value);
-                        console.log(value);
+						value = localDateTimeToUTC(e.target.value);
+						console.log(value);
 					}}
 				/>
 			{:else if type == 'date'}
-				<input class="input {sizeClass}" type="date" {placeholder} value={dateFormated} onchange={(e) => {
-                    console.log(e, dateFormated);
-                    value = localDateTimeToUTC(e.target.value);
-                    console.log(value);
-                }}/>
+				<input
+					class="input {sizeClass}"
+					type="date"
+					{placeholder}
+					value={dateFormated}
+					onchange={(e) => {
+						console.log(e, dateFormated);
+						value = localDateTimeToUTC(e.target.value);
+						console.log(value);
+					}}
+				/>
 			{:else if type == 'number'}
-				<input class="input {sizeClass}" type="number" {placeholder} bind:value {max} {min} {step} />
+				<input
+					class="input {sizeClass}"
+					type="number"
+					{placeholder}
+					bind:value
+					{max}
+					{min}
+					{step}
+				/>
+			{:else if type == 'boolean'}
+				<!-- svelte-ignore a11y_missing_attribute -->
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<a
+					class="button {sizeClass} {value ? 'is-success' : 'is-danger'}"
+					onclick={() => {
+						value = !value;
+					}}>{value}</a
+				>
 			{:else}
 				<input class="input {sizeClass}" type="text" {placeholder} bind:value />
 			{/if}
