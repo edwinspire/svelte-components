@@ -36,6 +36,8 @@
 		}
 	};
 
+	let  isoDate = "2025-01-29T19:04:00.000Z";
+
 	let menujson = {
 		start: [
 			{ label: 'PRUEBA', icon: ' fa-solid fa-delete-left ', link: '/ffsfffs/fff' },
@@ -490,7 +492,7 @@ url={row.endpoint}
 {/snippet}
 <button class="button is-dark">Dark</button>
 
-<Input placeholder='Hola' label='Texto:' type='number'></Input>
+<Input placeholder='Hola' label='Texto:' type='date' bind:value={isoDate} ></Input>
 
 
 <Notify></Notify>

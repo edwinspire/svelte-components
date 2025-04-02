@@ -1,5 +1,6 @@
 <script>
 	import FileUpload from '$lib/FileUpload/index.svelte';
+	import { DateTime } from 'luxon';
 
 	let {
 		placeholder = $bindable(),
@@ -19,6 +20,22 @@
 		onupload = () => {},
 		showUploadButton = $bindable(true)
 	} = $props();
+
+	let localDateTime = $derived.by(() => {
+		return type == 'datetime-local'
+			? DateTime.fromISO(value, { zone: 'utc' }).toLocal().toFormat("yyyy-MM-dd'T'HH:mm")
+			: '';
+	});
+
+	function localDateTimeToUTC(localDateTime) {
+		return DateTime.fromFormat(localDateTime, "yyyy-MM-dd'T'HH:mm").toUTC().toISO();
+	}
+
+let dateFormated = $derived.by(()=>{
+    return DateTime.fromISO(value, { zone: "utc" }).toFormat("yyyy-MM-dd");
+});
+
+
 </script>
 
 {#if type == 'file'}
@@ -60,9 +77,23 @@
 					</span></a
 				>
 			{:else if type == 'datetime-local'}
-				<input class="input {sizeClass}" type="datetime-local" {placeholder} {value} />
-			{:else if type == 'datetime'}
-				<input class="input {sizeClass}" type="datetime-local" {placeholder} {value} />
+				<input
+					class="input {sizeClass}"
+					type="datetime-local"
+					{placeholder}
+					value={localDateTime}
+					onchange={(e) => {
+						console.log(e, localDateTime);
+                        value = localDateTimeToUTC(e.target.value);
+                        console.log(value);
+					}}
+				/>
+			{:else if type == 'date'}
+				<input class="input {sizeClass}" type="date" {placeholder} value={dateFormated} onchange={(e) => {
+                    console.log(e, dateFormated);
+                    value = localDateTimeToUTC(e.target.value);
+                    console.log(value);
+                }}/>
 			{:else if type == 'number'}
 				<input class="input {sizeClass}" type="number" {placeholder} {value} {max} {min} {step} />
 			{:else}
