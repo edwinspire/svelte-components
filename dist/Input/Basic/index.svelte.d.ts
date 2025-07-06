@@ -13,13 +13,14 @@ declare const Index: import("svelte").Component<{
     min?: any;
     max?: any;
     step?: any;
+    isExpanded?: boolean;
     accept?: string;
     url?: string;
     multiple?: boolean;
     onselect?: Function;
     onupload?: Function;
     showUploadButton?: boolean;
-}, {}, "type" | "value" | "min" | "max" | "label" | "placeholder" | "accept" | "showUploadButton" | "sizeClass" | "labelClass" | "step">;
+}, {}, "type" | "value" | "min" | "max" | "label" | "placeholder" | "accept" | "showUploadButton" | "sizeClass" | "labelClass" | "step" | "isExpanded">;
 type $$ComponentProps = {
     placeholder?: any;
     type?: string;
@@ -30,6 +31,7 @@ type $$ComponentProps = {
     min?: any;
     max?: any;
     step?: any;
+    isExpanded?: boolean;
     accept?: string;
     url?: string;
     multiple?: boolean;

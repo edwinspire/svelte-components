@@ -11,7 +11,7 @@
 		Notifications,
 		FileUpload,
 		EditorContent,
-		Tab, Input
+		Tab, Input, MenuSide
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -312,6 +312,9 @@ let row = {};
 </script>
 
 
+
+<MenuSide></MenuSide>
+
 {#snippet user()}
 	<span class="icon-text">
 		<span class="icon">
@@ -409,169 +412,16 @@ let row = {};
 	}}>Mostrar</button
 >
 
-{#if mostrar}
-	<PredictiveInput
-		bind:selectedValue
-		label="SELECT"
-		{freeTyping}
-		classInput="is-small"
-		classLabel="is-small"
-		onselect={(p) => {
-			console.log('selectedValue', selectedValue, p);
-		}}
-	></PredictiveInput>
-	TENGO A DIOS, TENGO PAZ, TENGO FE DE MAS, LO QUE EL MUNDO NO ME DA...
-{/if}
 
-<!-- 
- -->
 
-<!-- 
-<DialogModal bind:Show={mostrar_dialogo}><span class="label is-small" slot="title">Alerta</span></DialogModal>	|	 -->
 
-<!-- <Level left={[chao, MPrincipal, B1]} right={[r1]}>
-	{#snippet chao()}
-		chao
-	{/snippet}
-
-	{#snippet MPrincipal()}
-		Menu principal
-	{/snippet}
-
-	{#snippet B1()}
-		<input class="input is-danger" type="button" label="sss" bind:value={valor} />
-	{/snippet}
-
-	{#snippet r1()}
-	<input class="input is-danger" type="button" label="sss" bind:value={valor} />
-{/snippet}
-	
-</Level>
- -->
-{#snippet l()}
-	Hola
-{/snippet}
-
-{#snippet r()}
-	chao
-{/snippet}
-
-{#if mostrar}
-	<EditorCode
-		left={l}
-		right={r}
-		bind:code
-		bind:lang
-		showResetButton={true}
-		isReadOnly={false}
-		showFormat={true}
-		showCode={true}
-		showHiddenButton={true}
-		showSelectLang={true}
-		onchange={(c) => {
-			console.log(' EditorCode >>>> ', c, code);
-		}}
-	></EditorCode>
-{/if}
-
-<!--  <MenuMega brand={menujson.brand} start={menujson.start} end={menujson.end}></MenuMega>
- -->
-<RESTTester
-bind:data={row.data_test}
-method={row.method}
-url={row.endpoint}
-
-	methodDisabled={false}
-	onchange={(data) => {
-		console.trace('RESTTester change: ', data);
-	}}
-></RESTTester>
- 
 {#snippet bt1()}
 	<button class="button is-dark">Dark</button>
 {/snippet}
 <button class="button is-dark">Dark</button>
 
-<Input placeholder='Hola' label='Texto:' type='boolean' bind:value={isoDate} ></Input>
-
 
 <Notify></Notify>
 
-
-<FileUpload label='Prueba' url={'http://localhost:3000/api/demo/langchain_test_001/dev'} multiple={true}
-></FileUpload>
-
-<!-- <Table
-	onnewrow={() => {
-		console.log(dataTest);
-	}}
-	oneditrow={(e) => {
-		console.log('>>>> -> ', e);
-	}}
-	onclickrow={(x) => {
-		console.log(x);
-	}}
-	{columns}
-	{requestData}
-	showDeleteButton={true}
-	showNewButton={true}
-	showEditButton={true}
-	left_items={[chao]}
-	right_items={[rt1, rt2, rt3, pepe, chavo]}
->
-	{#snippet rt1()}
-		<div class="field has-addons has-addons-centered">
-			<span class="control">
-				<input class="input is-small" type="datetime-local" placeholder="Start" />
-			</span>
-			<span class="control">
-				<a class="button is-static is-small"> Start </a>
-			</span>
-		</div>
-	{/snippet}
-
-	{#snippet rt2()}
-		<div class="field has-addons has-addons-centered">
-			<span class="control">
-				<input class="input is-small" type="datetime-local" placeholder="Start" />
-			</span>
-			<span class="control">
-				<a class="button is-static is-small"> End </a>
-			</span>
-		</div>
-	{/snippet}
-
-	{#snippet rt3()}
-		<div class="field has-addons has-addons-centered">
-			<span class="control">
-				<input class="input is-small" type="number" placeholder="Limit" />
-			</span>
-			<span class="control">
-				<a class="button is-static is-small"> Limit </a>
-			</span>
-		</div>
-	{/snippet}
-
-	{#snippet chao()}
-		chao
-	{/snippet}
-
-	{#snippet pepe()}
-		<button aria-label="close" class="button is-small" title="Delete row">
-			<span class="icon">
-				<i class="fa-solid fa-trash"></i>
-			</span>
-		</button>
-	{/snippet}
-
-	{#snippet chavo()}
-		<button aria-label="close" class="button is-small" title="Delete row">
-			<span class="icon">
-				<i class="fa-solid fa-trash"></i>
-			</span>
-		</button>
-	{/snippet}
-</Table>
- -->
 <style>
 </style>

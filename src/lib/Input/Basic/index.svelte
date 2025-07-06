@@ -12,7 +12,7 @@
 		min = $bindable(),
 		max = $bindable(),
 		step = $bindable(),
-
+		isExpanded = $bindable(true),
 		accept = $bindable('.json'),
 		url = 'http://localhost:3000/upload',
 		multiple = false,
@@ -54,7 +54,7 @@
 				<a class="button is-static {sizeClass} "> {label} </a>
 			</p>
 		{/if}
-		<p class="control">
+		<p class="control {isExpanded ? 'is-expanded' : ''}">
 			{#if type == 'checkbox'}
 				<!-- svelte-ignore a11y_missing_attribute -->
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -81,7 +81,7 @@
 					{placeholder}
 					value={localDateTime}
 					onchange={(e) => {
-						console.log(e, localDateTime);
+						//console.log(e, localDateTime);
 						value = localDateTimeToUTC(e.target.value);
 						console.log(value);
 					}}

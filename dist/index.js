@@ -24,6 +24,8 @@ import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 import { sha256 } from './class/sha.js';
 import { Notifications } from './class/utils.js';
 import { copyTextToClipboard } from './class/browserClipboard.js';
+import MenuSide  from './MenuSide/index.svelte';
+
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
 
 export {
@@ -49,6 +51,6 @@ export {
 	Notify,
 	Notifications,
 	FileUpload,
-	EditorContent, Input
+	EditorContent, Input, MenuSide
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";
