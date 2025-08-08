@@ -11,7 +11,7 @@
 		Notifications,
 		FileUpload,
 		EditorContent,
-		Tab, Input, MenuSide
+		Tab, Input, MenuSide, BasicSelect
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -311,9 +311,15 @@ let row = {};
 	}, 10000);
 </script>
 
+<BasicSelect label="Selecciona una opción"></BasicSelect>
 
-
-<MenuSide></MenuSide>
+<Input
+	placeholder="Escribe algo..."
+	bind:value={valor}
+	lang={lang}
+	onchange={(e) => {
+		console.log('Valor cambiado', e);
+	}}></Input>
 
 {#snippet user()}
 	<span class="icon-text">

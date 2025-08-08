@@ -8,7 +8,6 @@
 	let pushContent = false;
 	let open = true;
 
-
 	function toogleMenu() {
 		if (open) {
 			closeNav();
@@ -35,17 +34,13 @@
 	function openNavSobre() {
 		//mySidenav.style.width = '250px';
 	}
+</script>
 
-
-	</script>
-
-<VerticalMenu bind:open={open}></VerticalMenu>
+<VerticalMenu bind:open></VerticalMenu>
 
 <div bind:this={main} class="main">
 	<h2>Sidenav Push Example</h2>
 
-
-	
 	<p>
 		Click on the element below to open the side navigation menu, and push this content to the right.
 	</p>
@@ -60,5 +55,4 @@
 		transition: margin-left 0.5s;
 		padding: 16px;
 	}
-
 </style>

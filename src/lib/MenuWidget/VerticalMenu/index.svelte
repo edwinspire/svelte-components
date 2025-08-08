@@ -1,5 +1,5 @@
 <script>
-import { onMount } from "svelte";
+	import { onMount } from 'svelte';
 	let { open = bind(true) } = $props();
 
 	let mySidenav;
@@ -36,44 +36,57 @@ import { onMount } from "svelte";
 
 	function openNavDesplaza() {
 		//	console.log('openNavDesplaza', mySidenav, main);
-		mySidenav.style.width = '250px';
+		//		mySidenav.style.width = '250px';
 		//	main.style.marginLeft = '250px';
 	}
 
 	function closeNav() {
 		// Desplaza
-		mySidenav.style.width = '0';
+		//		mySidenav.style.width = '0';
 		//	main.style.marginLeft = '0';
 	}
 
 	function openNavSobre() {
-		mySidenav.style.width = '250px';
+		//		mySidenav.style.width = '250px';
 	}
 
 	function isArrayNotEmpty(obj) {
 		return Array.isArray(obj) && obj.length > 0;
 	}
 
-    onMount(()=>{
-        openNavDesplaza();
-    });
-
+	onMount(() => {
+		openNavDesplaza();
+	});
 </script>
 
 <div bind:this={mySidenav} class="sidenav">
-	<span class="icon has-text-danger is-clickable" on:click={toogleMenu}>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<!-- svelte-ignore event_directive_deprecated -->
+	<span class="icon has-text-danger is-clickable" onclick={toogleMenu}>
 		<i class="fa-solid fa-bars"></i>
 	</span>
 
-	<!--  -->
 	<aside class="menu">
-		{#each Menu as L1}
-			<p class="menu-label">
-				<span class="icon-text">
+		{#each Menu as L1, index}
+
+		
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+			<p class="menu-label" title="{L1.title}" onclick={() => {
+				// Handle click event
+				Menu[index].isopen = true;
+				console.log('Clicked on', L1.title, Menu[index].isopen);
+			//	alert(`Clicked on ${L1.isopen}`);
+			}}>
+				<span class="icon-text" >
 					<span class="icon">
-						<i class={L1.icon}></i>
+						<i class={L1.icon}></i> {L1.isopen} {Menu[index].isopen}
 					</span>
-					<span>{L1.title}</span>
+					{#if open}
+						<span>{L1.title}</span>
+
+					{/if}
 				</span>
 			</p>
 
@@ -81,12 +94,13 @@ import { onMount } from "svelte";
 				<ul class="menu-list">
 					{#each L1.subMenu as L2}
 						<li>
+							<!-- svelte-ignore a11y_missing_attribute -->
 							<a
 								><span class="icon-text">
 									<span class="icon">
 										<i class={L2.icon}></i>
 									</span>
-									<span>xxx {L2.title}</span>
+									<span>{L2.title}</span>
 								</span></a
 							>
 
@@ -108,7 +122,6 @@ import { onMount } from "svelte";
 <style>
 	.sidenav {
 		height: 100%;
-		width: 0;
 		position: fixed;
 		z-index: 40;
 		top: 0;
@@ -127,12 +140,5 @@ import { onMount } from "svelte";
 		margin-left: 50px;
 	}
 
-	@media screen and (max-height: 450px) {
-		.sidenav {
-			padding-top: 15px;
-		}
-		.sidenav a {
-			font-size: 18px;
-		}
-	}
+
 </style>
