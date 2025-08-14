@@ -193,7 +193,7 @@ TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
 				}}
 			>
 				<span class="icon is-small">
-					<i class="fa-solid fa-camera" />
+					<i class="fa-solid fa-camera" ></i>
 				</span>
 				<span>SnapShot</span>
 			</button>
@@ -210,9 +210,9 @@ TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
 			>
 				<span class="icon is-small">
 					{#if refresh}
-						<i class="fa-solid fa-lock-open" />
+						<i class="fa-solid fa-lock-open" ></i>
 					{:else}
-						<i class="fa-solid fa-lock" />
+						<i class="fa-solid fa-lock" ></i>
 					{/if}
 				</span>
 				<span>Refresh</span>
@@ -279,7 +279,5 @@ TimeSelected = (new Date(lastValue.date) - new Date(firstValue.date))/1000;
 </div>
 
 <style>
-	.tick line {
-		stroke: #3cb371 !important;
-	}
+	
 </style>

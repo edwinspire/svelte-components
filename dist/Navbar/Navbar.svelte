@@ -1,12 +1,15 @@
 <script>
 </script>
 
+<!-- svelte-ignore a11y_no_redundant_roles -->
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
+    <!-- svelte-ignore a11y_invalid_attribute -->
     <a class="navbar-item" href="#">
       <strong><slot name="title" /></strong>
     </a>
 
+    <!-- svelte-ignore a11y_missing_attribute -->
     <a
       role="button"
       class="navbar-burger"
@@ -14,8 +17,11 @@
       aria-expanded="false"
       data-target="navbarBasicExample"
     >
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <span aria-hidden="true" />
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <span aria-hidden="true" />
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <span aria-hidden="true" />
     </a>
   </div>

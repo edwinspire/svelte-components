@@ -44,9 +44,13 @@
 	<p>
 		Click on the element below to open the side navigation menu, and push this content to the right.
 	</p>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<span style="font-size: 30px; cursor: pointer" on:click={openNavDesplaza}
 		>&#9776; open Desplaza</span
 	>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<span style="font-size: 30px; cursor: pointer" on:click={openNavSobre}>&#9776; open Sobre</span>
 </div>
 

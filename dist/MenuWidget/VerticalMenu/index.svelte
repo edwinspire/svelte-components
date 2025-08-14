@@ -107,6 +107,7 @@
 							{#if isArrayNotEmpty(L2.subMenu)}
 								{#each L2.subMenu as L3}
 									<ul>
+										<!-- svelte-ignore a11y_missing_attribute -->
 										<li><a>{L3.title}</a></li>
 									</ul>
 								{/each}

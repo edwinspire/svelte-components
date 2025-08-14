@@ -19,7 +19,8 @@
 		onselect = () => {},
 		onupload = () => {},
 		showUploadButton = $bindable(true),
-		pattern = $bindable()
+		pattern = $bindable(),
+		required = $bindable(false)
 	} = $props();
 
 	let localDateTime = $derived.by(() => {
@@ -78,6 +79,7 @@
 			{:else if type == 'datetime-local'}
 				<input
 					{pattern}
+					{required}
 					class="input {sizeClass}"
 					type="datetime-local"
 					{placeholder}
@@ -91,6 +93,7 @@
 			{:else if type == 'date'}
 				<input
 					{pattern}
+					{required}
 					class="input {sizeClass}"
 					type="date"
 					{placeholder}
@@ -104,6 +107,7 @@
 			{:else if type == 'number'}
 				<input
 					{pattern}
+					{required}
 					class="input {sizeClass}"
 					type="number"
 					{placeholder}
@@ -123,7 +127,14 @@
 					}}>{value}</a
 				>
 			{:else}
-				<input {pattern} class="input {sizeClass}" type="text" {placeholder} bind:value />
+				<input
+					{pattern}
+					{required}
+					class="input {sizeClass}"
+					type="text"
+					{placeholder}
+					bind:value
+				/>
 			{/if}
 		</p>
 	</div>
