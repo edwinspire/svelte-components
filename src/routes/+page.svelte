@@ -11,7 +11,7 @@
 		Notifications,
 		FileUpload,
 		EditorContent,
-		Tab, Input, MenuSide, BasicSelect
+		Tab, Input, MenuSide, BasicSelect, Chat
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';
@@ -310,6 +310,9 @@ let row = {};
 		//	code = '{"dd": 4, "dtt": 788, "sss": {"dd": 78}}';
 	}, 10000);
 </script>
+
+<Chat></Chat>
+
 
 <BasicSelect label="Selecciona una opción"></BasicSelect>
 

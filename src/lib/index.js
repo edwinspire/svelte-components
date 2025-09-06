@@ -25,6 +25,7 @@ import { sha256 } from './class/sha.js';
 import { Notifications } from './class/utils.js';
 import { copyTextToClipboard } from './class/browserClipboard.js';
 import  MenuSide  from '$lib/MenuSide/index.svelte';
+//import  Chat  from '$lib/Chat/index.svelte';
 
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
 
