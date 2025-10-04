@@ -1,6 +1,6 @@
 {
   "name": "@edwinspire/svelte-components",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
@@ -95,6 +95,7 @@
     "d3": "^7.8.5",
     "events": "^3.3.0",
     "luxon": "^2.0.2",
+    "marked": "^16.3.0",
     "prettier-plugin-sql": "^0.18.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },

@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 const packagePath = path.resolve("package.json");
-const versionFilePath = path.resolve("./src/lib/OpenFusionAPI/version.js");
+const versionFilePath = path.resolve("./src/lib/version.js");
 
 // Leer package.json
 const packageData = JSON.parse(fs.readFileSync(packagePath, "utf8"));

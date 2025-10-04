@@ -11,7 +11,7 @@
 		Notifications,
 		FileUpload,
 		EditorContent,
-		Tab, Input, MenuSide, BasicSelect, Chat
+		Tab, Input, MenuSide, BasicSelect 
 	} from '../lib/index.js';
 	import { onMount } from 'svelte';
 	//import { jsonFootprint } from '../lib/Table/utils/utils.js';

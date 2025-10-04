@@ -25,6 +25,7 @@ import { sha256 } from './class/sha.js';
 import { Notifications } from './class/utils.js';
 import { copyTextToClipboard } from './class/browserClipboard.js';
 import  MenuSide  from '$lib/MenuSide/index.svelte';
+import MarkdownViewer from '$lib/Markdown/Viewer/index.svelte';
 //import  Chat  from '$lib/Chat/index.svelte';
 
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
@@ -52,6 +53,6 @@ export {
 	Notify,
 	Notifications,
 	FileUpload,
-	EditorContent, Input, MenuSide
+	EditorContent, Input, MenuSide, MarkdownViewer
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";
