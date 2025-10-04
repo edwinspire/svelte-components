@@ -311,8 +311,6 @@ let row = {};
 	}, 10000);
 </script>
 
-<Chat></Chat>
-
 
 <BasicSelect label="Selecciona una opción"></BasicSelect>
 

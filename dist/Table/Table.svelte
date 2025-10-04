@@ -137,7 +137,7 @@
 	onMount(() => {
 		timeRemainingToRefresh = 0;
 
-		if (!requestData) {
+		if (!requestData || requestData === undefined) {
 			requestData = {
 				url: undefined,
 				refresh_time: 4,
