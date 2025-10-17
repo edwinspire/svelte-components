@@ -59,7 +59,6 @@
     "prettier-plugin-svelte": "^3.2.6",
     "publint": "^0.1.9",
     "svelte-check": "^4.0.0",
-    "svelte-echarts": "^1.0.0",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
     "vite": "^5.4.11"
@@ -94,7 +93,6 @@
     "@fortawesome/fontawesome-free": "^6.4.0",
     "bulma": "^1.0.1",
     "codemirror": "^6.0.1",
-    "d3": "^7.8.5",
     "events": "^3.3.0",
     "luxon": "^2.0.2",
     "marked": "^16.3.0",
