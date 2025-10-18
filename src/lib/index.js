@@ -6,8 +6,7 @@ import * as types from './Table/Column/DefaultTypes.js';
 import DialogModal from './Dialog/Modal.svelte';
 import Predictive from './Input/Predictive.svelte';
 import Input from './Input/Basic/index.svelte';
-import Level from './Level/Level.svelte';
-import Plotter from './D3/Plotter.svelte';
+import Level from './Level/Level.svelte'; 
 import Tab from './Tab/Tab.svelte';
 import Menu from './Menu/Menu.svelte';
 import EditorCode from './EditorCode/EditorCode.svelte';
@@ -38,7 +37,7 @@ export {
 	WebSocketClient,
 	Predictive as PredictiveInput,
 	Level,
-	Plotter,
+	
 	Tab,
 	Menu,
 	SlideFullScreen,

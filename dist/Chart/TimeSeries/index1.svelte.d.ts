@@ -1,19 +1,13 @@
-export default Plotter;
-type Plotter = SvelteComponent<{
-    dataInput?: {
-        date: number;
-        time: number;
-    }[];
+export default Index1;
+type Index1 = SvelteComponent<{
+    [x: string]: never;
 }, {
     [evt: string]: CustomEvent<any>;
 }, {}> & {
     $$bindings?: string;
 };
-declare const Plotter: $$__sveltets_2_IsomorphicComponent<{
-    dataInput?: {
-        date: number;
-        time: number;
-    }[];
+declare const Index1: $$__sveltets_2_IsomorphicComponent<{
+    [x: string]: never;
 }, {
     [evt: string]: CustomEvent<any>;
 }, {}, {}, string>;
@@ -21,7 +15,7 @@ interface $$__sveltets_2_IsomorphicComponent<Props extends Record<string, any> =
     new (options: import("svelte").ComponentConstructorOptions<Props>): import("svelte").SvelteComponent<Props, Events, Slots> & {
         $$bindings?: Bindings;
     } & Exports;
-    (internal: unknown, props: Props & {
+    (internal: unknown, props: {
         $$events?: Events;
         $$slots?: Slots;
     }): Exports & {
