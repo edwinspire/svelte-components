@@ -6,7 +6,7 @@ import * as types from './Table/Column/DefaultTypes.js';
 import DialogModal from './Dialog/Modal.svelte';
 import Predictive from './Input/Predictive.svelte';
 import Input from './Input/Basic/index.svelte';
-import Level from './Level/Level.svelte'; 
+import Level from './Level/Level.svelte';
 import Tab from './Tab/Tab.svelte';
 import Menu from './Menu/Menu.svelte';
 import EditorCode from './EditorCode/EditorCode.svelte';
@@ -23,8 +23,9 @@ import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 import { sha256 } from './class/sha.js';
 import { Notifications } from './class/utils.js';
 import { copyTextToClipboard } from './class/browserClipboard.js';
-import MenuSide  from './MenuSide/index.svelte';
+import MenuSide from './MenuSide/index.svelte';
 import MarkdownViewer from './Markdown/Viewer/index.svelte';
+import { OpenFusionWebsocketClient } from './WebSocketClient.js';
 //import Chat  from './Chat/index.svelte';
 
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
@@ -37,7 +38,6 @@ export {
 	WebSocketClient,
 	Predictive as PredictiveInput,
 	Level,
-	
 	Tab,
 	Menu,
 	SlideFullScreen,
@@ -52,6 +52,10 @@ export {
 	Notify,
 	Notifications,
 	FileUpload,
-	EditorContent, Input, MenuSide, MarkdownViewer
+	EditorContent,
+	Input,
+	MenuSide,
+	MarkdownViewer,
+	OpenFusionWebsocketClient
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";
