@@ -24,4 +24,10 @@ import Input from './Input/Basic/index.svelte';
 import MenuSide from './MenuSide/index.svelte';
 import MarkdownViewer from './Markdown/Viewer/index.svelte';
 import { OpenFusionWebsocketClient } from './WebSocketClient.js';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega, Modal, Notify, Notifications, FileUpload, EditorContent, Input, MenuSide, MarkdownViewer, OpenFusionWebsocketClient };
+declare namespace ChartWidgets {
+    export { ChartBase as Base };
+    export { ChartTimeSeries as TimeSeries };
+}
+import ChartBase from './Chart/index.svelte';
+import ChartTimeSeries from './Chart/TimeSeries/index.svelte';
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega, Modal, Notify, Notifications, FileUpload, EditorContent, Input, MenuSide, MarkdownViewer, OpenFusionWebsocketClient, ChartWidgets as Chart };

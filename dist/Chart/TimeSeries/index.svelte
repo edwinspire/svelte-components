@@ -1,6 +1,6 @@
 <script>
-	import * as echarts from 'echarts';
 	import { onMount } from 'svelte';
+	import Chart from '../index.svelte';
 
 	let {
 		title = $bindable('Title'),
@@ -98,9 +98,8 @@
 	});
 
 	onMount(() => {
-		myChart = echarts.init(chartDom);
-		option && myChart.setOption(option);
+		//
 	});
 </script>
 
-<div style="width: 100%; height: 400px;" bind:this={chartDom}></div>
+<Chart bind:title bind:option></Chart>

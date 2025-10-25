@@ -26,9 +26,12 @@ import { copyTextToClipboard } from './class/browserClipboard.js';
 import MenuSide from '$lib/MenuSide/index.svelte';
 import MarkdownViewer from '$lib/Markdown/Viewer/index.svelte';
 import { OpenFusionWebsocketClient } from './WebSocketClient.js';
+import ChartTimeSeries from '$lib/Chart/TimeSeries/index.svelte';
+import ChartBase from '$lib/Chart/index.svelte';
 //import  Chat  from '$lib/Chat/index.svelte';
 
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
+const ChartWidgets = {Base: ChartBase, TimeSeries: ChartTimeSeries};
 
 export {
 	Table,
@@ -56,6 +59,6 @@ export {
 	Input,
 	MenuSide,
 	MarkdownViewer,
-	OpenFusionWebsocketClient
+	OpenFusionWebsocketClient, ChartWidgets as Chart
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";
