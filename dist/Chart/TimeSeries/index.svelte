@@ -76,11 +76,9 @@
 		})
 	} = $props();
 
-	var chartDom;
-	var myChart;
-
+	/*
 	$effect(() => {
-		//console.log("Data changed:", data);
+		console.log("Data changed:", data);
 		if (data) {
 			if (myChart) {
 				myChart.setOption({
@@ -96,10 +94,11 @@
 			}
 		}
 	});
+	*/
 
 	onMount(() => {
 		//
 	});
 </script>
 
-<Chart bind:title bind:option></Chart>
+<Chart bind:title bind:option bind:data></Chart>

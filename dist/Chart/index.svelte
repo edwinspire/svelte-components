@@ -8,9 +8,11 @@
 	var myChart;
 
 	$effect(() => {
-		//console.log("Data changed:", data);
+		//console.log("::::.> Data changed:");
 		if (data) {
+			//console.log('llega');
 			if (myChart) {
+				//	console.log('setea');
 				myChart.setOption({
 					title: {
 						text: title
