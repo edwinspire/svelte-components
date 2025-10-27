@@ -22,7 +22,7 @@
 				trigger: 'axis',
 				formatter: function (params) {
 					// Aqui para darle formato al texto del tooltip
-					console.log(params);
+					//console.log(params);
 					params = params[0];
 					var date = new Date(params.name);
 					return (
