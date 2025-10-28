@@ -162,7 +162,7 @@
 			case 0:
 				try {
 					let jsoncode = data?.body?.json?.code ?? undefined;
-					console.log('jsoncode >> ', jsoncode);
+				//	console.log('jsoncode >> ', jsoncode);
 					if (typeof jsoncode == 'object') {
 						dataBody = jsoncode;
 					} else {
@@ -275,7 +275,7 @@
 			<Auth
 				bind:data={data.auth}
 				onchange={() => {
-					console.log(data);
+				//	console.log(data);
 					internalOnChange();
 				}}
 			></Auth>
@@ -531,7 +531,7 @@
 										// Calculamos la diferencia en milisegundos
 										time_responde = endTime - startTime;
 
-										console.warn(last_response);
+										//console.warn(last_response);
 
 										// TODO: probar cuando el dato es text pero en el editor se usa JSON, hay una excepción que no está controlada y el editor deja de funcionat
 

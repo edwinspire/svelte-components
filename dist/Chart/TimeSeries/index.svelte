@@ -57,8 +57,8 @@
 			dataZoom: [
 				{
 					type: 'inside',
-					start: 0,
-					end: 20
+					start: 75,
+					end: 100
 				},
 				{
 					start: 0,
@@ -70,6 +70,7 @@
 					name: 'Time Data',
 					type: 'line',
 					showSymbol: false,
+					smooth: true,
 					data: data
 				}
 			]

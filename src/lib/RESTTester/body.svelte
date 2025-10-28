@@ -41,10 +41,12 @@
 		//		fnJSEditor.reset();
 	}
 
+	/*
 	$effect(() => {
 		data;
 		console.log('Volvio a cambiar');
 	});
+	*/
 
 	function defaultValues() {
 		if (!data) {

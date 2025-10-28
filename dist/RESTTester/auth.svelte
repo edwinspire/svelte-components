@@ -55,7 +55,7 @@
 		if (data && data.selection == null) {
 			data.selection = 0;
 		}
-		console.log('DEFAULT', data);
+	//	console.log('DEFAULT', data);
 
 		username = data.basic.username;
 		password = data.basic.password;
