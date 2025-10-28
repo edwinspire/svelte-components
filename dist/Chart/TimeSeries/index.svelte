@@ -11,10 +11,6 @@
 			},
 			toolbox: {
 				feature: {
-					dataZoom: {
-						yAxisIndex: 'none'
-					},
-					restore: {},
 					saveAsImage: {}
 				}
 			},
@@ -45,11 +41,26 @@
 				interval: 1000 * 60 * 30,
 				splitLine: {
 					show: true
+				},
+				splitLine: {
+					show: true, // Mostrar líneas de grilla del eje X
+					lineStyle: {
+						//color: '#e6eaf0', // Color rojo para las líneas verticales
+						//width: 1, // Ancho de 2 píxeles
+						opacity: 0.2
+						//type: 'solid' // Puedes usar 'dashed', 'dotted', 'solid'
+					}
 				}
 			},
 			yAxis: {
 				type: 'value',
 				boundaryGap: [0, '100%'],
+				lineStyle: {
+					//color: '#e6eaf0', // Color rojo para las líneas verticales
+					//width: 1, // Ancho de 2 píxeles
+					opacity: 0.2
+					//type: 'solid' // Puedes usar 'dashed', 'dotted', 'solid'
+				},
 				splitLine: {
 					show: true
 				}
@@ -71,7 +82,8 @@
 					type: 'line',
 					showSymbol: false,
 					smooth: true,
-					data: data
+					data: data,
+					large: true
 				}
 			]
 		})
