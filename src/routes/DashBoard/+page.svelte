@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import 'bulma/css/bulma.min.css';
 	import '@fortawesome/fontawesome-free/css/all.min.css';
+    import Table from "$lib/Table/Table.svelte"
 	// Estados reactivos
 	// sidebarState: 'expanded' | 'icons-only' | 'hidden'
 	let sidebarState = $state('icons-only');
@@ -10,9 +11,10 @@
 	let userDropdownActive = $state(false);
 	let currentActiveMenu = $state(0);
 	let currentActiveSubMenu = $state(0);
+	let lastSidebarStateSelected = '';
 
 	// Responsive state
-	let isMobile = false;
+	let isMobile = $state( false);
 
 	let menu_sections = $state({
 		section: [
@@ -61,6 +63,11 @@
 		if (!isMobile && sidebarActive) {
 			sidebarActive = false;
 		}
+		if (isMobile) {
+			sidebarState = 'hidden';
+		} else {
+			sidebarState = lastSidebarStateSelected;
+		}
 	}
 
 	// Toggle Sidebar with 3 states
@@ -78,6 +85,7 @@
 				sidebarState = 'icons-only';
 			}
 		}
+		lastSidebarStateSelected = sidebarState;
 	}
 
 	// Toggle Notification Dropdown
@@ -184,7 +192,7 @@
 					{/if}
 				</a>
 
-				{#if sidebarState === 'expanded'}
+				{#if sidebarState === 'expanded' || isMobile}
 					<ul class="submenu {data.internal_isopen ? 'open' : ''}">
 						{#each data.items as submenu}
 							{@render submenu_item(submenu)}
@@ -194,7 +202,7 @@
 			{:else}
 				<a
 					href={data.href ? data.href : '#'}
-					class="menu-link {data.items && data.items.length > 0 ? 'open' : ''}"
+					class="menu-link"
 					class:active={currentActiveMenu === data.internal_id}
 					onclick={(e) => {
 						if (!data.internal_id) {
@@ -227,17 +235,20 @@
 
 <!-- Sidebar -->
 <aside
-	class="sidebar"
+	class="sidebar box"
 	class:icons-only={sidebarState === 'icons-only'}
 	class:hidden={sidebarState === 'hidden'}
 	class:active={sidebarActive}
 >
-	<div class="sidebar-header">
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="sidebar-header  " onclick={toggleSidebar}>
+		<!-- svelte-ignore a11y_invalid_attribute -->
 		<a href="#" class="sidebar-logo">
 			<div class="logo-icon">
 				<i class="fas fa-cube"></i>
 			</div>
-			<span class="logo-text">OpenFusionAPI</span>
+			<span class="logo-text">OpenFusionAPI </span>
 		</a>
 	</div>
 
@@ -260,9 +271,11 @@
 	</div>
 </aside>
 
+<div class="box"></div>
+
 <!-- Top Navigation -->
 <nav
-	class="top-nav"
+	class="top-nav box"
 	class:icons-only={sidebarState === 'icons-only'}
 	class:expanded={sidebarState === 'hidden'}
 >
@@ -320,7 +333,7 @@
 		</div>
 
 		<div class="nav-item">
-			<button class="nav-link">
+			<button class="nav-link" onclick={toggleSidebar}>
 				<i class="fas fa-envelope"></i>
 				<span class="badge">5</span>
 			</button>
@@ -387,11 +400,11 @@
 
 <!-- Main Content -->
 <main
-	class="main-content"
+	class="main-content box "
 	class:icons-only={sidebarState === 'icons-only'}
 	class:expanded={sidebarState === 'hidden'}
 >
-	<div>Contenindo</div>
+	<div class="m"><Table></Table></div>
 </main>
 
 <style>
@@ -405,25 +418,9 @@
 		--sidebar-width: 250px;
 		--sidebar-width-icons: 80px;
 		--topbar-height: 70px;
-		--sidebar-bg: #1a1f2e;
-		--sidebar-hover: #4361ee;
-		--topbar-bg: #ffffff;
-		--text-primary: #2c3e50;
-		--text-secondary: #7b8a9b;
-		--border-color: #e8eef3;
 	}
 
-	:global(body) {
-		font-family:
-			'Inter',
-			-apple-system,
-			BlinkMacSystemFont,
-			'Segoe UI',
-			Roboto,
-			sans-serif;
-		background: #f7f9fc;
-		overflow-x: hidden;
-	}
+	
 
 	/* Overlay para móvil */
 	.overlay {
@@ -515,7 +512,7 @@
 	}
 
 	.sidebar-header {
-		padding: 20px;
+		padding: 15px;
 		background: #151922;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 	}
@@ -924,13 +921,6 @@
 		border-color: var(--sidebar-hover);
 	}
 
-	.dropdown-footer {
-		padding: 15px;
-		border-top: 1px solid var(--border-color);
-		display: flex;
-		gap: 10px;
-	}
-
 	.dropdown-item {
 		display: flex;
 		align-items: center;
@@ -1021,50 +1011,6 @@
 		font-size: 48px;
 		margin-bottom: 15px;
 		opacity: 0.5;
-	}
-
-	.placeholder-content p {
-		font-size: 16px;
-	}
-
-	/* Footer */
-	.footer {
-		margin-left: var(--sidebar-width);
-		padding: 20px 25px;
-		background: white;
-		border-top: 1px solid var(--border-color);
-		transition: all 0.3s ease;
-	}
-
-	.footer.expanded {
-		margin-left: 0;
-	}
-
-	@media (max-width: 768px) {
-		.footer {
-			margin-left: 0;
-			padding: 15px;
-		}
-	}
-
-	.footer-content {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 15px;
-	}
-
-	@media (max-width: 768px) {
-		.footer-content {
-			flex-direction: column;
-			text-align: center;
-		}
-	}
-
-	.footer-links {
-		display: flex;
-		gap: 20px;
 	}
 
 	/* Button styles (similar to Bulma) */
