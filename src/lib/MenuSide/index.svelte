@@ -119,6 +119,9 @@
 				}
 				currentActiveMenu = item.internal_id;
 				item.internal_isopen = !item.internal_isopen;
+				if (item.onclick) {
+					item.onclick();
+				}
 			}}
 			><span class="icon-text">
 				{#if item.icon && item.icon.length > 0}
@@ -362,46 +365,6 @@
 		font-size: 12px;
 	}
 
-	/* Upgrade Card */
-	.upgrade-card {
-		margin: 20px;
-		background: linear-gradient(135deg, var(--sidebar-hover), #3f51b5);
-		border-radius: 12px;
-		padding: 20px;
-		color: white;
-	}
-
-	/* Top Navigation */
-	.top-nav {
-		position: fixed;
-		top: 0;
-		left: var(--sidebar-width);
-		right: 0;
-		height: var(--topbar-height);
-		background: var(--topbar-bg);
-		display: flex;
-		align-items: center;
-		padding: 0 20px;
-		transition: all 0.3s ease;
-		z-index: 999;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-	}
-
-	.top-nav.icons-only {
-		left: var(--sidebar-width-icons);
-	}
-
-	.top-nav.expanded {
-		left: 0;
-	}
-
-	@media (max-width: 768px) {
-		.top-nav {
-			left: 0;
-			padding: 0 15px;
-		}
-	}
-
 	.nav-left {
 		display: flex;
 		align-items: center;
@@ -510,47 +473,6 @@
 	.user-role {
 		font-size: 12px;
 		color: var(--text-secondary);
-	}
-
-	/* Dropdown */
-	.dropdown-menu {
-		position: absolute;
-		top: calc(100% + 8px);
-		right: 0;
-		background: white;
-		border-radius: 8px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-		min-width: 280px;
-		display: none;
-		z-index: 1001;
-	}
-
-	.dropdown-menu.active {
-		display: block;
-	}
-
-	.dropdown-header {
-		padding: 15px 20px;
-		border-bottom: 1px solid var(--border-color);
-	}
-
-	.dropdown-body {
-		max-height: 300px;
-		overflow-y: auto;
-	}
-
-	.dropdown-item {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		color: var(--text-primary);
-		text-decoration: none;
-		font-size: 14px;
-		cursor: pointer;
-	}
-
-	.dropdown-item:hover {
-		color: var(--sidebar-hover);
 	}
 
 	/* Main Content */
@@ -682,12 +604,5 @@
 
 	.badge.is-primary {
 		background-color: var(--sidebar-hover);
-	}
-
-	/* Responsive adjustments */
-	@media (max-width: 768px) {
-		.dropdown-menu {
-			min-width: 250px;
-		}
 	}
 </style>

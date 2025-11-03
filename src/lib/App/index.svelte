@@ -78,7 +78,7 @@
 		right: 0;
 		height: var(--topbar-height);
 		background: var(--topbar-bg);
-		display: flex;
+		
 		align-items: center;
 		padding: 0 20px;
 		transition: all 0.3s ease;
