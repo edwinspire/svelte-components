@@ -5,7 +5,7 @@ type Index = {
 };
 declare const Index: import("svelte").Component<{
     logoText?: string;
-    logoIcon?: any;
+    logoIcon?: () => ReturnType<import("svelte").Snippet>;
     topRightNavBar?: any[];
     topLeftNavBar?: any[];
     children: any;
@@ -13,7 +13,7 @@ declare const Index: import("svelte").Component<{
 }, {}, "menu" | "logoText" | "logoIcon" | "topRightNavBar" | "topLeftNavBar">;
 type $$ComponentProps = {
     logoText?: string;
-    logoIcon?: any;
+    logoIcon?: () => ReturnType<import("svelte").Snippet>;
     topRightNavBar?: any[];
     topLeftNavBar?: any[];
     children: any;

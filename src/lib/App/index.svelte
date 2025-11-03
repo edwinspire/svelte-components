@@ -4,7 +4,7 @@
 
 	let {
 		logoText = $bindable('LOGO TEXT'),
-		logoIcon = $bindable(),
+		logoIcon = $bindable(iconFallback),
 		topRightNavBar = $bindable([]),
 		topLeftNavBar = $bindable([]),
 		children,
@@ -28,6 +28,10 @@
 		WidgetMenu.toggleSidebar();
 	}
 </script>
+
+{#snippet iconFallback()}
+	<i class="fas fa-cube"></i>
+{/snippet}
 
 {#snippet bntToggleSidebar()}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->

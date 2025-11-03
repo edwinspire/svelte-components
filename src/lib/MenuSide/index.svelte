@@ -116,7 +116,9 @@
 {/snippet}
 
 {#snippet snp_section(section)}
-	<p class="menu-label">{section.title}</p>
+	{#if sidebarState !== 'icons-only'}
+		<p class="menu-label">{section.title}</p>
+	{/if}
 
 	{#if section.items && section.items.length > 0}
 		<ul class="menu-list">
