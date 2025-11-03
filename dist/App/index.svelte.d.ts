@@ -2,18 +2,16 @@ export default Index;
 type Index = {
     $on?(type: string, callback: (e: any) => void): () => void;
     $set?(props: Partial<$$ComponentProps>): void;
-} & {
-    toggleSidebar: () => void;
 };
 declare const Index: import("svelte").Component<{
-    isMobile?: boolean;
-    sidebarState?: string;
+    topRightNavBar?: any[];
+    topLeftNavBar?: any[];
+    children: any;
     menu?: any[];
-}, {
-    toggleSidebar: () => void;
-}, "menu" | "isMobile" | "sidebarState">;
+}, {}, "menu" | "topRightNavBar" | "topLeftNavBar">;
 type $$ComponentProps = {
-    isMobile?: boolean;
-    sidebarState?: string;
+    topRightNavBar?: any[];
+    topLeftNavBar?: any[];
+    children: any;
     menu?: any[];
 };

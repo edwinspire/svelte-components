@@ -1,6 +1,18 @@
 <script>
 	import { onMount } from 'svelte';
-	let { isMobile = $bindable(false), sidebarState = $bindable('icons-only') } = $props();
+	let {
+		isMobile = $bindable(false),
+		sidebarState = $bindable('icons-only'),
+		menu = $bindable([
+			{
+				title: 'GRUP 01',
+				items: [
+					{ label: 'Demo Font', icon: ' fa-brands fa-font-awesome ', link: '' },
+					{ label: 'Demo Face', icon: ' fa-brands fa-facebook ', link: '' }
+				]
+			}
+		])
+	} = $props();
 
 	// Estados reactivos
 	// sidebarState: 'expanded' | 'icons-only' | 'hidden'
@@ -12,7 +24,7 @@
 
 	// Responsive state
 	//let isMobile = $state(false);
-
+	/*
 	let menu_sections = $state([
 		{
 			title: 'GRUPO 1',
@@ -46,6 +58,7 @@
 			]
 		}
 	]);
+	*/
 
 	onMount(() => {
 		while (sidebarState != 'icons-only') {
@@ -91,8 +104,6 @@
 		sidebarActive = false;
 	}
 </script>
-
-
 
 {#snippet snp_menu_item(item)}
 	<li>
@@ -177,7 +188,7 @@
 		</a>
 	</div>
 
-	{#each menu_sections as section}
+	{#each menu as section}
 		{@render snp_section(section)}
 	{/each}
 </aside>

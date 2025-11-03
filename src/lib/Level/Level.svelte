@@ -44,6 +44,7 @@
 	}
 	.nav_margin {
 		margin: 0.25em !important;
+		width: 100%;
 	}
 	.container_right {
 		display: flex;

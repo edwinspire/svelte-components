@@ -28,6 +28,7 @@ declare namespace ChartWidgets {
     export { ChartBase as Base };
     export { ChartTimeSeries as TimeSeries };
 }
+import AppBase from './App/index.svelte';
 import ChartBase from './Chart/index.svelte';
 import ChartTimeSeries from './Chart/TimeSeries/index.svelte';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega, Modal, Notify, Notifications, FileUpload, EditorContent, Input, MenuSide, MarkdownViewer, OpenFusionWebsocketClient, ChartWidgets as Chart };
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega, Modal, Notify, Notifications, FileUpload, EditorContent, Input, MenuSide, MarkdownViewer, OpenFusionWebsocketClient, ChartWidgets as Chart, AppBase };

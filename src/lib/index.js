@@ -28,6 +28,7 @@ import MarkdownViewer from '$lib/Markdown/Viewer/index.svelte';
 import { OpenFusionWebsocketClient } from './WebSocketClient.js';
 import ChartTimeSeries from '$lib/Chart/TimeSeries/index.svelte';
 import ChartBase from '$lib/Chart/index.svelte';
+import AppBase from '$lib/App/index.svelte';
 //import  Chat  from '$lib/Chat/index.svelte';
 
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
@@ -59,6 +60,6 @@ export {
 	Input,
 	MenuSide,
 	MarkdownViewer,
-	OpenFusionWebsocketClient, ChartWidgets as Chart
+	OpenFusionWebsocketClient, ChartWidgets as Chart, AppBase
 };
 //export { default as DialogModal } from "./Dialog/Modal.svelte";
