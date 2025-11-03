@@ -6,13 +6,17 @@ type Index = {
     toggleSidebar: () => void;
 };
 declare const Index: import("svelte").Component<{
+    logoText?: string;
+    logoIcon?: () => ReturnType<import("svelte").Snippet>;
     isMobile?: boolean;
     sidebarState?: string;
     menu?: any[];
 }, {
     toggleSidebar: () => void;
-}, "menu" | "isMobile" | "sidebarState">;
+}, "menu" | "logoText" | "logoIcon" | "isMobile" | "sidebarState">;
 type $$ComponentProps = {
+    logoText?: string;
+    logoIcon?: () => ReturnType<import("svelte").Snippet>;
     isMobile?: boolean;
     sidebarState?: string;
     menu?: any[];

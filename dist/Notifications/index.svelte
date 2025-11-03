@@ -8,21 +8,6 @@
 		//console.log('notifications_store: ', value);
 		list_notify = value;
 	});
-
-	/*
-	setTimeout(() => {
-		Notif.push({ message: 'Prueba notify' });
-	}, 5000);
-
-	setTimeout(() => {
-		Notif.push({
-			color: 'danger',
-			message:
-				'Prueba notify 2 dgjjfhsdgffhsfgsjdfgjsgfsh fsfdsf  dfsfdsf dsf  we r er e rwe rewr ',
-			title: 'Guardado...'
-		});
-	}, 3000);
-    */
 </script>
 
 <div class=" bottom-right">

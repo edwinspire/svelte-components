@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	let {
+		logoText = $bindable('LOGO TEXT'),
+		logoIcon = $bindable(iconFallback),
 		isMobile = $bindable(false),
 		sidebarState = $bindable('icons-only'),
 		menu = $bindable([
@@ -14,51 +16,11 @@
 		])
 	} = $props();
 
-	// Estados reactivos
 	// sidebarState: 'expanded' | 'icons-only' | 'hidden'
-	//let sidebarState = $state('icons-only');
 	let sidebarActive = $state(false);
 
 	let currentActiveMenu = $state(0);
 	let lastSidebarStateSelected = '';
-
-	// Responsive state
-	//let isMobile = $state(false);
-	/*
-	let menu_sections = $state([
-		{
-			title: 'GRUPO 1',
-			items: [
-				{ label: 'UNO', icon: ' fa-brands fa-font-awesome ', link: '' },
-				{ label: 'DOS', icon: ' fa-brands fa-facebook ', link: '' }
-			]
-		},
-		{
-			title: 'GRUPO 2',
-			items: [
-				{ label: 'Alfa', icon: ' fa-brands fa-shopify ', link: '' },
-				{ label: 'Beta', icon: ' fa-brands fa-figma ', link: '', badge: 'hola' },
-				{
-					label: 'Levels',
-					icon: ' fa-brands fa-google ',
-					items: [
-						{ label: 'Submenu 1', icon: '', link: '' },
-						{
-							label: 'Submenu 2',
-							icon: '',
-							link: '',
-							items: [
-								{ label: 'Un nivel mas abajo', items: [{ label: 'oxx' }] },
-								{ label: 'Un nivel mas abajito tambien', icon: ' fa-solid fa-user-minus ' }
-							]
-						},
-						{ label: 'Submenu 3', icon: ' fa-solid fa-folder-minus', link: '' }
-					]
-				}
-			]
-		}
-	]);
-	*/
 
 	onMount(() => {
 		while (sidebarState != 'icons-only') {
@@ -165,6 +127,10 @@
 	{/if}
 {/snippet}
 
+{#snippet iconFallback()}
+	<i class="fas fa-cube"></i>
+{/snippet}
+
 <!-- Overlay para móvil -->
 {#if sidebarActive}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -185,9 +151,13 @@
 		<!-- svelte-ignore a11y_invalid_attribute -->
 		<a href="#" class="sidebar-logo">
 			<div class="logo-icon">
-				<i class="fas fa-cube"></i>
+				{#if logoIcon}
+					{@render logoIcon()}
+				{:else}
+					<i class="fas fa-cube"></i>
+				{/if}
 			</div>
-			<span class="logo-text">OpenFusionAPI </span>
+			<span class="logo-text">{logoText} </span>
 		</a>
 	</div>
 
@@ -432,49 +402,6 @@
 		text-align: center;
 	}
 
-	.user-profile {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		padding: 8px 12px;
-		cursor: pointer;
-		border-radius: 8px;
-		transition: background 0.3s;
-	}
-
-	.user-profile:hover {
-		background: #f0f3f7;
-	}
-
-	.user-avatar {
-		width: 36px;
-		height: 36px;
-		border-radius: 50%;
-		object-fit: cover;
-	}
-
-	.user-info {
-		display: none;
-	}
-
-	@media (min-width: 768px) {
-		.user-info {
-			display: block;
-		}
-	}
-
-	.user-name {
-		font-size: 14px;
-		font-weight: 600;
-		color: var(--text-primary);
-		margin-bottom: 2px;
-	}
-
-	.user-role {
-		font-size: 12px;
-		color: var(--text-secondary);
-	}
-
 	/* Main Content */
 	.main-content {
 		margin-left: var(--sidebar-width);
@@ -511,26 +438,6 @@
 		margin-bottom: 8px;
 	}
 
-	.breadcrumb {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		font-size: 13px;
-	}
-
-	.breadcrumb-item {
-		color: var(--text-secondary);
-	}
-
-	.breadcrumb-item:not(:last-child)::after {
-		content: '/';
-		margin-left: 8px;
-	}
-
-	.breadcrumb-item:last-child {
-		color: var(--text-primary);
-	}
-
 	/* Dashboard Placeholder */
 	.dashboard-placeholder {
 		min-height: 400px;
@@ -551,41 +458,6 @@
 		font-size: 48px;
 		margin-bottom: 15px;
 		opacity: 0.5;
-	}
-
-	/* Button styles (similar to Bulma) */
-	.button {
-		display: inline-block;
-		border: 1px solid transparent;
-		border-radius: 4px;
-		font-size: 1rem;
-		line-height: 1.5;
-		padding: 0.5em 1em;
-		text-align: center;
-		vertical-align: top;
-		cursor: pointer;
-		text-decoration: none;
-		white-space: nowrap;
-		transition: all 0.3s;
-	}
-
-	.button.is-primary {
-		background-color: var(--sidebar-hover);
-		border-color: var(--sidebar-hover);
-		color: white;
-	}
-
-	.button.is-small {
-		font-size: 0.75rem;
-		padding: 0.375em 0.75em;
-	}
-
-	.button.is-fullwidth {
-		width: 100%;
-	}
-
-	.button:hover:not(.is-loading) {
-		filter: brightness(1.1);
 	}
 
 	/* Badge styles */

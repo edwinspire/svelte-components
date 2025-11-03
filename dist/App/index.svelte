@@ -1,7 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import Nav01 from '../Level/Level.svelte';
-	import Menu from '../MenuSide/index.svelte';
+	import { Level, MenuSide, Notify } from '../index.js';
 
 	let {
 		topRightNavBar = $bindable([]),
@@ -37,7 +36,7 @@
 {/snippet}
 
 <!-- Sidebar -->
-<Menu bind:sidebarState bind:this={WidgetMenu} bind:menu></Menu>
+<MenuSide bind:sidebarState bind:this={WidgetMenu} bind:menu></MenuSide>
 
 <!-- Top Navigation -->
 <span
@@ -45,7 +44,7 @@
 	class:icons-only={sidebarState === 'icons-only'}
 	class:expanded={sidebarState === 'hidden'}
 >
-	<Nav01  left={left_items_tnv} bind:right={topRightNavBar}></Nav01>
+	<Level left={left_items_tnv} bind:right={topRightNavBar}></Level>
 </span>
 
 <!-- Main Content -->
@@ -56,6 +55,9 @@
 >
 	{@render children?.()}
 </main>
+
+<!-- Notify widget -->
+<Notify></Notify>
 
 <style>
 	* {
@@ -78,7 +80,7 @@
 		right: 0;
 		height: var(--topbar-height);
 		background: var(--topbar-bg);
-		
+
 		align-items: center;
 		padding: 0 20px;
 		transition: all 0.3s ease;
@@ -93,10 +95,6 @@
 	.top-nav.expanded {
 		left: 0;
 	}
-
-    .top-nav-element{
-        width: 100%;
-    }
 
 	@media (max-width: 768px) {
 		.top-nav {
