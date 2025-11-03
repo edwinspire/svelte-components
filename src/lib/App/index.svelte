@@ -3,6 +3,8 @@
 	import { Level, MenuSide, Notify } from '$lib/index.js';
 
 	let {
+		logoText = $bindable('LOGO TEXT'),
+		logoIcon = $bindable(),
 		topRightNavBar = $bindable([]),
 		topLeftNavBar = $bindable([]),
 		children,
@@ -36,7 +38,7 @@
 {/snippet}
 
 <!-- Sidebar -->
-<MenuSide bind:sidebarState bind:this={WidgetMenu} bind:menu></MenuSide>
+<MenuSide bind:logoIcon bind:logoText bind:sidebarState bind:this={WidgetMenu} bind:menu></MenuSide>
 
 <!-- Top Navigation -->
 <span
