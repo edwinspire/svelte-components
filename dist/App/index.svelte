@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { Level, MenuSide, Notify } from '../index.js';
 
 	let {
@@ -19,14 +19,51 @@
 		return [bntToggleSidebar].concat(topLeftNavBar);
 	});
 
-	onMount(() => {
-		//
-	});
-
 	// Toggle Sidebar with 3 states
 	function toggleSidebar() {
 		WidgetMenu.toggleSidebar();
 	}
+
+	let element_top_nav;
+	let dimensions_top_nav = $state({ width: 0, height: 60 });
+	let resizeObserver;
+
+	onMount(() => {
+		if ('ResizeObserver' in window && element_top_nav) {
+			resizeObserver = new ResizeObserver((entries) => {
+				for (let entry of entries) {
+					const { width, height } = entry.contentRect;
+					dimensions_top_nav = { width: Math.round(width), height: Math.round(height) };
+				}
+				console.log(dimensions_top_nav);
+			});
+
+			resizeObserver.observe(element_top_nav);
+		} else {
+			// Fallback para navegadores antiguos
+			const updatedimensions_top_nav = () => {
+				if (element_top_nav) {
+					dimensions_top_nav = {
+						width: Math.round(element_top_nav.offsetWidth),
+						height: Math.round(element_top_nav.offsetHeight)
+					};
+				}
+			};
+
+			window.addEventListener('resize', updatedimensions_top_nav);
+			updatedimensions_top_nav();
+
+			onDestroy(() => {
+				window.removeEventListener('resize', updatedimensions_top_nav);
+			});
+		}
+	});
+
+	onDestroy(() => {
+		if (resizeObserver) {
+			resizeObserver.disconnect();
+		}
+	});
 </script>
 
 {#snippet iconFallback()}
@@ -46,6 +83,7 @@
 
 <!-- Top Navigation -->
 <span
+	bind:this={element_top_nav}
 	class="top-nav"
 	class:icons-only={sidebarState === 'icons-only'}
 	class:expanded={sidebarState === 'hidden'}
@@ -56,6 +94,7 @@
 <!-- Main Content -->
 <main
 	class="main-content"
+	style:margin-top={dimensions_top_nav.height + 'px'}
 	class:icons-only={sidebarState === 'icons-only'}
 	class:expanded={sidebarState === 'hidden'}
 >
@@ -75,7 +114,7 @@
 	:global(:root) {
 		--sidebar-width: 250px;
 		--sidebar-width-icons: 80px;
-		--topbar-height: 70px;
+		/* --topbar-height: 70px; */
 	}
 
 	/* Top Navigation */
@@ -84,7 +123,7 @@
 		top: 0;
 		left: var(--sidebar-width);
 		right: 0;
-		height: var(--topbar-height);
+		/* height: var(--topbar-height); */
 		background: var(--topbar-bg);
 
 		align-items: center;
@@ -105,17 +144,18 @@
 	@media (max-width: 768px) {
 		.top-nav {
 			left: 0;
-			padding: 0 15px;
+			padding: 0 10px;
 		}
 	}
 
 	/* Main Content */
 	.main-content {
 		margin-left: var(--sidebar-width);
-		margin-top: var(--topbar-height);
+		/* margin-top: var(--topbar-height); */
 		padding: 0.5em;
 		transition: all 0.3s ease;
 		min-height: calc(100vh - var(--topbar-height));
+		width: inherit;
 	}
 
 	.main-content.icons-only {
@@ -129,7 +169,7 @@
 	@media (max-width: 768px) {
 		.main-content {
 			margin-left: 0;
-			padding: 20px 15px;
+			padding: 5px 5px;
 		}
 	}
 </style>

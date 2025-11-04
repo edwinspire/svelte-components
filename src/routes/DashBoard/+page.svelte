@@ -39,4 +39,6 @@
 	</button>
 {/snippet}
 
-<AppBase bind:menu topLeftNavBar={[label1]} topRightNavBar={[bnt1]}><Table></Table></AppBase>
+<AppBase bind:menu topLeftNavBar={[label1]} topRightNavBar={[bnt1]}>
+	<textarea class="textarea" placeholder="e.g. Hello world"></textarea>
+	<Table></Table></AppBase>
