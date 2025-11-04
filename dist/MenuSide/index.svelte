@@ -68,51 +68,55 @@
 </script>
 
 {#snippet snp_menu_item(item)}
-	<li>
-		<!-- svelte-ignore a11y_click_events_have_key_events -->
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<!-- svelte-ignore a11y_missing_attribute -->
-		<a
-			title={item.label}
-			class={currentActiveMenu == item.internal_id ? 'is-active' : ''}
-			onclick={(e) => {
-				if (!item.internal_id) {
-					item.internal_id = Date.now();
-				}
-				currentActiveMenu = item.internal_id;
-				item.internal_isopen = !item.internal_isopen;
-				if (item.onclick) {
-					item.onclick();
-				}
-			}}
-			><span class="icon-text">
-				{#if item.icon && item.icon.length > 0}
-					<span class="icon">
-						<i class={item.icon}></i>
-					</span>
-				{/if}
-				{#if sidebarState !== 'icons-only'}
-					<span>{item.label}</span>
-				{/if}
-				{#if sidebarState !== 'icons-only' && item.items && item.items.length > 0}
-					<span class="submenu_arrow"
-						><i
-							class=" {item.internal_isopen
-								? 'fa-solid fa-chevron-down'
-								: 'fa-solid fa-chevron-right'}"
-						></i></span
-					>
-				{/if}
-			</span>
-		</a>
-		{#if sidebarState !== 'icons-only' && item.internal_isopen && item.items && item.items.length > 0}
-			<ul>
-				{#each item.items as subitem}
-					{@render snp_menu_item(subitem)}
-				{/each}
-			</ul>
-		{/if}
-	</li>
+	{#if item && !item.hidden}
+		<li class={item.enabled === false ? 'disabled-item' : ''}>
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<!-- svelte-ignore a11y_missing_attribute -->
+			<a
+				title={item.label}
+				class={currentActiveMenu == item.internal_id ? 'is-active' : ''}
+				onclick={(e) => {
+					if (item.enabled !== false) {
+						if (!item.internal_id) {
+							item.internal_id = Date.now();
+						}
+						currentActiveMenu = item.internal_id;
+						item.internal_isopen = !item.internal_isopen;
+						if (item.onclick) {
+							item.onclick();
+						}
+					}
+				}}
+				><span class="icon-text">
+					{#if item.icon && item.icon.length > 0}
+						<span class="icon">
+							<i class={item.icon}></i>
+						</span>
+					{/if}
+					{#if sidebarState !== 'icons-only'}
+						<span>{item.label}</span>
+					{/if}
+					{#if sidebarState !== 'icons-only' && item.items && item.items.length > 0}
+						<span class="submenu_arrow"
+							><i
+								class=" {item.internal_isopen
+									? 'fa-solid fa-chevron-down'
+									: 'fa-solid fa-chevron-right'}"
+							></i></span
+						>
+					{/if}
+				</span>
+			</a>
+			{#if sidebarState !== 'icons-only' && item.internal_isopen && item.items && item.items.length > 0}
+				<ul>
+					{#each item.items as subitem}
+						{@render snp_menu_item(subitem)}
+					{/each}
+				</ul>
+			{/if}
+		</li>
+	{/if}
 {/snippet}
 
 {#snippet snp_section(section)}
@@ -478,5 +482,11 @@
 
 	.badge.is-primary {
 		background-color: var(--sidebar-hover);
+	}
+
+	.disabled-item {
+		pointer-events: none; /* Prevents all mouse events on the element */
+		opacity: 0.2; /* Makes the element appear faded */
+		cursor: not-allowed; /* Changes the cursor to indicate it's not interactive */
 	}
 </style>

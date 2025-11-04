@@ -1,16 +1,22 @@
 <script>
 	import { onMount } from 'svelte';
-	import {AppBase, Table} from '$lib/index.js';
-	
+	import { AppBase, Table } from '$lib/index.js';
 
 	let menu = [
 		{
 			title: 'OpenFusionAPI',
+		
 			items: [
 				{ label: 'App', icon: ' fa-brands fa-font-awesome ', link: '' },
-				{ label: 'Bashboard', icon: ' fa-brands fa-facebook ', link: '' , onclick: ()=>{
-					alert('Ok');
-				}}
+				{
+					label: 'Bashboard',
+					icon: ' fa-brands fa-facebook ',
+					link: '',					
+					onclick: () => {
+						alert('Ok');
+					}
+				},
+				{ label: 'Pther', icon: ' fa-brands fa-font-awesome ', link: '', enabled: false }
 			]
 		}
 	];
