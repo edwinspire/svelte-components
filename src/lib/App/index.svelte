@@ -35,7 +35,7 @@
 					const { width, height } = entry.contentRect;
 					dimensions_top_nav = { width: Math.round(width), height: Math.round(height) };
 				}
-				console.log(dimensions_top_nav);
+			//	console.log(dimensions_top_nav);
 			});
 
 			resizeObserver.observe(element_top_nav);
@@ -129,7 +129,7 @@
 		align-items: center;
 		padding: 0 20px;
 		transition: all 0.3s ease;
-		z-index: 999;
+		z-index: 39;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 	}
 

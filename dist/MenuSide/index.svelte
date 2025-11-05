@@ -218,7 +218,7 @@
 		width: var(--sidebar-width);
 		background: var(--sidebar-bg);
 		transition: all 0.3s ease;
-		z-index: 1000;
+		z-index: 39;
 		overflow-y: auto;
 		overflow-x: hidden;
 	}
