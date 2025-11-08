@@ -181,7 +181,7 @@
 
 	:global(:root) {
 		--sidebar-width: 250px;
-		--sidebar-width-icons: 80px;
+		--sidebar-width-icons: 55px;
 		--topbar-height: 70px;
 	}
 
