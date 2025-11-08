@@ -17,7 +17,7 @@
 		height: 100%;
 		width: 0;
 		position: fixed;
-		z-index: 30;
+		z-index: 40;
 		top: 0;
 		left: 0;
 		background-color: rgb(0, 0, 0);
