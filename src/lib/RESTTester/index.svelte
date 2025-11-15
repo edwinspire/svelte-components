@@ -52,7 +52,7 @@
 		{ label: 'Result', component: tab_result }
 	]);
 
-	let last_data = $state();
+	let last_data = '';
 	let timeoutChangeData;
 
 	$effect(() => {
@@ -67,11 +67,21 @@
 
 	function internalOnChange() {
 		//	last_data = {...data};
-		onchange({
-			data: $state.snapshot(data),
-			url: $state.snapshot(url),
-			method: $state.snapshot(method)
+		let new_data = JSON.stringify({
+			data: data,
+			url: url,
+			method: method
 		});
+
+		if (new_data !== last_data) {
+			last_data = new_data;
+
+			onchange({
+				data: $state.snapshot(data),
+				url: $state.snapshot(url),
+				method: $state.snapshot(method)
+			});
+		}
 	}
 
 	function defaultValues() {
@@ -162,7 +172,7 @@
 			case 0:
 				try {
 					let jsoncode = data?.body?.json?.code ?? undefined;
-				//	console.log('jsoncode >> ', jsoncode);
+					//	console.log('jsoncode >> ', jsoncode);
 					if (typeof jsoncode == 'object') {
 						dataBody = jsoncode;
 					} else {
@@ -275,7 +285,7 @@
 			<Auth
 				bind:data={data.auth}
 				onchange={() => {
-				//	console.log(data);
+					//	console.log(data);
 					internalOnChange();
 				}}
 			></Auth>
