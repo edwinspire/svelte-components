@@ -13,7 +13,39 @@
 		method = $bindable('GET'),
 		limitSizeResponseView = $bindable(20000),
 		methodDisabled = $bindable(false),
-		data = $bindable(),
+		data = $bindable({
+			query: [
+				{
+					enabled: true,
+					key: '',
+					value: ''
+				}
+			],
+			body: {
+				selection: 0,
+				js: {},
+				xml: {
+					code: ''
+				},
+				text: {},
+				json: {
+					code: {}
+				},
+				form: {}
+			},
+			headers: [
+				{
+					enabled: false,
+					key: '',
+					value: ''
+				}
+			],
+			auth: {
+				selection: 0,
+				basic: {},
+				bearer: {}
+			}
+		}),
 		onchange = () => {}
 	} = $props();
 
