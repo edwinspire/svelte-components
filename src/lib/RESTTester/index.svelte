@@ -102,7 +102,8 @@
 		let new_data = JSON.stringify({
 			data: data,
 			url: url,
-			method: method
+			method: method,
+			last_response: data_result
 		});
 
 		if (new_data !== last_data) {
