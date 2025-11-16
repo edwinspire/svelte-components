@@ -54,9 +54,9 @@
 	let time_responde = $state();
 	let response_as = $state('json');
 	let active_tab = $state(0);
-	let data_result = $state('');
+	let data_result = $state({ data: '', MimeType: '', sizeKBResponse: -1 });
 	let running = $state(false);
-	let sizeKBResponse = $state(0);
+	//	let sizeKBResponse = $state(0);
 
 	let methods = [
 		{ method: 'CONNECT', label: 'CONNECT' },
@@ -97,6 +97,24 @@
 		}
 	});
 
+	/**
+	 * Extrae solo el tipo MIME principal del encabezado 'Content-Type'.
+	 * @param {Response} response - El objeto Response de una llamada fetch.
+	 * @returns {string|null} El tipo MIME (ej: "application/json") o null si no se encuentra.
+	 */
+	function getMimeType(response) {
+		const contentType = response.headers.get('Content-Type');
+
+		if (!contentType) {
+			return null;
+		}
+
+		// El tipo MIME es la parte que viene antes del primer punto y coma (;)
+		// Usamos .split() para dividir la cadena y tomamos el primer elemento.
+		// .trim() elimina espacios en blanco al inicio o al final.
+		return contentType.split(';')[0].trim();
+	}
+
 	function internalOnChange() {
 		//	last_data = {...data};
 		let new_data = JSON.stringify({
@@ -108,9 +126,10 @@
 
 		if (new_data !== last_data) {
 			last_data = new_data;
-
+			//alert('dddd');
+			//console.log(new_data);
 			onchange({
-				data: $state.snapshot(data),
+				data: new_data,
 				url: $state.snapshot(url),
 				method: $state.snapshot(method)
 			});
@@ -193,8 +212,29 @@
 
 	function resetResponse() {
 		last_response = {};
-		data_result = undefined;
+		data_result = { data: '', MimeType: '' };
 		time_responde = undefined;
+	}
+
+	/**
+	 * Obtiene el tamaño de la respuesta en kilobytes (KB) desde el header Content-Length.
+	 * @param {Response} response - El objeto Response de fetch.
+	 * @returns {number|null} El tamaño en KB (redondeado a 2 decimales) o null si no se puede obtener.
+	 */
+	function getResponseSizeInKB(response) {
+		const contentLength = response.headers.get('Content-Length');
+
+		if (!contentLength) {
+			return null;
+		}
+
+		const bytes = parseInt(contentLength, 10);
+
+		if (isNaN(bytes)) {
+			return null;
+		}
+
+		return (bytes / 1024).toFixed(2); // Redondea a 2 decimales
 	}
 
 	function getDataBody() {
@@ -362,10 +402,11 @@
 {/snippet}
 
 {#snippet tab_result()}
+	
 	<div class="field is-grouped is-grouped-multiline">
 		<div class="control">
 			<div class="tags has-addons">
-				<span class="tag {last_response && last_response.ok ? 'is-success' : 'is-danger'}"
+				<span class="tag {last_response ? last_response.ok === true ? 'is-success' : 'is-danger' : 'is-dark'}"
 					>Status</span
 				>
 				{#if last_response && last_response.status}
@@ -402,6 +443,17 @@
 
 		<div class="control">
 			<div class="tags has-addons">
+				<span class="tag is-dark">MimeType</span>
+				{#if data_result && data_result.MimeType}
+					<span class="tag">{data_result.MimeType}</span>
+				{:else}
+					<span class="tag"></span>
+				{/if}
+			</div>
+		</div>
+
+		<div class="control">
+			<div class="tags has-addons">
 				<span class="tag is-dark">Time</span>
 				{#if time_responde}
 					<span class="tag">{time_responde} ms</span>
@@ -413,11 +465,13 @@
 
 		<div class="control">
 			<div class="tags has-addons">
-				<span class="tag {sizeKBResponse > limitSizeResponseView ? 'is-danger' : 'is-dark'}  "
-					>Size</span
+				<span
+					class="tag {data_result.sizeKBResponse > limitSizeResponseView
+						? 'is-danger'
+						: 'is-dark'}  ">Size</span
 				>
-				{#if sizeKBResponse}
-					<span class="tag">{sizeKBResponse} KB</span>
+				{#if data_result.sizeKBResponse}
+					<span class="tag">{data_result.sizeKBResponse} KB</span>
 				{:else}
 					<span class="tag"> KB </span>
 				{/if}
@@ -425,17 +479,17 @@
 		</div>
 	</div>
 	<div>
-		{#if Number(sizeKBResponse) < Number(limitSizeResponseView)}
-			{#if last_response && !last_response.ok && data_result}
-				<JSONView bind:jsonObject={data_result}></JSONView>
-			{:else if response_as == 'json' && data_result}
-				<JSONView bind:jsonObject={data_result}></JSONView>
-			{:else if response_as == 'text' && data_result}
+		{#if Number(data_result.sizeKBResponse) < Number(limitSizeResponseView)}
+			{#if last_response && !last_response.ok && data_result.data}
+				<JSONView bind:jsonObject={data_result.data}></JSONView>
+			{:else if response_as == 'json' && data_result.data}
+				<JSONView bind:jsonObject={data_result.data}></JSONView>
+			{:else if response_as == 'text' && data_result.data}
 				<code>
-					{data_result}
+					{data_result.data}
 				</code>
-			{:else if response_as == 'datatable' && data_result}
-				<Table bind:RawDataTable={data_result}></Table>
+			{:else if response_as == 'datatable' && data_result.data}
+				<Table bind:RawDataTable={data_result.data}></Table>
 			{/if}
 		{:else}
 			<div class="container is-max-tablet is-small">
@@ -448,9 +502,9 @@
 						class="button is-link is-outlined is-small"
 						onclick={() => {
 							if (response_as == 'json') {
-								downloadFile(JSON.stringify(data_result), 'response.json', 'text/json');
+								downloadFile(JSON.stringify(data_result.data), 'response.json', 'text/json');
 							} else if (response_as == 'text') {
-								downloadFile(data_result, 'response.txt', 'text/plain');
+								downloadFile(data_result.data, 'response.txt', 'text/plain');
 							}
 						}}>Download</button
 					>
@@ -529,83 +583,100 @@
 									running = true;
 									let data_send = {};
 
+								//	console.log(last_response);
 									//	console.log('METHOD: ', method);
 
-									try {
-										if (
-											method == 'GET' ||
-											method == 'HEAD' ||
-											method == 'OPTIONS' ||
-											method == 'CONNECT' ||
-											method == 'TRACE'
-										) {
-											data_send = getDataQuery(data.query);
-										} else if (method == 'POST' || method == 'PUT' || method == 'PATCH') {
-											// Pueden tener tanto query como body
-											// Preferir body en lugar de query
-											//console.log('>>>>>>>', data.body);
-											let bodyData = getDataBody();
-
-											if (bodyData) {
-												data_send = bodyData;
-											} else {
+									if (url && url.length > 5) {
+										try {
+											if (
+												method == 'GET' ||
+												method == 'HEAD' ||
+												method == 'OPTIONS' ||
+												method == 'CONNECT' ||
+												method == 'TRACE'
+											) {
 												data_send = getDataQuery(data.query);
-											}
-										}
+											} else if (method == 'POST' || method == 'PUT' || method == 'PATCH') {
+												// Pueden tener tanto query como body
+												// Preferir body en lugar de query
+												//console.log('>>>>>>>', data.body);
+												let bodyData = getDataBody();
 
-										//console.log('>>>>>>>>>> ', typeof data_send, url, method);
-										resetResponse();
-										// Capturamos el tiempo inicial
-										let startTime = Date.now();
-
-										//let headers = {"access-control-expose-headers": "Content-Disposition", "access-control-allow-headers": "Authorization"}
-
-										last_response = await uF[method]({
-											url: url,
-											data: data_send,
-											headers: getDataHeaders(data.headers)
-										});
-
-										//last_response.headers.add("Access-Control-Expose-Headers","Authorization")
-
-										// Capturamos el tiempo final
-										let endTime = Date.now();
-
-										// Calculamos la diferencia en milisegundos
-										time_responde = endTime - startTime;
-
-										//console.warn(last_response);
-
-										// TODO: probar cuando el dato es text pero en el editor se usa JSON, hay una excepción que no está controlada y el editor deja de funcionat
-
-										if (last_response.ok) {
-											switch (response_as) {
-												case 'json':
-													data_result = await last_response.json();
-													sizeKBResponse = getSizeJSON(data_result);
-													break;
-												case 'text':
-													data_result = await last_response.text();
-													break;
-												case 'datatable':
-													data_result = await last_response.json();
-													sizeKBResponse = getSizeJSON(data_result);
-													break;
-												default:
-													data_result = '';
-													sizeKBResponse = -1;
-													break;
+												if (bodyData) {
+													data_send = bodyData;
+												} else {
+													data_send = getDataQuery(data.query);
+												}
 											}
 
-											//console.log(last_response, data_result);
-										} else {
-											data_result = await last_response.json();
+											//console.log('>>>>>>>>>> ', typeof data_send, url, method);
+											resetResponse();
+											// Capturamos el tiempo inicial
+											let startTime = Date.now();
+
+											//let headers = {"access-control-expose-headers": "Content-Disposition", "access-control-allow-headers": "Authorization"}
+
+											last_response = await uF[method]({
+												url: url,
+												data: data_send,
+												headers: getDataHeaders(data.headers)
+											});
+
+											//last_response.headers.add("Access-Control-Expose-Headers","Authorization")
+
+											// Capturamos el tiempo final
+											let endTime = Date.now();
+
+											// Calculamos la diferencia en milisegundos
+											time_responde = endTime - startTime;
+											data_result.MimeType = getMimeType(last_response);
+											data_result.sizeKBResponse = getResponseSizeInKB(last_response);
+										//	console.warn(last_response);
+
+											// TODO: probar cuando el dato es text pero en el editor se usa JSON, hay una excepción que no está controlada y el editor deja de funcionat
+
+											if (last_response.ok) {
+												switch (response_as) {
+													case 'json':
+														data_result.data = await last_response.json();
+														if (!data_result.sizeKBResponse) {
+															data_result.sizeKBResponse = getSizeJSON(data_result.data);
+														}
+
+														break;
+													case 'text':
+														data_result.data = await last_response.text();
+														if (!data_result.sizeKBResponse) {
+															data_result.sizeKBResponse = getSizeString(data_result.data);
+														}
+														break;
+													case 'datatable':
+														data_result.data = await last_response.json();
+														if (!data_result.sizeKBResponse) {
+															data_result.sizeKBResponse = getSizeJSON(data_result);
+														}
+														break;
+													default:
+														data_result.data = '';
+														data_result.sizeKBResponse = -1;
+														break;
+												}
+
+												//console.log(last_response, data_result);
+											} else {
+												data_result.data = await last_response.json();
+												if (!data_result.sizeKBResponse) {
+													data_result.sizeKBResponse = getSizeJSON(data_result.data);
+												}
+											}
+										} catch (error) {
+											running = false;
+											console.error(error);
+											data_result = { data: '', error: error };
+											alert(error);
 										}
-									} catch (error) {
-										running = false;
-										console.error(error);
-										data_result = error;
-										alert(error);
+									} else {
+										alert('Url is empty');
 									}
 
 									running = false;

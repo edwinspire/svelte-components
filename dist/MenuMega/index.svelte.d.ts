@@ -7,7 +7,7 @@ declare const Index: import("svelte").Component<{
     brand?: any[];
     start?: any[];
     end?: any[];
-}, {}, "end" | "start" | "brand">;
+}, {}, "start" | "end" | "brand">;
 type $$ComponentProps = {
     brand?: any[];
     start?: any[];

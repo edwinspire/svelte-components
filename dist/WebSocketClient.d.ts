@@ -4,8 +4,8 @@ export class OpenFusionWebsocketClient extends EventTarget {
     headers: {};
     ws: WebSocket;
     retryCount: number;
-    heartbeatTimer: NodeJS.Timeout;
-    pongTimeoutTimer: NodeJS.Timeout;
+    heartbeatTimer: number;
+    pongTimeoutTimer: number;
     emit(type: any, detail: any): void;
     on(eventName: any, callback: any): void;
     off(eventName: any, callback: any): void;

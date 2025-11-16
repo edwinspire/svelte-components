@@ -1,7 +1,7 @@
 export const storeChangedTables: import("svelte/store").Writable<{}>;
-export class WebSocketClient extends EventEmitter<[never]> {
-    constructor();
+declare const WebSocketClient_base: typeof import("events");
+export class WebSocketClient extends WebSocketClient_base {
     connect(): WebSocket;
     websocket: WebSocket;
 }
-import { EventEmitter } from 'events';
+export {};
