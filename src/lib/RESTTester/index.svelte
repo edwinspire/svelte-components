@@ -212,7 +212,7 @@
 
 	function resetResponse() {
 		last_response = {};
-		data_result = { data: '', MimeType: '' };
+		data_result = { data: '', MimeType: '', sizeKBResponse: -1 };
 		time_responde = undefined;
 	}
 
@@ -402,12 +402,15 @@
 {/snippet}
 
 {#snippet tab_result()}
-	
 	<div class="field is-grouped is-grouped-multiline">
 		<div class="control">
 			<div class="tags has-addons">
-				<span class="tag {last_response ? last_response.ok === true ? 'is-success' : 'is-danger' : 'is-dark'}"
-					>Status</span
+				<span
+					class="tag {last_response
+						? last_response.ok === true
+							? 'is-success'
+							: 'is-danger'
+						: 'is-dark'}">Status</span
 				>
 				{#if last_response && last_response.status}
 					<span class="tag">{last_response.status}</span>
@@ -583,7 +586,7 @@
 									running = true;
 									let data_send = {};
 
-								//	console.log(last_response);
+									//	console.log(last_response);
 									//	console.log('METHOD: ', method);
 
 									if (url && url.length > 5) {
@@ -631,7 +634,7 @@
 											time_responde = endTime - startTime;
 											data_result.MimeType = getMimeType(last_response);
 											data_result.sizeKBResponse = getResponseSizeInKB(last_response);
-										//	console.warn(last_response);
+											//	console.warn(last_response);
 
 											// TODO: probar cuando el dato es text pero en el editor se usa JSON, hay una excepción que no está controlada y el editor deja de funcionat
 
@@ -664,7 +667,15 @@
 
 												//console.log(last_response, data_result);
 											} else {
-												data_result.data = await last_response.json();
+												if (
+													typeof data_result.MimeType === 'string' &&
+													data_result.MimeType.toLowerCase().includes('json')
+												) {
+													data_result.data = await last_response.json();
+												} else {
+													data_result.data = await last_response.text();
+												}
+
 												if (!data_result.sizeKBResponse) {
 													data_result.sizeKBResponse = getSizeJSON(data_result.data);
 												}
@@ -672,7 +683,7 @@
 										} catch (error) {
 											running = false;
 											console.error(error);
-											data_result = { data: '', error: error };
+											data_result.error = error;
 											alert(error);
 										}
 									} else {
