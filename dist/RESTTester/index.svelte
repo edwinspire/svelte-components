@@ -117,22 +117,20 @@
 
 	function internalOnChange() {
 		//	last_data = {...data};
-		let new_data = JSON.stringify({
-			data: data,
-			url: url,
-			method: method,
+		const data_to_emit = {
+			data: { ...data },
+			url: $state.snapshot(url),
+			method: $state.snapshot(method),
 			last_response: data_result
-		});
+		};
+
+		let new_data = JSON.stringify(data_to_emit);
 
 		if (new_data !== last_data) {
 			last_data = new_data;
 			//alert('dddd');
 			//console.log(new_data);
-			onchange({
-				data: new_data,
-				url: $state.snapshot(url),
-				method: $state.snapshot(method)
-			});
+			onchange(data_to_emit);
 		}
 	}
 
