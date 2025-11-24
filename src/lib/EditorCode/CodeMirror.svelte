@@ -13,24 +13,12 @@
 
 	let dom;
 
-	onMount(() => {
-		_initEditorView(doc ?? '');
-		dispatchDocStore(doc ?? '');
-	});
-
 	export let view = null;
 
 	/* `doc` is deliberately made non-reactive for not storing a reduntant string
        besides the editor. Also, setting doc to undefined will not trigger an
        update, so that you can clear it after setting one. */
 	export let doc;
-
-	/* Cached doc string so that we don't extract strings in bulk over and over. */
-	let _docCached = null;
-
-	const subscribers = new Set();
-
-	export const docStore = writable(null);
 
 	function _reconfigureExtensions() {
 		if (view === null) return;
@@ -39,24 +27,16 @@
 		});
 	}
 
-	$: _reconfigureExtensions();
-
 	const updateListener = EditorView.updateListener.of((update) => {
 		if (update.docChanged) {
 			const newDoc = update.state.doc.toString();
-			_docCached = newDoc;
-			dispatchDocStore(newDoc);
 			dispatch('change', { view, update });
 		}
 	});
 
 	let extensions = [basicSetup, javascript(), updateListener];
 
-	function dispatchDocStore(s) {
-		for (const cb of subscribers) {
-			cb(s);
-		}
-	}
+	$: if (extensions) _reconfigureExtensions();
 
 	// the view will be inited with the either doc (as long as that it is not `undefined`)
 	// or the value in docStore once set
@@ -74,12 +54,16 @@
 
 		return true;
 	}
+	
+	onMount(() => {
+		view = null;
+		_initEditorView(doc ?? '');
+	});
 
 	onDestroy(() => {
 		if (view !== null) {
 			view.destroy();
 		}
-		subscribers.clear();
 	});
 </script>
 

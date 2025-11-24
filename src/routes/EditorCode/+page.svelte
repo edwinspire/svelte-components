@@ -1,6 +1,9 @@
 <script>
 	import { EditorCode } from '$lib/index.js';
-	let markdownContent = '## Hola';
+	let value = '{}';
 </script>
 
-<EditorCode  />
+<input bind:value={value} />
+
+
+<EditorCode bind:code={value}  />
