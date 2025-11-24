@@ -184,21 +184,7 @@
 		//parseCode();
 	}
 
-	/* 	function parseCode() {
-		last_code = code;
-		console.log('parseCode >>>>>> ', code);
-		try {
-			internal_code = typeof code !== 'string' ? JSON.stringify(code) : code;
-		} catch (error) {
-			internal_code = code;
-			console.warn(error);
-		}
-
-		//setCodeEditor(internal_code);
-		//	formatCode();
-	} */
-
-	async function setCodeEditor(code_value, with_format = false) {
+		async function setCodeEditor(code_value, with_format = false) {
 		let text = code_value;
 		try {
 			text = typeof code_value !== 'string' ? JSON.stringify(code_value, null, 2) : code_value;

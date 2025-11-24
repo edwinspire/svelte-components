@@ -2,10 +2,8 @@
 
 <script context="module">
 	import { EditorView, minimalSetup, basicSetup } from 'codemirror';
-	import { ViewPlugin } from '@codemirror/view';
 	import { StateEffect } from '@codemirror/state';
 	import { javascript } from '@codemirror/lang-javascript';
-	import { tags } from '@lezer/highlight';
 	export { minimalSetup, basicSetup };
 </script>
 
@@ -16,11 +14,10 @@
 	let dom;
 
 	let _mounted = false;
+
 	onMount(() => {
-		_mounted = true;
-		return () => {
-			_mounted = false;
-		};
+		_initEditorView(doc ?? '');
+		dispatchDocStore(doc ?? '');
 	});
 
 	export let view = null;
@@ -39,40 +36,13 @@
 	/* Overwrite the bulk of the text with the one specified. */
 	function _setText(text) {
 		view.dispatch({
-			changes: { from: 0, to: view.state.doc.length, insert: text }
+			changes: { from: 0, insert: text }
 		});
 	}
 
 	const subscribers = new Set();
 
-	/* And here comes the reactivity, implemented as a r/w store. */
-	export const docStore = {
-		ready: () => view !== null,
-		subscribe(cb) {
-			subscribers.add(cb);
-
-			if (!this.ready()) {
-				cb(null);
-			} else {
-				if (_docCached == null) {
-					_docCached = view.state.doc.toString();
-				}
-				cb(_docCached);
-			}
-
-			return () => void subscribers.delete(cb);
-		},
-		set(newValue) {
-			if (!_mounted) {
-				throw new Error('Cannot set docStore when the component is not mounted.');
-			}
-
-			const inited = _initEditorView(newValue);
-			if (!inited) _setText(newValue);
-		}
-	};
-
-	let extensions = [basicSetup, javascript()];
+	export const docStore = writable(null);
 
 	function _reconfigureExtensions() {
 		if (view === null) return;
@@ -81,24 +51,18 @@
 		});
 	}
 
-	$: extensions, _reconfigureExtensions();
+	$: _reconfigureExtensions();
 
-	function _editorTxHandler(trs, view) {
-		view.update(trs);
-
-		if (verbose) {
-			dispatch('update', trs);
+	const updateListener = EditorView.updateListener.of((update) => {
+		if (update.docChanged) {
+			const newDoc = update.state.doc.toString();
+			_docCached = newDoc;
+			dispatchDocStore(newDoc);
+			dispatch('change', { view, update });
 		}
+	});
 
-		let lastChangingTr;
-		if ((lastChangingTr = trs.findLast((tr) => tr.docChanged))) {
-			_docCached = null;
-			if (subscribers.size) {
-				dispatchDocStore((_docCached = lastChangingTr.newDoc.toString()));
-			}
-			dispatch('change', { view, trs });
-		}
-	}
+	let extensions = [basicSetup, javascript(), updateListener];
 
 	function dispatchDocStore(s) {
 		for (const cb of subscribers) {
@@ -116,22 +80,18 @@
 		view = new EditorView({
 			doc: initialDoc,
 			extensions,
-			parent: dom,
-			dispatchTransactions: _editorTxHandler
+			parent: dom
+			//dispatchTransactions: _editorTxHandler
 		});
 
 		return true;
-	}
-
-	$: if (_mounted && doc !== undefined) {
-		const inited = _initEditorView(doc);
-		dispatchDocStore(doc);
 	}
 
 	onDestroy(() => {
 		if (view !== null) {
 			view.destroy();
 		}
+		subscribers.clear();
 	});
 </script>
 
