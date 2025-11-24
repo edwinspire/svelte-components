@@ -13,8 +13,6 @@
 
 	let dom;
 
-	let _mounted = false;
-
 	onMount(() => {
 		_initEditorView(doc ?? '');
 		dispatchDocStore(doc ?? '');
@@ -27,18 +25,8 @@
        update, so that you can clear it after setting one. */
 	export let doc;
 
-	/* Set this if you would like to listen to all transactions via `update` event. */
-	export let verbose = false;
-
 	/* Cached doc string so that we don't extract strings in bulk over and over. */
 	let _docCached = null;
-
-	/* Overwrite the bulk of the text with the one specified. */
-	function _setText(text) {
-		view.dispatch({
-			changes: { from: 0, insert: text }
-		});
-	}
 
 	const subscribers = new Set();
 
