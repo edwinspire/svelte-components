@@ -345,112 +345,111 @@
 	}
 </script>
 
-{#snippet l02()}
-	{#if showSelectLang}
-		<div class="field is-horizontal">
-			<div class="field-label is-small">
-				<!-- svelte-ignore a11y_label_has_associated_control -->
-				<label class="label">Language</label>
-			</div>
-			<div class="field-body">
-				<div class="field is-narrow">
-					<div class="control has-icons-left">
-						<div class="select is-small {formatError ? 'is-danger' : ''}">
-							<select
-								bind:value={lang}
-								onchange={() => {
-									//initializeEditor();
-								}}
-							>
-								{#each listLangs as ll}
-									<option value={ll.value}>
-										{ll.label}
-									</option>
-								{/each}
-							</select>
-
-							<span class="icon is-small is-left">
-								{#if formatError}
-									<i class="fa-solid fa-triangle-exclamation"></i>
-								{/if}
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	{/if}
-{/snippet}
-
 {#snippet r01()}
-	{#if showFormat && getPrettierParserFor(lang).length > 0}
-		<button
-			class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}"
-			onclick={async () => {
-				await formatCode();
-			}}
-		>
-			<span class="icon is-small">
-				{#if formatError}
-					<i class="fa-solid fa-triangle-exclamation"></i>
-				{:else}
-					<i class="fa-solid fa-check"></i>
-				{/if}
-			</span>
-			<span>Format {lang.toUpperCase()}</span>
-		</button>
-	{:else if showFormat && lang === 'number'}
-		<button
-			class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}"
-			onclick={async () => {
-				await formatCode();
-			}}
-		>
-			<span class="icon is-small">
-				{#if formatError}
-					<i class="fa-solid fa-triangle-exclamation"></i>
-				{:else}
-					<i class="fa-solid fa-check"></i>
-				{/if}
-			</span>
-			<span>Parser {lang.toUpperCase()}</span>
-		</button>
-	{/if}
+	<span class="field has-addons">
+		{#if showSelectLang}
+			<p class="control">
+				<button disabled={isReadOnly} class="button is-static is-small"> Lang </button>
+			</p>
+			<p class="control">
+				<span class="select is-small {formatError ? 'is-danger' : ' '}">
+					<select
+						disabled={isReadOnly}
+						bind:value={lang}
+						onchange={() => {
+							//initializeEditor();
+						}}
+					>
+						{#each listLangs as ll}
+							<option value={ll.value}>
+								{ll.label}
+							</option>
+						{/each}
+					</select>
+				</span>
+			</p>
+		{/if}
+		{#if showFormat && getPrettierParserFor(lang).length > 0}
+			<p class="control">
+				<button
+					disabled={isReadOnly}
+					class="button is-small {formatError ? 'is-danger' : 'is-norma'}"
+					onclick={async () => {
+						await formatCode();
+					}}
+				>
+					<span class="icon is-small">
+						{#if formatError}
+							<i class="fa-solid fa-triangle-exclamation"></i>
+						{:else}
+							<i class="fa-solid fa-check"></i>
+						{/if}
+					</span>
+					<span>Format {!showSelectLang ? lang.toUpperCase() : ''}</span>
+				</button>
+			</p>
+		{:else if showFormat && lang === 'number'}
+			<p class="control">
+				<button
+					disabled={isReadOnly}
+					class="button is-small {formatError ? 'is-danger' : ''}"
+					onclick={async () => {
+						await formatCode();
+					}}
+				>
+					<span class="icon is-small">
+						{#if formatError}
+							<i class="fa-solid fa-triangle-exclamation"></i>
+						{:else}
+							<i class="fa-solid fa-check"></i>
+						{/if}
+					</span>
+					<span>Parser {!showSelectLang ? lang.toUpperCase() : ''}</span>
+				</button>
+			</p>
+		{/if}
+	</span>
 
-	{#if showResetButton}
-		<button
-			class="button is-small"
-			onclick={() => {
-				reset();
-			}}
-		>
-			<span class="icon is-small">
-				<i class="fa-solid fa-rotate-left"></i>
-			</span>
-			<span>Reset</span>
-		</button>
-	{/if}
+	<span class="field has-addons">
+		{#if showResetButton}
+			<p class="control">
+				<button
+					disabled={isReadOnly}
+					class="button is-small"
+					onclick={() => {
+						reset();
+					}}
+				>
+					<span class="icon is-small">
+						<i class="fa-solid fa-rotate-left"></i>
+					</span>
+					<span>Reset</span>
+				</button>
+			</p>{/if}
 
-	{#if showHiddenButton}
-		<button
-			title="Hide or show Code"
-			class="button is-small"
-			onclick={() => {
-				showCode = !showCode;
-			}}
-		>
-			<span class="icon is-small">
-				{#if showCode}
-					<i class="fa-solid fa-eye-slash"></i>
-				{:else}
-					<i class="fa-solid fa-eye"></i>
-				{/if}
-			</span>
-		</button>
-	{/if}
+		{#if showHiddenButton}
+			<p class="control">
+				<button
+					title="Hide or show Code"
+					class="button is-small"
+					onclick={() => {
+						showCode = !showCode;
+					}}
+				>
+					<span class="icon is-small">
+						{#if showCode}
+							<i class="fa-solid fa-eye-slash"></i>
+						{:else}
+							<i class="fa-solid fa-eye"></i>
+						{/if}
+					</span>
+				</button>
+			</p>
+		{/if}
+	</span>
 {/snippet}
 
-<Level left={[left, l02]} right={[right, r01]}></Level>
+<Level left={[left]} right={[right, r01]}></Level>
 
 <div class={showCode ? '' : 'is-hidden'}>
 	<div bind:this={containerEl}></div>

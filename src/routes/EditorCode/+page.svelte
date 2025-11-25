@@ -9,7 +9,7 @@
 	bind:code={value}
 	showFormat={true}
 	showSelectLang={true}
-	isReadOnly={false}
+	isReadOnly={true}
 	showResetButton={true}
 	onchange={(e) => {
 		console.log(e);
