@@ -1,5 +1,5 @@
 <script>
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import { Level } from '../index.js';
 	import { EditorState, StateEffect } from '@codemirror/state';
 	import { EditorView, basicSetup } from 'codemirror';
@@ -14,38 +14,49 @@
 	import prettierPluginHtml from 'prettier/plugins/html.mjs';
 	import prettierPluginSql from 'prettier-plugin-sql';
 
-	let editorView;
-	let elementParent;
+	// Dispatcher para emitir eventos hacia el exterior
+	const dispatch = createEventDispatcher();
+
+	// Props públicos
+	export let code = '';
+	export let left = null;
+	export let right = null;
+	export let lang = 'json';
+	export let showFormat = false;
+	export let showSelectLang = false;
+	export let isReadOnly = false;
+	export let showHiddenButton = true;
+	export let showResetButton = false;
+	export let showCode = true;
+
+	// Callbacks (opcional). Prefer usar eventos (change) en vez de pasar funciones.
+	export let onchange = null; // función opcional
+
+	// Estado interno
+	let editorView = null;
+	let containerEl;
 	let initialized = false;
+	let internalCode = '';
+	let lastCode = '';
+	let formatError = false;
 
-	let {
-		code = $bindable(''),
-		left,
-		right,
-		lang = $bindable('json'),
-		showFormat = $bindable(false),
-		showSelectLang = $bindable(false),
-		isReadOnly = $bindable(false),
-		showHiddenButton = $bindable(true),
-		showResetButton = $bindable(false),
-		showCode = $bindable(true),
-		onchange = (c) => {}
-	} = $props();
+	// Debounce timer para parseo/validación (evita parsear en cada tecla)
+	let debounceTimer = null;
+	const DEBOUNCE_MS = 350;
 
-	let last_code = '';
-	let formatError = $state(false);
-	let internal_code = '';
-	//let timeoutParseOnChange;
-
+	// Mapa de lenguajes para CodeMirror
 	const languages = {
 		js: javascript(),
 		json: json(),
 		html: xml(),
 		sql: sql(),
-		xml: xml()
+		xml: xml(),
+		text: [],
+		number: []
 	};
 
-	let list_langs = $state([
+	// Lista de lenguajes y plugins para Prettier
+	const listLangs = [
 		{ label: 'None', value: 'none', prettier: '', plugins: [] },
 		{ label: 'HTML', value: 'html', prettier: 'html', plugins: [prettierPluginHtml] },
 		{ label: 'Javascript', value: 'js', prettier: 'babel', plugins: [prettierPluginBabel, Estree] },
@@ -57,231 +68,281 @@
 		},
 		{ label: 'SQL', value: 'sql', prettier: 'sql', plugins: [prettierPluginSql] },
 		{ label: 'XML', value: 'xml', prettier: 'html', plugins: [prettierPluginHtml] },
-		{ label: 'Text', value: 'text', prettier: '', plugins: [] }
-	]);
+		{ label: 'Text', value: 'text', prettier: '', plugins: [] },
+		{ label: 'Number', value: 'number', prettier: '', plugins: [] }
+	];
 
-	let lang_prettier = $derived.by(() => {
-		let l = 'text';
-
-		let ll = list_langs.find((la) => {
-			return la.value == lang;
-		});
-
-		if (ll) {
-			l = ll.prettier;
-		}
-
-		return l;
-	});
-
-	let plugings_prettier = $derived.by(() => {
-		let p = [];
-
-		let ll = list_langs.find((la) => {
-			return la.value == lang;
-		});
-
-		if (ll) {
-			p = ll.plugins;
-		}
-		//		console.log(p);
-		return p;
-	});
-
-	$effect(() => {
-		if (lang) {
-			_reconfigureExtensions();
-		}
-	});
-
-	$effect(() => {
-		if (code) {
-			internalOnchange();
-		}
-	});
-
-	function internalOnchange() {
-		//	console.log('HuBO CAMBIOS >>>');
-		setCodeEditor(code, false);
-		onchange($state.snapshot({ lang: lang, code: code }));
+	// Derivados simples
+	function getPrettierParserFor(langValue) {
+		const found = listLangs.find((l) => l.value === langValue);
+		return found ? found.prettier : '';
 	}
 
-	function checkUpdateCode() {
-		let result = false;
+	function getPrettierPluginsFor(langValue) {
+		const found = listLangs.find((l) => l.value === langValue);
+		return found ? found.plugins : [];
+	}
+
+	// -----------------------
+	// SINCRONIZACIÓN
+	// -----------------------
+	// Actualiza internalCode y dispara onchange/dispatch cuando cambia contenido desde editor
+	function updateFromEditor(text) {
+		internalCode = text;
+
 		if (lang === 'json') {
-			let tmp_internal_code = JSON.stringify(JSON.parse(internal_code));
-			let tmp_code = typeof code === 'object' ? JSON.stringify(code) : code;
-
-			if (tmp_internal_code != tmp_code) {
-				code = JSON.parse(internal_code);
-				internalOnchange();
-				result = true;
+			try {
+				// intentar parsear pero no arrojar hacia UI si está incompleto (se marca formatError)
+				const parsed = JSON.parse(text);
+				code = parsed;
+				formatError = false;
+			} catch (err) {
+				// JSON inválido: no sobreescribir "code" con texto inválido
+				formatError = true;
 			}
-		} else if (internal_code != code) {
-			code = internal_code;
-			internalOnchange();
-			result = true;
+		} else if (lang === 'number') {
+			try {
+				const parsed = parseFloat(text);
+				code = Number.isNaN(parsed) ? text : parsed;
+				//console.log('>>', parsed, text);
+				formatError = Number.isNaN(parsed);
+			} catch (error) {
+				console.log(error);
+				formatError = true;
+			}
+		} else {
+			code = text;
+			formatError = false;
 		}
-		return result;
+
+		// Emitir evento de cambio (para el exterior)
+		const payload = { lang, code, typeof: typeof code };
+		//console.log(payload);
+		if (payload.lang == 'number') {
+			if (payload.typeof == 'number' && !Number.isNaN(payload.code)) {
+				if (typeof onchange === 'function') onchange(payload);
+				dispatch('change', payload);
+			}
+		} else {
+			if (typeof onchange === 'function') onchange(payload);
+			dispatch('change', payload);
+		}
 	}
 
-	function create_extensions() {
-		let languaje_editor = languages[lang] ? languages[lang] : [];
-		return [
-			basicSetup,
-			languaje_editor,
-			isReadOnly ? EditorState.readOnly.of(true) : [], // Activar solo lectura si isReadOnly es verdadero
-			languaje_editor,
-			EditorView.updateListener.of(async (update) => {
-				if (update.changes && update.changedRanges.length > 0) {
-					internal_code = update.state.doc.toString();
+	// Actualiza el editor cuando la prop "code" cambia desde fuera
+	async function updateEditorFromProp(newCode, withFormat = false) {
+		if (!editorView) return;
 
-					if (initialized) {
-						try {
-							checkUpdateCode();
-							formatError = false;
-						} catch (error) {
-							console.warn(error);
-							formatError = true;
-						}
-					}
+		let text = newCode;
+		try {
+			if (lang === 'json' && typeof newCode !== 'string') {
+				text = JSON.stringify(newCode, null, 2);
+			} else if (typeof newCode !== 'string') {
+				text = String(newCode);
+			}
+		} catch (err) {
+			console.warn('updateEditorFromProp: error serializing code', err);
+		}
+
+		if (withFormat) {
+			try {
+				const formatted = await formatWithPrettier(text);
+				if (!formatted.error) text = formatted.code;
+				formatError = !!formatted.error;
+			} catch (err) {
+				console.warn(err);
+				formatError = true;
+			}
+		}
+
+		const current = editorView.state.doc.toString();
+		if (text !== current) {
+			const tr = editorView.state.update({
+				changes: { from: 0, to: current.length, insert: text }
+			});
+			editorView.dispatch(tr);
+		}
+	}
+
+	// -----------------------
+	// CodeMirror: extensiones y reconfiguración
+	// -----------------------
+	function createExtensions() {
+		const langExt = languages[lang] || [];
+
+		const extensions = [
+			basicSetup,
+			Array.isArray(langExt) && langExt.length === 0 ? null : langExt,
+			isReadOnly ? EditorState.readOnly.of(true) : null,
+			EditorView.updateListener.of((update) => {
+				if (update.docChanged) {
+					// Debounce para evitar parsear en cada pulsación
+					clearTimeout(debounceTimer);
+					debounceTimer = setTimeout(() => {
+						updateFromEditor(update.state.doc.toString());
+					}, DEBOUNCE_MS);
 				}
 			}),
 			oneDark
 		];
+
+		return extensions.filter(Boolean);
 	}
 
-	function _reconfigureExtensions() {
-		if (editorView != null) {
-			editorView.dispatch({
-				effects: StateEffect.reconfigure.of(create_extensions())
-			});
+	function reconfigureExtensions() {
+		if (!editorView) return;
+		editorView.dispatch({ effects: StateEffect.reconfigure.of(createExtensions()) });
+	}
+
+	// -----------------------
+	// Inicialización / limpieza
+	// -----------------------
+	async function initializeEditor() {
+		if (!containerEl) return;
+
+		if (editorView) {
+			editorView.destroy();
+			editorView = null;
+		}
+
+		internalCode =
+			typeof code === 'string'
+				? code
+				: lang === 'json'
+					? JSON.stringify(code, null, 2)
+					: String(code);
+		lastCode = internalCode;
+
+		editorView = new EditorView({
+			doc: internalCode,
+			extensions: createExtensions(),
+			parent: containerEl
+		});
+
+		// marcar como inicializado después de montado y con contenido inicial
+		initialized = true;
+	}
+
+	onMount(() => {
+		initializeEditor();
+	});
+
+	onDestroy(() => {
+		if (editorView) {
+			editorView.destroy();
+			editorView = null;
+		}
+		clearTimeout(debounceTimer);
+	});
+
+	// Reactividad: si cambian propiedades claves, reconfigurar editor o actualizar contenido
+	$: if (initialized) {
+		reconfigureExtensions();
+	}
+
+	$: if (initialized && code !== undefined) {
+		// Si code proviene del exterior (y es distinto de lo que tenemos internamente), sincronizar
+		const editorText = editorView ? editorView.state.doc.toString() : '';
+		const candidateText =
+			lang === 'json' && typeof code !== 'string'
+				? JSON.stringify(code, null, 2)
+				: String(code ?? '');
+		if (candidateText !== editorText) {
+			updateEditorFromProp(code);
 		}
 	}
 
-	//let timeOutonchangeCode;
+	// -----------------------
+	// Helpers: formateo con Prettier
+	// -----------------------
+	async function formatWithPrettier(text) {
+		const parser = getPrettierParserFor(lang);
+		const plugins = getPrettierPluginsFor(lang);
+		const result = { error: null, code: text };
 
-	export function setCode(new_code) {
-		code = new_code;
+		if (parser) {
+			try {
+				const formatted = await Prettier.format(text, {
+					parser,
+					plugins,
+					tabWidth: 2,
+					useTabs: false
+				});
+				result.code = formatted;
+			} catch (err) {
+				result.error = err;
+				console.warn('Prettier error:', err);
+			}
+		} else if (lang === 'number') {
+			try {
+				const parsed = parseFloat(text);
+				//	console.log('>', parsed);
+				if (!Number.isNaN(parsed)) {
+					result.code = String(parsed);
+				} else {
+					result.code = text;
+					result.error = 'NAN';
+				}
+			} catch (err) {
+				result.error = err;
+				console.warn('Parse error:', err);
+			}
+		}
+
+		return result;
+	}
+
+	async function formatCode() {
+		if (!editorView) return;
+		const text = editorView.state.doc.toString();
+		const formatted = await formatWithPrettier(text);
+		if (!formatted.error) {
+			const tr = editorView.state.update({
+				changes: { from: 0, to: text.length, insert: formatted.code }
+			});
+			editorView.dispatch(tr);
+			formatError = false;
+			//console.log('>>>>', text);
+			// forzar sincronización
+			updateFromEditor(formatted.code);
+		} else {
+			//	console.log('>>>>', text);
+
+			formatError = true;
+		}
+	}
+
+	// -----------------------
+	// API pública (exported functions)
+	// -----------------------
+	export function setCode(newCode) {
+		alert('EditorCode setCode');
+		code = newCode;
 	}
 
 	export function getCode() {
+		alert('EditorCode getCode');
 		try {
-			formatError = false;
-			if (lang === 'json') {
-				return JSON.parse(editorView.state.doc.toString());
-			} else {
-				return editorView.state.doc.toString();
-			}
-		} catch (error) {
+			if (!editorView) return code;
+			const text = editorView.state.doc.toString();
+			if (lang === 'json') return JSON.parse(text);
+			return text;
+		} catch (err) {
 			formatError = true;
-			return editorView.state.doc.toString();
+			// si JSON inválido retornamos el string
+			return editorView ? editorView.state.doc.toString() : code;
 		}
 	}
 
 	export function reset() {
-		internal_code = last_code;
-		//parseCode();
+		if (!editorView) return;
+		const text = lastCode;
+		const tr = editorView.state.update({
+			changes: { from: 0, to: editorView.state.doc.length, insert: text }
+		});
+		editorView.dispatch(tr);
+		updateFromEditor(text);
 	}
-
-		async function setCodeEditor(code_value, with_format = false) {
-		let text = code_value;
-		try {
-			text = typeof code_value !== 'string' ? JSON.stringify(code_value, null, 2) : code_value;
-		} catch (error) {
-			console.warn(error);
-		}
-
-		if (with_format) {
-			try {
-				let formatted_code = await formatter(editorView.state.doc.toString());
-				formatError = formatted_code.error;
-				text = formatted_code.code;
-			} catch (error) {
-				console.warn(error);
-			}
-		}
-
-		//	console.log('setCodeEditor >>>>>> ', text);
-
-		if (editorView && editorView.state && text != editorView.state.doc.toString()) {
-			const transaction = editorView.state.update({
-				changes: { from: 0, to: editorView.state.doc.length, insert: text }
-			});
-
-			editorView.dispatch(transaction);
-		}
-	}
-
-	async function initializeEditor() {
-		// console.log('initializeEditor >>>>>> ', internal_code);
-		if (elementParent) {
-			if (editorView) {
-				editorView.destroy();
-				editorView = undefined;
-			}
-
-			editorView = new EditorView({
-				doc: internal_code,
-				extensions: create_extensions(),
-				parent: elementParent
-			});
-			await setCodeEditor(code);
-		}
-	}
-
-	// Formatear el código
-	async function formatCode() {
-		if (editorView && editorView.state) {
-			try {
-				await setCodeEditor(editorView.state.doc.toString(), true);
-			} catch (error) {
-				console.error($state.snapshot(error));
-			}
-		}
-	}
-
-	// Formatear el código
-	async function formatter(code_to_format) {
-		let result = { error: undefined, code: code_to_format };
-
-		try {
-			result.code =
-				typeof code_to_format !== 'string' ? JSON.stringify(code_to_format) : code_to_format;
-
-			if (lang_prettier && lang_prettier.length > 0) {
-				let formatted_code = await Prettier.format(result.code, {
-					parser: lang_prettier,
-					tabWidth: 2, // Indentación de 4 espacios
-					useTabs: false, // Usa espacios en lugar de tabulaciones
-					plugins: plugings_prettier
-				});
-				result.error = undefined;
-				result.code = formatted_code;
-			}
-		} catch (error) {
-			result.error = error;
-			console.warn($state.snapshot(error));
-		}
-		return result;
-	}
-
-	function defaultValues() {
-		if (code == null) {
-			code = '';
-		}
-	}
-
-	onMount(async () => {
-		defaultValues();
-		await initializeEditor();
-		initialized = true;
-	});
-
-	onDestroy(() => {
-		//clearTimeout(timeoutParseOnChange);
-		//	clearTimeout(timeOutonchangeCode);
-	});
 </script>
 
 {#snippet l02()}
@@ -301,7 +362,7 @@
 									//initializeEditor();
 								}}
 							>
-								{#each list_langs as ll}
+								{#each listLangs as ll}
 									<option value={ll.value}>
 										{ll.label}
 									</option>
@@ -322,12 +383,11 @@
 {/snippet}
 
 {#snippet r01()}
-	{#if showFormat && lang_prettier && lang_prettier.length > 0}
+	{#if showFormat && getPrettierParserFor(lang).length > 0}
 		<button
 			class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}"
 			onclick={async () => {
 				await formatCode();
-				checkUpdateCode();
 			}}
 		>
 			<span class="icon is-small">
@@ -337,7 +397,23 @@
 					<i class="fa-solid fa-check"></i>
 				{/if}
 			</span>
-			<span>Format {lang}</span>
+			<span>Format {lang.toUpperCase()}</span>
+		</button>
+	{:else if showFormat && lang === 'number'}
+		<button
+			class="button is-small is-outlined {formatError ? 'is-danger' : 'is-success'}"
+			onclick={async () => {
+				await formatCode();
+			}}
+		>
+			<span class="icon is-small">
+				{#if formatError}
+					<i class="fa-solid fa-triangle-exclamation"></i>
+				{:else}
+					<i class="fa-solid fa-check"></i>
+				{/if}
+			</span>
+			<span>Parser {lang.toUpperCase()}</span>
 		</button>
 	{/if}
 
@@ -376,9 +452,8 @@
 
 <Level left={[left, l02]} right={[right, r01]}></Level>
 
-<!-- Editor de CodeMirror -->
 <div class={showCode ? '' : 'is-hidden'}>
-	<div bind:this={elementParent}></div>
+	<div bind:this={containerEl}></div>
 </div>
 
 <style>

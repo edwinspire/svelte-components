@@ -3,7 +3,15 @@
 	let value = '{}';
 </script>
 
-<input bind:value={value} />
+<input bind:value />
 
-
-<EditorCode bind:code={value}  />
+<EditorCode
+	bind:code={value}
+	showFormat={true}
+	showSelectLang={true}
+	isReadOnly={false}
+	showResetButton={true}
+	onchange={(e) => {
+		console.log(e);
+	}}
+/>
