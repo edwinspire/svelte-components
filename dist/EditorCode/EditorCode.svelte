@@ -373,7 +373,7 @@
 			<p class="control">
 				<button
 					disabled={isReadOnly}
-					class="button is-small {formatError ? 'is-danger' : 'is-norma'}"
+					class="button is-small {formatError ? 'is-danger' : ' '}"
 					onclick={async () => {
 						await formatCode();
 					}}
@@ -405,6 +405,15 @@
 						{/if}
 					</span>
 					<span>Parser {!showSelectLang ? lang.toUpperCase() : ''}</span>
+				</button>
+			</p>
+		{:else}
+			<p class="control">
+				<button disabled class="button is-small {formatError ? 'is-danger' : ' '}">
+					<span class="icon is-small">
+						<i class="fa-solid fa-ban"></i>
+					</span>
+					<span>Format {!showSelectLang ? lang.toUpperCase() : ''}</span>
 				</button>
 			</p>
 		{/if}
