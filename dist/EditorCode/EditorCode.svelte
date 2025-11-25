@@ -51,7 +51,7 @@
 		html: xml(),
 		sql: sql(),
 		xml: xml(),
-		text: [],
+		string: [],
 		number: []
 	};
 
@@ -68,7 +68,7 @@
 		},
 		{ label: 'SQL', value: 'sql', prettier: 'sql', plugins: [prettierPluginSql] },
 		{ label: 'XML', value: 'xml', prettier: 'html', plugins: [prettierPluginHtml] },
-		{ label: 'Text', value: 'text', prettier: '', plugins: [] },
+		{ label: 'String', value: 'string', prettier: '', plugins: [] },
 		{ label: 'Number', value: 'number', prettier: '', plugins: [] }
 	];
 
