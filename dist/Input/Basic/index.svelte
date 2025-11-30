@@ -127,14 +127,7 @@
 					}}>{value}</a
 				>
 			{:else}
-				<input
-					{pattern}
-					{required}
-					class="input {sizeClass}"
-					type="text"
-					{placeholder}
-					bind:value
-				/>
+				<input {pattern} {required} class="input {sizeClass}" {type} {placeholder} bind:value />
 			{/if}
 		</p>
 	</div>
