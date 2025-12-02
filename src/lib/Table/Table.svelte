@@ -329,16 +329,15 @@
 	function ownDeleteRows(selected_rows) {
 		if (selected_rows.rows && selected_rows.rows.length > 0) {
 			//console.log('Hay filas por eliminar', selected_rows);
-			RawDataTable = RawDataTable.filter((item) => {
-				let r = selected_rows.rows.find((r) => {
-					//console.log(r, item);
-					return r.internal_hash_row == item.internal_hash_row;
-				});
-
-				console.log('R: ', r);
-
-				return !r;
-			});
+			RawDataTable = RawDataTable
+				? RawDataTable.filter((item) => {
+						let r = selected_rows.rows.find((r) => {
+							//console.log(r, item);
+							return r.internal_hash_row == item.internal_hash_row;
+						});
+						return !r;
+					})
+				: [];
 		}
 	}
 
@@ -427,17 +426,18 @@
 	}
 
 	function eventOnChangeCell(item, dataRow) {
-		let idrow = RawDataTable.findIndex((row) => {
-			return row.internal_hash_row == dataRow.internal_hash_row;
-		});
-
-		RawDataTable[idrow] = dataRow;
+		let row =
+			RawDataTable && Array.isArray(RawDataTable)
+				? RawDataTable.findIndex((row) => {
+						return row.internal_hash_row == dataRow.internal_hash_row;
+					})
+				: {};
 
 		if (onchangecell) {
 			onchangecell(
 				$state.snapshot({
 					field: item,
-					data: dataRow
+					data: row
 				})
 			);
 		}
@@ -1151,7 +1151,4 @@
 	.slot_padding {
 		margin: 0.1em !important;
 	}
-
-	
-
 </style>
