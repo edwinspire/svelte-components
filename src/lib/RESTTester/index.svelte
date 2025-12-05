@@ -617,6 +617,24 @@
 
 											//let headers = {"access-control-expose-headers": "Content-Disposition", "access-control-allow-headers": "Authorization"}
 
+											if (
+												data.auth &&
+												data.auth.selection == 1 &&
+												data.auth.basic.username &&
+												data.auth.basic.password
+											) {
+												console.log(data.auth);
+												uF.SetBasicAuthorization(
+													data.auth.basic.username,
+													data.auth.basic.password
+												);
+											}
+
+											if (data.auth && data.auth.selection == 2 && data.auth.bearer.token) {
+												console.log(data.auth);
+												uF.setBearerAuthorization(data.auth.bearer.token);
+											}
+
 											last_response = await uF[method]({
 												url: url,
 												data: data_send,

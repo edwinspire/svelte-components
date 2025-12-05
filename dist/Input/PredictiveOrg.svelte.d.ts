@@ -1,10 +1,10 @@
 export default PredictiveOrg;
 type PredictiveOrg = SvelteComponent<{
-    label?: string;
     options?: {
         name: string;
         value: number;
     }[];
+    label?: string;
 }, {
     select: CustomEvent<any>;
 } & {
@@ -13,11 +13,11 @@ type PredictiveOrg = SvelteComponent<{
     $$bindings?: string;
 };
 declare const PredictiveOrg: $$__sveltets_2_IsomorphicComponent<{
-    label?: string;
     options?: {
         name: string;
         value: number;
     }[];
+    label?: string;
 }, {
     select: CustomEvent<any>;
 } & {

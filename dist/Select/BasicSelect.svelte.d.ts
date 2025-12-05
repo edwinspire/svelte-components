@@ -10,7 +10,7 @@ declare const BasicSelect: import("svelte").Component<{
     options?: any[];
     css_class?: string;
     onselect?: Function;
-}, {}, "label" | "option" | "options" | "isExpanded" | "css_class">;
+}, {}, "options" | "label" | "option" | "isExpanded" | "css_class">;
 type $$ComponentProps = {
     label?: string;
     isExpanded?: boolean;
