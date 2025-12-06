@@ -54,7 +54,7 @@
 	let time_responde = $state();
 	let response_as = $state('json');
 	let active_tab = $state(0);
-	let data_result = $state({ data: '', MimeType: '', sizeKBResponse: -1 });
+	let data_result = $state({ data: '', sizeKBResponse: -1 });
 	let running = $state(false);
 	//	let sizeKBResponse = $state(0);
 
@@ -97,22 +97,29 @@
 		}
 	});
 
-	/**
-	 * Extrae solo el tipo MIME principal del encabezado 'Content-Type'.
-	 * @param {Response} response - El objeto Response de una llamada fetch.
-	 * @returns {string|null} El tipo MIME (ej: "application/json") o null si no se encuentra.
-	 */
-	function getMimeType(response) {
-		const contentType = response.headers.get('Content-Type');
-
-		if (!contentType) {
-			return null;
+	let icon_download_button = $derived.by(() => {
+		let class_icon = ' fa-solid fa-file-arrow-down ';
+		let ct = classifyContent(data_result.contentType);
+		if (ct == 'pdf') {
+			class_icon = ' fa-regular fa-file-pdf ';
+		} else if (ct == 'image') {
+			class_icon = ' fa-regular fa-image ';
+		} else if (ct == 'text') {
+			class_icon = ' fa-regular fa-file-lines ';
 		}
+		return class_icon;
+	});
 
-		// El tipo MIME es la parte que viene antes del primer punto y coma (;)
-		// Usamos .split() para dividir la cadena y tomamos el primer elemento.
-		// .trim() elimina espacios en blanco al inicio o al final.
-		return contentType.split(';')[0].trim();
+	function classifyContent(contentType) {
+		const type = contentType ? contentType.toLowerCase() : '';
+
+		if (type.includes('application/json')) return 'json';
+		if (type.includes('text/') && !type.includes('html')) return 'text';
+		if (type.includes('image/')) return 'image';
+		if (type.includes('application/pdf')) return 'pdf';
+		if (type.includes('application/') || type.includes('octet-stream')) return 'bin';
+
+		return '';
 	}
 
 	function internalOnChange() {
@@ -189,8 +196,40 @@
 		return sizeInKB;
 	}
 
+	// Función para descargar archivo automáticamente
+	function downloadFileBlob(blob, filename) {
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		URL.revokeObjectURL(url);
+	}
+
+	function downloadFilePDF(blob, filename) {
+		// Crear URL temporal
+		const blobUrl = URL.createObjectURL(blob);
+
+		// Crear un elemento <a> invisible
+		const enlace = document.createElement('a');
+		enlace.href = blobUrl;
+		enlace.download = filename; // <--- Aquí es donde se fuerza el nombre del archivo
+
+		// Añadir al DOM (necesario en Firefox), hacer clic y remover
+		document.body.appendChild(enlace);
+		enlace.click();
+		document.body.removeChild(enlace);
+
+		// Limpiar URL
+		setTimeout(() => {
+			URL.revokeObjectURL(blobUrl);
+		}, 100);
+	}
+
 	// Función para descargar el archivo
-	function downloadFile(text, file_name, type = 'text/plain') {
+	function downloadFileText(text, file_name, type = 'text/plain') {
 		// Crear un blob con el contenido
 		const blob = new Blob([text], { type: type });
 		// Crear una URL para el blob
@@ -210,7 +249,7 @@
 
 	function resetResponse() {
 		last_response = {};
-		data_result = { data: '', MimeType: '', sizeKBResponse: -1 };
+		data_result = { data: '', contentType: '', sizeKBResponse: -1, fileExtension: '' };
 		time_responde = undefined;
 	}
 
@@ -219,8 +258,8 @@
 	 * @param {Response} response - El objeto Response de fetch.
 	 * @returns {number|null} El tamaño en KB (redondeado a 2 decimales) o null si no se puede obtener.
 	 */
-	function getResponseSizeInKB(response) {
-		const contentLength = response.headers.get('Content-Length');
+	function getResponseSizeInKB(contentLength) {
+		//const contentLength = response.headers.get('Content-Length');
 
 		if (!contentLength) {
 			return null;
@@ -233,6 +272,121 @@
 		}
 
 		return (bytes / 1024).toFixed(2); // Redondea a 2 decimales
+	}
+
+	function getExtensionFromContentType(contentType, opciones = {}) {
+		const { incluirPunto = false, valorPorDefecto = null, permitirMultiples = false } = opciones;
+
+		// Validar entrada
+		if (!contentType || typeof contentType !== 'string') {
+			return valorPorDefecto;
+		}
+
+		// Limpiar contentType (remover charset y otros parámetros)
+		const tipoLimpio = contentType.split(';')[0].trim().toLowerCase();
+
+		// Mapa extendido de Content-Type a extensiones
+		const mapaExtensiones = {
+			// Imágenes
+			'image/jpeg': ['jpg', 'jpeg'],
+			'image/png': ['png'],
+			'image/gif': ['gif'],
+			'image/webp': ['webp'],
+			'image/svg+xml': ['svg'],
+			'image/bmp': ['bmp'],
+			'image/x-icon': ['ico'],
+			'image/tiff': ['tiff', 'tif'],
+
+			// Documentos
+			'application/pdf': ['pdf'],
+			'application/msword': ['doc'],
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['docx'],
+			'application/vnd.ms-excel': ['xls'],
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['xlsx'],
+			'application/vnd.ms-powerpoint': ['ppt'],
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['pptx'],
+			'application/rtf': ['rtf'],
+
+			// OpenDocument
+			'application/vnd.oasis.opendocument.text': ['odt'],
+			'application/vnd.oasis.opendocument.spreadsheet': ['ods'],
+			'application/vnd.oasis.opendocument.presentation': ['odp'],
+
+			// Texto
+			'text/plain': ['txt'],
+			'text/html': ['html', 'htm'],
+			'text/css': ['css'],
+			'text/javascript': ['js'],
+			'application/javascript': ['js'],
+			'text/csv': ['csv'],
+			'text/xml': ['xml'],
+			'application/xml': ['xml'],
+			'application/json': ['json'],
+			'text/markdown': ['md'],
+
+			// Audio
+			'audio/mpeg': ['mp3'],
+			'audio/wav': ['wav'],
+			'audio/x-wav': ['wav'],
+			'audio/ogg': ['ogg', 'oga'],
+			'audio/webm': ['weba'],
+			'audio/aac': ['aac'],
+			'audio/midi': ['midi', 'mid'],
+
+			// Video
+			'video/mp4': ['mp4'],
+			'video/mpeg': ['mpeg', 'mpg'],
+			'video/webm': ['webm'],
+			'video/ogg': ['ogv'],
+			'video/x-msvideo': ['avi'],
+			'video/3gpp': ['3gp'],
+			'video/3gpp2': ['3g2'],
+
+			// Archivos comprimidos
+			'application/zip': ['zip'],
+			'application/x-rar-compressed': ['rar'],
+			'application/x-7z-compressed': ['7z'],
+			'application/x-tar': ['tar'],
+			'application/gzip': ['gz'],
+			'application/x-bzip': ['bz'],
+			'application/x-bzip2': ['bz2'],
+
+			// Fuentes
+			'font/woff': ['woff'],
+			'font/woff2': ['woff2'],
+			'font/ttf': ['ttf'],
+			'font/otf': ['otf'],
+
+			// Otros
+			'application/octet-stream': ['bin'],
+			'application/epub+zip': ['epub'],
+			'application/java-archive': ['jar']
+		};
+
+		const extensiones = mapaExtensiones[tipoLimpio];
+
+		if (!extensiones) {
+			return valorPorDefecto;
+		}
+
+		// Decidir qué devolver
+		let resultado;
+		if (permitirMultiples) {
+			resultado = extensiones;
+		} else {
+			resultado = extensiones; // Primera extensión (más común)
+		}
+
+		// Agregar punto si se solicita
+		if (incluirPunto && resultado) {
+			if (Array.isArray(resultado)) {
+				resultado = resultado.map((ext) => '.' + ext);
+			} else {
+				resultado = '.' + resultado;
+			}
+		}
+
+		return resultado;
 	}
 
 	function getDataBody() {
@@ -292,6 +446,19 @@
 		}
 
 		return result;
+	}
+
+	function currentDateFormated() {
+		const ahora = new Date();
+
+		const año = ahora.getFullYear();
+		const mes = String(ahora.getMonth() + 1).padStart(2, '0'); // Meses empiezan en 0
+		const dia = String(ahora.getDate()).padStart(2, '0');
+		const horas = String(ahora.getHours()).padStart(2, '0');
+		const minutos = String(ahora.getMinutes()).padStart(2, '0');
+		const segundos = String(ahora.getSeconds()).padStart(2, '0');
+
+		return `${año}${mes}${dia}${horas}${minutos}${segundos}`;
 	}
 
 	onMount(() => {
@@ -445,8 +612,8 @@
 		<div class="control">
 			<div class="tags has-addons">
 				<span class="tag is-dark">MimeType</span>
-				{#if data_result && data_result.MimeType}
-					<span class="tag">{data_result.MimeType}</span>
+				{#if data_result && data_result.contentType}
+					<span class="tag">{data_result.contentType}</span>
 				{:else}
 					<span class="tag"></span>
 				{/if}
@@ -478,39 +645,51 @@
 				{/if}
 			</div>
 		</div>
+
+		<div class="control">
+			<button
+				class="button is-small {data_result.sizeKBResponse > 0 ? 'is-success' : ''}"
+				onclick={() => {
+					const ctype = classifyContent(data_result.contentType);
+					if (ctype === 'json') {
+						downloadFileText(
+							JSON.stringify(data_result.data),
+							data_result.fileName,
+							data_result.contentType
+						);
+					} else if (ctype === 'text') {
+						// Para texto plano, HTML, etc.
+						downloadFileText(data_result.data, `${data_result.fileName}`, data_result.contentType);
+					} else if (ctype === 'image' || ctype === 'bin') {
+						// Mostrar imagen inline
+						downloadFileBlob(data_result.data, `${data_result.fileName}`, data_result.contentType);
+					} else if (ctype === 'pdf') {
+						downloadFilePDF(data_result.data, data_result.fileName);
+					} else {
+						downloadFileBlob(data_result.data, data_result.fileName);
+					}
+				}}
+			>
+				<span class="icon">
+					<i class={icon_download_button}></i>
+				</span>
+				<span>Download</span>
+			</button>
+		</div>
 	</div>
 	<div>
 		{#if Number(data_result.sizeKBResponse) < Number(limitSizeResponseView)}
 			{#if last_response && !last_response.ok && data_result.data}
 				<JSONView bind:jsonObject={data_result.data}></JSONView>
-			{:else if response_as == 'json' && data_result.data}
+			{:else if response_as == 'json' && data_result.fileExtension == 'json' && data_result.data}
 				<JSONView bind:jsonObject={data_result.data}></JSONView>
-			{:else if response_as == 'text' && data_result.data}
+			{:else if response_as == 'text' && data_result.fileExtension == 'text' && data_result.data}
 				<code>
 					{data_result.data}
 				</code>
-			{:else if response_as == 'datatable' && data_result.data}
+			{:else if response_as == 'datatable' && data_result.data && Array.isArray(data_result.data)}
 				<Table bind:RawDataTable={data_result.data}></Table>
 			{/if}
-		{:else}
-			<div class="container is-max-tablet is-small">
-				<p class="block">
-					The response exceeds {limitSizeResponseView} KB, it cannot be displayed in the view.
-				</p>
-
-				<div class="is-align-content-center">
-					<button
-						class="button is-link is-outlined is-small"
-						onclick={() => {
-							if (response_as == 'json') {
-								downloadFile(JSON.stringify(data_result.data), 'response.json', 'text/json');
-							} else if (response_as == 'text') {
-								downloadFile(data_result.data, 'response.txt', 'text/plain');
-							}
-						}}>Download</button
-					>
-				</div>
-			</div>
 		{/if}
 	</div>
 {/snippet}
@@ -641,59 +820,74 @@
 												headers: getDataHeaders(data.headers)
 											});
 
-											//last_response.headers.add("Access-Control-Expose-Headers","Authorization")
-
 											// Capturamos el tiempo final
 											let endTime = Date.now();
 
 											// Calculamos la diferencia en milisegundos
 											time_responde = endTime - startTime;
-											data_result.MimeType = getMimeType(last_response);
-											data_result.sizeKBResponse = getResponseSizeInKB(last_response);
-											//	console.warn(last_response);
 
 											// TODO: probar cuando el dato es text pero en el editor se usa JSON, hay una excepción que no está controlada y el editor deja de funcionat
 
 											if (last_response.ok) {
-												switch (response_as) {
-													case 'json':
-														data_result.data = await last_response.json();
-														if (!data_result.sizeKBResponse) {
-															data_result.sizeKBResponse = getSizeJSON(data_result.data);
-														}
+												// Obtener headers importantes
+												data_result.contentType = last_response.headers.get('Content-Type') || '';
+												const contentDisposition =
+													last_response.headers.get('Content-Disposition') || '';
+												data_result.sizeKBResponse =
+													getResponseSizeInKB(last_response.headers.get('Content-Length')) || 0;
 
-														break;
-													case 'text':
-														data_result.data = await last_response.text();
-														if (!data_result.sizeKBResponse) {
-															data_result.sizeKBResponse = getSizeString(data_result.data);
-														}
-														break;
-													case 'datatable':
-														data_result.data = await last_response.json();
-														if (!data_result.sizeKBResponse) {
-															data_result.sizeKBResponse = getSizeJSON(data_result);
-														}
-														break;
-													default:
-														data_result.data = '';
-														data_result.sizeKBResponse = -1;
-														break;
-												}
+												data_result.fileExtension = getExtensionFromContentType(
+													data_result.contentType
+												);
 
-												//console.log(last_response, data_result);
-											} else {
-												if (
-													typeof data_result.MimeType === 'string' &&
-													data_result.MimeType.toLowerCase().includes('json')
-												) {
+												// Extraer nombre de archivo si existe
+												const fileNameMatch = contentDisposition.match(
+													/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+												);
+												data_result.fileName = fileNameMatch
+													? `result_${currentDateFormated()}_${fileNameMatch[1].replace(/['"]/g, '')}.${data_result.fileExtension[0]}`
+													: `result_${currentDateFormated()}.${data_result.fileExtension[0]}`;
+
+												console.log('DATA RESULT:', data_result);
+												// Clasificar tipo de contenido
+												const ctype = classifyContent(data_result.contentType);
+
+												if (ctype === 'json') {
+													// Manejo de JSON (tu lógica original)
 													data_result.data = await last_response.json();
-												} else {
+													if (!data_result.sizeKBResponse) {
+														data_result.sizeKBResponse = getSizeJSON(data_result.data);
+													}
+												} else if (ctype === 'text') {
+													// Para texto plano, HTML, etc.
 													data_result.data = await last_response.text();
-												}
-
-												if (!data_result.sizeKBResponse) {
-													data_result.sizeKBResponse = getSizeJSON(data_result.data);
+													if (!data_result.sizeKBResponse) {
+														data_result.sizeKBResponse = getSizeString(data_result.data);
+													}
+												} else if (ctype === 'image' || ctype === 'bin') {
+													// Mostrar imagen inline
+													data_result.data = await last_response.blob();
+													if (!data_result.sizeKBResponse) {
+														data_result.sizeKBResponse = getResponseSizeInKB(
+															String(data_result.data.size)
+														);
+													}
+												} else if (ctype === 'pdf') {
+													// Mostrar PDF inline o crear botón de descarga
+													data_result.data = await last_response.blob();
+													if (!data_result.sizeKBResponse) {
+														data_result.sizeKBResponse = getResponseSizeInKB(
+															String(data_result.data.size)
+														);
+													}
+												} else {
+													// Fallback: descargar como binario
+													data_result.data = await last_response.blob();
+													if (!data_result.sizeKBResponse) {
+														data_result.sizeKBResponse = getResponseSizeInKB(
+															String(data_result.data.size)
+														);
+													}
 												}
 											}
 										} catch (error) {
