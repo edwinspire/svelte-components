@@ -18,6 +18,7 @@
 		multiple = false,
 		onselect = () => {},
 		onupload = () => {},
+		onchange = () => {},
 		showUploadButton = $bindable(true),
 		pattern = $bindable(),
 		required = $bindable(false)
@@ -44,6 +45,7 @@
 		bind:accept
 		bind:url
 		bind:multiple
+		{onchange}
 		{onselect}
 		{onupload}
 		bind:showUploadButton
@@ -63,6 +65,7 @@
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<a
 					class="button {sizeClass} {value ? 'is-success' : ''}"
+					{onchange}
 					onclick={() => {
 						value = !value;
 					}}
@@ -99,9 +102,9 @@
 					{placeholder}
 					value={dateFormated}
 					onchange={(e) => {
-						console.log(e, dateFormated);
+						//	console.log(e, dateFormated);
 						value = localDateTimeToUTC(e.target.value);
-						console.log(value);
+						//	console.log(value);
 					}}
 				/>
 			{:else if type == 'number'}
@@ -115,6 +118,7 @@
 					{max}
 					{min}
 					{step}
+					{onchange}
 				/>
 			{:else if type == 'boolean'}
 				<!-- svelte-ignore a11y_missing_attribute -->
@@ -127,7 +131,15 @@
 					}}>{value}</a
 				>
 			{:else}
-				<input {pattern} {required} class="input {sizeClass}" {type} {placeholder} bind:value />
+				<input
+					{pattern}
+					{required}
+					class="input {sizeClass}"
+					{type}
+					{placeholder}
+					bind:value
+					{onchange}
+				/>
 			{/if}
 		</p>
 	</div>
