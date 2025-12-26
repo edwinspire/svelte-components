@@ -765,6 +765,7 @@
 
 									//	console.log(last_response);
 									//	console.log('METHOD: ', method);
+									console.log('URL: ', url, data);
 
 									if (url && url.length > 5) {
 										try {
@@ -810,7 +811,7 @@
 											}
 
 											if (data.auth && data.auth.selection == 2 && data.auth.bearer.token) {
-												console.log(data.auth);
+												//console.log(data.auth);
 												uF.setBearerAuthorization(data.auth.bearer.token);
 											}
 
@@ -848,7 +849,7 @@
 													? `result_${currentDateFormated()}_${fileNameMatch[1].replace(/['"]/g, '')}.${data_result.fileExtension[0]}`
 													: `result_${currentDateFormated()}.${data_result.fileExtension[0]}`;
 
-												console.log('DATA RESULT:', data_result);
+												//console.log('DATA RESULT:', data_result);
 												// Clasificar tipo de contenido
 												const ctype = classifyContent(data_result.contentType);
 
