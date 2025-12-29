@@ -62,24 +62,24 @@
 			{#if item.enabled}
 				<!-- svelte-ignore a11y_consider_explicit_label -->
 				<button
-					class="button is-small"
+					class="button is-small is-success"
 					onclick={() => {
 						item.enabled = false; // Mutación directa al objeto (Svelte 5 lo detecta en objetos)
-						data = [...data]; // Nueva referencia del array para actualizar UI
+					//	data = [...data]; // Nueva referencia del array para actualizar UI
 					}}
 				>
-					<span class="icon"><i class="fa-regular fa-square-check"></i></span>
+					<span class="icon"><i class="fa-solid fa-square-check"></i></span>
 				</button>
 			{:else}
 				<!-- svelte-ignore a11y_consider_explicit_label -->
 				<button
-					class="button is-small is-success"
+					class="button is-small"
 					onclick={() => {
 						item.enabled = true;
-						data = [...data];
+					//	data = [...data];
 					}}
 				>
-					<span class="icon"><i class="fa-solid fa-square-check"></i></span>
+					<span class="icon"><i class="fa-regular fa-square-check"></i></span>
 				</button>
 			{/if}
 		</p>
