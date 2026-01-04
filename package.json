@@ -1,6 +1,6 @@
 {
   "name": "@edwinspire/svelte-components",
-  "version": "1.2.35",
+  "version": "1.2.38",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
@@ -28,7 +28,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "reinstall": "rm -rf node_modules package-lock.json && npm install"
   },
   "exports": {
     ".": {

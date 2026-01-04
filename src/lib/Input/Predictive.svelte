@@ -38,6 +38,7 @@
 	);
 
 	$effect(() => {
+		inputValue;
 		//if (selectedValue != null) {
 		//console.log('selectedValue', selectedValue, inputValue);
 		//setinputValue();
@@ -118,7 +119,7 @@
 
 <div class="field has-addons">
 	{#if label && label.length > 0}
-		<p class="control">
+		<p class="control" title={inputValue}>
 			<span class="button {classLabel} is-static">
 				<span>{label}</span>
 			</span>
@@ -126,6 +127,7 @@
 	{/if}
 	<div class="control is-expanded">
 		<input
+		
 			class="input {classInput} is-outlined"
 			type="text"
 			bind:value={inputValue}
