@@ -101,7 +101,7 @@
 			$state.snapshot(options),
 			old_selectedValue != selectedValue
 		);
-		if (old_selectedValue != selectedValue) {
+		if (old_selectedValue != selectedValue || old_selectedValue != inputValue) {
 			//	console.log('UPDATED setinputValue Compare >> ', old_selectedValue, selectedValue, inputValue);
 			old_selectedValue = selectedValue;
 
