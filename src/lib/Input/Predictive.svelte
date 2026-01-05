@@ -113,7 +113,8 @@
 				if (new_inputValue) {
 					inputValue = new_inputValue;
 				} else {
-					selectedValue = null;
+					//selectedValue = null;
+					inputValue = '';
 				}
 			}
 		}
@@ -122,7 +123,7 @@
 	onMount(() => {
 		//setinputValue();
 		//checkUpdateSelectedValue();
-		selectedValue = "";
+		selectedValue = '';
 	});
 </script>
 
