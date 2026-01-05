@@ -38,7 +38,7 @@
 	);
 
 	$effect(() => {
-		inputValue;
+		selectedValue;
 		//if (selectedValue != null) {
 		//console.log('selectedValue', selectedValue, inputValue);
 		//setinputValue();
@@ -119,7 +119,7 @@
 
 <div class="field has-addons">
 	{#if label && label.length > 0}
-		<p class="control" title={inputValue}>
+		<p class="control" title={selectedValue}>
 			<span class="button {classLabel} is-static">
 				<span>{label}</span>
 			</span>
