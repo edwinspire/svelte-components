@@ -97,6 +97,7 @@
 			'checkUpdateSelectedValue > ',
 			$state.snapshot(old_selectedValue),
 			$state.snapshot(selectedValue),
+			$state.snapshot(inputValue),
 			$state.snapshot(options),
 			old_selectedValue != selectedValue
 		);
@@ -120,7 +121,8 @@
 
 	onMount(() => {
 		//setinputValue();
-		checkUpdateSelectedValue();
+		//checkUpdateSelectedValue();
+		selectedValue = "";
 	});
 </script>
 
