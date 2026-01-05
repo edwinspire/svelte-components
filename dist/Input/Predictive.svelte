@@ -20,7 +20,7 @@
 		onselect = () => {}
 	} = $props();
 
-	let old_selectedValue;
+	let old_selectedValue = $state();
 	let filteredOptions = $state(options);
 	let showDropdown = $state(false);
 	let inputValue = $state('');
@@ -93,6 +93,13 @@
 	);
 
 	function checkUpdateSelectedValue() {
+		console.warn(
+			'checkUpdateSelectedValue > ',
+			$state.snapshot(old_selectedValue),
+			$state.snapshot(selectedValue),
+			$state.snapshot(options),
+			old_selectedValue != selectedValue
+		);
 		if (old_selectedValue != selectedValue) {
 			//	console.log('UPDATED setinputValue Compare >> ', old_selectedValue, selectedValue, inputValue);
 			old_selectedValue = selectedValue;
@@ -127,7 +134,6 @@
 	{/if}
 	<div class="control is-expanded">
 		<input
-		
 			class="input {classInput} is-outlined"
 			type="text"
 			bind:value={inputValue}
@@ -137,24 +143,21 @@
 			placeholder={placeholderInternal}
 		/>
 
-	
 		{#if showDropdown && filteredOptions.length > 0}
-		<div class="menu_items">
-			<div class="box">
-				<ul>
-					
-					{#each filteredOptions as option}
-						<!-- svelte-ignore a11y_invalid_attribute -->
-						<li>
-							<a class="is-size-7" href="#" onclick={() => handleClick(option)}>
-								{option.name}
-							</a>
-						</li>
-					{/each}
-					
-				</ul>
+			<div class="menu_items">
+				<div class="box">
+					<ul>
+						{#each filteredOptions as option}
+							<!-- svelte-ignore a11y_invalid_attribute -->
+							<li>
+								<a class="is-size-7" href="#" onclick={() => handleClick(option)}>
+									{option.name}
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</div>
 			</div>
-		</div>
 		{/if}
 	</div>
 	<p class="control">
