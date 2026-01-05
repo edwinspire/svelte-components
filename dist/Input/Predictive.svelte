@@ -1,6 +1,13 @@
 <script>
+	import { onMount } from 'svelte';
+
 	let {
-		options = $bindable([]),
+		options = [
+			{ name: 'Manzana', value: '1' },
+			{ name: 'Durazno', value: '2' },
+			{ name: 'Pera', value: 'pera' },
+			{ name: 'Kiwi', value: '34' }
+		],
 		label = $bindable('SELECT'),
 		selectedValue = $bindable(null),
 		classLabel = $bindable('is-small'),
@@ -8,93 +15,113 @@
 		placeholder = $bindable(''),
 		classIcon = $bindable(''),
 		classOnSucess = $bindable('is-success'),
-		classOnError = $bindable('is-danger'),
+		classOnError = $bindable('is-danger fa-beat-fade'),
 		freeTyping = $bindable(false),
 		onselect = () => {}
 	} = $props();
 
-	/* ---------- State ---------- */
-	let inputValue = $state('');
+	let old_selectedValue = $state();
 	let showDropdown = $state(false);
-	let filteredOptions = $state([]);
+	let inputValue = $state('');
+	let isTyping = $state(false);
 
-	/* ---------- Derived ---------- */
-	const placeholderInternal = $derived(() =>
-		placeholder?.length ? placeholder : 'Type to see options'
+	let filteredOptions = $derived(
+		inputValue
+			? options.filter((option) => option.name.toLowerCase().includes(inputValue.toLowerCase()))
+			: options
 	);
 
-	const classIconInternal = $derived(() =>
-		classIcon?.length
+	let placeholderInternal = $derived(
+		placeholder && placeholder.length > 0 ? placeholder : 'Type to see options'
+	);
+
+	let classIconInternal = $derived(
+		classIcon && classIcon.length > 0
 			? classIcon
 			: freeTyping
 				? 'fa-regular fa-keyboard'
 				: 'fa-solid fa-angle-down'
 	);
 
-	const selectedValueIsValid = $derived(() =>
-		freeTyping
-			? true
-			: options.some((o) => o.value === selectedValue)
-	);
-
-	/* ---------- Sync: selectedValue → inputValue ---------- */
 	$effect(() => {
-		if (freeTyping) {
-			inputValue.set(selectedValue ?? '');
-			return;
-		}
-
-		const match = options.find((o) => o.value === selectedValue);
-		inputValue.set(match?.name ?? '');
+		if (!options) return;
+		checkUpdateSelectedValue();
 	});
 
-	/* ---------- Filtering ---------- */
-	function filterOptions(text) {
-		if (!text) return [];
-		return options.filter((o) =>
-			o.name.toLowerCase().includes(text.toLowerCase())
-		);
-	}
-
 	function handleInput(event) {
-		const value = event.target.value;
-		inputValue.set(value);
-		filteredOptions.set(filterOptions(value));
-		showDropdown.set(true);
-		selectedValue.set(null);
+		isTyping = true;
+		inputValue = event.target.value;
+		selectedValue = null;
+		showDropdown = true;
 	}
 
-	function handleFocus() {
-		filteredOptions.set(filterOptions(inputValue()));
-		showDropdown.set(true);
-	}
+	function handleClick(option) {
+		isTyping = false;
+		inputValue = option.name;
+		selectedValue = option.value;
+		showDropdown = false;
 
-	function handleSelect(option) {
-		inputValue.set(option.name);
-		selectedValue.set(option.value);
-		showDropdown.set(false);
-		onselect(option);
+		if (!freeTyping) {
+			onselect($state.snapshot(option));
+		} else {
+			blurHandler();
+		}
 	}
 
 	function blurHandler() {
-		if (!freeTyping) return;
+		setTimeout(() => {
+			showDropdown = false;
+			isTyping = false;
+			if (freeTyping) {
+				selectedValue = inputValue;
 
-		selectedValue.set(inputValue());
-		onselect({ name: 'freeTyping', value: inputValue() });
-		showDropdown.set(false);
+				onselect($state.snapshot({ name: 'freeTyping', value: inputValue }));
+			}
+			checkUpdateSelectedValue();
+		}, 200);
 	}
+
+	function handleFocus() {
+		showDropdown = true;
+	}
+
+	let selectedValueIsValid = $derived(
+		freeTyping ? true : options.some((option) => option.value === selectedValue)
+	);
+
+	function checkUpdateSelectedValue() {
+		if (old_selectedValue !== selectedValue) {
+			old_selectedValue = selectedValue;
+
+			if (!isTyping) {
+				if (freeTyping) {
+					inputValue = selectedValue ?? '';
+				} else {
+					const found = options.find((opt) => opt.value === selectedValue);
+					inputValue = found ? found.name : '';
+				}
+			}
+		}
+	}
+
+	onMount(() => {
+		if (!selectedValue) {
+			selectedValue = '';
+		}
+	});
 </script>
 
 <div class="field has-addons">
-	{#if label}
-		<p class="control">
-			<span class="button {classLabel} is-static">{label}</span>
+	{#if label && label.length > 0}
+		<p class="control" title={selectedValue}>
+			<span class="button {classLabel} is-static">
+				<span>{label}</span>
+			</span>
 		</p>
 	{/if}
-
 	<div class="control is-expanded">
 		<input
-			class="input {classInput}"
+			class="input {classInput} is-outlined"
 			type="text"
 			bind:value={inputValue}
 			oninput={handleInput}
@@ -103,19 +130,23 @@
 			placeholder={placeholderInternal}
 		/>
 
-		{#if showDropdown && filteredOptions.length}
+		{#if showDropdown && filteredOptions.length > 0}
 			<div class="menu_items">
 				<div class="box">
 					<ul>
 						{#each filteredOptions as option}
+							<!-- svelte-ignore a11y_invalid_attribute -->
 							<li>
-								<button
-									type="button"
+								<a
 									class="is-size-7"
-									onclick={() => handleSelect(option)}
+									href={'#'}
+									onclick={(e) => {
+										e.preventDefault();
+										handleClick(option);
+									}}
 								>
 									{option.name}
-								</button>
+								</a>
 							</li>
 						{/each}
 					</ul>
@@ -123,13 +154,15 @@
 			</div>
 		{/if}
 	</div>
-
 	<p class="control">
-		<!-- svelte-ignore a11y_consider_explicit_label -->
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<button
-			type="button"
 			class="button is-outlined {classLabel} {selectedValueIsValid ? classOnSucess : classOnError}"
-			onclick={() => showDropdown.set(!showDropdown())}
+			aria-label="Toggle dropdown"
+			onclick={() => {
+				showDropdown = !showDropdown;
+			}}
 		>
 			<span class="icon">
 				<i class={classIconInternal}></i>
@@ -137,3 +170,17 @@
 		</button>
 	</p>
 </div>
+
+<style>
+	.ajust-item {
+		padding: 0.1rem 0.1rem 0.1rem 1rem;
+		font-size: 0.75rem;
+	}
+
+	.menu_items {
+		position: absolute; /* Hace que el mensaje flote */
+		top: 100%; /* Coloca el mensaje justo debajo del input */
+		left: 0;
+		z-index: 5;
+	}
+</style>
