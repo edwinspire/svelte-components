@@ -192,18 +192,26 @@
 
 {#snippet tab_form()}
 	{#if data}
-		<div>
-			<FileUpload
-				showUploadButton={false}
-				accept={''}
-				multiple={true}
-				onselect={(file_selected) => {
-					data.form = file_selected.FormData;
-
+		<svelte:boundary onerror={(e) => console.error(e)}>
+			<KeyValue
+				enableFileType={true}
+				bind:data={data.form}
+				onchange={() => {
 					internalOnChange();
 				}}
-			></FileUpload>
-		</div>
+			></KeyValue>
+
+			{#snippet failed(error)}
+				<div>
+					<span class="icon-text">
+						<span class="icon has-text-warning">
+							<i class="fa-solid fa-triangle-exclamation"></i>
+						</span>
+						<span>{error.message}</span>
+					</span>
+				</div>
+			{/snippet}
+		</svelte:boundary>
 	{/if}
 {/snippet}
 

@@ -389,6 +389,26 @@
 		return resultado;
 	}
 
+	function createFormData(data) {
+		const formData = new FormData();
+
+		for (let index = 0; index < data.length; index++) {
+			const f = data[index];
+
+			if (f.value instanceof FileList) {
+				for (let i = 0; i < f.value.length; i++) {
+					formData.append(f.key, f.value[i], f.value[i].name);
+				}
+			} else {
+				formData.append(f.key, f.value);
+			}
+		}
+
+		console.log(formData);
+
+		return formData;
+	}
+
 	function getDataBody() {
 		let dataBody;
 		//console.log('getDataBody > ', data.body);
@@ -409,7 +429,7 @@
 				}
 				break;
 			case 3:
-				dataBody = data.body.form;
+				dataBody = createFormData(data.body.form);
 				break;
 
 			default:

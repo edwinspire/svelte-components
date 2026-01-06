@@ -6,8 +6,10 @@ type Kv = {
 declare const Kv: import("svelte").Component<{
     data?: any;
     onchange?: Function;
+    enableFileType?: boolean;
 }, {}, "data">;
 type $$ComponentProps = {
     data?: any;
     onchange?: Function;
+    enableFileType?: boolean;
 };

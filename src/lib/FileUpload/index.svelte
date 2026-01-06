@@ -61,9 +61,9 @@
 			<a class="button is-static {sizeClass} "> {label} </a>
 		</p>
 	{/if}
-	<p class="control file">
+	<p class="control file is-expanded">
 		<input
-			class="input {sizeClass}"
+			class="input {sizeClass} "
 			type="file"
 			{multiple}
 			{accept}

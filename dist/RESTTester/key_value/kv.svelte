@@ -1,8 +1,27 @@
 <script>
 	import { onMount } from 'svelte';
 	import { Level } from '../../index.js';
+	import FileUpload from '../../FileUpload/index.svelte';
 
-	let { data = $bindable(), onchange = () => {} } = $props();
+	let { data = $bindable(), onchange = () => {}, enableFileType = false } = $props();
+	let fieldTypes = [
+		{
+			id: 1,
+			text: `Text`
+		},
+		{
+			id: 2,
+			text: `Text Multiline`
+		},
+		{
+			id: 3,
+			text: `File`
+		}
+	];
+
+	let fieldTypesVisible = $derived.by(() => {
+		return enableFileType ? fieldTypes : fieldTypes.filter((p) => p.id !== 3);
+	});
 
 	function addRowEmpty() {
 		if (!data || !Array.isArray(data)) {
@@ -65,7 +84,8 @@
 					class="button is-small is-success"
 					onclick={() => {
 						item.enabled = false; // Mutación directa al objeto (Svelte 5 lo detecta en objetos)
-					//	data = [...data]; // Nueva referencia del array para actualizar UI
+						//	data = [...data]; // Nueva referencia del array para actualizar UI
+						onchange(data);
 					}}
 				>
 					<span class="icon"><i class="fa-solid fa-square-check"></i></span>
@@ -76,7 +96,8 @@
 					class="button is-small"
 					onclick={() => {
 						item.enabled = true;
-					//	data = [...data];
+						//	data = [...data];
+						onchange(data);
 					}}
 				>
 					<span class="icon"><i class="fa-regular fa-square-check"></i></span>
@@ -86,34 +107,73 @@
 
 		<!-- Inputs con bind:value -->
 		<p class="control">
-			<input class="input is-small" type="text" placeholder="Param name" bind:value={item.key} />
+			<input
+				class="input is-small"
+				type="text"
+				placeholder="Param name"
+				bind:value={item.key}
+				onchange={() => {
+					onchange(data);
+				}}
+			/>
 		</p>
 
-		{#if item.multiline}
+		{#if item.type === 2}
 			<p class="control is-expanded">
-				<textarea class="textarea is-small" bind:value={item.value} placeholder="Multiline Value"
-				></textarea>
+				<textarea
+					class="textarea is-small"
+					bind:value={item.value}
+					placeholder="Multiline Value"
+					onchange={() => {
+						onchange(data);
+					}}
+				>
+				</textarea>
+			</p>
+		{:else if item.type === 3}
+			<p class="control file is-expanded">
+				<input
+					class="input is-small"
+					type="file"
+					multiple={false}
+					onchange={(event) => {
+						item.value = event.target.files;
+						onchange(data);
+					}}
+				/>
 			</p>
 		{:else}
 			<p class="control is-expanded">
-				<input class="input is-small" type="text" placeholder="Value" bind:value={item.value} />
+				<input
+					class="input is-small"
+					type="text"
+					placeholder="Value"
+					bind:value={item.value}
+					onchange={() => {
+						onchange(data);
+					}}
+				/>
 			</p>
 		{/if}
 
 		<p class="control">
-			<button
-				class="button is-small {item.multiline ? 'is-success' : ''}"
-				onclick={() => {
-					item.multiline = !item.multiline;
-					data = [...data];
-				}}
-				title="Multiline"
-			>
-				<span class="icon"><i class="fa-solid fa-grip-lines"></i></span>
-			</button>
+			<span class="select is-small">
+				<select
+					bind:value={item.type}
+					onchange={() => {
+						onchange(data);
+					}}
+				>
+					{#each fieldTypesVisible as fieldType}
+						<option value={fieldType.id}>
+							{fieldType.text}
+						</option>
+					{/each}
+				</select>
+			</span>
 		</p>
 
-		<!-- ✅ BOTÓN DE BORRAR MODIFICADO -->
+		<!-- ✅ BOTÓN DE BORRAR  -->
 		<p class="control">
 			<button class="button is-small is-danger" onclick={() => removeRow(id)} title="Delete">
 				<span class="icon"><i class="fa-solid fa-trash-can"></i></span>
