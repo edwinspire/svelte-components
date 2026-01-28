@@ -43,6 +43,9 @@
 		onnewrow = (n) => {
 			console.trace('onnewrow no implemented.');
 		},
+		onsearch = (n) => {
+			console.trace('onsearch no implemented.');
+		},
 		ondeleterow = (d) => {
 			ownDeleteRows(d);
 		},
@@ -363,6 +366,10 @@
 	}
 
 	function handleClickSearch() {
+		if (onsearch) {
+			onsearch();
+		}
+
 		if (text_search && text_search.length > 0) {
 			FilterData();
 		} else {

@@ -28,6 +28,7 @@ declare const Table: import("svelte").Component<{
     onclickrow?: Function;
     oneditrow?: Function;
     onnewrow?: Function;
+    onsearch?: Function;
     ondeleterow?: Function;
     onselectrows?: Function;
     onclickcell?: Function;
@@ -58,6 +59,7 @@ type $$ComponentProps = {
     onclickrow?: Function;
     oneditrow?: Function;
     onnewrow?: Function;
+    onsearch?: Function;
     ondeleterow?: Function;
     onselectrows?: Function;
     onclickcell?: Function;
