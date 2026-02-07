@@ -12,32 +12,39 @@
 		css_cell = ''
 	} = $props();
 
-	let DC001 = $derived(
-		HighlightIsntToday &&
-			DateTime.fromISO(value).toFormat('yyyy-MM-dd') !== DateTime.local().toFormat('yyyy-MM-dd')
-	);
-	let value_formated = $derived(fn_DC01());
+	let dt = $derived.by(() => {
+		if (!value) return null;
 
-	function fn_DC01() {
-		try {
-			return DateTime.fromFormat(value, fromFormat).toLocal().toFormat(format);
-		} catch (error) {
-			return '';
+		if (value instanceof Date) {
+			return DateTime.fromJSDate(value);
 		}
-	}
 
+		// Try ISO first as it is standard
+		let d = DateTime.fromISO(value);
+		// If ISO fails and we have a specific format, try that
+		if (!d.isValid && fromFormat) {
+			d = DateTime.fromFormat(value, fromFormat);
+		}
+		return d;
+	});
 
+	let isNotToday = $derived(
+		HighlightIsntToday &&
+			(!dt || !dt.isValid || dt.toFormat('yyyy-MM-dd') !== DateTime.local().toFormat('yyyy-MM-dd'))
+	);
+
+	let formattedValue = $derived(dt && dt.isValid ? dt.toLocal().toFormat(format) : '');
 </script>
 
-<td onclick={onclick_cell} class:has-text-danger={DC001}>
-	{#if DC001}
+<td onclick={onclick_cell} class:has-text-danger={isNotToday} class={css_cell}>
+	{#if isNotToday}
 		<span class="icon-text" title="Incorrect date">
 			<span class="icon">
 				<i class="fas fa-exclamation-triangle"></i>
 			</span>
-			<span>{value}</span>
+			<span>{value || ''}</span>
 		</span>
 	{:else}
-		{value_formated}
+		{formattedValue}
 	{/if}
 </td>

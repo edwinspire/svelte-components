@@ -2,11 +2,13 @@
 	import { onMount } from 'svelte';
 	import TJson from './TreeView.svelte';
 	import TBoolean from './Boolean.svelte';
+	import DateTime from './DateTime.svelte';
+
 	let initialized = false;
-	//	let last_value;
+
 	let {
 		value = $bindable(),
-		onclickcell,
+		onclick_cell,
 		row = $bindable(),
 		editInline = false,
 		css_cell,
@@ -14,17 +16,18 @@
 	} = $props();
 
 	$effect(() => {
+		// Detect changes in value or row
+		// Using $state.snapshot to avoid infinite loops if objects are mutated deeply
+		// but simple access is enough for primitive values or reference changes.
+		// However, the previous code was weird accessing value; effectively just to subscribe.
 		value;
-		if (initialized && editInline) {
-			//console.log(onchangecell);
-			//	console.log('Auto', $state.snapshot(value), $state.snapshot(row));
-			if (onchangecell) {
-				onchangecell(value);
-			} else {
-				console.warn(
-					'Cell component without onchangecell event implemented. The onchangecell event will not be fired when there are changes in the cell value.'
-				);
-			}
+
+		if (initialized && editInline && onchangecell) {
+			onchangecell(value);
+		} else if (initialized && editInline && !onchangecell) {
+			console.warn(
+				'Cell component without onchangecell event implemented. The onchangecell event will not be fired when there are changes in the cell value.'
+			);
 		}
 	});
 
@@ -33,12 +36,17 @@
 	});
 </script>
 
-{#if value && (typeof value === 'object' || Array.isArray(value))}
-	<TJson bind:value {editInline} {css_cell} />
-{:else if typeof value === 'boolean'}
-	<TBoolean bind:value bind:row {editInline} {css_cell}></TBoolean>
+{#if typeof value === 'boolean'}
+	<TBoolean bind:value bind:row {editInline} {css_cell} {onclick_cell}></TBoolean>
+
+	<!-- Check for Date object. 
+     Note: typeof new Date() is 'object', so this must come before the generic object check. -->
+{:else if value instanceof Date}
+	<DateTime bind:value {row} {editInline} {css_cell} {onclick_cell} />
+{:else if value && (typeof value === 'object' || Array.isArray(value))}
+	<TJson bind:value {editInline} {css_cell} {onclick_cell} />
 {:else if typeof value === 'number' || typeof value === 'bigint'}
-	<td onclick={onclickcell}
+	<td onclick={onclick_cell} class={css_cell}
 		>{#if editInline}
 			<input class="input is-small" type="number" placeholder="Input" bind:value />
 		{:else}
@@ -46,7 +54,7 @@
 		{/if}</td
 	>
 {:else if typeof value === 'string'}
-	<td onclick={onclickcell}
+	<td onclick={onclick_cell} class={css_cell}
 		>{#if editInline}
 			<input class="input is-small" type="text" placeholder="Input" bind:value />
 		{:else}
@@ -54,7 +62,7 @@
 		{/if}</td
 	>
 {:else}
-	<td onclick={onclickcell}><span>{JSON.stringify(value)}</span></td>
+	<td onclick={onclick_cell} class={css_cell}><span>{JSON.stringify(value)}</span></td>
 {/if}
 
 <style>

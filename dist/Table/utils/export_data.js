@@ -1,42 +1,37 @@
-"use strict";
-
 import * as XLSX from 'xlsx';
 import { DateTime } from 'luxon';
-import { DateTime as DT } from '../Column/DefaultTypes.js';
-
+// Rename import to avoid confusion with luxon DateTime
+import { DateTime as DateTimeComponent } from '../Column/DefaultTypes.js';
 
 function FileName(fileNameExport, extension = 'txt') {
-
     let fName = 'Report';
 
     if (fileNameExport && fileNameExport.length > 0) {
         fName = fileNameExport;
     }
 
-    return `${fName}_${DateTime.local().toFormat(
-        'yyyy-MM-dd_HH-mm-ss'
-    )}.${extension}`;
-
+    return `${fName}_${DateTime.local().toFormat('yyyy-MM-dd_HH-mm-ss')}.${extension}`;
 }
 
 function ConvertDataToHtml(data) {
-
     let tableHTML = '<table id="ted_001">';
 
-    // Agregar encabezados de tabla
+    // Add table headers
     tableHTML += '<thead>';
     tableHTML += '<tr>';
-    Object.keys(data[0]).forEach(key => {
-        tableHTML += '<th>' + key + '</th>';
-    });
+    if (data.length > 0) {
+        Object.keys(data[0]).forEach((key) => {
+            tableHTML += '<th>' + key + '</th>';
+        });
+    }
     tableHTML += '</tr>';
     tableHTML += '</thead>';
 
-    // Agregar datos de tabla
+    // Add table data
     tableHTML += '<tbody>';
     data.forEach((row) => {
         tableHTML += '<tr>';
-        Object.values(row).forEach(value => {
+        Object.values(row).forEach((value) => {
             tableHTML += '<td>' + value + '</td>';
         });
         tableHTML += '</tr>';
@@ -81,113 +76,132 @@ function ConvertDataToHtml(data) {
     return tableHTML;
 }
 
+/**
+ * Formats data for export and checks if any cell exceeds the character limit.
+ * @param {Array} array_data 
+ * @param {Object} columns 
+ * @param {number} text_length_limit_in_cell 
+ * @returns {{data: Array, exceedsLimit: boolean}}
+ */
 function FormatDataToExport(array_data, columns, text_length_limit_in_cell = 0) {
-    return array_data.map((row) => {
-        let r = { ...row };
+    let exceedsLimit = false;
+    const excelLimit = 32767;
+
+    const data = array_data.map((row) => {
+        const newRow = {};
 
         Object.keys(row).forEach((key) => {
-            //         console.log('Export: ', key, columns[key]);
+            // Skip hidden columns
             if (columns[key] && columns[key].hidden) {
-                delete r[key];
-            } else if (
-                columns[key] &&
-                columns[key].decorator &&
-                columns[key].decorator.component &&
-                columns[key].decorator.component === DT
+                return;
+            }
+
+            const colConfig = columns[key];
+            let value = row[key];
+
+            // Handle DateTime columns
+            if (
+                colConfig &&
+                colConfig.decorator &&
+                colConfig.decorator.component &&
+                colConfig.decorator.component === DateTimeComponent
             ) {
-                //r[key] = new Date(row[key]).toISOString();
-                let dtluxon = DateTime.fromISO(row[key]);
-
-                if (dtluxon.isValid) {
-                    r[key] = dtluxon.toFormat('yyyy-MM-dd HH:mm:ss');
-                } else {
-                    r[key] = row[key];
-                }
-
-            } else if (row[key] !== null && typeof row[key] === 'object') {
-                //r[key] = JSON.stringify(row[key], null, 4);
-                r[key] = JSON.stringify(row[key]);
-
-                if (text_length_limit_in_cell > 0) {
-
-                    let caracteres = r[key].length;
-                    //32767 es el limite de caracteres por celda en un xlsx
-                    if (caracteres >= text_length_limit_in_cell) {
-                        r[key] = r[key].substring(0, text_length_limit_in_cell);
-                        console.warn(
-                            `El valor de la columna ${key} es muy largo para ser exportado, se ha limitado a ${text_length_limit_in_cell} caracteres`
-                        );
+                let dtLuxon = null;
+                if (value instanceof Date) {
+                    dtLuxon = DateTime.fromJSDate(value);
+                } else if (typeof value === 'string') {
+                    // Try ISO first
+                    dtLuxon = DateTime.fromISO(value);
+                    // If invalid and a format is provided, try that (though typically data is ISO or Date)
+                    if (!dtLuxon.isValid && colConfig.fromFormat) {
+                        dtLuxon = DateTime.fromFormat(value, colConfig.fromFormat);
                     }
-
                 }
 
+                if (dtLuxon && dtLuxon.isValid) {
+                    // Use column format if available, otherwise default
+                    const fmt = colConfig.format || 'yyyy-MM-dd HH:mm:ss';
+                    value = dtLuxon.toFormat(fmt);
+                }
+            }
+            // Handle Objects/Arrays
+            else if (value !== null && typeof value === 'object') {
+                value = JSON.stringify(value);
+            }
+
+            // Check character limit
+            if (typeof value === 'string') {
+                if (value.length > excelLimit) {
+                    console.warn(
+                        `El valor de la columna ${key} es muy largo para Excel (${value.length} chars).`
+                    );
+                    exceedsLimit = true;
+                }
+
+                if (text_length_limit_in_cell > 0 && value.length > text_length_limit_in_cell) {
+                    value = value.substring(0, text_length_limit_in_cell);
+                }
+            }
+
+            // Remove internal hash if present (though usually filtered out by key selection or just delete it)
+            if (key !== 'internal_hash_row') {
+                newRow[key] = value;
             }
         });
-        delete r.internal_hash_row;
-        return r;
+
+        return newRow;
     });
+
+    return { data, exceedsLimit };
 }
 
 export const ExportTableToXlsx = (filteredData, columns, fileNameExport) => {
-    //console.log(this);
     try {
-
-        // let filteredData = GetSelectedRows();
-        let ExceedsCharacterLimitPerCell = false;
-        let FormatedData = FormatDataToExport(filteredData, columns, 32767);
-        console.log('FormatedData', FormatedData, XLSX);
+        // limit for Excel cells is 32767 characters.
+        // We pass 0 (no truncation) to get full data, but FormatDataToExport checks excelLimit internally for the flag.
+        const { data: FormatedData, exceedsLimit } = FormatDataToExport(filteredData, columns, 0);
 
         if (FormatedData && FormatedData.length > 0) {
             /* Create a worksheet */
-            var ws = XLSX.utils.json_to_sheet(FormatedData);
+            const ws = XLSX.utils.json_to_sheet(FormatedData);
             /* Create a new empty workbook, then add the worksheet */
-            var wb = XLSX.utils.book_new();
+            const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
             let ExtensionFile = 'xlsx';
-            if (ExceedsCharacterLimitPerCell) {
+            if (exceedsLimit) {
                 ExtensionFile = 'csv';
+                console.warn('Data exceeds Excel cell limit, switching to CSV export to preserve full content.');
             }
 
-            let NameFile = FileName(fileNameExport, ExtensionFile);
-            var wopts = {
+            const NameFile = FileName(fileNameExport, ExtensionFile);
+            const wopts = {
                 bookType: ExtensionFile,
                 bookSST: false,
                 type: 'binary',
-                FS: ';'
+                FS: ';' // Semicolon for CSV separation (common in some locales, maybe make configurable?)
             };
             XLSX.writeFile(wb, NameFile, wopts);
         }
     } catch (error) {
         console.error(error);
     }
-}
+};
 
 export const ExportTableToHTML = (filteredData, columns, fileNameExport) => {
-    //console.log(this);
     try {
-
-        let FormatedData = FormatDataToExport(filteredData, columns);
-       // console.log('FormatedData', FormatedData);
-
-        let html_content = ConvertDataToHtml(FormatedData);
+        const { data: FormatedData } = FormatDataToExport(filteredData, columns);
+        const html_content = ConvertDataToHtml(FormatedData);
 
         const link_download = document.createElement('a');
         link_download.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(html_content));
         link_download.setAttribute('download', FileName(fileNameExport, 'html'));
 
-        // Ocultar el enlace de descarga
         link_download.style.display = 'none';
-
-        // Agregar el enlace de descarga al documento
         document.body.appendChild(link_download);
-
-        // Simular un clic en el enlace de descarga para iniciar la descarga
         link_download.click();
-
-        // Eliminar el enlace de descarga del documento
         document.body.removeChild(link_download);
-
     } catch (error) {
         console.error(error);
     }
-}
+};

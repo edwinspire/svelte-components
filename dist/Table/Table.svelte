@@ -312,20 +312,31 @@
 
 	function SortColumn(key, order = 'asc') {
 		return function innerSort(a, b) {
-			if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-				return 0;
+			const valA = a[key];
+			const valB = b[key];
+
+			// 1. Handle null/undefined (push to bottom)
+			const aNil = valA === null || valA === undefined;
+			const bNil = valB === null || valB === undefined;
+			if (aNil && bNil) return 0;
+			if (aNil) return order === 'asc' ? 1 : -1;
+			if (bNil) return order === 'asc' ? -1 : 1;
+
+			// 2. Handle Booleans (false < true)
+			if (typeof valA === 'boolean' && typeof valB === 'boolean') {
+				return order === 'asc' ? Number(valA) - Number(valB) : Number(valB) - Number(valA);
 			}
 
-			const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
-			const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key];
-
-			let comparison = 0;
-			if (varA > varB) {
-				comparison = 1;
-			} else if (varA < varB) {
-				comparison = -1;
+			// 3. Handle Strings
+			if (typeof valA === 'string' && typeof valB === 'string') {
+				const cmp = valA.localeCompare(valB, undefined, { sensitivity: 'base' });
+				return order === 'asc' ? cmp : -cmp;
 			}
-			return order === 'desc' ? comparison * -1 : comparison;
+
+			// 4. Default comparison (Numbers, etc)
+			if (valA > valB) return order === 'asc' ? 1 : -1;
+			if (valA < valB) return order === 'asc' ? -1 : 1;
+			return 0;
 		};
 	}
 
