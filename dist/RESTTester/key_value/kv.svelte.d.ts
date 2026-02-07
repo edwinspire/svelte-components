@@ -4,12 +4,12 @@ type Kv = {
     $set?(props: Partial<$$ComponentProps>): void;
 };
 declare const Kv: import("svelte").Component<{
-    data?: any;
+    data?: any[];
     onchange?: Function;
     enableFileType?: boolean;
 }, {}, "data">;
 type $$ComponentProps = {
-    data?: any;
+    data?: any[];
     onchange?: Function;
     enableFileType?: boolean;
 };

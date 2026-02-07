@@ -636,7 +636,7 @@
 	{/if}
 {/snippet}
 
-{#snippet t_selecttion_type()}
+{#snippet t_selection_type()}
 	{#if showSelectionButton}
 		<div class="dropdown is-hoverable is-right" title="Selection type">
 			<div class="dropdown-trigger">
@@ -761,7 +761,7 @@
 		t_new,
 		t_edit,
 		t_delete,
-		t_selecttion_type,
+		t_selection_type,
 		t_export_excel,
 		t_export_html,
 		t_search
@@ -1014,7 +1014,7 @@
 						</td>
 					{/if}
 
-					{#each Object.keys(dataRow) as item, itd}
+					{#each Object.keys(internal_columns) as item}
 						<!-- Muestra las columnas que no se hayan especificado como ocultas -->
 						{#if internal_columns[item]}
 							{#if !internal_columns[item].hidden || internal_columns[item].hidden == null}

@@ -25,16 +25,14 @@
 	} = $props();
 
 	let localDateTime = $derived.by(() => {
+		if (!value) return '';
 		return type == 'datetime-local'
 			? DateTime.fromISO(value, { zone: 'utc' }).toLocal().toFormat("yyyy-MM-dd'T'HH:mm")
 			: '';
 	});
 
-	function localDateTimeToUTC(localDateTime) {
-		return DateTime.fromFormat(localDateTime, "yyyy-MM-dd'T'HH:mm").toUTC().toISO();
-	}
-
 	let dateFormated = $derived.by(() => {
+		if (!value) return '';
 		return DateTime.fromISO(value, { zone: 'utc' }).toFormat('yyyy-MM-dd');
 	});
 </script>
@@ -88,9 +86,12 @@
 					{placeholder}
 					value={localDateTime}
 					onchange={(e) => {
-						//console.log(e, localDateTime);
-						value = localDateTimeToUTC(e.target.value);
-						console.log(value);
+						if (!e.target.value) {
+							value = null;
+						} else {
+							value = DateTime.fromFormat(e.target.value, "yyyy-MM-dd'T'HH:mm").toUTC().toISO();
+						}
+						onchange(e);
 					}}
 				/>
 			{:else if type == 'date'}
@@ -102,9 +103,12 @@
 					{placeholder}
 					value={dateFormated}
 					onchange={(e) => {
-						//	console.log(e, dateFormated);
-						value = localDateTimeToUTC(e.target.value);
-						//	console.log(value);
+						if (!e.target.value) {
+							value = null;
+						} else {
+							value = DateTime.fromFormat(e.target.value, 'yyyy-MM-dd', { zone: 'utc' }).toISO();
+						}
+						onchange(e);
 					}}
 				/>
 			{:else if type == 'number'}

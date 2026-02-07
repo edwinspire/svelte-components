@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import TJson from './TreeView .svelte';
+	import TJson from './TreeView.svelte';
 	import TBoolean from './Boolean.svelte';
 	let initialized = false;
 	//	let last_value;

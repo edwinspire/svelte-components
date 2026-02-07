@@ -31,7 +31,8 @@
 				json: {
 					code: {}
 				},
-				form: {}
+				form: [],
+				urlencoded: []
 			},
 			headers: [
 				{
@@ -49,7 +50,6 @@
 		onchange = () => {}
 	} = $props();
 
-	let uF = new uFetch();
 	let last_response = $state();
 	let time_responde = $state();
 	let response_as = $state('json');
@@ -155,19 +155,23 @@
 		}
 
 		if (data && data.body == null) {
-			data.body = { selection: 0 };
+			data.body = { selection: 0, urlencoded: [] };
 		}
 
 		if (data && data.body && data.body.selection == null) {
 			data.body.selection = 0;
 		}
 
+		if (data && data.body && data.body.urlencoded == null) {
+			data.body.urlencoded = [];
+		}
+
 		if (data && data.query == null) {
-			data.query = {};
+			data.query = [];
 		}
 
 		if (data && data.headers == null) {
-			data.headers = {};
+			data.headers = [];
 		}
 
 		if (!method) {
@@ -225,7 +229,7 @@
 		// Limpiar URL
 		setTimeout(() => {
 			URL.revokeObjectURL(blobUrl);
-		}, 100);
+		}, 5000);
 	}
 
 	// Función para descargar el archivo
@@ -414,10 +418,9 @@
 		//console.log('getDataBody > ', data.body);
 
 		switch (data.body.selection) {
-			case 0:
+			case 0: // JSON
 				try {
 					let jsoncode = data?.body?.json?.code ?? undefined;
-					//	console.log('jsoncode >> ', jsoncode);
 					if (typeof jsoncode == 'object') {
 						dataBody = jsoncode;
 					} else {
@@ -428,10 +431,24 @@
 					dataBody = {};
 				}
 				break;
-			case 3:
+			case 1: // XML
+				dataBody = data.body.xml?.code || '';
+				break;
+			case 2: // Text
+				dataBody = data.body.text?.value || '';
+				break;
+			case 3: // Form-Data
 				dataBody = createFormData(data.body.form);
 				break;
-
+			case 4: // Form-UrlEncoded
+				// Reuse logic from getDataQuery to get object {key:value}
+				const obj = getDataQuery(data.body.urlencoded);
+				const params = new URLSearchParams();
+				for (const key in obj) {
+					params.append(key, obj[key]);
+				}
+				dataBody = params;
+				break;
 			default:
 				dataBody = undefined;
 				break;
@@ -777,15 +794,16 @@
 						<button
 							class="button is-success is-small is-outlined"
 							onclick={async () => {
-								active_tab = 4;
+								active_tab = 4; // Switch to Result tab
 
 								if (!running) {
 									running = true;
 									let data_send = {};
 
-									//	console.log(last_response);
-									//	console.log('METHOD: ', method);
-									console.log('URL: ', url, data);
+									// Instantiate uFetch here to prevent Auth header leakage between requests
+									let uF = new uFetch();
+
+									//	console.log('URL: ', url, data);
 
 									if (url && url.length > 5) {
 										try {
@@ -800,7 +818,6 @@
 											} else if (method == 'POST' || method == 'PUT' || method == 'PATCH') {
 												// Pueden tener tanto query como body
 												// Preferir body en lugar de query
-												//console.log('>>>>>>>', data.body);
 												let bodyData = getDataBody();
 
 												if (bodyData) {
@@ -810,12 +827,9 @@
 												}
 											}
 
-											//console.log('>>>>>>>>>> ', typeof data_send, url, method);
 											resetResponse();
 											// Capturamos el tiempo inicial
 											let startTime = Date.now();
-
-											//let headers = {"access-control-expose-headers": "Content-Disposition", "access-control-allow-headers": "Authorization"}
 
 											if (
 												data.auth &&
@@ -823,7 +837,6 @@
 												data.auth.basic.username &&
 												data.auth.basic.password
 											) {
-												console.log(data.auth);
 												uF.SetBasicAuthorization(
 													data.auth.basic.username,
 													data.auth.basic.password
@@ -831,7 +844,6 @@
 											}
 
 											if (data.auth && data.auth.selection == 2 && data.auth.bearer.token) {
-												//console.log(data.auth);
 												uF.setBearerAuthorization(data.auth.bearer.token);
 											}
 
@@ -846,8 +858,6 @@
 
 											// Calculamos la diferencia en milisegundos
 											time_responde = endTime - startTime;
-
-											// TODO: probar cuando el dato es text pero en el editor se usa JSON, hay una excepción que no está controlada y el editor deja de funcionat
 
 											if (last_response.ok) {
 												// Obtener headers importantes
@@ -869,24 +879,20 @@
 													? `result_${currentDateFormated()}_${fileNameMatch[1].replace(/['"]/g, '')}.${data_result.fileExtension[0]}`
 													: `result_${currentDateFormated()}.${data_result.fileExtension[0]}`;
 
-												//console.log('DATA RESULT:', data_result);
 												// Clasificar tipo de contenido
 												const ctype = classifyContent(data_result.contentType);
 
 												if (ctype === 'json') {
-													// Manejo de JSON (tu lógica original)
 													data_result.data = await last_response.json();
 													if (!data_result.sizeKBResponse) {
 														data_result.sizeKBResponse = getSizeJSON(data_result.data);
 													}
 												} else if (ctype === 'text') {
-													// Para texto plano, HTML, etc.
 													data_result.data = await last_response.text();
 													if (!data_result.sizeKBResponse) {
 														data_result.sizeKBResponse = getSizeString(data_result.data);
 													}
 												} else if (ctype === 'image' || ctype === 'bin') {
-													// Mostrar imagen inline
 													data_result.data = await last_response.blob();
 													if (!data_result.sizeKBResponse) {
 														data_result.sizeKBResponse = getResponseSizeInKB(
@@ -894,7 +900,6 @@
 														);
 													}
 												} else if (ctype === 'pdf') {
-													// Mostrar PDF inline o crear botón de descarga
 													data_result.data = await last_response.blob();
 													if (!data_result.sizeKBResponse) {
 														data_result.sizeKBResponse = getResponseSizeInKB(
@@ -902,7 +907,6 @@
 														);
 													}
 												} else {
-													// Fallback: descargar como binario
 													data_result.data = await last_response.blob();
 													if (!data_result.sizeKBResponse) {
 														data_result.sizeKBResponse = getResponseSizeInKB(
@@ -914,16 +918,17 @@
 										} catch (error) {
 											running = false;
 											console.error(error);
-											data_result.error = error;
-											alert(error);
+											data_result.error = error.message || error;
+											// alert(error); // Removed alert
 										}
 									} else {
-										alert('Url is empty');
+										// alert('Url is empty'); // Removed alert
+										data_result.error = 'URL is empty';
 									}
 
 									running = false;
 								} else {
-									alert('There is an execution in progress');
+									// alert('There is an execution in progress'); // Removed alert
 								}
 							}}
 						>

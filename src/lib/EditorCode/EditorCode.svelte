@@ -237,6 +237,9 @@
 
 	// Reactividad: si cambian propiedades claves, reconfigurar editor o actualizar contenido
 	$: if (initialized) {
+		// Dependencias explícitas
+		lang;
+		isReadOnly;
 		reconfigureExtensions();
 	}
 
@@ -316,12 +319,12 @@
 	// API pública (exported functions)
 	// -----------------------
 	export function setCode(newCode) {
-		alert('EditorCode setCode');
+		// alert('EditorCode setCode');
 		code = newCode;
 	}
 
 	export function getCode() {
-		alert('EditorCode getCode');
+		// alert('EditorCode getCode');
 		try {
 			if (!editorView) return code;
 			const text = editorView.state.doc.toString();
@@ -346,7 +349,7 @@
 </script>
 
 {#snippet r01()}
-	<span class="field has-addons">
+	<div class="field has-addons">
 		{#if showSelectLang}
 			<p class="control">
 				<button disabled={isReadOnly} class="button is-static is-small"> Lang </button>
@@ -417,9 +420,9 @@
 				</button>
 			</p>
 		{/if}
-	</span>
+	</div>
 
-	<span class="field has-addons">
+	<div class="field has-addons">
 		{#if showResetButton}
 			<p class="control">
 				<button
@@ -455,7 +458,7 @@
 				</button>
 			</p>
 		{/if}
-	</span>
+	</div>
 {/snippet}
 
 <Level left={[left]} right={[right, r01]}></Level>
