@@ -10,7 +10,8 @@
 			json: { code: {} },
 			xml: { code: '' },
 			text: {},
-			form: {}
+			form: [],
+			urlencoded: []
 		}),
 		onchange = () => {}
 	} = $props();
@@ -23,10 +24,10 @@
 
 	let tabList = $state([
 		{ label: 'JSON', component: tab_json },
-		{ label: 'XML', disabled: true, component: tab_xml },
-		{ label: 'Text', disabled: true, component: tab_text },
+		{ label: 'XML', disabled: false, component: tab_xml },
+		{ label: 'Text', disabled: false, component: tab_text },
 		{ label: 'Form', disabled: false, component: tab_form },
-		{ label: 'Form-Encode', disabled: true, component: tab_form_encode },
+		{ label: 'Form-Encode', disabled: false, component: tab_form_encode },
 		{ label: 'Binary', disabled: true, component: tab_binary }
 	]);
 
@@ -82,7 +83,11 @@
 		}
 
 		if (data && data.form == null) {
-			data.form = {};
+			data.form = [];
+		}
+
+		if (data && data.urlencoded == null) {
+			data.urlencoded = [];
 		}
 
 		//console.log('defaultValues >> BODY =>', $state.snapshot(data));
@@ -185,7 +190,12 @@
 {#snippet tab_form_encode()}
 	{#if data}
 		<div>
-			<KeyValue></KeyValue>
+			<KeyValue
+				bind:data={data.urlencoded}
+				onchange={() => {
+					internalOnChange();
+				}}
+			></KeyValue>
 		</div>
 	{/if}
 {/snippet}
