@@ -188,7 +188,7 @@
 {/snippet}
 
 {#snippet tab_form_encode()}
-	{#if data}
+	{#if data && data.urlencoded}
 		<div>
 			<KeyValue
 				bind:data={data.urlencoded}
@@ -201,7 +201,7 @@
 {/snippet}
 
 {#snippet tab_form()}
-	{#if data}
+	{#if data && data.form}
 		<svelte:boundary onerror={(e) => console.error(e)}>
 			<KeyValue
 				enableFileType={true}
