@@ -1,6 +1,6 @@
 {
   "name": "@edwinspire/svelte-components",
-  "version": "1.2.53",
+  "version": "1.2.55",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",

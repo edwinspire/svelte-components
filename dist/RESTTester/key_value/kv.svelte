@@ -70,7 +70,7 @@
 		}
 	}
 
-	let keyInputs = [];
+	let keyInputs = $state([]);
 
 	async function handleKeydownLast(e, index) {
 		if (e.key === 'Tab' && !e.shiftKey && index === data.length - 1) {
@@ -130,7 +130,7 @@
 <Level right={[add_item]}></Level>
 
 {#if Array.isArray(data)}
-	{#each data as item, index (item._id)}
+	{#each data as item, index (item._id || index)}
 		<div class="field has-addons">
 			<p class="control">
 				<!-- Enable/Disable Button -->
