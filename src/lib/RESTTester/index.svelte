@@ -720,13 +720,19 @@
 				<JSONView bind:jsonObject={data_result.data}></JSONView>
 			{:else if response_as == 'json' && data_result.fileExtension == 'json' && data_result.data}
 				<JSONView bind:jsonObject={data_result.data}></JSONView>
-			{:else if response_as == 'text' && data_result.fileExtension == 'text' && data_result.data}
+			{:else if response_as == 'text' && data_result.fileExtension == 'txt' && data_result.data}
 				<code>
 					{data_result.data}
 				</code>
 			{:else if response_as == 'datatable' && data_result.data && Array.isArray(data_result.data)}
 				<Table bind:RawDataTable={data_result.data}></Table>
 			{/if}
+		{/if}
+
+		{#if data_result.error}
+			<div class="notification is-danger">
+				{data_result.error}
+			</div>
 		{/if}
 	</div>
 {/snippet}
@@ -858,10 +864,10 @@
 
 											// Calculamos la diferencia en milisegundos
 											time_responde = endTime - startTime;
-
+											data_result.contentType = last_response.headers.get('Content-Type') || '';
+											//alert(last_response.ok);
 											if (last_response.ok) {
 												// Obtener headers importantes
-												data_result.contentType = last_response.headers.get('Content-Type') || '';
 												const contentDisposition =
 													last_response.headers.get('Content-Disposition') || '';
 												data_result.sizeKBResponse =
@@ -878,46 +884,46 @@
 												data_result.fileName = fileNameMatch
 													? `result_${currentDateFormated()}_${fileNameMatch[1].replace(/['"]/g, '')}.${data_result.fileExtension[0]}`
 													: `result_${currentDateFormated()}.${data_result.fileExtension[0]}`;
+											}
 
-												// Clasificar tipo de contenido
-												const ctype = classifyContent(data_result.contentType);
+											// Clasificar tipo de contenido
+											const ctype = classifyContent(data_result.contentType);
 
-												if (ctype === 'json') {
-													data_result.data = await last_response.json();
-													if (!data_result.sizeKBResponse) {
-														data_result.sizeKBResponse = getSizeJSON(data_result.data);
-													}
-												} else if (ctype === 'text') {
-													data_result.data = await last_response.text();
-													if (!data_result.sizeKBResponse) {
-														data_result.sizeKBResponse = getSizeString(data_result.data);
-													}
-												} else if (ctype === 'image' || ctype === 'bin') {
-													data_result.data = await last_response.blob();
-													if (!data_result.sizeKBResponse) {
-														data_result.sizeKBResponse = getResponseSizeInKB(
-															String(data_result.data.size)
-														);
-													}
-												} else if (ctype === 'pdf') {
-													data_result.data = await last_response.blob();
-													if (!data_result.sizeKBResponse) {
-														data_result.sizeKBResponse = getResponseSizeInKB(
-															String(data_result.data.size)
-														);
-													}
-												} else {
-													data_result.data = await last_response.blob();
-													if (!data_result.sizeKBResponse) {
-														data_result.sizeKBResponse = getResponseSizeInKB(
-															String(data_result.data.size)
-														);
-													}
+											if (ctype === 'json') {
+												data_result.data = await last_response.json();
+												if (last_response.ok && !data_result.sizeKBResponse) {
+													data_result.sizeKBResponse = getSizeJSON(data_result.data);
+												}
+											} else if (ctype === 'text') {
+												data_result.data = await last_response.text();
+												if (last_response.ok && !data_result.sizeKBResponse) {
+													data_result.sizeKBResponse = getSizeString(data_result.data);
+												}
+											} else if (ctype === 'image' || ctype === 'bin') {
+												data_result.data = await last_response.blob();
+												if (last_response.ok && !data_result.sizeKBResponse) {
+													data_result.sizeKBResponse = getResponseSizeInKB(
+														String(data_result.data.size)
+													);
+												}
+											} else if (ctype === 'pdf') {
+												data_result.data = await last_response.blob();
+												if (last_response.ok && !data_result.sizeKBResponse) {
+													data_result.sizeKBResponse = getResponseSizeInKB(
+														String(data_result.data.size)
+													);
+												}
+											} else {
+												data_result.data = await last_response.blob();
+												if (last_response.ok && !data_result.sizeKBResponse) {
+													data_result.sizeKBResponse = getResponseSizeInKB(
+														String(data_result.data.size)
+													);
 												}
 											}
 										} catch (error) {
 											running = false;
-											console.error(error);
+											//console.error(error);
 											data_result.error = error.message || error;
 											// alert(error); // Removed alert
 										}
