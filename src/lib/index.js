@@ -19,6 +19,7 @@ import MenuMega from './MenuMega/index.svelte';
 import Modal from './Modal/Modal.svelte';
 import Notify from './Notifications/index.svelte';
 import FileUpload from './FileUpload/index.svelte';
+import TextArea from './TextArea/index.svelte';
 import { storeChangedTables, WebSocketClient } from './class/websocket.js';
 import { sha256 } from './class/sha.js';
 import { Notifications } from './class/utils.js';
@@ -32,7 +33,7 @@ import AppBase from '$lib/App/index.svelte';
 //import  Chat  from '$lib/Chat/index.svelte';
 
 //import { storeChangedTables, storeChangedTablesUpdate }  from "./Table/storeChangedTables.js";
-const ChartWidgets = {Base: ChartBase, TimeSeries: ChartTimeSeries};
+const ChartWidgets = { Base: ChartBase, TimeSeries: ChartTimeSeries };
 
 export {
 	Table,
@@ -58,6 +59,7 @@ export {
 	FileUpload,
 	EditorContent,
 	Input,
+	TextArea,
 	MenuSide,
 	MarkdownViewer,
 	OpenFusionWebsocketClient, ChartWidgets as Chart, AppBase
