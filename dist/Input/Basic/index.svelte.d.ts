@@ -4,7 +4,7 @@ type Index = {
     $set?(props: Partial<$$ComponentProps>): void;
 };
 declare const Index: import("svelte").Component<{
-    placeholder?: any;
+    placeholder?: string;
     type?: string;
     label?: any;
     value?: any;
@@ -23,9 +23,9 @@ declare const Index: import("svelte").Component<{
     showUploadButton?: boolean;
     pattern?: any;
     required?: boolean;
-}, {}, "value" | "type" | "min" | "max" | "label" | "placeholder" | "accept" | "showUploadButton" | "sizeClass" | "labelClass" | "step" | "isExpanded" | "pattern" | "required">;
+} & Record<string, any>, {}, "value" | "type" | "min" | "max" | "label" | "placeholder" | "accept" | "showUploadButton" | "sizeClass" | "labelClass" | "step" | "isExpanded" | "pattern" | "required">;
 type $$ComponentProps = {
-    placeholder?: any;
+    placeholder?: string;
     type?: string;
     label?: any;
     value?: any;
@@ -44,4 +44,4 @@ type $$ComponentProps = {
     showUploadButton?: boolean;
     pattern?: any;
     required?: boolean;
-};
+} & Record<string, any>;

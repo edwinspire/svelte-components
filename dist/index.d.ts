@@ -21,6 +21,7 @@ import { Notifications } from './class/utils.js';
 import FileUpload from './FileUpload/index.svelte';
 import EditorContent from './EditorContent/index.svelte';
 import Input from './Input/Basic/index.svelte';
+import TextArea from './TextArea/index.svelte';
 import MenuSide from './MenuSide/index.svelte';
 import MarkdownViewer from './Markdown/Viewer/index.svelte';
 import { OpenFusionWebsocketClient } from './WebSocketClient.js';
@@ -31,4 +32,4 @@ declare namespace ChartWidgets {
 import AppBase from './App/index.svelte';
 import ChartBase from './Chart/index.svelte';
 import ChartTimeSeries from './Chart/TimeSeries/index.svelte';
-export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega, Modal, Notify, Notifications, FileUpload, EditorContent, Input, MenuSide, MarkdownViewer, OpenFusionWebsocketClient, ChartWidgets as Chart, AppBase };
+export { Table, types as ColumnTypes, DialogModal, storeChangedTables, WebSocketClient, Predictive as PredictiveInput, Level, Tab, Menu, SlideFullScreen, BasicSelect, EditorCode, sha256, RESTTester, JSONView, copyTextToClipboard, MenuMega, Modal, Notify, Notifications, FileUpload, EditorContent, Input, TextArea, MenuSide, MarkdownViewer, OpenFusionWebsocketClient, ChartWidgets as Chart, AppBase };

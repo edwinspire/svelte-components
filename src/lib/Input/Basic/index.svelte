@@ -3,11 +3,15 @@
 	import { DateTime } from 'luxon';
 
 	let {
+		placeholder = $bindable(''),
 		type = $bindable('text'),
 		label = $bindable(),
 		value = $bindable(),
 		sizeClass = $bindable('is-small'),
 		labelClass = $bindable(''),
+		min = $bindable(),
+		max = $bindable(),
+		step = $bindable(),
 		isExpanded = $bindable(true),
 		accept = $bindable('.json'),
 		url = 'http://localhost:3000/upload',
@@ -16,13 +20,15 @@
 		onupload = () => {},
 		onchange = () => {},
 		showUploadButton = $bindable(true),
+		pattern = $bindable(),
+		required = $bindable(false),
 		...rest
 	} = $props();
 
-	// Generate a unique ID for accessibility
+	// Generate a stable unique ID for accessibility if not provided
 	const id = rest.id || `input-${Math.random().toString(36).substring(2, 9)}`;
 
-	// Common classes for input elements
+	// Common classes for input elements, merging sizeClass and any user-provided class
 	let inputClass = $derived(`input ${sizeClass} ${rest.class || ''}`);
 
 	let localDateTime = $derived.by(() => {
@@ -62,9 +68,10 @@
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<a
 					class="button {sizeClass} {value ? 'is-success' : ''}"
-					onclick={() => {
+					onclick={(e) => {
 						value = !value;
 						onchange(value);
+						if (rest.onclick) rest.onclick(e);
 					}}
 					{...rest}
 					><span class="icon-text">
@@ -82,6 +89,8 @@
 					{id}
 					class={inputClass}
 					type="datetime-local"
+					{placeholder}
+					{required}
 					{...rest}
 					value={localDateTime}
 					onchange={(e) => {
@@ -91,6 +100,7 @@
 							value = DateTime.fromFormat(e.target.value, "yyyy-MM-dd'T'HH:mm").toUTC().toISO();
 						}
 						onchange(e);
+						if (rest.onchange) rest.onchange(e);
 					}}
 				/>
 			{:else if type == 'date'}
@@ -98,6 +108,8 @@
 					{id}
 					class={inputClass}
 					type="date"
+					{placeholder}
+					{required}
 					{...rest}
 					value={dateFormated}
 					onchange={(e) => {
@@ -107,23 +119,47 @@
 							value = DateTime.fromFormat(e.target.value, 'yyyy-MM-dd', { zone: 'utc' }).toISO();
 						}
 						onchange(e);
+						if (rest.onchange) rest.onchange(e);
 					}}
 				/>
 			{:else if type == 'number'}
-				<input {id} class={inputClass} type="number" bind:value {...rest} {onchange} />
+				<input
+					{id}
+					class={inputClass}
+					type="number"
+					bind:value
+					{min}
+					{max}
+					{step}
+					{placeholder}
+					{required}
+					{...rest}
+					{onchange}
+				/>
 			{:else if type == 'boolean'}
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<a
 					class="button {sizeClass} {value ? 'is-success' : 'is-danger'}"
-					onclick={() => {
+					onclick={(e) => {
 						value = !value;
 						onchange(value);
+						if (rest.onclick) rest.onclick(e);
 					}}
 					{...rest}>{value}</a
 				>
 			{:else}
-				<input {id} class={inputClass} {type} bind:value {...rest} {onchange} />
+				<input
+					{id}
+					class={inputClass}
+					{type}
+					bind:value
+					{placeholder}
+					{required}
+					{pattern}
+					{...rest}
+					{onchange}
+				/>
 			{/if}
 		</p>
 	</div>
