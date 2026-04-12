@@ -843,7 +843,7 @@
 												data.auth.basic.username &&
 												data.auth.basic.password
 											) {
-												uF.SetBasicAuthorization(
+												uF.setBasicAuthorization(
 													data.auth.basic.username,
 													data.auth.basic.password
 												);
@@ -853,7 +853,8 @@
 												uF.setBearerAuthorization(data.auth.bearer.token);
 											}
 
-											last_response = await uF[method]({
+											let req_method = method ? String(method).toLowerCase() : 'get';
+											last_response = await uF[req_method]({
 												url: url,
 												data: data_send,
 												headers: getDataHeaders(data.headers)

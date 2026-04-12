@@ -1,4 +1,17 @@
 <script>
+	/**
+	 * Represents the properties available for the custom TextArea component.
+	 * 
+	 * @typedef {Object} TextAreaProps
+	 * @property {string} [value=''] - Bound active text string content inside the text area.
+	 * @property {string|null} [label] - Optional descriptive label rendered as a static add-on style above the text field.
+	 * @property {string} [sizeClass='is-small'] - The size modifier class for Bulma styling (e.g. 'is-small', 'is-normal').
+	 * @property {boolean} [isExpanded=true] - Allows the textarea width to stretch natively inside flex/flow containers.
+	 * @property {string} [placeholder] - Text that appears when the textarea is empty.
+	 * @property {number} [rows=3] - Initial height in number of text rows.
+	 */
+
+	/** @type {TextAreaProps & Record<string, any>} */
 	let {
 		value = $bindable(''),
 		label = $bindable(),

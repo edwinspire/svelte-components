@@ -12,6 +12,41 @@
 	//TODO Hacer celdas editables - Parcialmente implementado
 	//TODO Hacer columnas con ancho ajustable
 
+	/**
+	 * Configurable properties for the advanced data Table component.
+	 * Supports auto-refresh, pagination, searching, CRUD actions, and server-side fetching.
+	 * 
+	 * @typedef {Object} TableProps
+	 * @property {Array<Object>} [RawDataTable] - The local array of data objects to be rendered. Updated automatically if server polling is active.
+	 * @property {number} [selectionType=0] - Defines table selection mode: 0 (None), 1 (Single), 2 (Multiple).
+	 * @property {Object} [columns={}] - Configuration object defining columns behavior (hidden, sorting, layout, labels).
+	 * @property {boolean} [showNewButton=false] - Whether to render a 'New' row button in the top action bar.
+	 * @property {boolean} [showEditButton=false] - Whether to render an 'Edit' button in the action bar.
+	 * @property {boolean} [showEditRow=false] - Toggles whether inline row editing is active.
+	 * @property {boolean} [showSelectionButton=true] - Visibility toggle for the row selection mode dropdown.
+	 * @property {boolean} [showExportButton=true] - Visibility toggle for Export HTML/Excel buttons.
+	 * @property {string} [iconExport='fa-solid fa-file-excel'] - FontAwesome class for the 'Export to Excel' icon.
+	 * @property {string} [iconDeleteRow='fa-solid fa-trash'] - FontAwesome class for the 'Delete row' icon.
+	 * @property {boolean} [showDeleteButton=false] - Visibility toggle for the row deletion button.
+	 * @property {Array<number>} [pageSize=[25, 50, 100, 200, 300, 500, 1000]] - Allowable rows-per-page options.
+	 * @property {number} [pageSizeSelected=0] - The currently selected index inside the `pageSize` array.
+	 * @property {Array<string>} [relatedTablesForAutoRefresh=[]] - Names of DB tables tracked over WebSocket to trigger auto-refresh natively.
+	 * @property {string} [fileNameExport=''] - The filename string for outputted Excel/HTML files.
+	 * @property {Object} [requestData] - Defines how to fetch server-side data (url, refresh_time, params, method, headers, auth configurations).
+	 * @property {function} [rowClassFunction] - Dynamic row styling function logic, yielding a CSS class.
+	 * @property {Array<import('svelte').Snippet>} [left_items=[]] - Optional custom snippets injected on the left side of the top action Bar.
+	 * @property {Array<import('svelte').Snippet>} [right_items=[]] - Optional custom snippets injected on the right side of the action bar.
+	 * @property {function} [onclickrow] - Event triggered when standard single row is left clicked.
+	 * @property {function} [oneditrow] - Event triggered specifically on row editing.
+	 * @property {function} [onnewrow] - Event triggered when 'New' action button clicked.
+	 * @property {function} [onsearch] - Triggered alongside text-based searching algorithm.
+	 * @property {function} [ondeleterow] - Event triggered indicating selected rows should be removed.
+	 * @property {function} [onselectrows] - Event dispatch array providing all active checked rows.
+	 * @property {function} [onclickcell] - Cell-level mouse event bindings.
+	 * @property {function} [onchangecell] - Fired when data in an inline cell input morphs.
+	 */
+
+	/** @type {TableProps & Record<string, any>} */
 	let {
 		RawDataTable = $bindable(),
 		selectionType = $bindable(0),
@@ -530,16 +565,16 @@
 					if (requestData.authorization && requestData.authorization.bearer) {
 						FetchData.setBearerAuthorization(requestData.authorization.bearer);
 					} else if (requestData.authorization && requestData.authorization.basic) {
-						FetchData.SetBasicAuthentication(
+						FetchData.setBasicAuthorization(
 							requestData.authorization.basic.username,
 							requestData.authorization.basic.password
 						);
 					} else {
-						FetchData.ClearAuthorizationHeader();
+						FetchData.clearAuthorizationHeader();
 					}
 
 					let method_request =
-						requestData && requestData.method ? requestData.method.toUpperCase() : 'GET';
+						requestData && requestData.method ? requestData.method.toLowerCase() : 'get';
 
 					//		console.log(method_request);
 

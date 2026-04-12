@@ -1,6 +1,6 @@
 {
   "name": "@edwinspire/svelte-components",
-  "version": "1.2.58",
+  "version": "1.2.59",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
@@ -91,8 +91,8 @@
     "@editorjs/quote": "^2.7.6",
     "@editorjs/table": "^2.4.4",
     "@edwinspire/universal-fetch": "https://github.com/edwinspire/universal-fetch.git",
-    "@fortawesome/fontawesome-free": "^6.4.0",
-    "bulma": "^1.0.1",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "bulma": "^1.0.4",
     "codemirror": "^6.0.1",
     "events": "^3.3.0",
     "luxon": "^2.0.2",

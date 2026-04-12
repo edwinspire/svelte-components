@@ -1,5 +1,17 @@
 <script>
 	//import { createEventDispatcher } from 'svelte';
+	/**
+	 * Represents the properties available for the Tab component.
+	 * 
+	 * @typedef {Object} TabProps
+	 * @property {string} [classSize='is-small'] - The Bulma size class for the tabs (e.g., 'is-small', 'is-medium', 'is-large').
+	 * @property {function(Object): void} [onselect] - Event callback fired when a tab is clicked. Receives an object with tab details.
+	 * @property {Array<{label: string, classIcon?: string, disabled?: boolean, component?: import('svelte').Snippet, alias?: string}>} [tabs] - Definition array for rendering the tabs. 
+	 * @property {number} [active=0] - The index of the currently active/selected tab.
+	 * @property {import('svelte').Snippet} [children] - Optional snippet rendered at the bottom of the active tab.
+	 */
+
+	/** @type {TabProps & Record<string, any>} */
 	let {
 		classSize = $bindable('is-small'),
 		onselect = (e) => {},

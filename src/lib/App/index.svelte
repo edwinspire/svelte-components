@@ -2,6 +2,20 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Level, MenuSide, Notify } from '$lib/index.js';
 
+	/**
+	 * Main wrapper component for the Application layout.
+	 * Provides a responsive Sidebar, dynamic Top Nav, and a Main Content area.
+	 * 
+	 * @typedef {Object} AppBaseProps
+	 * @property {string} [logoText='LOGO TEXT'] - The text displayed on the sidebar logo.
+	 * @property {import('svelte').Snippet} [logoIcon] - A snippet providing the icon for the logo.
+	 * @property {Array<any>} [topRightNavBar=[]] - Elements to display on the top-right corner of the navigation bar.
+	 * @property {Array<any>} [topLeftNavBar=[]] - Elements to display on the top-left corner beside the sidebar toggle.
+	 * @property {import('svelte').Snippet} [children] - The main application content.
+	 * @property {Array<any>} [menu=[]] - Array definition defining the sidebar's Menu widget items.
+	 */
+
+	/** @type {AppBaseProps & Record<string, any>} */
 	let {
 		logoText = $bindable('LOGO TEXT'),
 		logoIcon = $bindable(iconFallback),

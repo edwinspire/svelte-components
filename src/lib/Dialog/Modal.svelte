@@ -1,5 +1,19 @@
 <script>
 	import Modal from '../Modal/Modal.svelte';
+	/**
+	 * Represents the configurable properties for the Dialog Modal component.
+	 * 
+	 * @typedef {Object} DialogModalProps
+	 * @property {boolean} [show=false] - Boolean state to control whether the dialog is open or strictly hidden.
+	 * @property {import('svelte').Snippet} [title] - Svelte snippet used to render the card's top header/title text.
+	 * @property {function(Event): void} [oncancel] - Function executed when the 'x' button or 'CANCEL' button is clicked.
+	 * @property {function(Event): void} [onaccept] - Function executed when the 'ACCEPT' button is clicked.
+	 * @property {import('svelte').Snippet} [body] - Svelte snippet used to render the main body logic and text.
+	 * @property {string} [label_accept='ACCEPT'] - Text label shown on the primary accept button.
+	 * @property {string} [label_cancel='CANCEL'] - Text label shown on the secondary cancel button.
+	 */
+
+	/** @type {DialogModalProps & Record<string, any>} */
 	let {
 		show = $bindable(false),
 		title,
