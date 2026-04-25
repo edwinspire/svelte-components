@@ -1,22 +1,39 @@
 <script>
 	import { onMount } from 'svelte';
 
+	/**
+	 * @typedef {Object} Option
+	 * @property {string} name - El texto visible de la opción en el menú.
+	 * @property {any} value - El valor interno que se asignará al seleccionar la opción.
+	 */
+
 	let {
+		/** @type {Option[]} options - Lista de opciones disponibles para el autocompletado. */
 		options = [
 			{ name: 'Manzana', value: '1' },
 			{ name: 'Durazno', value: '2' },
 			{ name: 'Pera', value: 'pera' },
 			{ name: 'Kiwi', value: '34' }
 		],
+		/** @type {string} label - Etiqueta a mostrar junto al campo de entrada. */
 		label = $bindable('SELECT'),
+		/** @type {any} selectedValue - Valor actualmente seleccionado. Es bindable. */
 		selectedValue = $bindable(null),
+		/** @type {string} classLabel - Clases CSS adicionales para la etiqueta. */
 		classLabel = $bindable('is-small'),
+		/** @type {string} classInput - Clases CSS adicionales para el campo de texto. */
 		classInput = $bindable('is-small'),
+		/** @type {string} placeholder - Texto de marcador de posición para el campo de texto. */
 		placeholder = $bindable(''),
+		/** @type {string} classIcon - Clases CSS para el icono del botón desplegable. Si está vacío, se calcula automáticamente. */
 		classIcon = $bindable(''),
+		/** @type {string} classOnSucess - Clase CSS a aplicar cuando hay un valor válido seleccionado. */
 		classOnSucess = $bindable('is-success'),
+		/** @type {string} classOnError - Clase CSS a aplicar cuando no hay un valor válido (a menos que freeTyping sea true). */
 		classOnError = $bindable('is-danger fa-beat-fade'),
+		/** @type {boolean} freeTyping - Permite ingresar texto libre que no esté en la lista de opciones. */
 		freeTyping = $bindable(false),
+		/** @type {function(Option): void} onselect - Función callback que se ejecuta al seleccionar una opción. */
 		onselect = () => {}
 	} = $props();
 
@@ -81,6 +98,13 @@
 		}, 200);
 	}
 
+	function handleFocusOut(event) {
+		if (event.currentTarget.contains(event.relatedTarget)) {
+			return;
+		}
+		blurHandler();
+	}
+
 	function handleFocus() {
 		showDropdown = true;
 	}
@@ -119,14 +143,13 @@
 			</span>
 		</p>
 	{/if}
-	<div class="control is-expanded">
+	<div class="control is-expanded" onfocusout={handleFocusOut}>
 		<input
 			class="input {classInput} is-outlined"
 			type="text"
 			bind:value={inputValue}
 			oninput={handleInput}
 			onfocus={handleFocus}
-			onblur={blurHandler}
 			placeholder={placeholderInternal}
 		/>
 
