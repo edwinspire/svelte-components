@@ -7,6 +7,7 @@
 		multiple = false,
 		onselect = () => {},
 		onupload = () => {},
+		onchange = () => {},
 		showUploadButton = $bindable(true),
 		sizeClass=$bindable('is-small')
 	} = $props();
@@ -72,6 +73,7 @@
 				statusSend = 0;
 				selectedFiles = event.target.files; // Obten el primer archivo seleccionado
 				onselect({ files: selectedFiles, FormData: createFormData() });
+				onchange(event);
 			}}
 		/>
 	</p>

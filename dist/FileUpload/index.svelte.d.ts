@@ -12,6 +12,7 @@ declare const Index: import("svelte").Component<{
     multiple?: boolean;
     onselect?: Function;
     onupload?: Function;
+    onchange?: Function;
     showUploadButton?: boolean;
     sizeClass?: string;
 }, {
@@ -24,6 +25,7 @@ type $$ComponentProps = {
     multiple?: boolean;
     onselect?: Function;
     onupload?: Function;
+    onchange?: Function;
     showUploadButton?: boolean;
     sizeClass?: string;
 };
