@@ -146,7 +146,7 @@
 
 <!-- Sidebar -->
 <aside
-	class="sidebar menu box"
+	class="sidebar menu"
 	class:icons-only={sidebarState === 'icons-only'}
 	class:hidden={sidebarState === 'hidden'}
 	class:active={sidebarActive}
@@ -179,11 +179,7 @@
 		box-sizing: border-box;
 	}
 
-	:global(:root) {
-		--sidebar-width: 250px;
-		--sidebar-width-icons: 55px;
-		--topbar-height: 70px;
-	}
+
 
 	/* Overlay para móvil */
 	.overlay {
@@ -207,7 +203,8 @@
 
 	.submenu_arrow {
 		position: absolute;
-		right: 1em;
+		right: 1.5em;
+		transition: transform 0.2s ease;
 	}
 	/* Sidebar */
 	.sidebar {
@@ -217,10 +214,12 @@
 		height: 100vh;
 		width: var(--sidebar-width);
 		background: var(--sidebar-bg);
-		transition: all 0.3s ease;
-		z-index: 39;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		z-index: 40;
 		overflow-y: auto;
 		overflow-x: hidden;
+		border-radius: 0;
+		box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.05);
 	}
 
 	/* Sidebar Icons-Only State */
@@ -283,8 +282,11 @@
 	}
 
 	.sidebar-header {
-		padding: 15px;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+		height: var(--topbar-height);
+		display: flex;
+		align-items: center;
+		padding: 0 20px;
+		border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.05));
 	}
 
 	.sidebar-logo {

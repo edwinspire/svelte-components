@@ -40,19 +40,20 @@
 
 	let element_top_nav;
 	let dimensions_top_nav = $state({ width: 0, height: 60 });
-	let resizeObserver;
+	let cleanupResize;
 
 	onMount(() => {
+		let resizeObserver;
 		if ('ResizeObserver' in window && element_top_nav) {
 			resizeObserver = new ResizeObserver((entries) => {
 				for (let entry of entries) {
 					const { width, height } = entry.contentRect;
 					dimensions_top_nav = { width: Math.round(width), height: Math.round(height) };
 				}
-			//	console.log(dimensions_top_nav);
 			});
 
 			resizeObserver.observe(element_top_nav);
+			cleanupResize = () => resizeObserver.disconnect();
 		} else {
 			// Fallback para navegadores antiguos
 			const updatedimensions_top_nav = () => {
@@ -67,17 +68,17 @@
 			window.addEventListener('resize', updatedimensions_top_nav);
 			updatedimensions_top_nav();
 
-			onDestroy(() => {
-				window.removeEventListener('resize', updatedimensions_top_nav);
-			});
+			cleanupResize = () => window.removeEventListener('resize', updatedimensions_top_nav);
 		}
 	});
 
 	onDestroy(() => {
-		if (resizeObserver) {
-			resizeObserver.disconnect();
+		if (cleanupResize) {
+			cleanupResize();
 		}
 	});
+
+
 </script>
 
 {#snippet iconFallback()}
@@ -108,7 +109,8 @@
 <!-- Main Content -->
 <main
 	class="main-content"
-	style:margin-top={dimensions_top_nav.height + 'px'}
+	style:--topbar-height={dimensions_top_nav.height + 'px'}
+	style:margin-top="var(--topbar-height)"
 	class:icons-only={sidebarState === 'icons-only'}
 	class:expanded={sidebarState === 'hidden'}
 >
@@ -128,8 +130,28 @@
 	:global(:root) {
 		--sidebar-width: 250px;
 		--sidebar-width-icons: 55px;
-		/* --topbar-height: 70px; */
+		--topbar-height: 60px;
+
+		/* Default Light Theme */
+		--topbar-bg: #ffffff;
+		--sidebar-bg: #ffffff;
+		--app-bg: #f5f7fa;
+		--text-primary: #2c3e50;
+		--text-secondary: #7f8c8d;
+		--border-color: rgba(0, 0, 0, 0.1);
 	}
+
+	@media (prefers-color-scheme: dark) {
+		:global(:root) {
+			--topbar-bg: #1a1a1a;
+			--sidebar-bg: #1a1a1a;
+			--app-bg: #121212;
+			--text-primary: #ecf0f1;
+			--text-secondary: #bdc3c7;
+			--border-color: rgba(255, 255, 255, 0.1);
+		}
+	}
+
 
 	/* Top Navigation */
 	.top-nav {
@@ -137,14 +159,17 @@
 		top: 0;
 		left: var(--sidebar-width);
 		right: 0;
-		/* height: var(--topbar-height); */
+		height: var(--topbar-height);
 		background: var(--topbar-bg);
+		border-bottom: 1px solid var(--border-color);
+		color: var(--text-primary);
 
+		display: flex;
 		align-items: center;
-		padding: 0 20px;
-		transition: all 0.3s ease;
-		z-index: 39;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+		padding: 0 24px;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		z-index: 38; /* Slightly below sidebar to let it overlap if needed */
+		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 	}
 
 	.top-nav.icons-only {
@@ -165,11 +190,12 @@
 	/* Main Content */
 	.main-content {
 		margin-left: var(--sidebar-width);
-		/* margin-top: var(--topbar-height); */
-		padding: 0.5em;
-		transition: all 0.3s ease;
+		padding: 24px;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		min-height: calc(100vh - var(--topbar-height));
-		width: inherit;
+		background-color: var(--app-bg);
+		color: var(--text-primary);
+		width: auto;
 	}
 
 	.main-content.icons-only {
