@@ -804,7 +804,7 @@
 
 								if (!running) {
 									running = true;
-									let data_send = {};
+									let data_send = undefined;
 
 									// Instantiate uFetch here to prevent Auth header leakage between requests
 									let uF = new uFetch();
@@ -813,6 +813,27 @@
 
 									if (url && url.length > 5) {
 										try {
+											let final_url = url;
+											let queryParams = getDataQuery(data.query);
+
+											if (queryParams && Object.keys(queryParams).length > 0) {
+												const sp = new URLSearchParams(queryParams);
+												const queryString = sp.toString();
+												if (queryString) {
+													const hashIndex = final_url.indexOf("#");
+													let hash = "";
+													let urlWithoutHash = final_url;
+
+													if (hashIndex !== -1) {
+														hash = final_url.substring(hashIndex);
+														urlWithoutHash = final_url.substring(0, hashIndex);
+													}
+
+													const separator = urlWithoutHash.includes("?") ? "&" : "?";
+													final_url = urlWithoutHash + separator + queryString + hash;
+												}
+											}
+
 											if (
 												method == 'GET' ||
 												method == 'HEAD' ||
@@ -820,16 +841,17 @@
 												method == 'CONNECT' ||
 												method == 'TRACE'
 											) {
-												data_send = getDataQuery(data.query);
-											} else if (method == 'POST' || method == 'PUT' || method == 'PATCH') {
-												// Pueden tener tanto query como body
-												// Preferir body en lugar de query
+												data_send = undefined;
+											} else if (
+												method == 'POST' ||
+												method == 'PUT' ||
+												method == 'PATCH' ||
+												method == 'DELETE'
+											) {
 												let bodyData = getDataBody();
 
 												if (bodyData) {
 													data_send = bodyData;
-												} else {
-													data_send = getDataQuery(data.query);
 												}
 											}
 
@@ -855,7 +877,7 @@
 
 											let req_method = method ? String(method).toLowerCase() : 'get';
 											last_response = await uF[req_method]({
-												url: url,
+												url: final_url,
 												data: data_send,
 												headers: getDataHeaders(data.headers)
 											});
